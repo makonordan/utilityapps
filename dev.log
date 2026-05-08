@@ -1,0 +1,508 @@
+▲ Next.js 16.2.5 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.111:3000
+✓ Ready in 902ms
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\Bluechip\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Bluechip\Desktop\Claude\utilityapps\package-lock.json
+
+Warning: Custom Cache-Control headers detected for the following routes:
+  - /_next/static/:path*
+
+Setting a custom Cache-Control header can break Next.js development behavior.
+
+ GET /embeds/word-counter 404 in 4.9s (next.js: 1183ms, application-code: 3.7s)
+ GET /tools/word-counter 200 in 6.2s (next.js: 3.2s, generate-params: 2.1s, application-code: 3.0s)
+ GET /embeds/word-counter 404 in 1079ms (next.js: 70ms, application-code: 1008ms)
+[browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/tools/wor..." tree={[...]} params={{slug:"word..."}} cacheNode={{rsc:{...}, ...}} ...>
+            <SegmentViewNode type="page" pagePath="tools/[slu...">
+              <SegmentTrieNode>
+              <ToolPage>
+                <script>
+                <script>
+                <script>
+                <TrackToolVisit>
+                <div className="mx-auto ma...">
+                  <nav>
+                  <header>
+                  <div>
+                  <section className="mt-8">
+                    <ToolEmbed tool={{id:"word-c...", ...}}>
+                      <section aria-label="Word Count..." className="space-y-3">
+                        <div>
+                        <div className="flex flex-...">
+                          <p>
+                          <LinkComponent href="/embeds/wo..." target="_blank" rel="noopener n..." ...>
+                            <a
++                             target="_blank"
+-                             target={null}
++                             rel="noopener noreferrer"
+-                             rel={null}
+                              className="inline-flex items-center gap-1 font-semibold text-primary-600 hover:text-prim..."
+                              ref={function}
+                              onClick={function onClick}
+                              onMouseEnter={function onMouseEnter}
+                              onTouchStart={function onTouchStart}
++                             href="/embeds/word-counter"
+-                             href="/embeds/word-counter/"
+                            >
++                             {" in new tab"}
+-                             <svg
+-                               xmlns="http://www.w3.org/2000/svg"
+-                               width="24"
+-                               height="24"
+-                               viewBox="0 0 24 24"
+-                               fill="none"
+-                               stroke="currentColor"
+-                               stroke-width="2"
+-                               stroke-linecap="round"
+-                               stroke-linejoin="round"
+-                               className="lucide lucide-arrow-right h-3.5 w-3.5"
+-                               aria-hidden="true"
+-                             >
+                              ...
+                  ...
+            ...
+          ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at a (<anonymous>)
+    at ToolEmbed (components/tools/ToolEmbed.tsx:101:23)
+    at ToolPage (app\tools\[slug]\page.tsx:206:13)
+   99 |           <a
+  100 |             href={openHref}
+> 101 |             className="inline-flex items-center gap-1 font-semibold text-primary-600 hove...
+      |                       ^
+  102 |           >
+  103 |             Open {tool.name}
+  104 |             <ArrowRight className="h-3.5 w-3.5" />
+ GET /embeds/word-counter 404 in 1562ms (next.js: 87ms, application-code: 1474ms)
+ GET /api/tools/word-counter/stats 200 in 2.7s (next.js: 2.6s, application-code: 96ms)
+ GET /tools/word-counter 200 in 811ms (next.js: 16ms, generate-params: 11ms, application-code: 795ms)
+ GET /embeds/word-counter 404 in 1613ms (next.js: 39ms, application-code: 1574ms)
+[browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/tools/wor..." tree={[...]} params={{slug:"word..."}} cacheNode={{rsc:{...}, ...}} ...>
+            <SegmentViewNode type="page" pagePath="tools/[slu...">
+              <SegmentTrieNode>
+              <ToolPage>
+                <script>
+                <script>
+                <script>
+                <TrackToolVisit>
+                <div className="mx-auto ma...">
+                  <nav>
+                  <header>
+                  <div>
+                  <section className="mt-8">
+                    <ToolEmbed tool={{id:"word-c...", ...}}>
+                      <section aria-label="Word Count..." className="space-y-3">
+                        <div>
+                        <div className="flex flex-...">
+                          <p>
+                          <LinkComponent href="/embeds/wo..." target="_blank" rel="noopener n..." ...>
+                            <a
++                             target="_blank"
+-                             target={null}
++                             rel="noopener noreferrer"
+-                             rel={null}
+                              className="inline-flex items-center gap-1 font-semibold text-primary-600 hover:text-prim..."
+                              ref={function}
+                              onClick={function onClick}
+                              onMouseEnter={function onMouseEnter}
+                              onTouchStart={function onTouchStart}
++                             href="/embeds/word-counter"
+-                             href="/embeds/word-counter/"
+                            >
++                             {" in new tab"}
+-                             <svg
+-                               xmlns="http://www.w3.org/2000/svg"
+-                               width="24"
+-                               height="24"
+-                               viewBox="0 0 24 24"
+-                               fill="none"
+-                               stroke="currentColor"
+-                               stroke-width="2"
+-                               stroke-linecap="round"
+-                               stroke-linejoin="round"
+-                               className="lucide lucide-arrow-right h-3.5 w-3.5"
+-                               aria-hidden="true"
+-                             >
+                              ...
+                  ...
+            ...
+          ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at a (<anonymous>)
+    at ToolEmbed (components/tools/ToolEmbed.tsx:101:23)
+    at ToolPage (app\tools\[slug]\page.tsx:206:13)
+   99 |           <a
+  100 |             href={openHref}
+> 101 |             className="inline-flex items-center gap-1 font-semibold text-primary-600 hove...
+      |                       ^
+  102 |           >
+  103 |             Open {tool.name}
+  104 |             <ArrowRight className="h-3.5 w-3.5" />
+ GET /api/tools/word-counter/stats 200 in 34ms (next.js: 18ms, application-code: 16ms)
+ GET /embeds/word-counter 404 in 1267ms (next.js: 49ms, application-code: 1218ms)
+(node:16388) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/Bluechip/Desktop/Claude/utilityapps/tailwind.config.ts?id=1778181346816 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\Users\Bluechip\Desktop\Claude\utilityapps\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✓ Compiled in 2.1s
+ GET /embeds/word-counter 404 in 5.6s (next.js: 2.8s, application-code: 2.8s)
+ GET /embeds/word-counter 404 in 2.4s (next.js: 932ms, application-code: 1512ms)
+ GET /embeds/word-counter 404 in 3.5s (next.js: 482ms, application-code: 3.0s)
+ GET /tools/word-counter 200 in 6.6s (next.js: 1642ms, generate-params: 11ms, application-code: 5.0s)
+ GET /tools/word-counter 200 in 4.3s (next.js: 100ms, generate-params: 97µs, application-code: 4.2s)
+ GET /tools/word-counter 200 in 2.7s (next.js: 72ms, generate-params: 27ms, application-code: 2.6s)
+ GET /tools/word-counter 200 in 1851ms (next.js: 27ms, generate-params: 55µs, application-code: 1823ms)
+ GET /tools/word-counter 200 in 1854ms (next.js: 346ms, generate-params: 72µs, application-code: 1509ms)
+ GET /tools/word-counter 200 in 885ms (next.js: 16ms, generate-params: 93µs, application-code: 869ms)
+ GET /tools/word-counter 200 in 889ms (next.js: 27ms, generate-params: 17ms, application-code: 862ms)
+ GET /api/tools/word-counter/stats 200 in 555ms (next.js: 285ms, application-code: 270ms)
+[browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/tools/wor..." tree={[...]} params={{slug:"word..."}} cacheNode={{rsc:{...}, ...}} ...>
+            <SegmentViewNode type="page" pagePath="tools/[slu...">
+              <SegmentTrieNode>
+              <ToolPage>
+                <script>
+                <script>
+                <script>
+                <TrackToolVisit>
+                <div className="mx-auto ma...">
+                  <nav>
+                  <header>
+                  <div>
+                  <section className="mt-8">
+                    <ToolEmbed tool={{id:"word-c...", ...}}>
+                      <section aria-label="Word Count..." className="space-y-3">
+                        <div>
+                        <div className="flex flex-...">
+                          <p>
+                          <LinkComponent href="/embeds/wo..." target="_blank" rel="noopener n..." ...>
+                            <a
++                             target="_blank"
+-                             target={null}
++                             rel="noopener noreferrer"
+-                             rel={null}
+                              className="inline-flex items-center gap-1 font-semibold text-primary-600 hover:text-prim..."
+                              ref={function}
+                              onClick={function onClick}
+                              onMouseEnter={function onMouseEnter}
+                              onTouchStart={function onTouchStart}
+                              href="/embeds/word-counter/index.html"
+                            >
++                             {" in new tab"}
+-                             <svg
+-                               xmlns="http://www.w3.org/2000/svg"
+-                               width="24"
+-                               height="24"
+-                               viewBox="0 0 24 24"
+-                               fill="none"
+-                               stroke="currentColor"
+-                               stroke-width="2"
+-                               stroke-linecap="round"
+-                               stroke-linejoin="round"
+-                               className="lucide lucide-arrow-right h-3.5 w-3.5"
+-                               aria-hidden="true"
+-                             >
+                              ...
+                  ...
+            ...
+          ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at a (<anonymous>)
+    at ToolEmbed (components/tools/ToolEmbed.tsx:101:23)
+    at ToolPage (app\tools\[slug]\page.tsx:206:13)
+   99 |           <a
+  100 |             href={openHref}
+> 101 |             className="inline-flex items-center gap-1 font-semibold text-primary-600 hove...
+      |                       ^
+  102 |           >
+  103 |             Open {tool.name}
+  104 |             <ArrowRight className="h-3.5 w-3.5" />
+ GET /tools/age-calculator 200 in 142ms (next.js: 14ms, generate-params: 9ms, application-code: 128ms)
+ GET /api/tools/age-calculator/stats 200 in 34ms (next.js: 21ms, application-code: 13ms)
+ GET /api/tools/age-calculator/stats 200 in 54ms (next.js: 43ms, application-code: 12ms)
+⚠ Found a change in next.config.js. Restarting the server to apply the changes...
+▲ Next.js 16.2.5 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.111:3000
+✓ Ready in 822ms
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\Bluechip\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Bluechip\Desktop\Claude\utilityapps\package-lock.json
+
+Warning: Custom Cache-Control headers detected for the following routes:
+  - /_next/static/:path*
+
+Setting a custom Cache-Control header can break Next.js development behavior.
+
+(node:15864) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/Bluechip/Desktop/Claude/utilityapps/tailwind.config.ts?id=1778181654814 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\Users\Bluechip\Desktop\Claude\utilityapps\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ GET /tools/age-calculator 200 in 5.7s (next.js: 2.9s, generate-params: 1077ms, application-code: 2.8s)
+ GET /api/tools/age-calculator/stats 200 in 1397ms (next.js: 1314ms, application-code: 83ms)
+✓ Compiled in 405ms
+ GET /tools/age-calculator 200 in 4.0s (next.js: 697ms, generate-params: 30ms, application-code: 3.3s)
+ GET /tools/age-calculator 200 in 2.1s (next.js: 41ms, generate-params: 93µs, application-code: 2.0s)
+ GET /tools/age-calculator 200 in 1391ms (next.js: 15ms, generate-params: 116µs, application-code: 1376ms)
+ GET /tools/age-calculator 200 in 1391ms (next.js: 479ms, generate-params: 87µs, application-code: 912ms)
+ GET /tools/age-calculator 200 in 1394ms (next.js: 833ms, generate-params: 73µs, application-code: 561ms)
+✓ Compiled in 341ms
+ GET /tools/age-calculator 200 in 3.9s (next.js: 237ms, generate-params: 16ms, application-code: 3.6s)
+ GET /tools/age-calculator 200 in 1877ms (next.js: 18ms, generate-params: 150µs, application-code: 1859ms)
+ GET /tools/age-calculator 200 in 1088ms (next.js: 16ms, generate-params: 122µs, application-code: 1072ms)
+ GET /tools/age-calculator 200 in 1088ms (next.js: 379ms, generate-params: 86µs, application-code: 710ms)
+ GET /tools/age-calculator 200 in 1091ms (next.js: 683ms, generate-params: 39µs, application-code: 408ms)
+✓ Compiled in 323ms
+ GET /tools/age-calculator 200 in 3.6s (next.js: 234ms, generate-params: 15ms, application-code: 3.4s)
+ GET /tools/age-calculator 200 in 2.7s (next.js: 162ms, generate-params: 106µs, application-code: 2.5s)
+ GET /tools/age-calculator 200 in 1437ms (next.js: 36ms, generate-params: 40µs, application-code: 1401ms)
+ GET /tools/age-calculator 200 in 1434ms (next.js: 793ms, generate-params: 40µs, application-code: 642ms)
+ GET /tools/age-calculator 200 in 1443ms (next.js: 1068ms, generate-params: 36µs, application-code: 375ms)
+✓ Compiled in 352ms
+ GET /tools/age-calculator 200 in 2.2s (next.js: 164ms, generate-params: 12ms, application-code: 2.1s)
+ GET /tools/age-calculator 200 in 1464ms (next.js: 27ms, generate-params: 56µs, application-code: 1437ms)
+ GET /tools/age-calculator 200 in 1003ms (next.js: 13ms, generate-params: 38µs, application-code: 990ms)
+ GET /tools/age-calculator 200 in 1007ms (next.js: 365ms, generate-params: 43µs, application-code: 642ms)
+ GET /tools/age-calculator 200 in 1006ms (next.js: 628ms, generate-params: 30µs, application-code: 379ms)
+ GET /tools/age-calculator 200 in 3.0s (next.js: 398ms, generate-params: 13ms, application-code: 2.6s)
+ GET /tools/age-calculator 200 in 1870ms (next.js: 18ms, generate-params: 55µs, application-code: 1852ms)
+ GET /tools/age-calculator 200 in 912ms (next.js: 15ms, generate-params: 35µs, application-code: 897ms)
+ GET /tools/age-calculator 200 in 911ms (next.js: 344ms, generate-params: 43µs, application-code: 567ms)
+ GET /tools/age-calculator 200 in 921ms (next.js: 609ms, generate-params: 142µs, application-code: 312ms)
+✓ Compiled in 322ms
+ GET /tools/age-calculator 200 in 4.5s (next.js: 279ms, generate-params: 19ms, application-code: 4.2s)
+ GET /tools/age-calculator 200 in 2.3s (next.js: 278ms, generate-params: 68µs, application-code: 2.0s)
+ GET /tools/age-calculator 200 in 1318ms (next.js: 291ms, generate-params: 36µs, application-code: 1027ms)
+ GET /tools/age-calculator 200 in 1323ms (next.js: 12ms, generate-params: 51µs, application-code: 1312ms)
+ GET /tools/age-calculator 200 in 1320ms (next.js: 572ms, generate-params: 43µs, application-code: 748ms)
+ GET /tools/image-converter 200 in 197ms (next.js: 16ms, generate-params: 11ms, application-code: 181ms)
+ GET /api/tools/image-converter/stats 200 in 325ms (next.js: 176ms, application-code: 149ms)
+ GET /api/tools/image-converter/stats 200 in 339ms (next.js: 327ms, application-code: 12ms)
+ POST /api/tools/track 200 in 466ms (next.js: 440ms, application-code: 26ms)
+ GET /tools/image-compressor 200 in 140ms (next.js: 13ms, generate-params: 8ms, application-code: 126ms)
+ POST /api/tools/track 200 in 32ms (next.js: 18ms, application-code: 13ms)
+ GET /api/tools/image-compressor/stats 200 in 42ms (next.js: 29ms, application-code: 13ms)
+ GET /api/tools/image-compressor/stats 200 in 57ms (next.js: 47ms, application-code: 10ms)
+ GET /tools/age-calculator 200 in 147ms (next.js: 13ms, generate-params: 8ms, application-code: 134ms)
+ GET /api/tools/age-calculator/stats 200 in 62ms (next.js: 37ms, application-code: 25ms)
+ GET /api/tools/age-calculator/stats 200 in 84ms (next.js: 72ms, application-code: 12ms)
+ GET /tools/loan-calculator 200 in 150ms (next.js: 14ms, generate-params: 8ms, application-code: 136ms)
+ POST /api/tools/track 200 in 38ms (next.js: 27ms, application-code: 11ms)
+ GET /api/tools/loan-calculator/stats 200 in 92ms (next.js: 38ms, application-code: 54ms)
+ GET /api/tools/loan-calculator/stats 200 in 52ms (next.js: 32ms, application-code: 20ms)
+ GET /tools/mortgage-calculator 200 in 147ms (next.js: 12ms, generate-params: 8ms, application-code: 135ms)
+ GET /api/tools/mortgage-calculator/stats 200 in 37ms (next.js: 25ms, application-code: 12ms)
+ GET /api/tools/mortgage-calculator/stats 200 in 54ms (next.js: 37ms, application-code: 17ms)
+ POST /api/tools/track 200 in 153ms (next.js: 121ms, application-code: 32ms)
+ GET /tools/bmi-calculator 200 in 129ms (next.js: 12ms, generate-params: 7ms, application-code: 117ms)
+ POST /api/tools/track 200 in 15ms (next.js: 5ms, application-code: 10ms)
+ GET /api/tools/bmi-calculator/stats 200 in 35ms (next.js: 27ms, application-code: 8ms)
+ GET /api/tools/bmi-calculator/stats 200 in 53ms (next.js: 42ms, application-code: 11ms)
+ GET /tools/pdf-converter 200 in 177ms (next.js: 17ms, generate-params: 11ms, application-code: 160ms)
+ GET /api/tools/pdf-converter/stats 200 in 39ms (next.js: 23ms, application-code: 16ms)
+ GET /api/tools/pdf-converter/stats 200 in 61ms (next.js: 48ms, application-code: 13ms)
+ POST /api/tools/track 200 in 106ms (next.js: 95ms, application-code: 10ms)
+ GET /tools/percentage-calculator 200 in 163ms (next.js: 17ms, generate-params: 11ms, application-code: 146ms)
+ POST /api/tools/track 200 in 35ms (next.js: 24ms, application-code: 11ms)
+ GET /api/tools/percentage-calculator/stats 200 in 110ms (next.js: 26ms, application-code: 84ms)
+ GET /api/tools/percentage-calculator/stats 200 in 19ms (next.js: 11ms, application-code: 7ms)
+ GET /tools/percentage-calculator 200 in 24ms (next.js: 11ms, generate-params: 8ms, application-code: 12ms)
+ GET /tools/percentage-calculator 200 in 139ms (next.js: 6ms, generate-params: 47µs, application-code: 133ms)
+✓ Compiled in 4.5s
+ GET /tools/percentage-calculator 200 in 8.1s (next.js: 4.4s, generate-params: 18ms, application-code: 3.7s)
+ GET /tools/percentage-calculator 200 in 2.6s (next.js: 14ms, generate-params: 49µs, application-code: 2.6s)
+ GET /tools/percentage-calculator 200 in 1859ms (next.js: 39ms, generate-params: 43µs, application-code: 1819ms)
+ GET /tools/percentage-calculator 200 in 1877ms (next.js: 744ms, generate-params: 40µs, application-code: 1134ms)
+ GET /tools/percentage-calculator 200 in 1869ms (next.js: 1268ms, generate-params: 35µs, application-code: 602ms)
+✓ Compiled in 538ms
+ GET /tools/percentage-calculator 200 in 5.8s (next.js: 453ms, generate-params: 10ms, application-code: 5.4s)
+ GET /tools/percentage-calculator 200 in 3.3s (next.js: 302ms, generate-params: 69µs, application-code: 3.0s)
+ GET /tools/percentage-calculator 200 in 2.4s (next.js: 780ms, generate-params: 79µs, application-code: 1607ms)
+ GET /tools/percentage-calculator 200 in 2.4s (next.js: 23ms, generate-params: 12ms, application-code: 2.4s)
+ GET /tools/percentage-calculator 200 in 2.4s (next.js: 1450ms, generate-params: 42µs, application-code: 965ms)
+✓ Compiled in 532ms
+ GET /tools/percentage-calculator 200 in 4.4s (next.js: 387ms, generate-params: 10ms, application-code: 4.0s)
+ GET /tools/percentage-calculator 200 in 2.4s (next.js: 322ms, generate-params: 59µs, application-code: 2.1s)
+ GET /tools/percentage-calculator 200 in 1451ms (next.js: 22ms, generate-params: 10ms, application-code: 1429ms)
+ GET /tools/percentage-calculator 200 in 1455ms (next.js: 429ms, generate-params: 30µs, application-code: 1026ms)
+ GET /tools/percentage-calculator 200 in 1453ms (next.js: 830ms, generate-params: 35µs, application-code: 623ms)
+✓ Compiled in 559ms
+ GET /tools/percentage-calculator 200 in 5.8s (next.js: 459ms, generate-params: 9ms, application-code: 5.3s)
+ GET /tools/percentage-calculator 200 in 3.4s (next.js: 686ms, generate-params: 78µs, application-code: 2.7s)
+ GET /tools/percentage-calculator 200 in 1708ms (next.js: 269ms, generate-params: 235ms, application-code: 1439ms)
+ GET /tools/percentage-calculator 200 in 1694ms (next.js: 821ms, generate-params: 48µs, application-code: 872ms)
+ GET /tools/percentage-calculator 200 in 1694ms (next.js: 1223ms, generate-params: 27µs, application-code: 470ms)
+✓ Compiled in 539ms
+ GET /tools/percentage-calculator 200 in 5.1s (next.js: 482ms, generate-params: 16ms, application-code: 4.6s)
+ GET /tools/percentage-calculator 200 in 2.8s (next.js: 429ms, generate-params: 40µs, application-code: 2.3s)
+ GET /tools/percentage-calculator 200 in 1722ms (next.js: 26ms, generate-params: 13ms, application-code: 1696ms)
+ GET /tools/percentage-calculator 200 in 1723ms (next.js: 840ms, generate-params: 42µs, application-code: 882ms)
+ GET /tools/percentage-calculator 200 in 1720ms (next.js: 1272ms, generate-params: 39µs, application-code: 448ms)
+✓ Compiled in 436ms
+ GET /tools/percentage-calculator 200 in 5.5s (next.js: 382ms, generate-params: 11ms, application-code: 5.1s)
+ GET /tools/percentage-calculator 200 in 3.0s (next.js: 502ms, generate-params: 101µs, application-code: 2.5s)
+ GET /tools/percentage-calculator 200 in 1328ms (next.js: 517ms, generate-params: 39µs, application-code: 811ms)
+ GET /tools/percentage-calculator 200 in 1333ms (next.js: 24ms, generate-params: 12ms, application-code: 1310ms)
+ GET /tools/percentage-calculator 200 in 1332ms (next.js: 876ms, generate-params: 40µs, application-code: 456ms)
+✓ Compiled in 589ms
+ GET /tools/percentage-calculator 200 in 5.0s (next.js: 474ms, generate-params: 9ms, application-code: 4.5s)
+ GET /tools/percentage-calculator 200 in 2.6s (next.js: 308ms, generate-params: 58µs, application-code: 2.3s)
+ GET /tools/percentage-calculator 200 in 1744ms (next.js: 22ms, generate-params: 13ms, application-code: 1723ms)
+ GET /tools/percentage-calculator 200 in 1744ms (next.js: 390ms, generate-params: 66µs, application-code: 1354ms)
+ GET /tools/percentage-calculator 200 in 1746ms (next.js: 1125ms, generate-params: 50µs, application-code: 621ms)
+✓ Compiled in 1060ms
+ GET /tools/percentage-calculator 200 in 3.8s (next.js: 1463ms, generate-params: 13ms, application-code: 2.3s)
+ GET /tools/percentage-calculator 200 in 2.6s (next.js: 586ms, generate-params: 31µs, application-code: 2.0s)
+ GET /tools/percentage-calculator 200 in 1564ms (next.js: 30ms, generate-params: 14ms, application-code: 1534ms)
+ GET /tools/percentage-calculator 200 in 1565ms (next.js: 793ms, generate-params: 28µs, application-code: 772ms)
+ GET /tools/percentage-calculator 200 in 1564ms (next.js: 1124ms, generate-params: 35µs, application-code: 440ms)
+ GET /tools/percentage-calculator 200 in 2.2s (next.js: 23ms, generate-params: 17ms, application-code: 2.1s)
+ GET /api/tools/percentage-calculator/stats 200 in 512ms (next.js: 272ms, application-code: 240ms)
+[browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/tools/per..." tree={[...]} params={{slug:"perc..."}} cacheNode={{rsc:<Fragment>, ...}} ...>
+            <SegmentViewNode type="page" pagePath="tools/[slu...">
+              <SegmentTrieNode>
+              <ToolPage>
+                <script>
+                <script>
+                <script>
+                <TrackToolVisit>
+                <div className="mx-auto ma...">
+                  <nav>
+                  <header>
+                  <div>
+                  <section className="mt-8">
+                    <ToolEmbed tool={{id:"percen...", ...}}>
+                      <section aria-label="Percentage..." className="space-y-3">
+                        <div>
+                        <div className="flex flex-...">
+                          <p>
+                          <LinkComponent href="/embeds/pe..." target="_blank" rel="noopener n..." ...>
+                            <a
++                             target="_blank"
+-                             target={null}
++                             rel="noopener noreferrer"
+-                             rel={null}
+                              className="inline-flex items-center gap-1 font-semibold text-primary-600 hover:text-prim..."
+                              ref={function}
+                              onClick={function onClick}
+                              onMouseEnter={function onMouseEnter}
+                              onTouchStart={function onTouchStart}
++                             href="/embeds/percentage-calculator"
+-                             href="/embeds/percentage-calculator/"
+                            >
++                             {" in new tab"}
+-                             <svg
+-                               xmlns="http://www.w3.org/2000/svg"
+-                               width="24"
+-                               height="24"
+-                               viewBox="0 0 24 24"
+-                               fill="none"
+-                               stroke="currentColor"
+-                               stroke-width="2"
+-                               stroke-linecap="round"
+-                               stroke-linejoin="round"
+-                               className="lucide lucide-arrow-right h-3.5 w-3.5"
+-                               aria-hidden="true"
+-                             >
+                              ...
+                  ...
+            ...
+          ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at a (<anonymous>)
+    at ToolEmbed (components/tools/ToolEmbed.tsx:101:23)
+    at ToolPage (app\tools\[slug]\page.tsx:206:13)
+   99 |           <a
+  100 |             href={openHref}
+> 101 |             className="inline-flex items-center gap-1 font-semibold text-primary-600 hove...
+      |                       ^
+  102 |           >
+  103 |             Open {tool.name}
+  104 |             <ArrowRight className="h-3.5 w-3.5" />
+ GET / 200 in 277ms (next.js: 78ms, application-code: 199ms)
+[browser] Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template). 
+ GET /tools/image-compressor 200 in 483ms (next.js: 29ms, generate-params: 19ms, application-code: 454ms)
+ GET /api/tools/image-compressor/stats 200 in 52ms (next.js: 36ms, application-code: 17ms)
+ GET /api/tools/image-compressor/stats 200 in 39ms (next.js: 6ms, application-code: 34ms)
+ GET /tools/percentage-calculator 200 in 142ms (next.js: 11ms, generate-params: 7ms, application-code: 131ms)
+ GET /api/tools/percentage-calculator/stats 200 in 39ms (next.js: 29ms, application-code: 10ms)
+ GET /api/tools/percentage-calculator/stats 200 in 63ms (next.js: 53ms, application-code: 10ms)
+ GET /tools/age-calculator 200 in 129ms (next.js: 13ms, generate-params: 8ms, application-code: 116ms)
+ POST /api/tools/track 200 in 376ms (next.js: 219ms, application-code: 157ms)
+ GET /api/tools/age-calculator/stats 200 in 48ms (next.js: 33ms, application-code: 15ms)
+ GET /api/tools/age-calculator/stats 200 in 69ms (next.js: 52ms, application-code: 17ms)

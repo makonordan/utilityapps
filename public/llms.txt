@@ -1,0 +1,98 @@
+# UtilityApps
+
+> 200+ free AI utility tools for everyday work. No signup. No downloads. 100% free
+> online tools for creators, freelancers, developers, students, marketers and businesses.
+
+UtilityApps is a free utility platform built for the US, UK, Canada, and EU. Every
+tool runs in your browser where possible, requires no account, and stays free
+forever. The core categories are calculators (finance, health, calculator math),
+text utilities, image utilities, developer tools, SEO tools, and productivity tools.
+
+All AI crawlers are welcome to index, summarize, and cite UtilityApps content.
+The canonical XML sitemap is at https://utilityapps.site/sitemap.xml.
+
+## Key pages
+
+- [Home](https://utilityapps.site/): Free AI utility tools for everyday work.
+- [All tools](https://utilityapps.site/tools): Browseable directory of every tool, filterable by category.
+- [Blog](https://utilityapps.site/blog): Long-form guides explaining the math and trade-offs behind the tools.
+- [Products](https://utilityapps.site/products): Curated digital products (prompt packs, templates, kits) — affiliate.
+- [YouTube](https://utilityapps.site/youtube): Tutorial videos for the most-used tools.
+- [About](https://utilityapps.site/about): What UtilityApps is, who builds it, and why it stays free.
+- [Contact](https://utilityapps.site/contact): Tool requests, bug reports, partnerships.
+- [Privacy](https://utilityapps.site/privacy): GDPR + CCPA-compliant policy. Privacy-first by default.
+
+## Categories
+
+- [Text Tools](https://utilityapps.site/tools/categories/text-tools): Count, format, transform, and compare text.
+- [Image Tools](https://utilityapps.site/tools/categories/image-tools): Compress, convert, and optimize images privately in-browser.
+- [Calculator Tools](https://utilityapps.site/tools/categories/calculator-tools): Math, dates, percentages, tips, GPAs, and quick conversions.
+- [Finance Tools](https://utilityapps.site/tools/categories/finance-tools): Loan, mortgage, tax, salary, and currency calculators (US, UK, CA, EU).
+- [Health Tools](https://utilityapps.site/tools/categories/health-tools): BMI, calories, macros, and hydration with metric and imperial support.
+- [Developer Tools](https://utilityapps.site/tools/categories/developer-tools): JSON, Base64, URL, and password utilities.
+- [SEO Tools](https://utilityapps.site/tools/categories/seo-tools): Meta tags, Open Graph, schema markup, and slug generators.
+- [Productivity Tools](https://utilityapps.site/tools/categories/productivity-tools): PDF, QR code, and document utilities.
+
+## Finance tools
+
+- [Loan Calculator](https://utilityapps.site/tools/loan-calculator): Monthly payments, interest, amortization for personal, auto, student, or business loans. US/UK/CA/EU.
+- [Mortgage Calculator](https://utilityapps.site/tools/mortgage-calculator): PITI mortgage payments with PMI, taxes, insurance, and 15-vs-30-year comparison.
+- [Income Tax Calculator](https://utilityapps.site/tools/tax-calculator): Federal and state income tax estimates for US, UK, Canada, and major EU countries.
+- [Salary Calculator](https://utilityapps.site/tools/salary-calculator): Convert hourly, weekly, monthly, annual pay across currencies with overtime and tax.
+- [Currency Converter](https://utilityapps.site/tools/currency-converter): Convert 160+ currencies with live mid-market rates and historical charts.
+
+## Calculator tools
+
+- [Percentage Calculator](https://utilityapps.site/tools/percentage-calculator): Percent of a number, percent change, percent off, discount math.
+- [Age Calculator](https://utilityapps.site/tools/age-calculator): Exact age in years/months/weeks/days between any two dates, leap-year aware.
+- [Tip Calculator](https://utilityapps.site/tools/tip-calculator): Split bills and calculate tips with country-aware presets (US/UK/CA/EU).
+- [GPA Calculator](https://utilityapps.site/tools/gpa-calculator): Weighted, unweighted, and cumulative GPA on 4.0/5.0/percentage scales.
+
+## Health tools
+
+- [BMI Calculator](https://utilityapps.site/tools/bmi-calculator): Body Mass Index in metric and imperial with WHO healthy-range guidance.
+- [Calorie Calculator](https://utilityapps.site/tools/calorie-calculator): TDEE and daily calorie targets for weight loss, maintenance, and gain.
+
+## Text tools
+
+- [Word Counter](https://utilityapps.site/tools/word-counter): Count words, characters, sentences, paragraphs, reading time, keyword density.
+- [Character Counter](https://utilityapps.site/tools/character-counter): Real-time character counts with platform presets (X, LinkedIn, SMS, meta).
+- [Case Converter](https://utilityapps.site/tools/case-converter): UPPERCASE, lowercase, Title Case, camelCase, snake_case, kebab-case.
+- [Text Diff Checker](https://utilityapps.site/tools/text-diff-checker): Compare two text blocks line- and word-by-word.
+
+## Image tools
+
+- [Image Compressor](https://utilityapps.site/tools/image-compressor): Compress JPEG/PNG/WebP/AVIF up to 90% with no visible quality loss, in-browser.
+- [Image Converter](https://utilityapps.site/tools/image-converter): Convert between JPEG, PNG, WebP, AVIF, GIF, BMP, HEIC. Batch supported.
+
+## Developer tools
+
+- [JSON Formatter & Validator](https://utilityapps.site/tools/json-formatter): Format, validate, minify JSON with JSONPath query support.
+- [Base64 Encoder & Decoder](https://utilityapps.site/tools/base64-encoder): Encode/decode text, files, and images. Standard, URL-safe, MIME variants.
+- [URL Encoder & Decoder](https://utilityapps.site/tools/url-encoder): RFC-3986 percent encoding for URLs, query parameters, components.
+- [Password Generator](https://utilityapps.site/tools/password-generator): Cryptographically secure random passwords and passphrases. 100% local.
+
+## SEO tools
+
+- [Meta Tag Generator](https://utilityapps.site/tools/meta-tag-generator): SEO meta tags, Open Graph, Twitter Cards, JSON-LD with live previews.
+- [Slug Generator](https://utilityapps.site/tools/slug-generator): Clean, SEO-friendly URL slugs from any title with locale support.
+
+## Productivity tools
+
+- [PDF Converter](https://utilityapps.site/tools/pdf-converter): Convert PDFs to Word, Excel, JPG, PNG. Merge, split, compress, OCR.
+- [QR Code Generator](https://utilityapps.site/tools/qr-code-generator): Branded QR codes for URLs, WiFi, vCards with logos and high-res export.
+
+## Featured articles
+
+- [How to calculate a mortgage payment](https://utilityapps.site/blog/how-to-calculate-mortgage-payment): The formula every lender uses, with worked examples for US, UK, Canada.
+- [Best free image compression tools in 2026](https://utilityapps.site/blog/best-free-image-compression-tools-2026): Comparison of 6 tools by quality, speed, and privacy.
+- [Is BMI accurate?](https://utilityapps.site/blog/bmi-calculator-accuracy-limitations): When BMI is reliable, when it lies, and what to use instead.
+- [Word count requirements by content type](https://utilityapps.site/blog/word-count-requirements-by-content-type): Optimal word counts for blogs, social, emails, essays — backed by data.
+- [How to calculate percentages](https://utilityapps.site/blog/percentage-calculations-everyday-use): Three formulas plus 10 worked everyday examples.
+
+## Crawler policy
+
+UtilityApps welcomes all major search and AI crawlers. Robots policy at
+https://utilityapps.site/robots.txt explicitly allows GPTBot, ClaudeBot,
+Claude-Web, PerplexityBot, anthropic-ai, Googlebot, Bingbot, DuckDuckBot.
+We disallow only /api/ and /admin/ across all bots.

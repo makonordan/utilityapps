@@ -1,0 +1,199 @@
+---
+title: "How to Calculate a Mortgage Payment (With and Without a Calculator)"
+description: "Step-by-step guide to calculating monthly mortgage payments, including PITI, PMI, and the formula that lenders actually use. Examples for the US, UK, and Canada."
+date: "2026-02-04"
+category: "Finance Tools"
+tags: ["mortgage", "home loan", "PITI", "personal finance", "calculator"]
+featured: true
+author: "UtilityApps Team"
+image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&h=600&q=80"
+---
+
+A mortgage payment is the single largest line item in most household budgets. Knowing how it is calculated — not just the number on a quote — saves real money. The same loan can cost $40,000 more or less over 30 years depending on details most people never check.
+
+This guide walks through the exact formula, what every component means, and a worked example for a US, UK, and Canadian buyer. By the end you can sanity-check any quote your lender hands you in 30 seconds.
+
+## The four parts of a mortgage payment (PITI)
+
+Every monthly mortgage payment is made up of four pieces. Lenders bundle them together and call the total **PITI**:
+
+- **P**rincipal — paying down what you borrowed.
+- **I**nterest — what the bank charges to lend.
+- **T**axes — property tax, paid via escrow.
+- **I**nsurance — homeowners insurance, also via escrow.
+
+For loans with less than 20% down (US) or higher LTV ratios elsewhere, you also pay **PMI** (Private Mortgage Insurance). HOA dues are sometimes added on top but are not technically part of the mortgage.
+
+When someone says "my mortgage is $2,400 a month," they almost always mean PITI. The bank cares about all four because all four come out of your account on the same day.
+
+## The mortgage payment formula
+
+The principal-and-interest portion of the payment uses the standard amortizing-loan formula:
+
+```
+M = P × [ r(1+r)^n ] / [ (1+r)^n − 1 ]
+```
+
+Where:
+
+- **M** = monthly payment (principal + interest)
+- **P** = loan amount (price minus down payment)
+- **r** = monthly interest rate (annual rate divided by 12)
+- **n** = number of monthly payments (years × 12)
+
+That is the formula every lender uses. Banks have not changed it in decades.
+
+<Callout type="info">
+**Want to skip the math?** Drop your numbers into the [Mortgage Calculator](/tools/mortgage-calculator) and get PITI, an amortization schedule, and a 15-vs-30 comparison in under a second.
+</Callout>
+
+## A worked example (US, 30-year fixed)
+
+Assume:
+
+- Home price: **$420,000**
+- Down payment: **$84,000** (20%)
+- Loan amount (P): **$336,000**
+- Annual rate: **6.5%**
+- Term: **30 years (360 months)**
+
+Step 1. Convert the rate to monthly:
+
+```
+r = 6.5% / 12 = 0.005417
+```
+
+Step 2. Compute (1 + r)^n:
+
+```
+(1 + 0.005417)^360 ≈ 7.0394
+```
+
+Step 3. Plug into the formula:
+
+```
+M = 336,000 × (0.005417 × 7.0394) / (7.0394 − 1)
+M = 336,000 × 0.03814 / 6.0394
+M ≈ $2,123.06 / month (principal + interest)
+```
+
+Add taxes and insurance:
+
+- Property tax (1.1% of home value / 12) ≈ **$385**
+- Homeowners insurance (~$1,500/year) ≈ **$125**
+
+**Total PITI ≈ $2,633 / month.**
+
+If the down payment were 10% instead of 20%, you would also pay around **$140/month** in PMI until you hit 22% equity, pushing PITI past $2,750.
+
+## How the same loan looks in the UK
+
+UK mortgages typically use a **fixed-rate** period (2, 3, 5, or 10 years) followed by a Standard Variable Rate. The math during the fixed period is identical to the formula above; you just have to repeat it after the fix expires.
+
+For a £350,000 home in London with 25% down (£87,500), a £262,500 loan at 5.2% over 25 years:
+
+```
+r = 5.2% / 12 = 0.004333
+(1 + r)^300 ≈ 3.6473
+M ≈ £262,500 × (0.004333 × 3.6473) / (3.6473 − 1)
+M ≈ £1,569 / month
+```
+
+UK borrowers do not escrow taxes — Council Tax is paid separately to the local authority — but you should still include it when budgeting.
+
+## How the same loan looks in Canada
+
+Canada is the trickiest case. Canadian mortgages compound **semi-annually**, not monthly, even when paid monthly. The formula gets one extra step.
+
+If you have a posted annual rate **i**, you compute the equivalent monthly rate:
+
+```
+r = (1 + i/2)^(1/6) − 1
+```
+
+For a CA$500,000 home in Toronto with 20% down, a CA$400,000 loan at 5.0%, 25-year amortization:
+
+```
+r = (1 + 0.05/2)^(1/6) − 1 ≈ 0.004124
+(1 + r)^300 ≈ 3.4488
+M ≈ 400,000 × (0.004124 × 3.4488) / (3.4488 − 1)
+M ≈ CA$2,326 / month
+```
+
+Property tax in Canada is paid separately or via escrow depending on the lender. CMHC insurance applies for sub-20% down payments.
+
+## What people get wrong
+
+A few mistakes show up in every quote we sanity-check:
+
+### Confusing APR with the interest rate
+
+The interest rate is what gets plugged into the formula. APR includes points, fees, and PMI. Use the rate to compute the payment, and use the APR only to compare loans across lenders.
+
+### Forgetting closing costs
+
+Closing costs in the US run 2–5% of the loan amount. They are paid up front and do not affect the monthly payment, but they hurt the savings calculation people use to justify refinancing.
+
+### Stretching the term to "afford" more house
+
+A 40-year mortgage looks attractive — the monthly drops 10–15%. But total interest paid roughly *doubles*. The same money goes to the bank instead of into your retirement account. Run the comparison before signing anything.
+
+### Ignoring the rate-vs-points tradeoff
+
+Buying down the rate with points pays off only if you stay in the house long enough. Most lenders quote a "break-even period" buried in the disclosure. If you might move within 5 years, paying for points is usually a bad bet.
+
+<Callout type="warning">
+**Always run the 15-year comparison.** A 15-year mortgage payment is usually 25–30% higher than a 30-year, but you save more than 50% in total interest. Even if you cannot afford the 15-year, it tells you how much of your monthly payment is "throwaway" interest.
+</Callout>
+
+## Quick sanity check formula
+
+If you do not have a calculator handy, the rule of thumb at 6% over 30 years is:
+
+> **About $6 per $1,000 borrowed, per month.**
+
+So $300,000 borrowed ≈ $1,800/month principal + interest.
+
+At 5%, drop the multiplier to ~$5.40. At 7%, raise it to ~$6.70. Within a percent or two, this rule is accurate to within 5%.
+
+## Refinancing — when does it make sense?
+
+The classic rule used to be "1% lower rate." That has not been right since 2010. The real test is:
+
+```
+break_even_months = closing_costs / monthly_savings
+```
+
+If you will stay in the house longer than `break_even_months`, refinance. If not, don't. A typical refinance in 2026 has $4,000–$6,000 of closing costs and saves $80–$200/month, giving break-even windows of 2–4 years.
+
+## A faster way
+
+The math above is exactly what every bank and broker runs. If you want the answer without doing the algebra each time, use the [Mortgage Calculator](/tools/mortgage-calculator) — it handles US, UK, and Canadian loans, includes PMI / CMHC, and exports an amortization schedule you can paste into your spreadsheet.
+
+For comparing the impact of a different down payment or term, the [Loan Calculator](/tools/loan-calculator) handles the same math but lets you sweep multiple variables at once.
+
+## FAQ
+
+### Why is so much of my early payment going to interest?
+
+Amortizing loans front-load interest. In the first five years of a 30-year mortgage, around 70% of each payment goes to interest. Equity builds slowly. The amortization schedule shows the exact split month by month.
+
+### Should I round up my mortgage payment?
+
+If you can afford it, yes. Adding $100/month to a $2,000 payment shaves roughly 4 years off a 30-year term and saves tens of thousands in interest. Confirm your loan does not penalize prepayment first.
+
+### How much house can I "afford"?
+
+A common bank rule is the 28/36 rule: PITI under 28% of gross monthly income, total debt payments under 36%. That is the *bank&apos;s* limit, not yours — most personal-finance experts cap PITI at 25% of *take-home* pay so other goals stay funded.
+
+### What is a "rate buy-down"?
+
+You pay points up front (1 point = 1% of the loan) to drop the rate, usually by ~0.25% per point. Whether it pays off depends entirely on how long you keep the loan. Run both scenarios through the calculator.
+
+### Are mortgage rates negotiable?
+
+Yes. Lenders quote based on credit score, LTV, and your willingness to walk away. Get three quotes and tell each lender about the others — most will sharpen by 0.1–0.3% to win the deal.
+
+---
+
+The formula has not changed since the 1930s, but the difference between a good loan and a bad one is bigger than ever. Run the numbers yourself before you sign.

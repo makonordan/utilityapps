@@ -1,0 +1,11 @@
+# https://imagesqueeze.com/robots.txt
+
+User-agent: *
+Allow: /
+
+# Block crawlers from API routes and internal Next.js paths
+Disallow: /api/
+Disallow: /_next/
+
+# Sitemap location
+Sitemap: https://imagesqueeze.com/sitemap.xml

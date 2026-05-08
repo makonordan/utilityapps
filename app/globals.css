@@ -1,26 +1,45 @@
 @import "tailwindcss";
 
+/* Tell Tailwind v4 to read our JS config (colors, animations, fonts). */
+@config "../tailwind.config.ts";
+
+/* Class-based dark mode: only apply `dark:` utilities when an ancestor has `.dark`. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Theme tokens — the toggle in the header swaps the `.dark` class on <html>. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  color-scheme: dark;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html,
+body {
+  height: 100%;
+}
+
+/* Smooth scroll for in-page anchor links (TOC, breadcrumb, hero CTAs). */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Selection style picks up the brand. */
+::selection {
+  background-color: rgba(0, 102, 255, 0.18);
+  color: inherit;
+}
+
+/* Default focus ring uses the brand primary. */
+:focus-visible {
+  outline: 2px solid rgb(0 102 255 / 0.6);
+  outline-offset: 2px;
+  border-radius: 4px;
 }

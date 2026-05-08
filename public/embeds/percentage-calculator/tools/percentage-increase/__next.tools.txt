@@ -1,0 +1,5 @@
+1:"$Sreact.fragment"
+2:I[76384,["/embeds/percentage-calculator/_next/static/chunks/0qr.ijrln1kdv.js","/embeds/percentage-calculator/_next/static/chunks/04.rz4ah3s88_.js"],"default"]
+3:I[20604,["/embeds/percentage-calculator/_next/static/chunks/0qr.ijrln1kdv.js","/embeds/percentage-calculator/_next/static/chunks/04.rz4ah3s88_.js"],"default"]
+4:[]
+0:{"rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"isPartial":false,"staleTime":300,"varyParams":"$W4","buildId":"Zb0zV1vmMgbPbY_SqQRVI"}
