@@ -66,8 +66,8 @@ const PLACEHOLDER_POSTS: FeaturedPost[] = [
 
 export async function getFeaturedPosts(limit: number = 3): Promise<FeaturedPost[]> {
   try {
-    // contentlayer/generated only exists after `contentlayer build`. Try at runtime.
-    const mod = (await import("contentlayer/generated").catch(() => null)) as
+    // contentlayer2/generated only exists after `contentlayer2 build`. Try at runtime.
+    const mod = (await import("contentlayer2/generated").catch(() => null)) as
       | { allPosts?: ContentlayerPost[] }
       | null;
     if (!mod?.allPosts || mod.allPosts.length === 0) return PLACEHOLDER_POSTS.slice(0, limit);
@@ -109,7 +109,7 @@ export async function getRelatedPosts(
 
 async function getAllPosts(): Promise<FeaturedPost[]> {
   try {
-    const mod = (await import("contentlayer/generated").catch(() => null)) as
+    const mod = (await import("contentlayer2/generated").catch(() => null)) as
       | { allPosts?: ContentlayerPost[] }
       | null;
     if (!mod?.allPosts || mod.allPosts.length === 0) return PLACEHOLDER_POSTS;

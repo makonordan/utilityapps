@@ -1,4 +1,4 @@
-import { defineDocumentType, makeSource } from "contentlayer/source-files";
+import { defineDocumentType, makeSource } from "contentlayer2/source-files";
 
 const READING_WORDS_PER_MINUTE = 220;
 
@@ -72,4 +72,8 @@ export const Post = defineDocumentType(() => ({
 export default makeSource({
   contentDirPath: "content",
   documentTypes: [Post],
+  // The warning checks for a tsconfig path alias under the old "contentlayer/generated"
+  // name. We only use "contentlayer2/generated" (already wired into tsconfig.json), so
+  // suppress the noise.
+  disableImportAliasWarning: true,
 });

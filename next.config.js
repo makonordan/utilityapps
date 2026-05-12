@@ -115,11 +115,13 @@ const nextConfig = {
 let configured = nextConfig;
 
 try {
-  // Contentlayer wrapper — peer dep `next-contentlayer` must be installed.
-  const { withContentlayer } = require("next-contentlayer");
+  // Contentlayer wrapper — peer dep `next-contentlayer2` must be installed.
+  // contentlayer2 is the maintained community fork of the original (now
+  // unmaintained) contentlayer/next-contentlayer packages.
+  const { withContentlayer } = require("next-contentlayer2");
   configured = withContentlayer(configured);
 } catch {
-  // next-contentlayer not installed yet; skip silently so dev/build still works.
+  // next-contentlayer2 not installed yet; skip silently so dev/build still works.
 }
 
 if (process.env.ANALYZE === "true") {

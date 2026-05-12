@@ -52,7 +52,7 @@ interface RawPost {
 
 async function loadAllRawPosts(): Promise<RawPost[]> {
   try {
-    const mod = (await import("contentlayer/generated").catch(() => null)) as
+    const mod = (await import("contentlayer2/generated").catch(() => null)) as
       | { allPosts?: RawPost[] }
       | null;
     return mod?.allPosts ?? [];
