@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 
 const FLOATING_TOOLS = [
   { id: "loan-calculator", icon: Banknote, accent: "from-primary-500 to-accent-500" },
-  { id: "image-compressor", icon: ImageIcon, accent: "from-accent-500 to-primary-500" },
+  { id: "compress-image", icon: ImageIcon, accent: "from-accent-500 to-primary-500" },
   { id: "bmi-calculator", icon: HeartPulse, accent: "from-success-500 to-primary-500" },
 ];
 

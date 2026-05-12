@@ -7,6 +7,7 @@ const SIZE = { width: 1200, height: 630 } as const;
 
 const TYPE_STYLES: Record<string, { label: string; accent: string }> = {
   tool: { label: "Tool", accent: "#0066FF" },
+  "image-tool": { label: "Image Tool", accent: "#7C3AED" },
   post: { label: "Article", accent: "#7C3AED" },
   product: { label: "Product", accent: "#F59E0B" },
   category: { label: "Category", accent: "#10B981" },

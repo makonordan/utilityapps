@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import { ComingSoonNotify } from "@/components/tools/ComingSoonNotify";
+import { IN_HOUSE_TOOLS } from "@/components/tools/in-house/registry";
 import { ToolCard } from "@/components/tools/ToolCard";
 import { ToolEmbed } from "@/components/tools/ToolEmbed";
 import { ToolFAQ, type FAQItem } from "@/components/tools/ToolFAQ";
@@ -32,8 +33,32 @@ interface RouteParams {
   params: Promise<{ slug: string }>;
 }
 
+/**
+ * Tools that ship a dedicated page under /app/tools/<slug>/page.tsx.
+ * They take precedence over this dynamic catch-all and must be excluded
+ * from generateStaticParams so the build doesn't try to emit two routes
+ * for the same path.
+ */
+const DEDICATED_TOOL_PAGES = new Set<string>([
+  "compress-image",
+  "resize-image",
+  "crop-image",
+  "convert-to-jpg",
+  "convert-from-jpg",
+  "photo-editor",
+  "upscale-image",
+  "remove-background",
+  "watermark-image",
+  "meme-generator",
+  "rotate-image",
+  "html-to-image",
+  "blur-face",
+]);
+
 export async function generateStaticParams() {
-  return TOOLS.map((tool) => ({ slug: tool.id }));
+  return TOOLS.filter((tool) => !DEDICATED_TOOL_PAGES.has(tool.id)).map((tool) => ({
+    slug: tool.id,
+  }));
 }
 
 export async function generateMetadata({ params }: RouteParams): Promise<Metadata> {
@@ -79,10 +104,9 @@ export default async function ToolPage({ params }: RouteParams) {
   const category = getCategoryByName(tool.category);
   const accent = category?.color ?? "#0066FF";
 
-  const related = tool.relatedTools
-    .map((id) => TOOLS_BY_ID[id])
-    .filter((t): t is Tool => Boolean(t))
-    .slice(0, 4);
+  const related = TOOLS.filter(
+    (t) => t.category === tool.category && t.id !== tool.id
+  );
 
   const articles = await getRelatedPosts(tool.category, 3);
 
@@ -202,11 +226,16 @@ export default async function ToolPage({ params }: RouteParams) {
         <AdSlot position="top" />
 
         <section className="mt-8">
-          {tool.embedUrl || tool.externalHref ? (
-            <ToolEmbed tool={tool} />
-          ) : (
-            <ComingSoonNotify toolId={tool.id} toolName={tool.name} />
-          )}
+          {(() => {
+            // Prefer the in-house Next.js component when one exists for this
+            // tool slug. Falls back to the external-tool stub for tools that
+            // haven't been migrated yet, or to a "coming soon" notify card
+            // when no destination is configured at all.
+            const InHouse = IN_HOUSE_TOOLS[tool.id];
+            if (InHouse) return <InHouse />;
+            if (tool.embedUrl || tool.externalHref) return <ToolEmbed tool={tool} />;
+            return <ComingSoonNotify toolId={tool.id} toolName={tool.name} />;
+          })()}
         </section>
 
         <AdSlot position="mid" />
@@ -264,13 +293,23 @@ export default async function ToolPage({ params }: RouteParams) {
 
         {related.length > 0 && (
           <section className="mt-14 space-y-6">
-            <header>
-              <h2 className="text-2xl font-bold tracking-tight text-surface-900 sm:text-3xl dark:text-white">
-                You might also like
-              </h2>
-              <p className="mt-1 text-sm text-surface-600 dark:text-surface-400">
-                Tools that pair well with {tool.name}.
-              </p>
+            <header className="flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <h2 className="text-2xl font-bold tracking-tight text-surface-900 sm:text-3xl dark:text-white">
+                  All {tool.category}
+                </h2>
+                <p className="mt-1 text-sm text-surface-600 dark:text-surface-400">
+                  Every other {tool.category.toLowerCase().replace(/ tools$/, "")} tool — jump straight in.
+                </p>
+              </div>
+              {category && (
+                <Link
+                  href={`/tools/categories/${category.id}`}
+                  className="text-xs font-semibold text-primary-700 hover:underline dark:text-primary-300"
+                >
+                  View hub →
+                </Link>
+              )}
             </header>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {related.map((t) => (

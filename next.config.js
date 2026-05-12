@@ -41,6 +41,8 @@ const nextConfig = {
       { protocol: "https", hostname: "avatars.githubusercontent.com" },
       { protocol: "https", hostname: "img.youtube.com" },
       { protocol: "https", hostname: "i.ytimg.com" },
+      { protocol: "https", hostname: "picsum.photos" },
+      { protocol: "https", hostname: "api.qrserver.com" },
     ],
   },
   async headers() {
@@ -74,6 +76,19 @@ const nextConfig = {
       {
         source: "/categories/:id",
         destination: "/tools/categories/:id",
+        permanent: true,
+      },
+      // Legacy iframe-style image tools were superseded by the in-house
+      // Next.js components at /tools/compress-image and /tools/convert-from-jpg.
+      // Permanent redirects preserve SEO and any external bookmarks.
+      {
+        source: "/tools/image-compressor",
+        destination: "/tools/compress-image",
+        permanent: true,
+      },
+      {
+        source: "/tools/image-converter",
+        destination: "/tools/convert-from-jpg",
         permanent: true,
       },
     ];

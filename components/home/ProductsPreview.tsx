@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Star } from "lucide-react";
 
@@ -34,10 +35,18 @@ export function ProductsPreview() {
                 href={`/products/${product.id}`}
                 className="group flex h-full flex-col overflow-hidden rounded-2xl border border-surface-200 bg-white transition hover:-translate-y-0.5 hover:shadow-card-hover dark:border-surface-800 dark:bg-surface-900"
               >
-                <div className={cn("relative h-36 w-full bg-gradient-to-br", product.image)} aria-hidden="true">
-                  <span className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.4),transparent_60%)]" />
+                <div className="relative h-36 w-full overflow-hidden">
+                  <div className={cn("absolute inset-0 bg-gradient-to-br", product.image)} aria-hidden="true" />
+                  <Image
+                    src={product.imageUrl}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                  <span className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                   {badge && (
-                    <span className="absolute left-3 top-3 rounded-full bg-white/30 px-2 py-0.5 text-[11px] font-semibold text-white backdrop-blur">
+                    <span className="absolute left-3 top-3 rounded-full bg-white/85 px-2 py-0.5 text-[11px] font-semibold text-surface-800 shadow-sm backdrop-blur">
                       {badge}
                     </span>
                   )}

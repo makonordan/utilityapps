@@ -45,7 +45,7 @@ const PLACEHOLDERS: Omit<Video, "thumbnail">[] = [
     description:
       "The math behind modern image formats and how to drop file sizes 80% without anyone noticing.",
     category: "Tools",
-    toolId: "image-compressor",
+    toolId: "compress-image",
     duration: "7:28",
     views: "120K",
     publishedAt: "2026-03-30",
@@ -197,9 +197,12 @@ const PLACEHOLDERS: Omit<Video, "thumbnail">[] = [
   },
 ];
 
+// Placeholder thumbnails: deterministic picsum.photos images keyed by video id.
+// Once real YouTube videos are uploaded, swap each entry to the real thumbnail
+// at https://img.youtube.com/vi/<11-char-yt-id>/maxresdefault.jpg.
 export const VIDEOS: Video[] = PLACEHOLDERS.map((v) => ({
   ...v,
-  thumbnail: `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`,
+  thumbnail: `https://picsum.photos/seed/${v.id}/1280/720`,
 }));
 
 export const VIDEO_CATEGORIES: Video["category"][] = [

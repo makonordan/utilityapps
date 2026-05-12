@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -236,9 +237,18 @@ function Breadcrumb({ product }: { product: Product }) {
 function ProductHero({ product, discount }: { product: Product; discount: number }) {
   return (
     <div className="relative overflow-hidden rounded-3xl border border-surface-200 bg-white dark:border-surface-800 dark:bg-surface-900">
-      <div className={cn("relative aspect-[4/3] w-full bg-gradient-to-br", product.image)} aria-hidden="true">
-        <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.45),transparent_60%)]" />
-        <span className="absolute left-4 top-4 rounded-full bg-white/30 px-2.5 py-0.5 text-xs font-semibold text-white backdrop-blur">
+      <div className="relative aspect-[4/3] w-full overflow-hidden">
+        <div className={cn("absolute inset-0 bg-gradient-to-br", product.image)} aria-hidden="true" />
+        <Image
+          src={product.imageUrl}
+          alt={product.name}
+          fill
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          className="object-cover"
+          priority
+        />
+        <span className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+        <span className="absolute left-4 top-4 rounded-full bg-white/85 px-2.5 py-0.5 text-xs font-semibold text-surface-800 shadow-sm backdrop-blur">
           {platformLabel(product.platform)}
         </span>
         {discount > 0 && (

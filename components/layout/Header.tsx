@@ -27,6 +27,18 @@ const NAV_LINKS = [
   { label: "About", href: "/about" },
 ];
 
+function groupToolsByCategory(): Map<string, Tool[]> {
+  const map = new Map<string, Tool[]>();
+  for (const tool of TOOLS) {
+    if (!map.has(tool.category)) map.set(tool.category, []);
+    map.get(tool.category)!.push(tool);
+  }
+  for (const list of map.values()) {
+    list.sort((a, b) => b.monthlySearches - a.monthlySearches);
+  }
+  return map;
+}
+
 function Logo({ className }: { className?: string }) {
   return (
     <Link href="/" className={cn("flex items-center gap-2 font-semibold", className)} aria-label="UtilityApps home">
@@ -118,18 +130,7 @@ function ScrollProgress() {
 }
 
 function ToolsMegaMenu() {
-  const grouped = useMemo(() => {
-    const map = new Map<string, Tool[]>();
-    for (const tool of TOOLS) {
-      if (!map.has(tool.category)) map.set(tool.category, []);
-      map.get(tool.category)!.push(tool);
-    }
-    for (const [cat, list] of map) {
-      list.sort((a, b) => b.monthlySearches - a.monthlySearches);
-      map.set(cat, list.slice(0, 4));
-    }
-    return map;
-  }, []);
+  const grouped = useMemo(() => groupToolsByCategory(), []);
 
   return (
     <motion.div
@@ -137,18 +138,19 @@ function ToolsMegaMenu() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.18, ease: "easeOut" }}
-      // Width: cap at 720px, but never wider than the viewport minus 3rem of
-      // padding. Two separate classes (Tailwind v4 mis-parses comma-list
-      // arbitrary values like `w-[min(960px,calc(100vw-2rem))]`).
-      className="absolute left-0 top-full z-50 mt-2 max-w-[720px] w-[calc(100vw-3rem)] rounded-3xl border border-surface-200 bg-white p-6 shadow-card-hover dark:border-surface-800 dark:bg-surface-900"
+      className="absolute left-0 top-full z-50 mt-2 max-w-[960px] w-[calc(100vw-3rem)] rounded-3xl border border-surface-200 bg-white p-6 shadow-card-hover dark:border-surface-800 dark:bg-surface-900"
     >
       <div className="grid grid-cols-2 gap-x-8 gap-y-6 lg:grid-cols-4">
         {CATEGORIES.map((cat) => {
           const tools = grouped.get(cat.name) ?? [];
+          const isImageTools = cat.name === "Image Tools";
+          const categoryHref = isImageTools
+            ? "/tools/image-tools"
+            : `/tools/categories/${cat.id}`;
           return (
             <div key={cat.id}>
               <Link
-                href={`/tools/categories/${cat.id}`}
+                href={categoryHref}
                 className="mb-3 flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-surface-500 hover:text-surface-900 dark:text-surface-400 dark:hover:text-white"
               >
                 <span>{cat.name}</span>
@@ -156,7 +158,7 @@ function ToolsMegaMenu() {
                   {cat.toolCount}
                 </span>
               </Link>
-              <ul className="space-y-1.5">
+              <ul className="max-h-72 space-y-1.5 overflow-y-auto pr-1">
                 {tools.map((tool) => (
                   <li key={tool.id}>
                     <Link
@@ -195,14 +197,7 @@ function ToolsMegaMenu() {
 
 function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [expanded, setExpanded] = useState<string | null>(null);
-  const grouped = useMemo(() => {
-    const map = new Map<string, Tool[]>();
-    for (const tool of TOOLS) {
-      if (!map.has(tool.category)) map.set(tool.category, []);
-      map.get(tool.category)!.push(tool);
-    }
-    return map;
-  }, []);
+  const grouped = useMemo(() => groupToolsByCategory(), []);
 
   useEffect(() => {
     if (!open) return;
@@ -291,7 +286,11 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                             ))}
                             <li>
                               <Link
-                                href={`/tools/categories/${cat.id}`}
+                                href={
+                                  cat.name === "Image Tools"
+                                    ? "/tools/image-tools"
+                                    : `/tools/categories/${cat.id}`
+                                }
                                 onClick={onClose}
                                 className="block rounded-lg px-3 py-2 text-xs font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400"
                               >

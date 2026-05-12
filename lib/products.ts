@@ -28,8 +28,11 @@ export interface Product {
   currency: "USD";
   category: string;
   tags: string[];
-  /** Tailwind gradient class string, e.g. "from-primary-500 to-accent-500" */
+  /** Tailwind gradient class string used as a fallback / decorative overlay
+   *  while the cover image loads. e.g. "from-primary-500 to-accent-500" */
   image: string;
+  /** Cover image URL shown on product cards and detail pages. */
+  imageUrl: string;
   rating: number;
   reviewCount: number;
   salesCount: number;
@@ -49,6 +52,11 @@ const r = (author: string, rating: number, body: string, date: string): ProductR
   date,
 });
 
+// Deterministic placeholder images. picsum.photos returns the same image for
+// the same seed, so each product card has a stable, varied cover. Swap to
+// custom artwork by replacing the imageUrl on each product.
+const img = (seed: string): string => `https://picsum.photos/seed/${seed}/640/400`;
+
 export const PRODUCTS: Product[] = [
   // ---------- AI Prompt Bundles (5) ----------
   {
@@ -57,12 +65,13 @@ export const PRODUCTS: Product[] = [
     description: "Battle-tested prompts for ChatGPT, Claude, and Gemini across writing, code, marketing, and research.",
     longDescription:
       "1,000 hand-curated prompts that survived three months of daily use across writing, code, marketing, research, and product work. Organized by use case with usage notes, expected output length, and the model each prompt was tuned on. Updated quarterly.",
-    price: 29,
+    price: 19,
     originalPrice: 49,
     currency: "USD",
     category: "AI Prompt Bundles",
     tags: ["ChatGPT", "Claude", "Gemini", "writing", "marketing", "code"],
     image: "from-primary-500 to-accent-500",
+    imageUrl: img("ai-prompt-vault"),
     rating: 4.9,
     reviewCount: 1280,
     salesCount: 4_300,
@@ -90,12 +99,13 @@ export const PRODUCTS: Product[] = [
     description: "Long-context, code-heavy, and analysis prompts purpose-built for Claude Sonnet and Opus.",
     longDescription:
       "200 prompts written specifically for Claude's strengths: long-context analysis, code review, multi-step planning, and structured output. Each recipe includes the prompt, the system message, sample input, and expected output. Includes 30 prompts for Claude Code specifically.",
-    price: 19,
+    price: 15,
     originalPrice: 29,
     currency: "USD",
     category: "AI Prompt Bundles",
     tags: ["Claude", "Anthropic", "Claude Code", "long context"],
     image: "from-accent-500 to-primary-500",
+    imageUrl: img("claude-power-prompts"),
     rating: 4.8,
     reviewCount: 540,
     salesCount: 1_700,
@@ -122,12 +132,13 @@ export const PRODUCTS: Product[] = [
     description: "Email sequences, ad copy, landing pages, and SEO briefs in one bundle.",
     longDescription:
       "A full marketing stack of prompts: 8 cold-email frameworks, 12 ad-copy templates (Meta, X, LinkedIn, Google), 6 landing-page generators, and 10 SEO brief generators. Tested across DTC, SaaS, and creator businesses.",
-    price: 35,
+    price: 20,
     originalPrice: 59,
     currency: "USD",
     category: "AI Prompt Bundles",
     tags: ["marketing", "email", "ads", "SEO", "copywriting"],
     image: "from-accent-500 to-warning-500",
+    imageUrl: img("ai-marketing-stack"),
     rating: 4.7,
     reviewCount: 412,
     salesCount: 1_200,
@@ -155,12 +166,13 @@ export const PRODUCTS: Product[] = [
     description: "Lit reviews, source synthesis, and structured note-taking for academic work.",
     longDescription:
       "60 prompts for graduate students and researchers: literature reviews, source synthesis, citation cross-checking, paper-style summaries, and structured note-taking. Designed for ChatGPT and Claude with explicit prompts to mitigate hallucinations.",
-    price: 15,
+    price: 12,
     originalPrice: 25,
     currency: "USD",
     category: "AI Prompt Bundles",
     tags: ["research", "academic", "literature review", "citations"],
     image: "from-primary-500 to-success-500",
+    imageUrl: img("research-assistant-prompts"),
     rating: 4.6,
     reviewCount: 198,
     salesCount: 620,
@@ -187,12 +199,13 @@ export const PRODUCTS: Product[] = [
     description: "Hooks, scripts, descriptions, and newsletter outlines for solo creators.",
     longDescription:
       "Everything a solo creator needs: 50 video hook formulas, 20 long-form script frameworks, YouTube description templates that rank, and newsletter outlines that convert. Tested on channels from 1K to 500K subs.",
-    price: 24,
+    price: 17,
     originalPrice: 39,
     currency: "USD",
     category: "AI Prompt Bundles",
     tags: ["YouTube", "newsletter", "creator", "video scripts"],
     image: "from-warning-500 to-accent-500",
+    imageUrl: img("creator-prompt-pack"),
     rating: 4.8,
     reviewCount: 322,
     salesCount: 1_080,
@@ -209,7 +222,7 @@ export const PRODUCTS: Product[] = [
     ],
     reviews: [
       r("Aiden M.", 5, "My CTR jumped 40% after testing the hook formulas. Real receipts.", "2026-04-30"),
-      r("Lana S.", 5, "Best $24 I've spent on my channel.", "2026-04-12"),
+      r("Lana S.", 5, "Best $17 I've spent on my channel.", "2026-04-12"),
       r("Cole F.", 4, "Some hooks feel formulaic but they work.", "2026-03-25"),
     ],
   },
@@ -227,6 +240,7 @@ export const PRODUCTS: Product[] = [
     category: "Resume & Career Templates",
     tags: ["resume", "ATS", "career", "Word", "Notion"],
     image: "from-success-500 to-primary-500",
+    imageUrl: img("resume-vault"),
     rating: 4.9,
     reviewCount: 2_140,
     salesCount: 7_800,
@@ -259,6 +273,7 @@ export const PRODUCTS: Product[] = [
     category: "Resume & Career Templates",
     tags: ["cover letter", "career", "job search"],
     image: "from-primary-500 to-success-500",
+    imageUrl: img("cover-letter-kit"),
     rating: 4.7,
     reviewCount: 460,
     salesCount: 1_400,
@@ -284,12 +299,13 @@ export const PRODUCTS: Product[] = [
     description: "Headline templates, About-section frameworks, and a featured-section visual kit.",
     longDescription:
       "Everything to rebuild your LinkedIn profile in an afternoon: 25 headline templates, 8 About-section frameworks, banner image templates in Figma, and a featured-section visual kit. Includes recruiter-keyword cheat sheet by industry.",
-    price: 22,
+    price: 16,
     originalPrice: 35,
     currency: "USD",
     category: "Resume & Career Templates",
     tags: ["LinkedIn", "personal brand", "job search"],
     image: "from-success-500 to-accent-500",
+    imageUrl: img("linkedin-makeover"),
     rating: 4.6,
     reviewCount: 280,
     salesCount: 740,
@@ -318,12 +334,13 @@ export const PRODUCTS: Product[] = [
     description: "100 editable Canva carousels for creators, coaches, and small brands.",
     longDescription:
       "100 high-converting Instagram carousel templates in Canva. Categories: educational, listicle, story, hook + payoff, and case study. All templates use the same color system so a brand swap takes 60 seconds.",
-    price: 27,
+    price: 19,
     originalPrice: 49,
     currency: "USD",
     category: "Social Media Kits",
     tags: ["Instagram", "carousel", "Canva", "social media"],
     image: "from-accent-500 to-warning-500",
+    imageUrl: img("instagram-post-kit"),
     rating: 4.8,
     reviewCount: 1_540,
     salesCount: 4_900,
@@ -350,12 +367,13 @@ export const PRODUCTS: Product[] = [
     description: "60 short-form scripts and 100 hook formulas for organic reach.",
     longDescription:
       "60 fully written TikTok / Reels scripts across 6 niches (fitness, finance, food, fashion, parenting, tech). Plus 100 hook formulas with examples that pulled 1M+ views. Updated monthly with new trending formats.",
-    price: 19,
+    price: 15,
     originalPrice: 29,
     currency: "USD",
     category: "Social Media Kits",
     tags: ["TikTok", "Reels", "scripts", "short-form"],
     image: "from-warning-500 to-accent-500",
+    imageUrl: img("tiktok-script-pack"),
     rating: 4.7,
     reviewCount: 880,
     salesCount: 2_650,
@@ -382,12 +400,13 @@ export const PRODUCTS: Product[] = [
     description: "Thread frameworks, reply scripts, and a 30-day content calendar.",
     longDescription:
       "Everything to grow on X without dancing for the algorithm: 25 thread frameworks, 15 reply scripts that get reach, a 30-day content calendar with prompts, and a Notion content board to plan everything.",
-    price: 17,
+    price: 14,
     originalPrice: 25,
     currency: "USD",
     category: "Social Media Kits",
     tags: ["Twitter", "X", "threads", "growth"],
     image: "from-primary-500 to-accent-500",
+    imageUrl: img("twitter-x-toolkit"),
     rating: 4.7,
     reviewCount: 410,
     salesCount: 1_120,
@@ -414,12 +433,13 @@ export const PRODUCTS: Product[] = [
     description: "Hand-built Photoshop and Canva thumbnails optimized for CTR.",
     longDescription:
       "80 thumbnail templates split between Photoshop (.psd) and Canva, organized by genre: tutorial, listicle, vlog, finance, tech review, and challenge. Includes a 4-page guide on what actually drives CTR in 2026.",
-    price: 22,
+    price: 18,
     originalPrice: 35,
     currency: "USD",
     category: "Social Media Kits",
     tags: ["YouTube", "thumbnails", "Photoshop", "Canva"],
     image: "from-warning-500 to-success-500",
+    imageUrl: img("youtube-thumbnail-pack"),
     rating: 4.6,
     reviewCount: 320,
     salesCount: 980,
@@ -454,6 +474,7 @@ export const PRODUCTS: Product[] = [
     category: "Finance & Business Templates",
     tags: ["freelance", "tax", "invoice", "Notion", "spreadsheet"],
     image: "from-success-500 to-primary-500",
+    imageUrl: img("freelance-finance-pack"),
     rating: 4.8,
     reviewCount: 540,
     salesCount: 1_900,
@@ -481,12 +502,13 @@ export const PRODUCTS: Product[] = [
     description: "SOP templates, hiring scorecards, and a financial dashboard for sub-$1M businesses.",
     longDescription:
       "Built for owner-operated businesses doing $50K–$1M/year: 12 SOP templates, hiring scorecards, a financial dashboard, and a 30-page playbook on running the business without it running you.",
-    price: 39,
+    price: 20,
     originalPrice: 69,
     currency: "USD",
     category: "Finance & Business Templates",
     tags: ["SOP", "operations", "small business", "hiring"],
     image: "from-success-500 to-warning-500",
+    imageUrl: img("small-business-toolkit"),
     rating: 4.7,
     reviewCount: 290,
     salesCount: 720,
@@ -513,12 +535,13 @@ export const PRODUCTS: Product[] = [
     description: "10 founder-tested pitch deck templates with annotated slide-by-slide notes.",
     longDescription:
       "10 pitch deck templates from real seed and Series A raises. Each slide has annotations explaining what investors look for and what to avoid. Keynote, PowerPoint, and Google Slides versions.",
-    price: 49,
+    price: 20,
     originalPrice: 79,
     currency: "USD",
     category: "Finance & Business Templates",
     tags: ["pitch deck", "startup", "fundraising", "Keynote", "Slides"],
     image: "from-primary-500 to-warning-500",
+    imageUrl: img("startup-pitch-deck"),
     rating: 4.8,
     reviewCount: 220,
     salesCount: 510,
@@ -545,12 +568,13 @@ export const PRODUCTS: Product[] = [
     description: "60-day launch calendar, email sequences, and a Notion command center.",
     longDescription:
       "A complete product launch system used to ship 4 launches at $100K+. Includes a 60-day calendar, 12 email sequences, social copy templates, and a Notion command center to keep everything in one place.",
-    price: 29,
+    price: 18,
     originalPrice: 49,
     currency: "USD",
     category: "Finance & Business Templates",
     tags: ["product launch", "marketing", "Notion"],
     image: "from-warning-500 to-primary-500",
+    imageUrl: img("product-launch-playbook"),
     rating: 4.6,
     reviewCount: 180,
     salesCount: 460,
@@ -579,12 +603,13 @@ export const PRODUCTS: Product[] = [
     description: "200+ Tailwind components in React, Vue, and HTML — copy-paste ready.",
     longDescription:
       "A handcrafted Tailwind UI library with 200+ components: hero sections, pricing tables, dashboards, auth forms, and more. React, Vue, and plain HTML versions with dark-mode support and accessibility baked in.",
-    price: 59,
+    price: 20,
     originalPrice: 99,
     currency: "USD",
     category: "Design & UI Kits",
     tags: ["Tailwind", "components", "React", "Vue"],
     image: "from-accent-500 to-primary-500",
+    imageUrl: img("ui-component-library"),
     rating: 4.9,
     reviewCount: 720,
     salesCount: 2_140,
@@ -611,12 +636,13 @@ export const PRODUCTS: Product[] = [
     description: "1,000 hand-crafted icons in SVG, React, and Figma — 4 weights.",
     longDescription:
       "1,000 icons across 16 categories, drawn at 4 stroke weights for visual consistency. Ships as SVG, React, and a fully tagged Figma library. Free updates for 12 months.",
-    price: 39,
+    price: 19,
     originalPrice: 59,
     currency: "USD",
     category: "Design & UI Kits",
     tags: ["icons", "SVG", "Figma", "React"],
     image: "from-primary-500 to-accent-500",
+    imageUrl: img("icon-set-1000"),
     rating: 4.8,
     reviewCount: 530,
     salesCount: 1_640,
@@ -643,12 +669,13 @@ export const PRODUCTS: Product[] = [
     description: "12 designed Notion dashboards for life, work, and side projects.",
     longDescription:
       "12 fully designed Notion dashboards covering life OS, project tracker, content calendar, reading list, finance, fitness, and more. Light and dark mode optimized layouts.",
-    price: 25,
+    price: 17,
     originalPrice: 39,
     currency: "USD",
     category: "Design & UI Kits",
     tags: ["Notion", "dashboard", "templates", "productivity"],
     image: "from-accent-500 to-primary-500",
+    imageUrl: img("notion-dashboard-pack"),
     rating: 4.7,
     reviewCount: 410,
     salesCount: 1_220,
@@ -674,12 +701,13 @@ export const PRODUCTS: Product[] = [
     description: "Pixel-perfect mockups for iPhone, Android, MacBook, iPad, and web.",
     longDescription:
       "80 device mockups in Figma covering current iPhone, Android, MacBook, iPad, and a set of browser mockups. Includes a smart-component setup so swapping screens takes one click.",
-    price: 29,
+    price: 18,
     originalPrice: 49,
     currency: "USD",
     category: "Design & UI Kits",
     tags: ["Figma", "mockups", "device", "design"],
     image: "from-primary-500 to-warning-500",
+    imageUrl: img("figma-mockup-pack"),
     rating: 4.7,
     reviewCount: 280,
     salesCount: 760,

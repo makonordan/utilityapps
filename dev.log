@@ -506,3 +506,1185 @@ https://react.dev/link/hydration-mismatch
  POST /api/tools/track 200 in 376ms (next.js: 219ms, application-code: 157ms)
  GET /api/tools/age-calculator/stats 200 in 48ms (next.js: 33ms, application-code: 15ms)
  GET /api/tools/age-calculator/stats 200 in 69ms (next.js: 52ms, application-code: 17ms)
+ GET /tools/age-calculator 200 in 1311ms (next.js: 28ms, generate-params: 18ms, application-code: 1284ms)
+ GET /api/tools/age-calculator/stats 200 in 91ms (next.js: 55ms, application-code: 36ms)
+[browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/tools/age..." tree={[...]} params={{slug:"age-..."}} cacheNode={{rsc:{...}, ...}} ...>
+            <SegmentViewNode type="page" pagePath="tools/[slu...">
+              <SegmentTrieNode>
+              <ToolPage>
+                <script>
+                <script>
+                <script>
+                <TrackToolVisit>
+                <div className="mx-auto ma...">
+                  <nav>
+                  <header>
+                  <div>
+                  <section className="mt-8">
+                    <ToolEmbed tool={{id:"age-ca...", ...}}>
+                      <section aria-label="Age Calcul..." className="space-y-3">
+                        <div>
+                        <div className="flex flex-...">
+                          <p>
+                          <LinkComponent href="/embeds/ag..." target="_blank" rel="noopener n..." ...>
+                            <a
++                             target="_blank"
+-                             target={null}
++                             rel="noopener noreferrer"
+-                             rel={null}
+                              className="inline-flex items-center gap-1 font-semibold text-primary-600 hover:text-prim..."
+                              ref={function}
+                              onClick={function onClick}
+                              onMouseEnter={function onMouseEnter}
+                              onTouchStart={function onTouchStart}
++                             href="/embeds/age-calculator"
+-                             href="/embeds/age-calculator/"
+                            >
++                             {" in new tab"}
+-                             <svg
+-                               xmlns="http://www.w3.org/2000/svg"
+-                               width="24"
+-                               height="24"
+-                               viewBox="0 0 24 24"
+-                               fill="none"
+-                               stroke="currentColor"
+-                               stroke-width="2"
+-                               stroke-linecap="round"
+-                               stroke-linejoin="round"
+-                               className="lucide lucide-arrow-right h-3.5 w-3.5"
+-                               aria-hidden="true"
+-                             >
+                              ...
+                  ...
+            ...
+          ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at a (<anonymous>)
+    at ToolEmbed (components/tools/ToolEmbed.tsx:101:23)
+    at ToolPage (app\tools\[slug]\page.tsx:206:13)
+   99 |           <a
+  100 |             href={openHref}
+> 101 |             className="inline-flex items-center gap-1 font-semibold text-primary-600 hove...
+      |                       ^
+  102 |           >
+  103 |             Open {tool.name}
+  104 |             <ArrowRight className="h-3.5 w-3.5" />
+⨯ Error: The router state header was sent but could not be parsed.
+    at ignore-listed frames
+⨯ Error: The router state header was sent but could not be parsed.
+    at ignore-listed frames
+○ Compiling /_error ...
+ GET /embeds/age-calculator/sitemap/index.txt 500 in 6.3s (next.js: 6.0s, application-code: 376ms)
+ GET /tools/image-compressor 200 in 181ms (next.js: 23ms, generate-params: 14ms, application-code: 159ms)
+ GET /api/tools/image-compressor/stats 200 in 85ms (next.js: 26ms, application-code: 60ms)
+ GET /api/tools/image-compressor/stats 200 in 35ms (next.js: 14ms, application-code: 21ms)
+ GET /tools/percentage-calculator 200 in 196ms (next.js: 16ms, generate-params: 9ms, application-code: 180ms)
+ GET /api/tools/percentage-calculator/stats 200 in 95ms (next.js: 36ms, application-code: 59ms)
+ GET /api/tools/percentage-calculator/stats 200 in 105ms (next.js: 93ms, application-code: 12ms)
+ HEAD /embeds/percentage-calculator/tools/margin-calculator 404 in 1071ms (next.js: 36ms, application-code: 1034ms)
+ HEAD /embeds/percentage-calculator/tools/tip-calculator 404 in 1587ms (next.js: 770ms, application-code: 818ms)
+ HEAD /embeds/percentage-calculator/tools/discount-calculator 404 in 1594ms (next.js: 929ms, application-code: 665ms)
+ HEAD /embeds/percentage-calculator/tools/percentage-of 404 in 476ms (next.js: 13ms, application-code: 462ms)
+ HEAD /embeds/percentage-calculator/tools/what-percent-of 404 in 456ms (next.js: 11ms, application-code: 445ms)
+ HEAD /embeds/percentage-calculator/tools/percentage-difference 404 in 649ms (next.js: 20ms, application-code: 628ms)
+ HEAD /embeds/percentage-calculator/tools/percentage-change 404 in 1464ms (next.js: 650ms, application-code: 814ms)
+ HEAD /embeds/percentage-calculator/tools/tip-calculator 404 in 618ms (next.js: 14ms, application-code: 603ms)
+ HEAD /embeds/percentage-calculator/tools/discount-calculator 404 in 876ms (next.js: 454ms, application-code: 423ms)
+ HEAD /embeds/percentage-calculator/tools/margin-calculator 404 in 1135ms (next.js: 27ms, application-code: 1108ms)
+ HEAD /embeds/percentage-calculator/tools/tip-calculator 404 in 1603ms (next.js: 694ms, application-code: 909ms)
+ HEAD /embeds/percentage-calculator/tools/discount-calculator 404 in 1605ms (next.js: 958ms, application-code: 647ms)
+ HEAD /embeds/percentage-calculator/tools/margin-calculator 404 in 1218ms (next.js: 20ms, application-code: 1198ms)
+ HEAD /embeds/percentage-calculator/tools/what-percent-of 404 in 1288ms (next.js: 187ms, application-code: 1101ms)
+ HEAD /embeds/percentage-calculator/tools/percentage-difference 404 in 2.0s (next.js: 355ms, application-code: 1673ms)
+ HEAD /embeds/percentage-calculator/tools/percentage-change 404 in 2.0s (next.js: 609ms, application-code: 1426ms)
+ HEAD /embeds/percentage-calculator/tools/tip-calculator 404 in 777ms (next.js: 31ms, application-code: 746ms)
+ HEAD /embeds/percentage-calculator/tools/tax-calculator 404 in 1229ms (next.js: 502ms, application-code: 727ms)
+ HEAD /embeds/percentage-calculator/tools/discount-calculator 404 in 1232ms (next.js: 638ms, application-code: 594ms)
+ GET /embeds/percentage-calculator/tools/percentage-of/__next.tools.percentage-of.txt 404 in 3.7s (next.js: 45ms, application-code: 3.6s)
+ GET /embeds/percentage-calculator/tools/percentage-of/__next.tools.percentage-of.__PAGE__.txt 404 in 3.3s (next.js: 1732ms, application-code: 1569ms)
+ HEAD /embeds/percentage-calculator/tools/margin-calculator 404 in 639ms (next.js: 23ms, application-code: 617ms)
+ HEAD /embeds/percentage-calculator/tools/tip-calculator 404 in 1233ms (next.js: 392ms, application-code: 841ms)
+ HEAD /embeds/percentage-calculator/tools/discount-calculator 404 in 1243ms (next.js: 508ms, application-code: 735ms)
+ HEAD /embeds/percentage-calculator/tools/percentage-increase 404 in 525ms (next.js: 23ms, application-code: 502ms)
+ HEAD /embeds/percentage-calculator/tools/tax-calculator 404 in 1010ms (next.js: 390ms, application-code: 620ms)
+ HEAD /embeds/percentage-calculator/tools/grade-calculator 404 in 1685ms (next.js: 736ms, application-code: 949ms)
+ HEAD /embeds/percentage-calculator/tools/ratio-calculator 404 in 1691ms (next.js: 850ms, application-code: 841ms)
+ HEAD /embeds/percentage-calculator/tools/percentage-change 404 in 385ms (next.js: 21ms, application-code: 365ms)
+ HEAD /embeds/percentage-calculator/tools/what-percent-of 404 in 1144ms (next.js: 386ms, application-code: 758ms)
+ HEAD /embeds/percentage-calculator/tools/margin-calculator 404 in 1144ms (next.js: 505ms, application-code: 640ms)
+ HEAD /embeds/percentage-calculator/tools/tip-calculator 404 in 1610ms (next.js: 1142ms, application-code: 468ms)
+ HEAD /embeds/percentage-calculator/tools/discount-calculator 404 in 416ms (next.js: 12ms, application-code: 404ms)
+ GET /tools/loan-calculator 200 in 194ms (next.js: 17ms, generate-params: 13ms, application-code: 176ms)
+ GET /api/tools/loan-calculator/stats 200 in 75ms (next.js: 62ms, application-code: 13ms)
+ GET /api/tools/loan-calculator/stats 200 in 135ms (next.js: 101ms, application-code: 34ms)
+ GET /embeds/loan-calculator/tools/loan-calculator 404 in 1517ms (next.js: 18ms, application-code: 1499ms)
+ GET /tools/loan-calculator 200 in 45ms (next.js: 21ms, generate-params: 14ms, application-code: 24ms)
+ GET /tools/loan-calculator 200 in 199ms (next.js: 15ms, generate-params: 50µs, application-code: 184ms)
+ GET /tools/loan-calculator 200 in 30ms (next.js: 13ms, generate-params: 8ms, application-code: 17ms)
+ GET /tools/loan-calculator 200 in 172ms (next.js: 6ms, generate-params: 53µs, application-code: 166ms)
+ GET /tools/mortgage-calculator 200 in 161ms (next.js: 23ms, generate-params: 13ms, application-code: 138ms)
+ GET /api/tools/mortgage-calculator/stats 200 in 45ms (next.js: 35ms, application-code: 11ms)
+ GET /api/tools/mortgage-calculator/stats 200 in 72ms (next.js: 60ms, application-code: 12ms)
+ GET /embeds/loan-calculator/tools/mortgage-calculator 404 in 1793ms (next.js: 18ms, application-code: 1775ms)
+ GET /tools/pdf-converter 200 in 166ms (next.js: 15ms, generate-params: 9ms, application-code: 151ms)
+ GET /api/tools/pdf-converter/stats 200 in 52ms (next.js: 40ms, application-code: 12ms)
+ GET /api/tools/pdf-converter/stats 200 in 94ms (next.js: 79ms, application-code: 15ms)
+ HEAD /embeds/pdf-converter/about 404 in 1386ms (next.js: 50ms, application-code: 1336ms)
+ HEAD /embeds/pdf-converter/tools/pdf-to-excel 404 in 1953ms (next.js: 906ms, application-code: 1047ms)
+ HEAD /embeds/pdf-converter/tools/pdf-to-jpg 404 in 1962ms (next.js: 1070ms, application-code: 892ms)
+ GET /tools/bmi-calculator 200 in 136ms (next.js: 14ms, generate-params: 9ms, application-code: 122ms)
+ GET /api/tools/bmi-calculator/stats 200 in 54ms (next.js: 33ms, application-code: 21ms)
+ GET /api/tools/bmi-calculator/stats 200 in 83ms (next.js: 67ms, application-code: 17ms)
+ GET /tools/calorie-calculator 200 in 131ms (next.js: 15ms, generate-params: 9ms, application-code: 116ms)
+ GET /api/tools/calorie-calculator/stats 200 in 30ms (next.js: 20ms, application-code: 10ms)
+ GET /api/tools/calorie-calculator/stats 200 in 55ms (next.js: 38ms, application-code: 17ms)
+ POST /api/tools/track 200 in 171ms (next.js: 122ms, application-code: 48ms)
+ GET /tools/image-converter 200 in 179ms (next.js: 13ms, generate-params: 8ms, application-code: 166ms)
+ GET /api/tools/image-converter/stats 200 in 86ms (next.js: 30ms, application-code: 55ms)
+ GET /api/tools/image-converter/stats 200 in 140ms (next.js: 124ms, application-code: 16ms)
+ GET /embeds/image-compressor/tools/convert-to-webp 404 in 1886ms (next.js: 47ms, application-code: 1838ms)
+ GET /tools/image-compressor 200 in 169ms (next.js: 18ms, generate-params: 11ms, application-code: 150ms)
+ GET /api/tools/image-compressor/stats 200 in 33ms (next.js: 21ms, application-code: 11ms)
+ GET /api/tools/image-compressor/stats 200 in 72ms (next.js: 54ms, application-code: 18ms)
+ GET /tools/word-counter 200 in 133ms (next.js: 12ms, generate-params: 8ms, application-code: 121ms)
+ POST /api/tools/track 200 in 49ms (next.js: 29ms, application-code: 20ms)
+ GET /api/tools/word-counter/stats 200 in 51ms (next.js: 30ms, application-code: 20ms)
+ GET /api/tools/word-counter/stats 200 in 68ms (next.js: 53ms, application-code: 15ms)
+ GET /embeds/style.css 404 in 2.8s (next.js: 462ms, application-code: 2.3s)
+ GET /embeds/script.js 404 in 3.3s (next.js: 22ms, application-code: 3.3s)
+ GET /tools/character-counter 200 in 151ms (next.js: 13ms, generate-params: 9ms, application-code: 137ms)
+ GET /api/tools/character-counter/stats 200 in 79ms (next.js: 71ms, application-code: 8ms)
+ POST /api/tools/track 200 in 111ms (next.js: 100ms, application-code: 11ms)
+ GET /api/tools/character-counter/stats 200 in 85ms (next.js: 76ms, application-code: 9ms)
+ GET /tools/case-converter 200 in 145ms (next.js: 19ms, generate-params: 10ms, application-code: 126ms)
+ GET /api/tools/case-converter/stats 200 in 36ms (next.js: 22ms, application-code: 14ms)
+ POST /api/tools/track 200 in 69ms (next.js: 56ms, application-code: 13ms)
+ GET /api/tools/case-converter/stats 200 in 134ms (next.js: 76ms, application-code: 58ms)
+ GET / 200 in 296ms (next.js: 42ms, application-code: 254ms)
+[browser] Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template). 
+○ Compiling /affiliate-disclosure ...
+ GET /affiliate-disclosure 200 in 3.4s (next.js: 3.3s, application-code: 92ms)
+ GET /affiliate-disclosure 200 in 155ms (next.js: 12ms, application-code: 143ms)
+ GET /products 200 in 1398ms (next.js: 1263ms, application-code: 134ms)
+ POST /api/affiliate/click 200 in 1505ms (next.js: 1480ms, application-code: 25ms)
+ GET /tools/bmi-calculator 200 in 446ms (next.js: 86ms, generate-params: 66ms, application-code: 360ms)
+ POST /api/tools/track 200 in 100ms (next.js: 56ms, application-code: 44ms)
+ GET /api/tools/bmi-calculator/stats 200 in 316ms (next.js: 150ms, application-code: 165ms)
+ GET /api/tools/bmi-calculator/stats 200 in 386ms (next.js: 356ms, application-code: 30ms)
+ GET / 200 in 327ms (next.js: 24ms, application-code: 302ms)
+ GET /tools/age-calculator 200 in 1772ms (next.js: 50ms, generate-params: 25ms, application-code: 1722ms)
+ GET /api/tools/age-calculator/stats 200 in 269ms (next.js: 235ms, application-code: 34ms)
+ POST /api/tools/track 200 in 390ms (next.js: 343ms, application-code: 47ms)
+ GET /api/tools/age-calculator/stats 200 in 346ms (next.js: 331ms, application-code: 16ms)
+ GET /tools/loan-calculator 200 in 346ms (next.js: 27ms, generate-params: 13ms, application-code: 318ms)
+ GET /api/tools/loan-calculator/stats 200 in 136ms (next.js: 98ms, application-code: 37ms)
+ POST /api/tools/track 200 in 360ms (next.js: 261ms, application-code: 99ms)
+ GET /api/tools/loan-calculator/stats 200 in 287ms (next.js: 271ms, application-code: 16ms)
+ GET /embeds/loan-calculator/tools/loan-calculator 404 in 4.6s (next.js: 49ms, application-code: 4.6s)
+ GET /tools/bmi-calculator 200 in 271ms (next.js: 21ms, generate-params: 13ms, application-code: 251ms)
+ GET /api/tools/bmi-calculator/stats 200 in 63ms (next.js: 45ms, application-code: 19ms)
+ GET /api/tools/bmi-calculator/stats 200 in 102ms (next.js: 76ms, application-code: 26ms)
+ GET /tools/bmi-calculator 200 in 50ms (next.js: 23ms, generate-params: 15ms, application-code: 27ms)
+ GET /tools/bmi-calculator 200 in 258ms (next.js: 15ms, generate-params: 239µs, application-code: 243ms)
+ GET /blog 200 in 330ms (next.js: 118ms, application-code: 212ms)
+ GET /tools/pdf-converter 200 in 333ms (next.js: 20ms, generate-params: 14ms, application-code: 313ms)
+ POST /api/tools/track 200 in 292ms (next.js: 209ms, application-code: 83ms)
+ GET /api/tools/pdf-converter/stats 200 in 101ms (next.js: 76ms, application-code: 25ms)
+ GET /api/tools/pdf-converter/stats 200 in 123ms (next.js: 96ms, application-code: 27ms)
+ HEAD /embeds/pdf-converter/tools/pdf-to-excel 404 in 4.5s (next.js: 48ms, application-code: 4.4s)
+ HEAD /embeds/pdf-converter/tools/pdf-to-jpg 404 in 4.5s (next.js: 684ms, application-code: 3.8s)
+ HEAD /embeds/pdf-converter/about 404 in 4.5s (next.js: 1687ms, application-code: 2.8s)
+Error: Failed to find Server Action. This request might be from an older or newer deployment.
+Read more: https://nextjs.org/docs/messages/failed-to-find-server-action
+    at ignore-listed frames
+ POST /api/convert 404 in 1099ms (next.js: 33ms, application-code: 1066ms)
+Error: Failed to find Server Action. This request might be from an older or newer deployment.
+Read more: https://nextjs.org/docs/messages/failed-to-find-server-action
+    at ignore-listed frames
+ POST /api/convert 404 in 1280ms (next.js: 28ms, application-code: 1252ms)
+(node:19300) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/Bluechip/Desktop/Claude/utilityapps/tailwind.config.ts?id=1778243192937 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\Users\Bluechip\Desktop\Claude\utilityapps\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ GET /tools/pdf-converter 200 in 2.6s (next.js: 305ms, generate-params: 9ms, application-code: 2.3s)
+ GET /tools/pdf-converter 200 in 1813ms (next.js: 5ms, generate-params: 34µs, application-code: 1807ms)
+ GET /tools/pdf-converter 200 in 1664ms (next.js: 41ms, generate-params: 39µs, application-code: 1623ms)
+ GET /tools/pdf-converter 200 in 1667ms (next.js: 496ms, generate-params: 58µs, application-code: 1170ms)
+ GET /tools/pdf-converter 200 in 1670ms (next.js: 660ms, generate-params: 40µs, application-code: 1009ms)
+ GET /tools/pdf-converter 200 in 1678ms (next.js: 843ms, generate-params: 27µs, application-code: 836ms)
+ GET /tools/pdf-converter 200 in 1543ms (next.js: 14ms, generate-params: 9ms, application-code: 1529ms)
+ GET /tools/pdf-converter 200 in 1554ms (next.js: 6ms, generate-params: 38µs, application-code: 1548ms)
+ GET /tools/pdf-converter 200 in 1508ms (next.js: 11ms, generate-params: 51µs, application-code: 1497ms)
+ GET /tools/pdf-converter 200 in 1507ms (next.js: 244ms, generate-params: 22µs, application-code: 1263ms)
+ GET /tools/pdf-converter 200 in 1509ms (next.js: 442ms, generate-params: 20µs, application-code: 1068ms)
+ GET /tools/pdf-converter 200 in 933ms (next.js: 15ms, generate-params: 9ms, application-code: 918ms)
+ GET /tools/pdf-converter 200 in 1558ms (next.js: 6ms, generate-params: 29µs, application-code: 1552ms)
+ GET /tools/pdf-converter 200 in 1576ms (next.js: 4ms, generate-params: 30µs, application-code: 1572ms)
+ GET /tools/pdf-converter 200 in 1546ms (next.js: 9ms, generate-params: 195µs, application-code: 1537ms)
+ GET /tools/pdf-converter 200 in 1550ms (next.js: 204ms, generate-params: 30µs, application-code: 1346ms)
+ GET /tools/pdf-converter 200 in 1157ms (next.js: 17ms, generate-params: 8ms, application-code: 1140ms)
+ GET /tools/pdf-converter 200 in 921ms (next.js: 8ms, generate-params: 51µs, application-code: 913ms)
+ GET /tools/pdf-converter 200 in 1588ms (next.js: 6ms, generate-params: 39µs, application-code: 1582ms)
+ GET /tools/pdf-converter 200 in 1583ms (next.js: 7ms, generate-params: 36µs, application-code: 1576ms)
+ GET /tools/pdf-converter 200 in 1581ms (next.js: 15ms, generate-params: 9ms, application-code: 1566ms)
+ GET /tools/pdf-converter 200 in 1303ms (next.js: 41ms, generate-params: 24µs, application-code: 1262ms)
+ GET /tools/pdf-converter 200 in 1043ms (next.js: 6ms, generate-params: 28µs, application-code: 1037ms)
+ GET /tools/pdf-converter 200 in 860ms (next.js: 6ms, generate-params: 34µs, application-code: 855ms)
+ GET /tools/pdf-converter 200 in 1537ms (next.js: 12ms, generate-params: 7ms, application-code: 1526ms)
+ GET /tools/pdf-converter 200 in 1563ms (next.js: 5ms, generate-params: 46µs, application-code: 1558ms)
+ GET /tools/pdf-converter 200 in 1626ms (next.js: 9ms, generate-params: 102µs, application-code: 1617ms)
+ GET /tools/pdf-converter 200 in 1358ms (next.js: 44ms, generate-params: 26µs, application-code: 1314ms)
+ GET /tools/pdf-converter 200 in 1327ms (next.js: 162ms, generate-params: 29µs, application-code: 1165ms)
+ GET /tools/pdf-converter 200 in 1019ms (next.js: 17ms, generate-params: 8ms, application-code: 1002ms)
+ GET /tools/pdf-converter 200 in 1741ms (next.js: 6ms, generate-params: 28µs, application-code: 1736ms)
+ GET /tools/pdf-converter 200 in 1679ms (next.js: 7ms, generate-params: 41µs, application-code: 1672ms)
+ GET /tools/pdf-converter 200 in 1645ms (next.js: 7ms, generate-params: 29µs, application-code: 1638ms)
+ GET /tools/pdf-converter 200 in 1446ms (next.js: 56ms, generate-params: 10ms, application-code: 1390ms)
+ GET /tools/pdf-converter 200 in 1109ms (next.js: 10ms, generate-params: 40µs, application-code: 1099ms)
+ GET /tools/pdf-converter 200 in 1109ms (next.js: 220ms, generate-params: 61µs, application-code: 889ms)
+ GET /tools/pdf-converter 200 in 1691ms (next.js: 5ms, generate-params: 35µs, application-code: 1686ms)
+ GET /tools/pdf-converter 200 in 1743ms (next.js: 17ms, generate-params: 10ms, application-code: 1725ms)
+ GET /tools/pdf-converter 200 in 1809ms (next.js: 10ms, generate-params: 76µs, application-code: 1799ms)
+ GET /tools/pdf-converter 200 in 1470ms (next.js: 9ms, generate-params: 35µs, application-code: 1461ms)
+ GET /tools/pdf-converter 200 in 1471ms (next.js: 237ms, generate-params: 58µs, application-code: 1234ms)
+ GET /tools/pdf-converter 200 in 1085ms (next.js: 19ms, generate-params: 11ms, application-code: 1066ms)
+ GET /tools/pdf-converter 200 in 2.2s (next.js: 5ms, generate-params: 42µs, application-code: 2.2s)
+ GET /tools/pdf-converter 200 in 2.3s (next.js: 5ms, generate-params: 25µs, application-code: 2.3s)
+ GET /tools/pdf-converter 200 in 2.4s (next.js: 11ms, generate-params: 40µs, application-code: 2.4s)
+ GET /tools/pdf-converter 200 in 2.1s (next.js: 20ms, generate-params: 10ms, application-code: 2.0s)
+ GET /tools/pdf-converter 200 in 1691ms (next.js: 9ms, generate-params: 44µs, application-code: 1682ms)
+ GET /tools/pdf-converter 200 in 1695ms (next.js: 371ms, generate-params: 33µs, application-code: 1325ms)
+ GET /tools/pdf-converter 200 in 2.3s (next.js: 8ms, generate-params: 37µs, application-code: 2.3s)
+ GET /tools/pdf-converter 200 in 2.3s (next.js: 17ms, generate-params: 11ms, application-code: 2.3s)
+ GET /tools/pdf-converter 200 in 2.0s (next.js: 15ms, generate-params: 36µs, application-code: 2.0s)
+ GET /tools/pdf-converter 200 in 1602ms (next.js: 9ms, generate-params: 37µs, application-code: 1593ms)
+ GET /tools/pdf-converter 200 in 1258ms (next.js: 7ms, generate-params: 45µs, application-code: 1252ms)
+ GET /tools/pdf-converter 200 in 1219ms (next.js: 17ms, generate-params: 8ms, application-code: 1202ms)
+ GET /tools/pdf-converter 200 in 1714ms (next.js: 6ms, generate-params: 40µs, application-code: 1708ms)
+ GET /tools/pdf-converter 200 in 1729ms (next.js: 5ms, generate-params: 22µs, application-code: 1724ms)
+ GET /tools/pdf-converter 200 in 1868ms (next.js: 8ms, generate-params: 40µs, application-code: 1860ms)
+ GET /tools/pdf-converter 200 in 1607ms (next.js: 15ms, generate-params: 8ms, application-code: 1592ms)
+ GET /tools/pdf-converter 200 in 1311ms (next.js: 7ms, generate-params: 40µs, application-code: 1304ms)
+ GET /tools/pdf-converter 200 in 1477ms (next.js: 7ms, generate-params: 38µs, application-code: 1470ms)
+ GET /tools/pdf-converter 200 in 2.1s (next.js: 5ms, generate-params: 38µs, application-code: 2.1s)
+ GET /tools/pdf-converter 200 in 2.1s (next.js: 17ms, generate-params: 7ms, application-code: 2.0s)
+ GET /tools/pdf-converter 200 in 1942ms (next.js: 10ms, generate-params: 68µs, application-code: 1932ms)
+ GET /tools/pdf-converter 200 in 1512ms (next.js: 18ms, generate-params: 38µs, application-code: 1494ms)
+ GET /tools/pdf-converter 200 in 1205ms (next.js: 7ms, generate-params: 42µs, application-code: 1198ms)
+ GET /tools/pdf-converter 200 in 1245ms (next.js: 18ms, generate-params: 11ms, application-code: 1228ms)
+ GET /tools/pdf-converter 200 in 1291ms (next.js: 6ms, generate-params: 38µs, application-code: 1285ms)
+ GET /tools/pdf-converter 200 in 960ms (next.js: 7ms, generate-params: 33µs, application-code: 953ms)
+ GET /tools/pdf-converter 200 in 664ms (next.js: 10ms, generate-params: 37µs, application-code: 654ms)
+ GET /tools/pdf-converter 200 in 395ms (next.js: 12ms, generate-params: 7ms, application-code: 383ms)
+  Reload env: .env.local
+ GET /tools/pdf-converter 200 in 1582ms (next.js: 1005ms, generate-params: 8ms, application-code: 577ms)
+ GET /tools/pdf-converter 200 in 2.7s (next.js: 17ms, generate-params: 13ms, application-code: 2.7s)
+ HEAD /embeds/pdf-converter/about 404 in 2.8s (next.js: 85ms, application-code: 2.7s)
+ HEAD /embeds/pdf-converter/tools/pdf-to-excel 404 in 2.8s (next.js: 1473ms, application-code: 1323ms)
+[browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/tools/pdf..." tree={[...]} params={{slug:"pdf-..."}} cacheNode={{rsc:{...}, ...}} ...>
+            <SegmentViewNode type="page" pagePath="tools/[slu...">
+              <SegmentTrieNode>
+              <ToolPage>
+                <script>
+                <script>
+                <script>
+                <TrackToolVisit>
+                <div className="mx-auto ma...">
+                  <nav>
+                  <header>
+                  <div>
+                  <section className="mt-8">
+                    <ToolEmbed tool={{id:"pdf-co...", ...}}>
+                      <section aria-label="PDF Conver..." className="space-y-3">
+                        <div>
+                        <div className="flex flex-...">
+                          <p>
+                          <LinkComponent href="/embeds/pd..." target="_blank" rel="noopener n..." ...>
+                            <a
++                             target="_blank"
+-                             target={null}
++                             rel="noopener noreferrer"
+-                             rel={null}
+                              className="inline-flex items-center gap-1 font-semibold text-primary-600 hover:text-prim..."
+                              ref={function}
+                              onClick={function onClick}
+                              onMouseEnter={function onMouseEnter}
+                              onTouchStart={function onTouchStart}
++                             href="/embeds/pdf-converter"
+-                             href="/embeds/pdf-converter/"
+                            >
++                             {" in new tab"}
+-                             <svg
+-                               xmlns="http://www.w3.org/2000/svg"
+-                               width="24"
+-                               height="24"
+-                               viewBox="0 0 24 24"
+-                               fill="none"
+-                               stroke="currentColor"
+-                               stroke-width="2"
+-                               stroke-linecap="round"
+-                               stroke-linejoin="round"
+-                               className="lucide lucide-arrow-right h-3.5 w-3.5"
+-                               aria-hidden="true"
+-                             >
+                              ...
+                  ...
+            ...
+          ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at a (<anonymous>)
+    at ToolEmbed (components/tools/ToolEmbed.tsx:101:23)
+    at ToolPage (app\tools\[slug]\page.tsx:206:13)
+   99 |           <a
+  100 |             href={openHref}
+> 101 |             className="inline-flex items-center gap-1 font-semibold text-primary-600 hove...
+      |                       ^
+  102 |           >
+  103 |             Open {tool.name}
+  104 |             <ArrowRight className="h-3.5 w-3.5" />
+ GET /api/tools/pdf-converter/stats 200 in 4.0s (next.js: 966ms, application-code: 3.0s)
+ HEAD /embeds/pdf-converter/tools/pdf-to-excel 404 in 1980ms (next.js: 46ms, application-code: 1934ms)
+ HEAD /embeds/pdf-converter/tools/pdf-to-jpg 404 in 2.6s (next.js: 1627ms, application-code: 932ms)
+ HEAD /embeds/pdf-converter/about 404 in 3.3s (next.js: 2.6s, application-code: 737ms)
+ POST /api/convert 200 in 22.8s (next.js: 1246ms, application-code: 21.5s)
+ GET / 200 in 1039ms (next.js: 315ms, application-code: 724ms)
+[browser] Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template). 
+ GET /MyComp 404 in 4.9s (next.js: 347ms, application-code: 4.6s)
+✓ Finished filesystem cache database compaction in 11.2s
+✓ Compiled in 9.4s
+✓ Compiled in 1010ms
+(node:19380) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/Bluechip/Desktop/Claude/utilityapps/tailwind.config.ts?id=1778514282656 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\Users\Bluechip\Desktop\Claude\utilityapps\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:8092) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/Bluechip/Desktop/Claude/utilityapps/tailwind.config.ts?id=1778514291555 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\Users\Bluechip\Desktop\Claude\utilityapps\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6268) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/Bluechip/Desktop/Claude/utilityapps/tailwind.config.ts?id=1778514731296 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\Users\Bluechip\Desktop\Claude\utilityapps\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✓ Compiled in 490ms
+✓ Compiled in 384ms
+✓ Compiled in 448ms
+(node:14460) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/Bluechip/Desktop/Claude/utilityapps/tailwind.config.ts?id=1778515757940 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\Users\Bluechip\Desktop\Claude\utilityapps\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:8392) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/Bluechip/Desktop/Claude/utilityapps/tailwind.config.ts?id=1778515768745 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\Users\Bluechip\Desktop\Claude\utilityapps\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✓ Compiled in 300ms
+✓ Compiled in 407ms
+(node:25340) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/Bluechip/Desktop/Claude/utilityapps/tailwind.config.ts?id=1778516757196 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\Users\Bluechip\Desktop\Claude\utilityapps\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✓ Compiled in 368ms
+✓ Compiled in 400ms
+✓ Finished filesystem cache database compaction in 13.8s
+(node:24708) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/Bluechip/Desktop/Claude/utilityapps/tailwind.config.ts?id=1778517526178 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\Users\Bluechip\Desktop\Claude\utilityapps\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✓ Compiled in 476ms
+✓ Compiled in 391ms
+✓ Compiled in 366ms
+✓ Compiled in 835ms
+✓ Finished filesystem cache database compaction in 10.1s
+✓ Compiled in 730ms
+✓ Compiled in 374ms
+[browser] Uncaught Error: Internal Next.js error: Router action dispatched before initialization.
+[browser] Uncaught Error: Internal Next.js error: Router action dispatched before initialization.
+ GET / 200 in 25.0s (next.js: 5.3s, application-code: 19.7s)
+[browser] Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template). 
+[browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <InnerLayoutRouter url="/" tree={[...]} params={{}} cacheNode={{rsc:{...}, ...}} segmentPath={[...]} ...>
+      <SegmentViewNode type="page" pagePath="page.tsx">
+        <SegmentTrieNode>
+        <HomePage>
+          <Hero>
+          <div>
+          <TrendingTools>
+            <section className="mx-auto ma...">
+              <header>
+              <div className="-mx-4 flex...">
+                <div className="snap-start...">
+                  <ToolCard tool={{id:"compre...", ...}} rank={1} variant="trending">
+                    <article className="group rela...">
+                      <span>
+                      <LinkComponent>
+                      <div className="relative z...">
+                        <div className="flex items...">
+                          <span className="flex h-10 ..." style={{...}} aria-hidden="true">
+                            <Sparkles className="h-5 w-5">
+                              <svg
+                                ref={null}
+                                xmlns="http://www.w3.org/2000/svg"
+                                width={24}
+                                height={24}
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth={2}
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
++                               className="lucide lucide-sparkles h-5 w-5"
+-                               className="lucide lucide-file-image h-5 w-5"
+                                aria-hidden="true"
+                              >
+                                <path
++                                 d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1..."
+-                                 d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4..."
+                                >
+                                <path
++                                 d="M20 2v4"
+-                                 d="M14 2v5a1 1 0 0 0 1 1h5"
+                                >
++                               <path d="M22 4h-4">
+-                               <circle cx="10" cy="12" r="2">
+                                ...
+                          ...
+                        ...
+                      ...
+                ...
+          ...
+      ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at path (<anonymous>)
+    at Array.map (<anonymous>)
+    at ToolCard (components/tools/ToolCard.tsx:65:13)
+    at <anonymous> (components\home\TrendingTools.tsx:37:13)
+    at Array.map (<anonymous>:1:18)
+    at TrendingTools (components\home\TrendingTools.tsx:35:16)
+    at HomePage (app\page.tsx:64:7)
+  63 |           >
+  64 |             {/* eslint-disable-next-line react-hooks/static-components */}
+> 65 |             <Icon className="h-5 w-5" />
+     |             ^
+  66 |           </span>
+  67 |           <div>
+  68 |             <p className="text-xs font-medium uppercase tracking-wider text-surface-500 da...
+ GET /tools/image-compressor 200 in 12.1s (next.js: 4.9s, generate-params: 294ms, application-code: 7.2s)
+ GET /api/tools/image-compressor/stats 200 in 2.7s (next.js: 1329ms, application-code: 1326ms)
+ GET /api/tools/image-compressor/stats 200 in 2.7s (next.js: 2.7s, application-code: 59ms)
+ POST /api/tools/track 200 in 3.6s (next.js: 3.1s, application-code: 472ms)
+✓ Compiled in 1121ms
+✓ Finished filesystem cache database compaction in 10.3s
+ GET /tools/image-compressor 200 in 15.8s (next.js: 2.1s, generate-params: 78ms, application-code: 13.7s)
+ GET /tools/image-compressor 200 in 11.7s (next.js: 12ms, generate-params: 48µs, application-code: 11.7s)
+ GET /tools/image-compressor 200 in 10.7s (next.js: 58ms, generate-params: 34µs, application-code: 10.7s)
+ GET /tools/image-compressor 200 in 10.7s (next.js: 1781ms, generate-params: 59µs, application-code: 8.9s)
+ GET /tools/image-compressor 200 in 10.7s (next.js: 5.1s, generate-params: 40µs, application-code: 5.6s)
+ GET /tools/image-compressor 200 in 10.8s (next.js: 6.7s, generate-params: 63µs, application-code: 4.0s)
+ GET /tools/image-compressor 200 in 8.8s (next.js: 992ms, generate-params: 124ms, application-code: 7.8s)
+ GET /tools/image-compressor 200 in 8.7s (next.js: 2.6s, generate-params: 116µs, application-code: 6.1s)
+ GET /tools/image-compressor 200 in 4.9s (next.js: 49ms, generate-params: 67µs, application-code: 4.9s)
+ GET /tools/image-compressor 200 in 5.0s (next.js: 1275ms, generate-params: 36µs, application-code: 3.7s)
+ GET /tools/image-compressor 200 in 5.0s (next.js: 3.2s, generate-params: 39µs, application-code: 1782ms)
+ GET /tools/image-compressor 200 in 5.0s (next.js: 2.3s, generate-params: 82µs, application-code: 2.7s)
+✓ Finished filesystem cache database compaction in 11.9s
+ GET /tools/image-compressor 200 in 8.6s (next.js: 245ms, generate-params: 124ms, application-code: 8.3s)
+ GET /tools/image-compressor 200 in 8.5s (next.js: 1698ms, generate-params: 135µs, application-code: 6.8s)
+ GET /tools/image-compressor 200 in 5.4s (next.js: 1325ms, generate-params: 93µs, application-code: 4.1s)
+ GET /tools/image-compressor 200 in 5.4s (next.js: 2.3s, generate-params: 53µs, application-code: 3.1s)
+ GET /tools/image-compressor 200 in 5.4s (next.js: 53ms, generate-params: 34µs, application-code: 5.3s)
+ GET /tools/image-compressor 200 in 5.4s (next.js: 3.6s, generate-params: 123µs, application-code: 1769ms)
+ GET /tools/image-compressor 200 in 8.3s (next.js: 101ms, generate-params: 19ms, application-code: 8.2s)
+ GET /tools/image-compressor 200 in 8.3s (next.js: 1417ms, generate-params: 39µs, application-code: 6.9s)
+ GET /tools/image-compressor 200 in 5.9s (next.js: 1994ms, generate-params: 282µs, application-code: 3.9s)
+ GET /tools/image-compressor 200 in 5.9s (next.js: 160ms, generate-params: 71µs, application-code: 5.7s)
+ GET /tools/image-compressor 200 in 5.9s (next.js: 4.2s, generate-params: 48µs, application-code: 1623ms)
+ GET /tools/image-compressor 200 in 5.9s (next.js: 3.1s, generate-params: 199µs, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 5.0s (next.js: 93ms, generate-params: 30ms, application-code: 4.9s)
+ GET /tools/image-compressor 200 in 3.9s (next.js: 52ms, generate-params: 50µs, application-code: 3.9s)
+ GET /tools/image-compressor 200 in 3.1s (next.js: 30ms, generate-params: 133µs, application-code: 3.1s)
+ GET /tools/image-compressor 200 in 3.1s (next.js: 1404ms, generate-params: 34µs, application-code: 1722ms)
+ GET /tools/image-compressor 200 in 3.1s (next.js: 817ms, generate-params: 37µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 1197ms, generate-params: 48µs, application-code: 1142ms)
+ GET /tools/image-compressor 200 in 4.4s (next.js: 49ms, generate-params: 24ms, application-code: 4.3s)
+ GET /tools/image-compressor 200 in 4.4s (next.js: 871ms, generate-params: 41µs, application-code: 3.5s)
+ GET /tools/image-compressor 200 in 2.9s (next.js: 1199ms, generate-params: 45µs, application-code: 1683ms)
+ GET /tools/image-compressor 200 in 2.9s (next.js: 566ms, generate-params: 35µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 2.9s (next.js: 16ms, generate-params: 34µs, application-code: 2.9s)
+ GET /tools/image-compressor 200 in 2.9s (next.js: 1745ms, generate-params: 41µs, application-code: 1148ms)
+ GET /tools/image-compressor 200 in 4.5s (next.js: 100ms, generate-params: 55ms, application-code: 4.4s)
+ GET /tools/image-compressor 200 in 4.5s (next.js: 916ms, generate-params: 86µs, application-code: 3.6s)
+ GET /tools/image-compressor 200 in 4.7s (next.js: 919ms, generate-params: 34µs, application-code: 3.8s)
+ GET /tools/image-compressor 200 in 4.7s (next.js: 46ms, generate-params: 68µs, application-code: 4.7s)
+ GET /tools/image-compressor 200 in 4.7s (next.js: 1544ms, generate-params: 36µs, application-code: 3.2s)
+ GET /tools/image-compressor 200 in 4.7s (next.js: 2.1s, generate-params: 762µs, application-code: 2.6s)
+ GET /tools/image-compressor 200 in 6.8s (next.js: 60ms, generate-params: 33ms, application-code: 6.8s)
+ GET /tools/image-compressor 200 in 6.8s (next.js: 839ms, generate-params: 60µs, application-code: 6.0s)
+ GET /tools/image-compressor 200 in 6.8s (next.js: 74ms, generate-params: 58µs, application-code: 6.7s)
+ GET /tools/image-compressor 200 in 4.7s (next.js: 38ms, generate-params: 19ms, application-code: 4.6s)
+ GET /tools/image-compressor 200 in 6.7s (next.js: 1079ms, generate-params: 43µs, application-code: 5.7s)
+ GET /tools/image-compressor 200 in 4.7s (next.js: 1688ms, generate-params: 33µs, application-code: 3.0s)
+ GET /tools/image-compressor 200 in 4.9s (next.js: 13ms, generate-params: 43µs, application-code: 4.9s)
+ GET /tools/image-compressor 200 in 4.0s (next.js: 14ms, generate-params: 69µs, application-code: 4.0s)
+ GET /tools/image-compressor 200 in 4.6s (next.js: 1666ms, generate-params: 57µs, application-code: 2.9s)
+ GET /tools/image-compressor 200 in 4.6s (next.js: 772ms, generate-params: 49µs, application-code: 3.8s)
+ GET /tools/image-compressor 200 in 4.6s (next.js: 24ms, generate-params: 16ms, application-code: 4.6s)
+ GET /tools/image-compressor 200 in 4.7s (next.js: 2.3s, generate-params: 33µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 1604ms (next.js: 33ms, generate-params: 14ms, application-code: 1571ms)
+ GET /tools/image-compressor 200 in 1026ms (next.js: 42ms, generate-params: 46µs, application-code: 984ms)
+ GET /tools/image-compressor 200 in 5.7s (next.js: 125ms, generate-params: 64µs, application-code: 5.5s)
+ GET /tools/image-compressor 200 in 5.6s (next.js: 2.2s, generate-params: 44µs, application-code: 3.5s)
+ GET /tools/image-compressor 200 in 5.7s (next.js: 3.2s, generate-params: 33µs, application-code: 2.5s)
+ GET /tools/image-compressor 200 in 5.7s (next.js: 1155ms, generate-params: 46µs, application-code: 4.5s)
+ GET /tools/image-compressor 200 in 5.6s (next.js: 3.8s, generate-params: 37µs, application-code: 1779ms)
+ GET /tools/image-compressor 200 in 5.7s (next.js: 4.5s, generate-params: 45µs, application-code: 1180ms)
+ GET /tools/image-compressor 200 in 6.3s (next.js: 33ms, generate-params: 16ms, application-code: 6.3s)
+ GET /tools/image-compressor 200 in 6.3s (next.js: 843ms, generate-params: 45µs, application-code: 5.5s)
+ GET /tools/image-compressor 200 in 6.3s (next.js: 2.6s, generate-params: 38µs, application-code: 3.7s)
+ GET /tools/image-compressor 200 in 6.3s (next.js: 4.0s, generate-params: 62µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 6.4s (next.js: 3.4s, generate-params: 33µs, application-code: 3.0s)
+ GET /tools/image-compressor 200 in 6.4s (next.js: 4.7s, generate-params: 41µs, application-code: 1673ms)
+ GET /tools/image-compressor 200 in 4.5s (next.js: 1067ms, generate-params: 54µs, application-code: 3.5s)
+ GET /tools/image-compressor 200 in 4.5s (next.js: 1808ms, generate-params: 48µs, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 4.5s (next.js: 3.2s, generate-params: 55µs, application-code: 1343ms)
+ GET /tools/image-compressor 200 in 4.5s (next.js: 3.7s, generate-params: 46µs, application-code: 816ms)
+ GET /tools/image-compressor 200 in 4.5s (next.js: 52ms, generate-params: 26ms, application-code: 4.5s)
+ GET /tools/image-compressor 200 in 4.5s (next.js: 2.6s, generate-params: 41µs, application-code: 1966ms)
+ GET /tools/image-compressor 200 in 3.8s (next.js: 45ms, generate-params: 30ms, application-code: 3.8s)
+ GET /tools/image-compressor 200 in 3.8s (next.js: 1504ms, generate-params: 39µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 3.8s (next.js: 3.0s, generate-params: 60µs, application-code: 823ms)
+ GET /tools/image-compressor 200 in 3.9s (next.js: 815ms, generate-params: 36µs, application-code: 3.0s)
+ GET /tools/image-compressor 200 in 3.8s (next.js: 2.6s, generate-params: 35µs, application-code: 1257ms)
+ GET /tools/image-compressor 200 in 3.9s (next.js: 2.1s, generate-params: 31µs, application-code: 1766ms)
+ GET /tools/image-compressor 200 in 4.5s (next.js: 30ms, generate-params: 13ms, application-code: 4.4s)
+ GET /tools/image-compressor 200 in 4.5s (next.js: 1590ms, generate-params: 55µs, application-code: 2.9s)
+ GET /tools/image-compressor 200 in 4.5s (next.js: 916ms, generate-params: 63µs, application-code: 3.6s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 797ms, generate-params: 63µs, application-code: 1533ms)
+ GET /tools/image-compressor 200 in 4.5s (next.js: 2.2s, generate-params: 175µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 945ms (next.js: 39ms, generate-params: 21ms, application-code: 906ms)
+ GET /tools/image-compressor 200 in 4.8s (next.js: 810ms, generate-params: 43µs, application-code: 4.0s)
+ GET /tools/image-compressor 200 in 4.8s (next.js: 20ms, generate-params: 240µs, application-code: 4.8s)
+ GET /tools/image-compressor 200 in 4.8s (next.js: 1311ms, generate-params: 43µs, application-code: 3.5s)
+ GET /tools/image-compressor 200 in 3.5s (next.js: 563ms, generate-params: 20ms, application-code: 3.0s)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 34ms, generate-params: 57µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 782ms (next.js: 34ms, generate-params: 22ms, application-code: 748ms)
+ GET /tools/image-compressor 200 in 1616ms (next.js: 833ms, generate-params: 52µs, application-code: 783ms)
+ GET /tools/image-compressor 200 in 1620ms (next.js: 14ms, generate-params: 93µs, application-code: 1606ms)
+✓ Compiled in 390ms
+ GET /tools/image-compressor 200 in 1716ms (next.js: 233ms, generate-params: 10ms, application-code: 1483ms)
+ GET /tools/image-compressor 200 in 785ms (next.js: 8ms, generate-params: 38µs, application-code: 776ms)
+(node:5344) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/Bluechip/Desktop/Claude/utilityapps/tailwind.config.ts?id=1778519992140 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\Users\Bluechip\Desktop\Claude\utilityapps\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ GET /tools/image-compressor 200 in 3.9s (next.js: 291ms, generate-params: 12ms, application-code: 3.7s)
+ GET /tools/image-compressor 200 in 3.2s (next.js: 124ms, generate-params: 68µs, application-code: 3.1s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 12ms, generate-params: 45µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 448ms, generate-params: 64µs, application-code: 1813ms)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 793ms, generate-params: 50µs, application-code: 1468ms)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 1146ms, generate-params: 20µs, application-code: 1116ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 18ms, generate-params: 11ms, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 8ms, generate-params: 36µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 6ms, generate-params: 44µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 1727ms (next.js: 8ms, generate-params: 40µs, application-code: 1718ms)
+ GET /tools/image-compressor 200 in 1915ms (next.js: 14ms, generate-params: 8ms, application-code: 1901ms)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 276ms, generate-params: 50µs, application-code: 1995ms)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 8ms, generate-params: 41µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 7ms, generate-params: 39µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 26ms, generate-params: 13ms, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 1802ms (next.js: 14ms, generate-params: 44µs, application-code: 1788ms)
+ GET /tools/image-compressor 200 in 1765ms (next.js: 8ms, generate-params: 40µs, application-code: 1756ms)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 258ms, generate-params: 49µs, application-code: 1759ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 16ms, generate-params: 10ms, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 8ms, generate-params: 46µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 9ms, generate-params: 31µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 1704ms (next.js: 8ms, generate-params: 36µs, application-code: 1696ms)
+ GET /tools/image-compressor 200 in 1751ms (next.js: 13ms, generate-params: 9ms, application-code: 1737ms)
+ GET /tools/image-compressor 200 in 1813ms (next.js: 12ms, generate-params: 48µs, application-code: 1801ms)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 7ms, generate-params: 37µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 6ms, generate-params: 52µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 22ms, generate-params: 12ms, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 1666ms (next.js: 8ms, generate-params: 49µs, application-code: 1658ms)
+ GET /tools/image-compressor 200 in 1903ms (next.js: 8ms, generate-params: 32µs, application-code: 1895ms)
+ GET /tools/image-compressor 200 in 1682ms (next.js: 7ms, generate-params: 58µs, application-code: 1675ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 16ms, generate-params: 10ms, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 6ms, generate-params: 41µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 9ms, generate-params: 35µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 1701ms (next.js: 6ms, generate-params: 33µs, application-code: 1695ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 18ms, generate-params: 10ms, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 1810ms (next.js: 8ms, generate-params: 38µs, application-code: 1802ms)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 6ms, generate-params: 23µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 9ms, generate-params: 38µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 15ms, generate-params: 8ms, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 1809ms (next.js: 10ms, generate-params: 36µs, application-code: 1799ms)
+ GET /tools/image-compressor 200 in 1686ms (next.js: 10ms, generate-params: 35µs, application-code: 1677ms)
+ GET /tools/image-compressor 200 in 1680ms (next.js: 6ms, generate-params: 53µs, application-code: 1673ms)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 15ms, generate-params: 8ms, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 9ms, generate-params: 36µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 1996ms (next.js: 9ms, generate-params: 29µs, application-code: 1987ms)
+ GET /tools/image-compressor 200 in 1704ms (next.js: 9ms, generate-params: 37µs, application-code: 1695ms)
+ GET /tools/image-compressor 200 in 1733ms (next.js: 18ms, generate-params: 12ms, application-code: 1715ms)
+ GET /tools/image-compressor 200 in 1846ms (next.js: 10ms, generate-params: 38µs, application-code: 1835ms)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 6ms, generate-params: 22µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 8ms, generate-params: 49µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 1756ms (next.js: 17ms, generate-params: 8ms, application-code: 1739ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 9ms, generate-params: 38µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 1748ms (next.js: 7ms, generate-params: 53µs, application-code: 1741ms)
+ GET /tools/image-compressor 200 in 1766ms (next.js: 7ms, generate-params: 27µs, application-code: 1759ms)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 14ms, generate-params: 9ms, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 3.0s (next.js: 15ms, generate-params: 36µs, application-code: 3.0s)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 8ms, generate-params: 33µs, application-code: 2.6s)
+ GET /tools/image-compressor 200 in 3.0s (next.js: 7ms, generate-params: 39µs, application-code: 3.0s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 21ms, generate-params: 11ms, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 7ms, generate-params: 26µs, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 91ms, generate-params: 41µs, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 20ms, generate-params: 12ms, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 1720ms (next.js: 8ms, generate-params: 57µs, application-code: 1712ms)
+ GET /tools/image-compressor 200 in 1941ms (next.js: 7ms, generate-params: 39µs, application-code: 1934ms)
+ GET /tools/image-compressor 200 in 1654ms (next.js: 9ms, generate-params: 50µs, application-code: 1645ms)
+ GET /tools/image-compressor 200 in 1758ms (next.js: 20ms, generate-params: 12ms, application-code: 1738ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 6ms, generate-params: 39µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 8ms, generate-params: 40µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 1824ms (next.js: 9ms, generate-params: 35µs, application-code: 1815ms)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 17ms, generate-params: 11ms, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 3.1s (next.js: 9ms, generate-params: 284µs, application-code: 3.1s)
+ GET /tools/image-compressor 200 in 3.1s (next.js: 6ms, generate-params: 55µs, application-code: 3.1s)
+ GET /tools/image-compressor 200 in 3.5s (next.js: 5ms, generate-params: 29µs, application-code: 3.5s)
+ GET /tools/image-compressor 200 in 3.4s (next.js: 16ms, generate-params: 9ms, application-code: 3.4s)
+ GET /tools/image-compressor 200 in 2.5s (next.js: 31ms, generate-params: 38µs, application-code: 2.5s)
+ GET /tools/image-compressor 200 in 1792ms (next.js: 13ms, generate-params: 37µs, application-code: 1779ms)
+ GET /tools/image-compressor 200 in 1695ms (next.js: 8ms, generate-params: 46µs, application-code: 1687ms)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 24ms, generate-params: 12ms, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 7ms, generate-params: 37µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 6ms, generate-params: 58µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 11ms, generate-params: 40µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 14ms, generate-params: 8ms, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 8ms, generate-params: 72µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 6ms, generate-params: 35µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 6ms, generate-params: 31µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 18ms, generate-params: 12ms, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 9ms, generate-params: 37µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 1806ms (next.js: 10ms, generate-params: 75µs, application-code: 1796ms)
+ GET /tools/image-compressor 200 in 1693ms (next.js: 8ms, generate-params: 51µs, application-code: 1684ms)
+ GET /tools/image-compressor 200 in 1676ms (next.js: 18ms, generate-params: 10ms, application-code: 1658ms)
+ GET /tools/image-compressor 200 in 1306ms (next.js: 6ms, generate-params: 76µs, application-code: 1300ms)
+ GET /tools/image-compressor 200 in 949ms (next.js: 6ms, generate-params: 33µs, application-code: 943ms)
+ GET /tools/image-compressor 200 in 604ms (next.js: 8ms, generate-params: 35µs, application-code: 597ms)
+ GET /tools/image-compressor 200 in 339ms (next.js: 14ms, generate-params: 8ms, application-code: 325ms)
+ GET /tools/image-compressor 200 in 3.7s (next.js: 262ms, generate-params: 15ms, application-code: 3.5s)
+ GET /tools/image-compressor 200 in 2.5s (next.js: 23ms, generate-params: 49µs, application-code: 2.5s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 521ms, generate-params: 59µs, application-code: 1704ms)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 21ms, generate-params: 57µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 879ms, generate-params: 25µs, application-code: 1357ms)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 1096ms, generate-params: 24µs, application-code: 1144ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 19ms, generate-params: 12ms, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 7ms, generate-params: 49µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 1963ms (next.js: 9ms, generate-params: 40µs, application-code: 1953ms)
+ GET /tools/image-compressor 200 in 1964ms (next.js: 352ms, generate-params: 51µs, application-code: 1612ms)
+ GET /tools/image-compressor 200 in 1626ms (next.js: 224ms, generate-params: 21µs, application-code: 1402ms)
+ GET /tools/image-compressor 200 in 1163ms (next.js: 22ms, generate-params: 12ms, application-code: 1141ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 8ms, generate-params: 38µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 9ms, generate-params: 38µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 8ms, generate-params: 36µs, application-code: 1997ms)
+ GET /tools/image-compressor 200 in 1747ms (next.js: 296ms, generate-params: 52µs, application-code: 1451ms)
+ GET /tools/image-compressor 200 in 1754ms (next.js: 28ms, generate-params: 15ms, application-code: 1726ms)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 33ms, generate-params: 62µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 5ms, generate-params: 43µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 15ms, generate-params: 10ms, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 7ms, generate-params: 36µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 1888ms (next.js: 314ms, generate-params: 37µs, application-code: 1574ms)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 378ms, generate-params: 31µs, application-code: 1884ms)
+ GET /tools/image-compressor 200 in 1501ms (next.js: 19ms, generate-params: 12ms, application-code: 1482ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 6ms, generate-params: 35µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 1977ms (next.js: 9ms, generate-params: 44µs, application-code: 1968ms)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 9ms, generate-params: 37µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 1791ms (next.js: 24ms, generate-params: 15ms, application-code: 1767ms)
+ GET /tools/image-compressor 200 in 1729ms (next.js: 274ms, generate-params: 39µs, application-code: 1455ms)
+ GET /tools/image-compressor 200 in 1732ms (next.js: 8ms, generate-params: 39µs, application-code: 1724ms)
+ GET /tools/image-compressor 200 in 1993ms (next.js: 6ms, generate-params: 38µs, application-code: 1987ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 23ms, generate-params: 16ms, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 1953ms (next.js: 11ms, generate-params: 184µs, application-code: 1943ms)
+ GET /tools/image-compressor 200 in 1620ms (next.js: 15ms, generate-params: 28µs, application-code: 1606ms)
+ GET /tools/image-compressor 200 in 1599ms (next.js: 9ms, generate-params: 26µs, application-code: 1591ms)
+ GET /tools/image-compressor 200 in 1853ms (next.js: 225ms, generate-params: 35µs, application-code: 1627ms)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 16ms, generate-params: 11ms, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 8ms, generate-params: 46µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 9ms, generate-params: 33µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 1868ms (next.js: 10ms, generate-params: 46µs, application-code: 1859ms)
+ GET /tools/image-compressor 200 in 1909ms (next.js: 20ms, generate-params: 12ms, application-code: 1888ms)
+ GET /tools/image-compressor 200 in 1910ms (next.js: 8ms, generate-params: 52µs, application-code: 1902ms)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 6ms, generate-params: 20µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 8ms, generate-params: 43µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 16ms, generate-params: 8ms, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 1754ms (next.js: 8ms, generate-params: 35µs, application-code: 1746ms)
+ GET /tools/image-compressor 200 in 1933ms (next.js: 8ms, generate-params: 44µs, application-code: 1924ms)
+ GET /tools/image-compressor 200 in 1673ms (next.js: 6ms, generate-params: 34µs, application-code: 1667ms)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 18ms, generate-params: 11ms, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 6ms, generate-params: 42µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 8ms, generate-params: 58µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 1734ms (next.js: 7ms, generate-params: 49µs, application-code: 1727ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 22ms, generate-params: 13ms, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 390ms, generate-params: 36µs, application-code: 1691ms)
+ GET /tools/image-compressor 200 in 1924ms (next.js: 5ms, generate-params: 24µs, application-code: 1919ms)
+ GET /tools/image-compressor 200 in 1926ms (next.js: 7ms, generate-params: 48µs, application-code: 1919ms)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 15ms, generate-params: 9ms, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 1706ms (next.js: 5ms, generate-params: 32µs, application-code: 1701ms)
+ GET /tools/image-compressor 200 in 1958ms (next.js: 261ms, generate-params: 37µs, application-code: 1697ms)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 7ms, generate-params: 64µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 13ms, generate-params: 8ms, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 7ms, generate-params: 48µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 1962ms (next.js: 5ms, generate-params: 30µs, application-code: 1957ms)
+ GET /tools/image-compressor 200 in 1651ms (next.js: 7ms, generate-params: 68µs, application-code: 1644ms)
+ GET /tools/image-compressor 200 in 1663ms (next.js: 264ms, generate-params: 35µs, application-code: 1399ms)
+ GET /tools/image-compressor 200 in 1667ms (next.js: 16ms, generate-params: 9ms, application-code: 1651ms)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 6ms, generate-params: 44µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 7ms, generate-params: 30µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 21ms, generate-params: 14ms, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 1875ms (next.js: 13ms, generate-params: 41µs, application-code: 1861ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 16ms, generate-params: 55µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 384ms, generate-params: 34µs, application-code: 1733ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 18ms, generate-params: 12ms, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 8ms, generate-params: 63µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 1993ms (next.js: 9ms, generate-params: 37µs, application-code: 1984ms)
+ GET /tools/image-compressor 200 in 1671ms (next.js: 8ms, generate-params: 52µs, application-code: 1663ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 21ms, generate-params: 13ms, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 1807ms (next.js: 7ms, generate-params: 37µs, application-code: 1800ms)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 8ms, generate-params: 56µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 7ms, generate-params: 23µs, application-code: 2.6s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 18ms, generate-params: 12ms, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 1963ms (next.js: 6ms, generate-params: 57µs, application-code: 1957ms)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 11ms, generate-params: 66µs, application-code: 2.8s)
+ GET /tools/image-compressor 200 in 2.9s (next.js: 25ms, generate-params: 35µs, application-code: 2.8s)
+ GET /tools/image-compressor 200 in 2.9s (next.js: 21ms, generate-params: 14ms, application-code: 2.8s)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 8ms, generate-params: 39µs, application-code: 2.5s)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 428ms, generate-params: 42µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 859ms, generate-params: 52µs, application-code: 1697ms)
+ GET /tools/image-compressor 200 in 2.5s (next.js: 18ms, generate-params: 11ms, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 8ms, generate-params: 41µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 7ms, generate-params: 37µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 1931ms (next.js: 26ms, generate-params: 17ms, application-code: 1905ms)
+ GET /tools/image-compressor 200 in 1931ms (next.js: 400ms, generate-params: 44µs, application-code: 1532ms)
+ GET /tools/image-compressor 200 in 1932ms (next.js: 742ms, generate-params: 35µs, application-code: 1189ms)
+ GET /tools/image-compressor 200 in 796ms (next.js: 6ms, generate-params: 35µs, application-code: 790ms)
+ GET /tools/image-compressor 200 in 513ms (next.js: 18ms, generate-params: 11ms, application-code: 495ms)
+ GET /tools/image-compressor 200 in 3.6s (next.js: 389ms, generate-params: 15ms, application-code: 3.2s)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 20ms, generate-params: 35µs, application-code: 2.6s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 530ms, generate-params: 46µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 754ms, generate-params: 34µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 65ms, generate-params: 40µs, application-code: 2.8s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 974ms, generate-params: 29µs, application-code: 1854ms)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 26ms, generate-params: 15ms, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 41ms, generate-params: 45µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 1524ms (next.js: 9ms, generate-params: 60µs, application-code: 1516ms)
+ GET /tools/image-compressor 200 in 1896ms (next.js: 289ms, generate-params: 39µs, application-code: 1608ms)
+ GET /tools/image-compressor 200 in 1619ms (next.js: 519ms, generate-params: 35µs, application-code: 1100ms)
+ GET /tools/image-compressor 200 in 1624ms (next.js: 229ms, generate-params: 12ms, application-code: 1395ms)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 8ms, generate-params: 26µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 8ms, generate-params: 45µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 1947ms (next.js: 21ms, generate-params: 12ms, application-code: 1926ms)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 31ms, generate-params: 41µs, application-code: 1984ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 392ms, generate-params: 40µs, application-code: 1676ms)
+ GET /tools/image-compressor 200 in 1687ms (next.js: 376ms, generate-params: 36µs, application-code: 1311ms)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 19ms, generate-params: 12ms, application-code: 2.4s)
+✓ Compiled in 591ms
+ GET /tools/image-compressor 200 in 2.8s (next.js: 10ms, generate-params: 445µs, application-code: 2.8s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 9ms, generate-params: 34µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 1898ms (next.js: 13ms, generate-params: 63µs, application-code: 1885ms)
+ GET /tools/image-compressor 200 in 1894ms (next.js: 314ms, generate-params: 47µs, application-code: 1580ms)
+ GET /tools/image-compressor 200 in 1587ms (next.js: 275ms, generate-params: 12ms, application-code: 1312ms)
+ GET /tools/image-compressor 200 in 3.9s (next.js: 17ms, generate-params: 38µs, application-code: 3.9s)
+ GET /tools/image-compressor 200 in 3.6s (next.js: 358ms, generate-params: 39µs, application-code: 3.2s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 41ms, generate-params: 23ms, application-code: 2.6s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 963ms, generate-params: 44µs, application-code: 1691ms)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 495ms, generate-params: 35µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 1417ms, generate-params: 37µs, application-code: 1244ms)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 17ms, generate-params: 11ms, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 6ms, generate-params: 37µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 10ms, generate-params: 62µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 338ms, generate-params: 36µs, application-code: 1788ms)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 630ms, generate-params: 39µs, application-code: 1530ms)
+ GET /tools/image-compressor 200 in 1538ms (next.js: 405ms, generate-params: 12ms, application-code: 1133ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 7ms, generate-params: 34µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 6ms, generate-params: 30µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 1798ms (next.js: 231ms, generate-params: 33µs, application-code: 1567ms)
+ GET /tools/image-compressor 200 in 1802ms (next.js: 12ms, generate-params: 39µs, application-code: 1790ms)
+ GET /tools/image-compressor 200 in 1632ms (next.js: 26ms, generate-params: 14ms, application-code: 1606ms)
+ GET /tools/image-compressor 200 in 1632ms (next.js: 331ms, generate-params: 198µs, application-code: 1301ms)
+ GET /tools/image-compressor 200 in 4.3s (next.js: 12ms, generate-params: 33µs, application-code: 4.3s)
+ GET /tools/image-compressor 200 in 5.0s (next.js: 11ms, generate-params: 46µs, application-code: 4.9s)
+ GET /tools/image-compressor 200 in 4.6s (next.js: 17ms, generate-params: 8ms, application-code: 4.6s)
+ GET /tools/image-compressor 200 in 4.6s (next.js: 447ms, generate-params: 35µs, application-code: 4.2s)
+ GET /tools/image-compressor 200 in 3.4s (next.js: 30ms, generate-params: 83µs, application-code: 3.3s)
+ GET /tools/image-compressor 200 in 3.4s (next.js: 1095ms, generate-params: 279µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 7.7s (next.js: 94ms, generate-params: 71ms, application-code: 7.6s)
+ GET /tools/image-compressor 200 in 7.2s (next.js: 12ms, generate-params: 31µs, application-code: 7.2s)
+ GET /tools/image-compressor 200 in 7.2s (next.js: 1342ms, generate-params: 36µs, application-code: 5.9s)
+ GET /tools/image-compressor 200 in 7.2s (next.js: 5.1s, generate-params: 33µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 7.2s (next.js: 2.9s, generate-params: 65µs, application-code: 4.4s)
+ GET /tools/image-compressor 200 in 7.2s (next.js: 4.0s, generate-params: 28µs, application-code: 3.2s)
+ GET /tools/image-compressor 200 in 3.1s (next.js: 71ms, generate-params: 35ms, application-code: 3.0s)
+ GET /tools/image-compressor 200 in 3.1s (next.js: 8ms, generate-params: 56µs, application-code: 3.1s)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 561ms, generate-params: 52µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 8ms, generate-params: 29µs, application-code: 2.6s)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 1460ms, generate-params: 148µs, application-code: 1165ms)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 1071ms, generate-params: 37µs, application-code: 1560ms)
+ GET /tools/image-compressor 200 in 3.5s (next.js: 147ms, generate-params: 120ms, application-code: 3.3s)
+ GET /tools/image-compressor 200 in 3.7s (next.js: 12ms, generate-params: 32µs, application-code: 3.7s)
+ GET /tools/image-compressor 200 in 3.7s (next.js: 1776ms, generate-params: 31µs, application-code: 1956ms)
+ GET /tools/image-compressor 200 in 3.7s (next.js: 801ms, generate-params: 33µs, application-code: 2.9s)
+ GET /tools/image-compressor 200 in 3.7s (next.js: 1309ms, generate-params: 29µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 3.8s (next.js: 2.2s, generate-params: 59µs, application-code: 1561ms)
+ GET /tools/image-compressor 200 in 4.9s (next.js: 22ms, generate-params: 14ms, application-code: 4.9s)
+ GET /tools/image-compressor 200 in 4.9s (next.js: 15ms, generate-params: 49µs, application-code: 4.9s)
+ GET /tools/image-compressor 200 in 4.9s (next.js: 731ms, generate-params: 31µs, application-code: 4.2s)
+ GET /tools/image-compressor 200 in 4.9s (next.js: 1798ms, generate-params: 48µs, application-code: 3.1s)
+ GET /tools/image-compressor 200 in 4.9s (next.js: 2.6s, generate-params: 45µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 4.9s (next.js: 2.9s, generate-params: 33µs, application-code: 1971ms)
+ GET /tools/image-compressor 200 in 3.3s (next.js: 19ms, generate-params: 12ms, application-code: 3.3s)
+ GET /tools/image-compressor 200 in 3.3s (next.js: 19ms, generate-params: 40µs, application-code: 3.3s)
+ GET /tools/image-compressor 200 in 3.3s (next.js: 1059ms, generate-params: 33µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 3.3s (next.js: 431ms, generate-params: 45µs, application-code: 2.9s)
+ GET /tools/image-compressor 200 in 1825ms (next.js: 35ms, generate-params: 21ms, application-code: 1790ms)
+ GET /tools/image-compressor 200 in 1829ms (next.js: 606ms, generate-params: 2ms, application-code: 1222ms)
+ GET /tools/image-compressor 200 in 3.9s (next.js: 16ms, generate-params: 34µs, application-code: 3.9s)
+ GET /tools/image-compressor 200 in 4.2s (next.js: 44ms, generate-params: 28ms, application-code: 4.2s)
+ GET /tools/image-compressor 200 in 4.2s (next.js: 576ms, generate-params: 47µs, application-code: 3.7s)
+ GET /tools/image-compressor 200 in 4.2s (next.js: 1155ms, generate-params: 45µs, application-code: 3.1s)
+ GET /tools/image-compressor 200 in 3.7s (next.js: 29ms, generate-params: 54µs, application-code: 3.7s)
+ GET /tools/image-compressor 200 in 3.8s (next.js: 917ms, generate-params: 588µs, application-code: 2.9s)
+ GET /tools/image-compressor 200 in 3.2s (next.js: 118ms, generate-params: 21ms, application-code: 3.1s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 18ms, generate-params: 58µs, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 545ms, generate-params: 186µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 1784ms (next.js: 10ms, generate-params: 28µs, application-code: 1774ms)
+ GET /tools/image-compressor 200 in 2.5s (next.js: 19ms, generate-params: 11ms, application-code: 2.5s)
+ GET /tools/image-compressor 200 in 2.5s (next.js: 407ms, generate-params: 36µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.5s (next.js: 10ms, generate-params: 28µs, application-code: 2.5s)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 9ms, generate-params: 32µs, application-code: 2.6s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 27ms, generate-params: 15ms, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 415ms, generate-params: 30µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 23ms, generate-params: 36µs, application-code: 2.6s)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 412ms, generate-params: 34µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 1823ms (next.js: 21ms, generate-params: 14ms, application-code: 1803ms)
+ GET /tools/image-compressor 200 in 1314ms (next.js: 9ms, generate-params: 34µs, application-code: 1304ms)
+ GET /tools/image-compressor 200 in 855ms (next.js: 380ms, generate-params: 32µs, application-code: 475ms)
+ GET /tools/image-compressor 200 in 854ms (next.js: 16ms, generate-params: 28µs, application-code: 838ms)
+(node:27592) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/Bluechip/Desktop/Claude/utilityapps/tailwind.config.ts?id=1778520539643 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\Users\Bluechip\Desktop\Claude\utilityapps\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✓ Compiled in 799ms
+✓ Compiled in 374ms
+ GET /tools/image-compressor 200 in 1405ms (next.js: 242ms, generate-params: 9ms, application-code: 1164ms)
+ GET /tools/image-compressor 200 in 563ms (next.js: 9ms, generate-params: 31µs, application-code: 555ms)
+ GET /tools/image-compressor 200 in 3.3s (next.js: 593ms, generate-params: 26ms, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 7ms, generate-params: 28µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 53ms, generate-params: 34µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 499ms, generate-params: 40µs, application-code: 1748ms)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 865ms, generate-params: 60µs, application-code: 1384ms)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 1092ms, generate-params: 40µs, application-code: 1155ms)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 16ms, generate-params: 10ms, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 8ms, generate-params: 45µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 9ms, generate-params: 30µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 40ms, generate-params: 30µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 280ms, generate-params: 36µs, application-code: 1875ms)
+ GET /tools/image-compressor 200 in 1899ms (next.js: 268ms, generate-params: 12ms, application-code: 1631ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 9ms, generate-params: 31µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 1644ms (next.js: 8ms, generate-params: 56µs, application-code: 1636ms)
+✓ Compiled in 807ms
+ GET /tools/image-compressor 200 in 6.5s (next.js: 1012ms, generate-params: 333ms, application-code: 5.4s)
+ GET /tools/image-compressor 200 in 6.4s (next.js: 1798ms, generate-params: 32µs, application-code: 4.6s)
+ GET /tools/image-compressor 200 in 6.5s (next.js: 2.7s, generate-params: 26µs, application-code: 3.8s)
+ GET /tools/image-compressor 200 in 6.3s (next.js: 4.9s, generate-params: 41µs, application-code: 1490ms)
+ GET /tools/image-compressor 200 in 6.4s (next.js: 3.6s, generate-params: 72µs, application-code: 2.9s)
+ GET /tools/image-compressor 200 in 6.3s (next.js: 5.5s, generate-params: 29µs, application-code: 842ms)
+ GET /tools/image-compressor 200 in 4.8s (next.js: 402ms, generate-params: 18ms, application-code: 4.4s)
+ GET /tools/image-compressor 200 in 4.8s (next.js: 1079ms, generate-params: 46µs, application-code: 3.7s)
+ GET /tools/image-compressor 200 in 3.7s (next.js: 855ms, generate-params: 31µs, application-code: 2.9s)
+ GET /tools/image-compressor 200 in 3.7s (next.js: 2.4s, generate-params: 30µs, application-code: 1282ms)
+ GET /tools/image-compressor 200 in 3.7s (next.js: 1978ms, generate-params: 75µs, application-code: 1764ms)
+ GET /tools/image-compressor 200 in 868ms (next.js: 135ms, generate-params: 21ms, application-code: 733ms)
+ GET /tools/image-compressor 200 in 4.7s (next.js: 16ms, generate-params: 32µs, application-code: 4.7s)
+ GET /tools/image-compressor 200 in 4.7s (next.js: 1200ms, generate-params: 27µs, application-code: 3.5s)
+ GET /tools/image-compressor 200 in 4.7s (next.js: 650ms, generate-params: 65µs, application-code: 4.1s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 35ms, generate-params: 19ms, application-code: 2.8s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 919ms, generate-params: 46µs, application-code: 1918ms)
+ GET /tools/image-compressor 200 in 1027ms (next.js: 142ms, generate-params: 33µs, application-code: 885ms)
+ GET /tools/image-compressor 200 in 3.8s (next.js: 75ms, generate-params: 22ms, application-code: 3.7s)
+ GET /tools/image-compressor 200 in 3.8s (next.js: 1183ms, generate-params: 37µs, application-code: 2.6s)
+ GET /tools/image-compressor 200 in 3.8s (next.js: 690ms, generate-params: 52µs, application-code: 3.1s)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 106ms, generate-params: 22ms, application-code: 1909ms)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 712ms, generate-params: 41µs, application-code: 1337ms)
+ GET /tools/image-compressor 200 in 820ms (next.js: 61ms, generate-params: 35µs, application-code: 759ms)
+ GET /tools/image-compressor 200 in 3.7s (next.js: 22ms, generate-params: 11ms, application-code: 3.7s)
+ GET /tools/image-compressor 200 in 3.7s (next.js: 509ms, generate-params: 37µs, application-code: 3.2s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 67ms, generate-params: 44µs, application-code: 2.6s)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 843ms, generate-params: 31µs, application-code: 1793ms)
+ GET /tools/image-compressor 200 in 1316ms (next.js: 33ms, generate-params: 17ms, application-code: 1283ms)
+ GET /tools/image-compressor 200 in 1328ms (next.js: 518ms, generate-params: 35µs, application-code: 810ms)
+ GET /tools/image-compressor 200 in 4.0s (next.js: 13ms, generate-params: 58µs, application-code: 4.0s)
+ GET /tools/image-compressor 200 in 3.4s (next.js: 652ms, generate-params: 42µs, application-code: 2.8s)
+ GET /tools/image-compressor 200 in 4.0s (next.js: 579ms, generate-params: 896µs, application-code: 3.4s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 74ms, generate-params: 41ms, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.2s (next.js: 724ms, generate-params: 53µs, application-code: 1504ms)
+ GET /tools/image-compressor 200 in 739ms (next.js: 14ms, generate-params: 52µs, application-code: 725ms)
+ GET /tools/image-compressor 200 in 3.3s (next.js: 14ms, generate-params: 35µs, application-code: 3.3s)
+ GET /tools/image-compressor 200 in 3.3s (next.js: 562ms, generate-params: 32µs, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 34ms, generate-params: 12ms, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 430ms, generate-params: 34µs, application-code: 1697ms)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 441ms, generate-params: 40µs, application-code: 1922ms)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 14ms, generate-params: 30µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 5.3s (next.js: 767ms, generate-params: 51µs, application-code: 4.6s)
+ GET /tools/image-compressor 200 in 5.3s (next.js: 25ms, generate-params: 13ms, application-code: 5.3s)
+ GET /tools/image-compressor 200 in 1941ms (next.js: 1253ms, generate-params: 62µs, application-code: 688ms)
+ GET /tools/image-compressor 200 in 4.1s (next.js: 1190ms, generate-params: 472µs, application-code: 2.9s)
+ GET /tools/image-compressor 200 in 1943ms (next.js: 47ms, generate-params: 18ms, application-code: 1896ms)
+ GET /tools/image-compressor 200 in 4.1s (next.js: 26ms, generate-params: 45µs, application-code: 4.1s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 32ms, generate-params: 18ms, application-code: 2.7s)
+ GET /api/tools/image-compressor/stats 200 in 875ms (next.js: 670ms, application-code: 206ms)
+[browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/tools/ima..." tree={[...]} params={{slug:"imag..."}} cacheNode={{rsc:{...}, ...}} ...>
+            <SegmentViewNode type="page" pagePath="tools/[slu...">
+              <SegmentTrieNode>
+              <ToolPage>
+                <script>
+                <script>
+                <script>
+                <TrackToolVisit>
+                <div className="mx-auto ma...">
+                  <nav>
+                  <header>
+                  <div>
+                  <section className="mt-8">
+                    <ToolEmbed tool={{id:"image-...", ...}}>
+                      <section aria-label="Image Comp..." className="space-y-3">
+                        <div>
+                        <div className="flex flex-...">
+                          <p>
+                          <LinkComponent href="/embeds/im..." target="_blank" rel="noopener n..." ...>
+                            <a
++                             target="_blank"
+-                             target={null}
++                             rel="noopener noreferrer"
+-                             rel={null}
+                              className="inline-flex items-center gap-1 font-semibold text-primary-600 hover:text-prim..."
+                              ref={function}
+                              onClick={function onClick}
+                              onMouseEnter={function onMouseEnter}
+                              onTouchStart={function onTouchStart}
++                             href="/embeds/image-compressor"
+-                             href="/embeds/image-compressor/"
+                            >
++                             {" in new tab"}
+-                             <svg
+-                               xmlns="http://www.w3.org/2000/svg"
+-                               width="24"
+-                               height="24"
+-                               viewBox="0 0 24 24"
+-                               fill="none"
+-                               stroke="currentColor"
+-                               stroke-width="2"
+-                               stroke-linecap="round"
+-                               stroke-linejoin="round"
+-                               className="lucide lucide-arrow-right h-3.5 w-3.5"
+-                               aria-hidden="true"
+-                             >
+                              ...
+                  ...
+            ...
+          ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at a (<anonymous>)
+    at ToolEmbed (components/tools/ToolEmbed.tsx:101:23)
+    at ToolPage (app\tools\[slug]\page.tsx:230:13)
+   99 |           <a
+  100 |             href={openHref}
+> 101 |             className="inline-flex items-center gap-1 font-semibold text-primary-600 hove...
+      |                       ^
+  102 |           >
+  103 |             Open {tool.name}
+  104 |             <ArrowRight className="h-3.5 w-3.5" />
+✓ Finished filesystem cache database compaction in 10.2s
+✓ Compiled in 303ms
+ GET /tools/image-compressor 200 in 2.8s (next.js: 271ms, generate-params: 11ms, application-code: 2.5s)
+ GET /tools/image-compressor 200 in 1734ms (next.js: 17ms, generate-params: 46µs, application-code: 1717ms)
+ GET /tools/image-compressor 200 in 4.9s (next.js: 530ms, generate-params: 32ms, application-code: 4.4s)
+ GET /tools/image-compressor 200 in 4.7s (next.js: 11ms, generate-params: 63µs, application-code: 4.7s)
+ GET /tools/image-compressor 200 in 4.1s (next.js: 22ms, generate-params: 5ms, application-code: 4.0s)
+ GET /tools/image-compressor 200 in 4.1s (next.js: 648ms, generate-params: 477µs, application-code: 3.4s)
+ GET /tools/image-compressor 200 in 4.1s (next.js: 2.0s, generate-params: 35µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 4.1s (next.js: 1548ms, generate-params: 30µs, application-code: 2.5s)
+ GET /tools/image-compressor 200 in 5.8s (next.js: 42ms, generate-params: 33ms, application-code: 5.7s)
+ GET /tools/image-compressor 200 in 5.4s (next.js: 38ms, generate-params: 59µs, application-code: 5.4s)
+ GET /tools/image-compressor 200 in 5.2s (next.js: 22ms, generate-params: 43µs, application-code: 5.2s)
+ GET /tools/image-compressor 200 in 5.2s (next.js: 1438ms, generate-params: 46µs, application-code: 3.8s)
+ GET /tools/image-compressor 200 in 5.3s (next.js: 869ms, generate-params: 39µs, application-code: 4.4s)
+ GET /tools/image-compressor 200 in 5.3s (next.js: 1899ms, generate-params: 35µs, application-code: 3.4s)
+ GET /tools/image-compressor 200 in 4.4s (next.js: 38ms, generate-params: 21ms, application-code: 4.4s)
+ GET /tools/image-compressor 200 in 4.4s (next.js: 8ms, generate-params: 49µs, application-code: 4.4s)
+ GET /tools/image-compressor 200 in 3.9s (next.js: 19ms, generate-params: 38µs, application-code: 3.9s)
+ GET /tools/image-compressor 200 in 4.0s (next.js: 883ms, generate-params: 30µs, application-code: 3.1s)
+ GET /tools/image-compressor 200 in 3.9s (next.js: 1411ms, generate-params: 31µs, application-code: 2.5s)
+ GET /tools/image-compressor 200 in 4.0s (next.js: 1858ms, generate-params: 32µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 4.2s (next.js: 24ms, generate-params: 15ms, application-code: 4.2s)
+ GET /tools/image-compressor 200 in 3.5s (next.js: 6ms, generate-params: 46µs, application-code: 3.5s)
+ GET /tools/image-compressor 200 in 3.9s (next.js: 724ms, generate-params: 29µs, application-code: 3.2s)
+ GET /tools/image-compressor 200 in 3.9s (next.js: 1339ms, generate-params: 30µs, application-code: 2.6s)
+ GET /tools/image-compressor 200 in 4.0s (next.js: 18ms, generate-params: 52µs, application-code: 4.0s)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 113ms, generate-params: 16ms, application-code: 1922ms)
+ GET /tools/image-compressor 200 in 3.9s (next.js: 21ms, generate-params: 33µs, application-code: 3.9s)
+ GET /tools/image-compressor 200 in 3.4s (next.js: 9ms, generate-params: 38µs, application-code: 3.4s)
+ GET /tools/image-compressor 200 in 5.3s (next.js: 53ms, generate-params: 17ms, application-code: 5.2s)
+ GET /tools/image-compressor 200 in 5.3s (next.js: 550ms, generate-params: 58µs, application-code: 4.7s)
+ GET /tools/image-compressor 200 in 5.3s (next.js: 1170ms, generate-params: 46µs, application-code: 4.1s)
+ GET /tools/image-compressor 200 in 3.5s (next.js: 101ms, generate-params: 36µs, application-code: 3.4s)
+ GET /tools/image-compressor 200 in 6.3s (next.js: 85ms, generate-params: 38ms, application-code: 6.2s)
+ GET /tools/image-compressor 200 in 6.2s (next.js: 937ms, generate-params: 41µs, application-code: 5.3s)
+ GET /tools/image-compressor 200 in 3.7s (next.js: 10ms, generate-params: 33µs, application-code: 3.7s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 1067ms, generate-params: 33µs, application-code: 1608ms)
+ GET /tools/image-compressor 200 in 3.7s (next.js: 1089ms, generate-params: 92µs, application-code: 2.6s)
+ GET /tools/image-compressor 200 in 2.5s (next.js: 95ms, generate-params: 39ms, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 3.9s (next.js: 54ms, generate-params: 43µs, application-code: 3.9s)
+ GET /tools/image-compressor 200 in 3.9s (next.js: 777ms, generate-params: 42µs, application-code: 3.2s)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 474ms, generate-params: 31µs, application-code: 1963ms)
+ GET /tools/image-compressor 200 in 2.5s (next.js: 33ms, generate-params: 47µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 3.4s (next.js: 1000ms, generate-params: 51µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 663ms, generate-params: 30ms, application-code: 1769ms)
+ GET /tools/image-compressor 200 in 3.0s (next.js: 504ms, generate-params: 39µs, application-code: 2.5s)
+ GET /tools/image-compressor 200 in 3.0s (next.js: 23ms, generate-params: 64µs, application-code: 3.0s)
+ GET /tools/image-compressor 200 in 1991ms (next.js: 499ms, generate-params: 39µs, application-code: 1492ms)
+ GET /tools/image-compressor 200 in 1992ms (next.js: 26ms, generate-params: 16ms, application-code: 1966ms)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 15ms, generate-params: 52µs, application-code: 1999ms)
+ GET /tools/image-compressor 200 in 2.0s (next.js: 490ms, generate-params: 39µs, application-code: 1527ms)
+ GET /tools/image-compressor 200 in 2.9s (next.js: 476ms, generate-params: 54µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 2.9s (next.js: 25ms, generate-params: 14ms, application-code: 2.8s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 21ms, generate-params: 35µs, application-code: 2.8s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 429ms, generate-params: 32µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 832ms, generate-params: 33µs, application-code: 1976ms)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 1279ms, generate-params: 50µs, application-code: 1535ms)
+ GET /tools/image-compressor 200 in 2.9s (next.js: 29ms, generate-params: 14ms, application-code: 2.8s)
+ GET /tools/image-compressor 200 in 2.9s (next.js: 422ms, generate-params: 70µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 379ms, generate-params: 49µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 19ms, generate-params: 32µs, application-code: 2.8s)
+ GET /tools/image-compressor 200 in 1961ms (next.js: 29ms, generate-params: 15ms, application-code: 1931ms)
+ GET /tools/image-compressor 200 in 1960ms (next.js: 437ms, generate-params: 35µs, application-code: 1522ms)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 447ms, generate-params: 32µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 7ms, generate-params: 38µs, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 431ms, generate-params: 32µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 20ms, generate-params: 12ms, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 1886ms (next.js: 411ms, generate-params: 61µs, application-code: 1475ms)
+ GET /tools/image-compressor 200 in 1890ms (next.js: 8ms, generate-params: 35µs, application-code: 1883ms)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 406ms, generate-params: 33µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 20ms, generate-params: 13ms, application-code: 2.8s)
+ GET /tools/image-compressor 200 in 2.8s (next.js: 18ms, generate-params: 48µs, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 423ms, generate-params: 51µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 1920ms (next.js: 27ms, generate-params: 16ms, application-code: 1893ms)
+ GET /tools/image-compressor 200 in 1918ms (next.js: 478ms, generate-params: 65µs, application-code: 1439ms)
+ GET /tools/image-compressor 200 in 2.5s (next.js: 7ms, generate-params: 33µs, application-code: 2.5s)
+ GET /tools/image-compressor 200 in 2.5s (next.js: 417ms, generate-params: 26µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.5s (next.js: 20ms, generate-params: 12ms, application-code: 2.5s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 12ms, generate-params: 57µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 407ms, generate-params: 45µs, application-code: 1668ms)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 749ms, generate-params: 43µs, application-code: 1328ms)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 21ms, generate-params: 12ms, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 386ms, generate-params: 39µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 9ms, generate-params: 29µs, application-code: 2.4s)
+ GET /tools/image-compressor 200 in 2.4s (next.js: 372ms, generate-params: 32µs, application-code: 2.0s)
+ GET /tools/image-compressor 200 in 1715ms (next.js: 21ms, generate-params: 13ms, application-code: 1694ms)
+ GET /tools/image-compressor 200 in 1313ms (next.js: 50ms, generate-params: 32µs, application-code: 1263ms)
+ GET /tools/image-compressor 200 in 2.5s (next.js: 8ms, generate-params: 42µs, application-code: 2.5s)
+ GET /tools/image-compressor 200 in 2.5s (next.js: 362ms, generate-params: 41µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 19ms, generate-params: 12ms, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 2.7s (next.js: 436ms, generate-params: 48µs, application-code: 2.3s)
+ GET /tools/image-compressor 200 in 2.3s (next.js: 539ms, generate-params: 51µs, application-code: 1734ms)
+ GET /tools/image-compressor 200 in 1369ms (next.js: 55ms, generate-params: 35µs, application-code: 1314ms)
+ GET /tools/image-compressor 200 in 3.2s (next.js: 15ms, generate-params: 9ms, application-code: 3.2s)
+ GET /tools/image-compressor 200 in 3.2s (next.js: 338ms, generate-params: 31µs, application-code: 2.9s)
+ GET /tools/image-compressor 200 in 3.3s (next.js: 27ms, generate-params: 43µs, application-code: 3.3s)
+ GET /tools/image-compressor 200 in 3.3s (next.js: 579ms, generate-params: 36µs, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 3.3s (next.js: 1061ms, generate-params: 32µs, application-code: 2.2s)
+ GET /tools/image-compressor 200 in 1843ms (next.js: 80ms, generate-params: 13ms, application-code: 1763ms)
+ GET /tools/image-compressor 200 in 2.6s (next.js: 10ms, generate-params: 36µs, application-code: 2.6s)
+ GET /tools/image-compressor 200 in 2.1s (next.js: 11ms, generate-params: 30µs, application-code: 2.1s)
+ GET /tools/image-compressor 200 in 1553ms (next.js: 22ms, generate-params: 14ms, application-code: 1531ms)
+ GET /tools/image-compressor 200 in 1553ms (next.js: 473ms, generate-params: 37µs, application-code: 1080ms)
+ GET /tools/image-compressor 200 in 1090ms (next.js: 389ms, generate-params: 37µs, application-code: 701ms)
+ GET /tools/image-compressor 200 in 396ms (next.js: 69ms, generate-params: 22µs, application-code: 327ms)
+✓ Compiled in 1987ms
+ GET /tools/image-compressor 200 in 2.1s (next.js: 514ms, generate-params: 34ms, application-code: 1579ms)
+✓ Compiled in 743ms
+ GET /tools/image-compressor 200 in 1995ms (next.js: 412ms, generate-params: 18ms, application-code: 1583ms)
+✓ Compiled in 421ms
+ GET /tools/image-compressor 200 in 941ms (next.js: 258ms, generate-params: 9ms, application-code: 684ms)
+✓ Compiled in 360ms
+ GET /tools/image-compressor 200 in 1160ms (next.js: 242ms, generate-params: 9ms, application-code: 918ms)
+✓ Compiled in 603ms
+ GET /tools/image-compressor 200 in 3.0s (next.js: 268ms, generate-params: 11ms, application-code: 2.7s)
+ GET /tools/image-compressor 200 in 1612ms (next.js: 20ms, generate-params: 118µs, application-code: 1591ms)
+ GET /tools/image-compressor 200 in 1489ms (next.js: 13ms, generate-params: 537µs, application-code: 1476ms)
+ GET /tools/image-compressor 200 in 1488ms (next.js: 335ms, generate-params: 30µs, application-code: 1153ms)
+ GET /tools/image-compressor 200 in 1488ms (next.js: 549ms, generate-params: 17µs, application-code: 939ms)
+ GET /tools/image-compressor 200 in 1488ms (next.js: 783ms, generate-params: 23µs, application-code: 705ms)
+ GET /tools/image-compressor 200 in 433ms (next.js: 16ms, generate-params: 10ms, application-code: 416ms)
+✓ Compiled in 7.8s
+[?25h

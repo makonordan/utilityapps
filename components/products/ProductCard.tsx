@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Star } from "lucide-react";
 
@@ -34,14 +35,21 @@ export function ProductCard({ product, className }: { product: Product; classNam
           aria-hidden="true"
           className={cn("absolute inset-0 bg-gradient-to-br", product.image)}
         />
-        <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.4),transparent_60%)]" />
-        <span className="absolute left-3 top-3 rounded-full bg-white/30 px-2 py-0.5 text-[11px] font-semibold text-white backdrop-blur">
+        <Image
+          src={product.imageUrl}
+          alt=""
+          fill
+          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+          className="object-cover"
+        />
+        <span className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+        <span className="absolute left-3 top-3 rounded-full bg-white/85 px-2 py-0.5 text-[11px] font-semibold text-surface-800 shadow-sm backdrop-blur">
           {platformLabel(product.platform)}
         </span>
         {badge && (
           <span
             className={cn(
-              "absolute right-3 top-3 rounded-full px-2 py-0.5 text-[11px] font-semibold",
+              "absolute right-3 top-3 rounded-full px-2 py-0.5 text-[11px] font-semibold shadow-sm",
               badge.tone
             )}
           >
@@ -104,8 +112,16 @@ export function FeaturedProductCard({ product }: { product: Product }) {
           aria-hidden="true"
           className={cn("absolute inset-0 bg-gradient-to-br", product.image)}
         />
-        <span className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.45),transparent_60%)]" />
-        <span className="absolute left-4 top-4 rounded-full bg-white/25 px-2.5 py-0.5 text-xs font-semibold text-white backdrop-blur">
+        <Image
+          src={product.imageUrl}
+          alt=""
+          fill
+          sizes="(min-width: 1024px) 33vw, 100vw"
+          className="object-cover"
+          priority
+        />
+        <span className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+        <span className="absolute left-4 top-4 rounded-full bg-white/85 px-2.5 py-0.5 text-xs font-semibold text-surface-800 shadow-sm backdrop-blur">
           {platformLabel(product.platform)}
         </span>
         {discount > 0 && (
