@@ -44,17 +44,22 @@ export function ToolCard({ tool, rank, variant = "grid", className }: ToolCardPr
         style={{ backgroundColor: accent }}
       />
 
-      {/* Card-level link covers the whole card. The interactive controls
-          (bookmark, share, external badge) sit on top with z-index + their
-          own click handlers that stopPropagation. */}
+      {/* Stretched card-level link. Sits beneath the visual content via
+          `inset-0`; the surrounding text/badges use `pointer-events-none`
+          so clicks fall through to this anchor. The interactive Share /
+          Bookmark buttons re-enable pointer events on themselves and call
+          stopPropagation to avoid triggering navigation. Opens in a new
+          tab so users don't lose their place on the homepage. */}
       <Link
         href={tool.href}
+        target="_blank"
+        rel="noopener noreferrer"
         onClick={() => recordToolUse(tool.id)}
-        aria-label={`Open ${tool.name}`}
+        aria-label={`Open ${tool.name} in a new tab`}
         className="absolute inset-0 z-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40"
       />
 
-      <div className="relative z-10 flex items-start justify-between p-5">
+      <div className="pointer-events-none relative z-10 flex items-start justify-between p-5">
         <div className="flex items-center gap-3">
           <span
             className="flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-sm"
@@ -73,17 +78,17 @@ export function ToolCard({ tool, rank, variant = "grid", className }: ToolCardPr
             </h3>
           </div>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="pointer-events-auto flex items-center gap-1.5">
           <ShareToolButton toolId={tool.id} toolName={tool.name} toolPath={tool.href} size="sm" />
           <BookmarkButton toolId={tool.id} size="sm" />
         </div>
       </div>
 
-      <p className="relative z-10 line-clamp-3 px-5 text-sm text-surface-600 dark:text-surface-300">
+      <p className="pointer-events-none relative z-10 line-clamp-3 px-5 text-sm text-surface-600 dark:text-surface-300">
         {tool.description}
       </p>
 
-      <div className="relative z-10 mt-auto flex flex-wrap items-center gap-2 px-5 pt-4">
+      <div className="pointer-events-none relative z-10 mt-auto flex flex-wrap items-center gap-2 px-5 pt-4">
         {variant === "trending" && rank && (
           <Badge tone="trending">
             <TrendingUp className="h-3 w-3" /> Trending #{rank}
@@ -103,7 +108,7 @@ export function ToolCard({ tool, rank, variant = "grid", className }: ToolCardPr
         )}
       </div>
 
-      <div className="relative z-10 flex items-center justify-between border-t border-surface-100 p-4 pt-3 dark:border-surface-800">
+      <div className="pointer-events-none relative z-10 flex items-center justify-between border-t border-surface-100 p-4 pt-3 dark:border-surface-800">
         <span
           className="inline-flex items-center gap-1 text-sm font-semibold text-primary-600 transition group-hover:gap-2 dark:text-primary-400"
           aria-hidden="true"
