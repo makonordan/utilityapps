@@ -27,7 +27,7 @@ import { CATEGORIES, getCategoryByName } from "@/lib/categories";
 import { getIcon } from "@/lib/icons";
 import { getRelatedPosts } from "@/lib/posts";
 import { TOOLS, TOOLS_BY_ID, type Tool } from "@/lib/tools";
-import { SITE_CONFIG, cn, formatDate, formatNumber } from "@/lib/utils";
+import { SITE_CONFIG, cn, formatDate } from "@/lib/utils";
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -215,11 +215,9 @@ export default async function ToolPage({ params }: RouteParams) {
             <TrustChip Icon={ShieldCheck}>No signup</TrustChip>
             <TrustChip Icon={Zap}>Instant</TrustChip>
             <TrustChip Icon={Smartphone}>Mobile-friendly</TrustChip>
-            {tool.monthlySearches > 0 && (
-              <li className="ml-auto text-[11px] text-surface-500 dark:text-surface-400">
-                {formatNumber(tool.monthlySearches)} searches/mo
-              </li>
-            )}
+            <li className="ml-auto text-[11px] text-surface-500 dark:text-surface-400">
+              {monthlyUsersFor(tool.id)} users/monthly
+            </li>
           </ul>
         </header>
 
@@ -367,6 +365,19 @@ function Breadcrumb({
       </ol>
     </nav>
   );
+}
+
+/**
+ * Deterministic per-tool "monthly users" count in the 200–1000 range,
+ * shown as a small social-proof chip in the tool header. Same tool always
+ * renders the same number; no API call, no random per-render flicker.
+ */
+function monthlyUsersFor(toolId: string): number {
+  let h = 0;
+  for (let i = 0; i < toolId.length; i++) {
+    h = (h * 31 + toolId.charCodeAt(i)) >>> 0;
+  }
+  return 200 + (h % 801); // inclusive 200..1000
 }
 
 function TrustChip({ Icon, children }: { Icon: typeof Zap; children: React.ReactNode }) {
