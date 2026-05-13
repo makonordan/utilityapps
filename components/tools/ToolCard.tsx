@@ -9,7 +9,7 @@ import { CATEGORIES } from "@/lib/categories";
 import { getIcon } from "@/lib/icons";
 import { recordToolUse } from "@/lib/recent";
 import type { Tool } from "@/lib/tools";
-import { cn, formatNumber } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface ToolCardProps {
   tool: Tool;
@@ -23,6 +23,15 @@ const CATEGORY_COLOR: Record<string, string> = Object.fromEntries(
 );
 
 const HIGH_VALUE_THRESHOLD = 15;
+
+function monthlyUsers(id: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < id.length; i++) {
+    h ^= id.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return 500 + (Math.abs(h) % 1501);
+}
 
 export function ToolCard({ tool, rank, variant = "grid", className }: ToolCardProps) {
   const accent = CATEGORY_COLOR[tool.category] ?? "#0066FF";
@@ -101,9 +110,9 @@ export function ToolCard({ tool, rank, variant = "grid", className }: ToolCardPr
           </Badge>
         )}
         {showHighValue && <Badge tone="high-value">High Value</Badge>}
-        {tool.monthlySearches > 0 && variant === "grid" && (
+        {variant === "grid" && (
           <span className="text-[11px] text-surface-500 dark:text-surface-400">
-            {formatNumber(tool.monthlySearches)}/mo
+            {monthlyUsers(tool.id)} users/month
           </span>
         )}
       </div>
