@@ -125,12 +125,22 @@ const config: Config = {
           "0%": { backgroundPosition: "-1000px 0" },
           "100%": { backgroundPosition: "1000px 0" },
         },
+        "accordion-down": {
+          from: { height: "0px" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0px" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.4s ease forwards",
         "slide-up": "slide-up 0.4s ease forwards",
         "scale-in": "scale-in 0.3s ease forwards",
         shimmer: "shimmer 2s linear infinite",
+        "accordion-down": "accordion-down 0.2s ease",
+        "accordion-up": "accordion-up 0.2s ease",
       },
       backgroundImage: {
         "shimmer-gradient":

@@ -75,7 +75,7 @@ export function FAQ() {
                 </Accordion.Trigger>
               </h3>
             </Accordion.Header>
-            <Accordion.Content className="overflow-hidden text-sm text-surface-600 data-[state=closed]:animate-[accordion-up_0.2s_ease] data-[state=open]:animate-[accordion-down_0.2s_ease] dark:text-surface-300">
+            <Accordion.Content className="overflow-hidden text-sm text-surface-600 data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down dark:text-surface-300">
               <div className="px-5 pb-5 pt-0">{faq.a}</div>
             </Accordion.Content>
           </Accordion.Item>
