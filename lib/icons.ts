@@ -1,6 +1,7 @@
 import {
   ArrowLeftRight,
   AudioLines,
+  AudioWaveform,
   Banknote,
   Barcode,
   Binary,
@@ -35,6 +36,8 @@ import {
   ImageDown,
   ImagePlay,
   Images,
+  Mic,
+  Music,
   KeyRound,
   Laugh,
   Link2,
@@ -62,6 +65,7 @@ import {
 const ICONS: Record<string, LucideIcon> = {
   ArrowLeftRight,
   AudioLines,
+  AudioWaveform,
   Banknote,
   Barcode,
   Binary,
@@ -96,6 +100,8 @@ const ICONS: Record<string, LucideIcon> = {
   ImageDown,
   ImagePlay,
   Images,
+  Mic,
+  Music,
   KeyRound,
   Laugh,
   Link2,

@@ -1426,6 +1426,88 @@ export const TOOLS: Tool[] = [
     cpc: 4,
     relatedTools: ["html-formatter", "regex-tester", "json-formatter"],
   },
+
+  // ─── Audio Tools ───────────────────────────────────────────────────────
+  {
+    id: "mp3-cutter",
+    name: "MP3 Cutter",
+    description:
+      "Cut and trim MP3, WAV, OGG, FLAC and more free in your browser. Lossless stream-copy — no re-encoding, no quality loss.",
+    longDescription:
+      "Online MP3 cutter and audio trimmer. Drag the start/end handles or type timestamps, then cut a clean section out of any audio file. Uses ffmpeg's stream-copy mode so the output is bit-identical to the source — perfect for ringtones, podcast clips, and samples. Runs entirely in your browser.",
+    category: "Audio Tools",
+    icon: "Scissors",
+    href: "/tools/mp3-cutter",
+    externalHref: null,
+    embedUrl: null,
+    keywords: ["mp3 cutter", "audio trimmer", "cut mp3", "trim audio online", "mp3 trimmer"],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 740_000,
+    cpc: 4,
+    relatedTools: ["audio-converter", "voice-recorder", "bpm-detector"],
+  },
+  {
+    id: "audio-converter",
+    name: "Audio Converter",
+    description:
+      "Convert audio between MP3, WAV, OGG, FLAC, AAC and OPUS free in your browser. Powered by ffmpeg.wasm.",
+    longDescription:
+      "Free audio converter supporting MP3, WAV, OGG (Vorbis), FLAC, AAC/M4A, and OPUS as both input and output. Lossless formats convert without loss; lossy formats re-encode at transparent default bitrates. The transcode runs in your browser via ffmpeg.wasm — your audio never leaves your device.",
+    category: "Audio Tools",
+    icon: "AudioLines",
+    href: "/tools/audio-converter",
+    externalHref: null,
+    embedUrl: null,
+    keywords: ["audio converter", "mp3 converter", "wav to mp3", "flac to mp3", "convert audio online"],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 920_000,
+    cpc: 5,
+    relatedTools: ["mp3-cutter", "voice-recorder", "bpm-detector"],
+  },
+  {
+    id: "voice-recorder",
+    name: "Voice Recorder",
+    description:
+      "Record your voice free in your browser with a live waveform. Download as WebM or MP3. No signup, no upload.",
+    longDescription:
+      "Online voice recorder built on the MediaRecorder API. Capture audio from your microphone with a live waveform display, play it back, and download as WebM/Opus (small file) or convert to MP3. The recording exists only in your browser tab — nothing is uploaded to a server.",
+    category: "Audio Tools",
+    icon: "Mic",
+    href: "/tools/voice-recorder",
+    externalHref: null,
+    embedUrl: null,
+    keywords: ["voice recorder", "online voice recorder", "audio recorder", "record voice", "mic recorder"],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 1_100_000,
+    cpc: 4,
+    relatedTools: ["audio-converter", "mp3-cutter", "bpm-detector"],
+  },
+  {
+    id: "bpm-detector",
+    name: "BPM Detector",
+    description:
+      "Detect the BPM (tempo) of any song free in your browser. Drop an MP3, WAV, OGG or FLAC and get beats per minute.",
+    longDescription:
+      "Free BPM detector that finds a song's tempo using the Web Audio API. The audio is decoded to PCM, energy peaks (kick drums, snares) are detected, and the dominant inter-peak interval is converted to beats per minute. Accurate within ±2 BPM for music with a clear beat.",
+    category: "Audio Tools",
+    icon: "AudioWaveform",
+    href: "/tools/bpm-detector",
+    externalHref: null,
+    embedUrl: null,
+    keywords: ["bpm detector", "bpm counter", "find bpm", "song tempo", "beats per minute"],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 480_000,
+    cpc: 3,
+    relatedTools: ["audio-converter", "mp3-cutter", "voice-recorder"],
+  },
 ];
 
 export const TOOLS_BY_ID: Record<string, Tool> = TOOLS.reduce(

@@ -92,6 +92,15 @@ const CATEGORY_DEFINITIONS: Omit<Category, "toolCount">[] = [
     color: "#EC4899",
     featured: true,
   },
+  {
+    id: "audio-tools",
+    name: "Audio Tools",
+    description:
+      "Cut, convert, record, and analyse MP3, WAV, OGG, FLAC and more — entirely in your browser. No upload, no signup.",
+    icon: "Music",
+    color: "#14B8A6",
+    featured: true,
+  },
 ];
 
 export const CATEGORIES: Category[] = CATEGORY_DEFINITIONS.map((category) => ({
