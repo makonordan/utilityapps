@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Balancer from "react-wrap-balancer";
 import {
@@ -209,6 +210,14 @@ function GradientMesh() {
 }
 
 function FloatingToolCards() {
+  // Render only after mount. The framer-motion animated cards were producing
+  // hydration mismatches under React 19, which then caused the entire page's
+  // event handlers (including ToolCard navigation) to be re-attached and
+  // briefly miss clicks. Mount-after-effect avoids the SSR/client diff entirely.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+
   return (
     <div
       className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 mx-auto hidden max-w-6xl px-4 sm:px-6 lg:block"
