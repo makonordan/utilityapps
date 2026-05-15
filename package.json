@@ -10,6 +10,8 @@
     "postinstall": "contentlayer2 build"
   },
   "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
     "@radix-ui/react-accordion": "^1.2.12",
     "@supabase/supabase-js": "^2.105.3",
     "@tensorflow/tfjs": "^4.22.0",

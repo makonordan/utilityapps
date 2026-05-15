@@ -83,6 +83,15 @@ const CATEGORY_DEFINITIONS: Omit<Category, "toolCount">[] = [
     color: "#A855F7",
     featured: true,
   },
+  {
+    id: "video-tools",
+    name: "Video Tools",
+    description:
+      "Compress, trim, convert, mute, and resize MP4, MOV, WebM and more — all in your browser via ffmpeg.wasm. No upload, no signup.",
+    icon: "Film",
+    color: "#EC4899",
+    featured: true,
+  },
 ];
 
 export const CATEGORIES: Category[] = CATEGORY_DEFINITIONS.map((category) => ({
