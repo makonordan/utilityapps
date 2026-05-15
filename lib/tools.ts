@@ -1508,6 +1508,88 @@ export const TOOLS: Tool[] = [
     cpc: 3,
     relatedTools: ["audio-converter", "mp3-cutter", "voice-recorder"],
   },
+
+  // ─── Design Tools ──────────────────────────────────────────────────────
+  {
+    id: "gradient-generator",
+    name: "Gradient Generator",
+    description:
+      "Build linear, radial, and conic CSS gradients with unlimited colour stops, angle control, and copy-ready CSS.",
+    longDescription:
+      "Free CSS gradient generator. Design linear, radial, or conic gradients with as many colour stops as you need, adjust the angle and stop positions, and copy production-ready CSS. Live preview updates as you edit — no images, no extra requests, scales to any size.",
+    category: "Design Tools",
+    icon: "Blend",
+    href: "/tools/gradient-generator",
+    externalHref: null,
+    embedUrl: null,
+    keywords: ["gradient generator", "css gradient", "linear gradient", "radial gradient", "conic gradient"],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 620_000,
+    cpc: 4,
+    relatedTools: ["color-converter", "css-shadow-builder", "contrast-checker"],
+  },
+  {
+    id: "contrast-checker",
+    name: "Contrast Checker",
+    description:
+      "Check colour contrast against WCAG 2.1. See the ratio and AA/AAA pass-fail for normal and large text with a live preview.",
+    longDescription:
+      "Free WCAG 2.1 colour contrast checker. Pick a text and background colour to see the contrast ratio and whether the pair passes AA and AAA for both normal and large text. A live text preview shows exactly how readable the combination is.",
+    category: "Design Tools",
+    icon: "Contrast",
+    href: "/tools/contrast-checker",
+    externalHref: null,
+    embedUrl: null,
+    keywords: ["contrast checker", "wcag contrast", "color contrast", "accessibility checker", "aa aaa contrast"],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 540_000,
+    cpc: 6,
+    relatedTools: ["color-converter", "gradient-generator", "font-pairing"],
+  },
+  {
+    id: "css-shadow-builder",
+    name: "CSS Shadow Builder",
+    description:
+      "Build multi-layer CSS box-shadows with inset support, X/Y/blur/spread sliders, live preview, and copy-ready CSS.",
+    longDescription:
+      "Free CSS box-shadow generator. Stack multiple shadow layers for realistic, layered depth, toggle inset for inner shadows, and fine-tune offset, blur, spread, colour, and opacity with sliders. The box-shadow CSS updates live and copies in one click.",
+    category: "Design Tools",
+    icon: "Layers",
+    href: "/tools/css-shadow-builder",
+    externalHref: null,
+    embedUrl: null,
+    keywords: ["css shadow generator", "box shadow generator", "box-shadow css", "shadow builder", "css drop shadow"],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 410_000,
+    cpc: 4,
+    relatedTools: ["gradient-generator", "color-converter", "contrast-checker"],
+  },
+  {
+    id: "font-pairing",
+    name: "Font Pairing",
+    description:
+      "Browse curated Google Font pairings with live previews. Copy-ready link tag and font-family CSS for each combination.",
+    longDescription:
+      "Free font pairing tool. Browse hand-picked heading + body font combinations, each previewed with the real Google Fonts so what you see is what ships. Every pairing comes with a copy-ready Google Fonts link tag and the font-family CSS declarations.",
+    category: "Design Tools",
+    icon: "Type",
+    href: "/tools/font-pairing",
+    externalHref: null,
+    embedUrl: null,
+    keywords: ["font pairing", "google font pairing", "font combinations", "font pairs", "typography pairing"],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 380_000,
+    cpc: 3,
+    relatedTools: ["color-converter", "contrast-checker", "gradient-generator"],
+  },
 ];
 
 export const TOOLS_BY_ID: Record<string, Tool> = TOOLS.reduce(

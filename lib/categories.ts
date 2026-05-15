@@ -101,6 +101,15 @@ const CATEGORY_DEFINITIONS: Omit<Category, "toolCount">[] = [
     color: "#14B8A6",
     featured: true,
   },
+  {
+    id: "design-tools",
+    name: "Design Tools",
+    description:
+      "Gradient generator, contrast checker, CSS shadow builder, and font pairing — copy-paste-ready CSS for designers and developers.",
+    icon: "Palette",
+    color: "#F43F5E",
+    featured: true,
+  },
 ];
 
 export const CATEGORIES: Category[] = CATEGORY_DEFINITIONS.map((category) => ({
