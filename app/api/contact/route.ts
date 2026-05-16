@@ -55,6 +55,19 @@ export async function POST(request: NextRequest) {
   const inboxAddress = process.env.CONTACT_INBOX ?? "hello@utilityapps.site";
   const fromAddress = process.env.RESEND_FROM ?? "noreply@utilityapps.site";
 
+  // Persist to Supabase so every submission is viewable in the admin
+  // dashboard. Best-effort: a database failure must not lose the message or
+  // break the user's submission — the email send below is the backup path.
+  try {
+    const queries = await import("@/lib/db/queries").catch(() => null);
+    if (queries) {
+      const saved = await queries.saveContactMessage(name, email, subject, message);
+      if (saved.error) console.warn("[contact] supabase save failed:", saved.error);
+    }
+  } catch (err) {
+    console.error("[contact] supabase", err);
+  }
+
   if (process.env.RESEND_API_KEY) {
     try {
       const res = await fetch("https://api.resend.com/emails", {

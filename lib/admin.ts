@@ -28,6 +28,14 @@ export interface SearchQuerySummary {
   count: number;
 }
 
+export interface ContactMessageSummary {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  createdAt: string;
+}
+
 export interface ZeroResultSearch {
   query: string;
   count: number;
@@ -62,6 +70,10 @@ export interface AdminStats {
   affiliateClicks7d: number;
   affiliateClicks30d: number;
   subscriberGrowth: SubscriberGrowthPoint[];
+  contactMessageCount: number;
+  recentContactMessages: ContactMessageSummary[];
+  /** True when the service-role key needed to read contact_messages is set. */
+  contactReadable: boolean;
   source: "supabase" | "fallback";
   fallbackReason?: string;
 }
@@ -79,7 +91,20 @@ const EMPTY_STATS: Omit<AdminStats, "source" | "fallbackReason"> = {
   affiliateClicks7d: 0,
   affiliateClicks30d: 0,
   subscriberGrowth: [],
+  contactMessageCount: 0,
+  recentContactMessages: [],
+  contactReadable: false,
 };
+
+// Shape of a contact_messages row as read through the untyped service-role
+// client (which is a plain SupabaseClient without the Database generic).
+interface ContactMessageRecord {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  created_at: string;
+}
 
 export async function getAdminStats(): Promise<AdminStats> {
   const sb = await import("./supabase").catch(() => null);
@@ -236,6 +261,41 @@ export async function getAdminStats(): Promise<AdminStats> {
       subscriberGrowth.push({ date: day, delta, cumulative });
     }
 
+    // Contact messages — read with the service-role client. The
+    // contact_messages table has no anon SELECT policy (it holds PII), so the
+    // anon `supabase` client cannot read it. Falls back to empty when the
+    // SUPABASE_SERVICE_ROLE_KEY env var is not configured.
+    let contactMessageCount = 0;
+    let recentContactMessages: ContactMessageSummary[] = [];
+    let contactReadable = false;
+    try {
+      const adminMod = await import("./supabaseAdmin").catch(() => null);
+      const adminClient = adminMod?.getSupabaseAdmin() ?? null;
+      if (adminClient) {
+        contactReadable = true;
+        const [contactCountRes, contactRecentRes] = await Promise.all([
+          adminClient.from("contact_messages").select("id", { count: "exact", head: true }),
+          adminClient
+            .from("contact_messages")
+            .select("name, email, subject, message, created_at")
+            .order("created_at", { ascending: false })
+            .limit(50),
+        ]);
+        contactMessageCount = contactCountRes.count ?? 0;
+        recentContactMessages = ((contactRecentRes.data ?? []) as ContactMessageRecord[]).map(
+          (row) => ({
+            name: row.name,
+            email: row.email,
+            subject: row.subject,
+            message: row.message,
+            createdAt: row.created_at,
+          })
+        );
+      }
+    } catch (err) {
+      console.error("[admin/stats] contact_messages", err);
+    }
+
     return {
       totalToolViews: totalUsageRes.count ?? 0,
       newsletterCount: newsletterCountRes.count ?? 0,
@@ -261,6 +321,9 @@ export async function getAdminStats(): Promise<AdminStats> {
       affiliateClicks7d,
       affiliateClicks30d,
       subscriberGrowth,
+      contactMessageCount,
+      recentContactMessages,
+      contactReadable,
       source: "supabase",
     };
   } catch (err) {

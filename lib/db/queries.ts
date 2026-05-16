@@ -170,6 +170,30 @@ export async function subscribeNewsletter(
   }
 }
 
+// --- contact ---------------------------------------------------------------
+
+export async function saveContactMessage(
+  name: string,
+  email: string,
+  subject: string,
+  message: string
+): Promise<DbResult<true>> {
+  try {
+    // Insert only — no .select() — so the table needs just an INSERT policy
+    // for the anon key. Reads happen server-side with the service-role key.
+    const { error } = await supabase.from("contact_messages").insert({
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      subject: subject.trim(),
+      message: message.trim(),
+    });
+    if (error) return fail(error);
+    return ok(true);
+  } catch (err) {
+    return fail(err);
+  }
+}
+
 // --- ratings ---------------------------------------------------------------
 
 export async function rateTools(

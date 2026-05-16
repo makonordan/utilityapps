@@ -7,6 +7,7 @@ import {
   BookText,
   ChevronRight,
   CircleDollarSign,
+  Inbox,
   LogOut,
   Mail,
   RefreshCcw,
@@ -21,6 +22,7 @@ import type {
   AdminToolRow,
   AffiliateClickRow,
   BlogViewSummary,
+  ContactMessageSummary,
   NewsletterSubscriberSummary,
   SubscriberGrowthPoint,
   ZeroResultSearch,
@@ -28,13 +30,14 @@ import type {
 import { TOOLS_BY_ID } from "@/lib/tools";
 import { cn, formatDate, formatNumber } from "@/lib/utils";
 
-type Tab = "overview" | "tools" | "blog" | "newsletter" | "search" | "revenue";
+type Tab = "overview" | "tools" | "blog" | "newsletter" | "contact" | "search" | "revenue";
 
 const TABS: { id: Tab; label: string; Icon: typeof BarChart3 }[] = [
   { id: "overview", label: "Overview", Icon: BarChart3 },
   { id: "tools", label: "Tools", Icon: Wrench },
   { id: "blog", label: "Blog", Icon: BookText },
   { id: "newsletter", label: "Newsletter", Icon: Mail },
+  { id: "contact", label: "Contact", Icon: Inbox },
   { id: "search", label: "Search", Icon: Search },
   { id: "revenue", label: "Revenue", Icon: CircleDollarSign },
 ];
@@ -61,6 +64,13 @@ export function Dashboard({ stats }: { stats: AdminStats }) {
               total={stats.newsletterCount}
               recent={stats.recentSubscribers}
               growth={stats.subscriberGrowth}
+            />
+          )}
+          {tab === "contact" && (
+            <ContactTab
+              total={stats.contactMessageCount}
+              messages={stats.recentContactMessages}
+              readable={stats.contactReadable}
             />
           )}
           {tab === "search" && (
@@ -497,6 +507,83 @@ function SubscriberList({ items }: { items: NewsletterSubscriberSummary[] }) {
       ])}
       emptyText=""
     />
+  );
+}
+
+// ----- Contact -------------------------------------------------------------
+
+function ContactTab({
+  total,
+  messages,
+  readable,
+}: {
+  total: number;
+  messages: ContactMessageSummary[];
+  readable: boolean;
+}) {
+  return (
+    <div>
+      <ul className="grid gap-4 sm:grid-cols-2">
+        <li>
+          <StatCard label="Total messages" value={formatNumber(total)} />
+        </li>
+        <li>
+          <StatCard
+            label="Showing"
+            value={formatNumber(messages.length)}
+            hint="Most recent 50"
+          />
+        </li>
+      </ul>
+
+      {!readable && (
+        <p className="mt-6 rounded-2xl border border-warning-300 bg-warning-50 p-4 text-sm text-warning-800 dark:border-warning-500/40 dark:bg-warning-500/10 dark:text-warning-200">
+          Contact messages can&apos;t be read yet. The table holds personal data, so it is not
+          readable with the public key — add the <code>SUPABASE_SERVICE_ROLE_KEY</code>{" "}
+          environment variable (Supabase → Settings → API → service_role key) and redeploy.
+        </p>
+      )}
+
+      <Section title="Recent contact messages" description="Newest first">
+        {messages.length === 0 ? (
+          <p className="rounded-2xl border border-dashed border-surface-200 p-6 text-center text-sm text-surface-500 dark:border-surface-800 dark:text-surface-400">
+            {readable
+              ? "No contact messages yet."
+              : "Once the service-role key is set, submissions will appear here."}
+          </p>
+        ) : (
+          <ul className="space-y-3">
+            {messages.map((m, i) => (
+              <li
+                key={i}
+                className="rounded-2xl border border-surface-200 bg-white p-4 dark:border-surface-800 dark:bg-surface-900"
+              >
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <p className="text-sm font-semibold text-surface-900 dark:text-white">
+                    {m.name}{" "}
+                    <a
+                      href={`mailto:${m.email}`}
+                      className="font-normal text-primary-600 hover:underline dark:text-primary-400"
+                    >
+                      ({m.email})
+                    </a>
+                  </p>
+                  <p className="text-xs text-surface-500 dark:text-surface-400">
+                    {formatDate(m.createdAt)}
+                  </p>
+                </div>
+                <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
+                  {m.subject}
+                </p>
+                <p className="mt-2 whitespace-pre-wrap text-sm text-surface-700 dark:text-surface-200">
+                  {m.message}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Section>
+    </div>
   );
 }
 

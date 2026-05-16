@@ -103,6 +103,30 @@ create table if not exists public.search_queries (
 create index if not exists search_queries_created_at_idx on public.search_queries (created_at desc);
 create index if not exists search_queries_query_idx       on public.search_queries (lower(query));
 
+-- 8. contact_messages -------------------------------------------------------
+-- Contact-form submissions. Holds PII (name, email, message text), so RLS
+-- allows INSERT with the anon key but has NO select policy — reads happen
+-- server-side with the service-role key only.
+create table if not exists public.contact_messages (
+  id          bigint generated always as identity primary key,
+  name        text not null,
+  email       text not null,
+  subject     text not null,
+  message     text not null,
+  created_at  timestamptz not null default now()
+);
+
+create index if not exists contact_messages_created_at_idx
+  on public.contact_messages (created_at desc);
+
+alter table public.contact_messages enable row level security;
+-- CREATE POLICY has no IF NOT EXISTS form, so drop-then-create for idempotency.
+drop policy if exists contact_messages_insert on public.contact_messages;
+create policy contact_messages_insert on public.contact_messages
+  for insert to anon, authenticated with check (true);
+-- Intentionally no select policy: the anon key must not be able to read
+-- contact submissions. The admin dashboard reads with the service-role key.
+
 -- Aggregate helpers ---------------------------------------------------------
 
 create or replace function public.get_trending_tools(

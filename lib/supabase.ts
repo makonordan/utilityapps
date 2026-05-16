@@ -67,6 +67,15 @@ export interface ProductsClickRow {
   created_at: string;
 }
 
+export interface ContactMessageRow {
+  id: number;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  created_at: string;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -116,6 +125,12 @@ export interface Database {
         Row: ProductsClickRow;
         Insert: Omit<ProductsClickRow, "id" | "created_at"> & { created_at?: string };
         Update: Partial<Omit<ProductsClickRow, "id">>;
+        Relationships: [];
+      };
+      contact_messages: {
+        Row: ContactMessageRow;
+        Insert: Omit<ContactMessageRow, "id" | "created_at"> & { created_at?: string };
+        Update: Partial<Omit<ContactMessageRow, "id">>;
         Relationships: [];
       };
     };
