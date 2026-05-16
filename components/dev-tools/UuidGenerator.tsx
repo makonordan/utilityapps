@@ -25,7 +25,10 @@ export function UuidGenerator() {
     try {
       const mod = await import("uuid");
       const out: string[] = [];
-      const fn = version === "v1" ? mod.v1 : version === "v4" ? mod.v4 : mod.v7;
+      // Each uuid.vX has overloaded signatures, so a conditional union of them
+      // isn't callable. Annotate as a plain no-arg string factory — every
+      // version is assignable to it since all options arguments are optional.
+      const fn: () => string = version === "v1" ? mod.v1 : version === "v4" ? mod.v4 : mod.v7;
       const n = Math.max(1, Math.min(1000, count));
       for (let i = 0; i < n; i++) out.push(fn());
       setResults(out);
