@@ -1,0 +1,76 @@
+---
+title: "UUID v1 vs v4 vs v7: Which Should You Use?"
+description: "A developer's guide to UUID versions — how v1, v4 and v7 differ, why v7 is the modern default for database keys, and when each one is the right choice."
+date: "2026-05-03"
+category: "Developer Tools"
+tags: ["uuid", "database", "primary keys", "backend"]
+featured: false
+author: "UtilityApps Team"
+---
+
+A UUID — Universally Unique Identifier — is a 128-bit value used as an identifier that you can generate anywhere, on any machine, without coordinating with a central authority and still be confident it will not collide. But there are several *versions* of UUID, and they behave very differently. Picking the wrong one for a database primary key is a mistake you feel years later. This guide explains v1, v4 and v7.
+
+## What all UUIDs have in common
+
+Every UUID is 128 bits, conventionally written as 32 hexadecimal digits in five dash-separated groups:
+
+```
+550e8400-e29b-41d4-a716-446655440000
+```
+
+That is a vast space — 2 to the power of 122 usable values. The chance of two independently generated UUIDs colliding is, for practical purposes, zero. What differs between versions is *how* those bits are filled.
+
+## UUID v1: timestamp + machine
+
+v1 builds the identifier from two things: the current timestamp and a node identifier (historically the machine's MAC address).
+
+**The upside:** because the timestamp is embedded, v1 UUIDs generated over time are roughly sortable by creation order.
+
+**The downsides are serious:**
+
+- It **leaks information.** A v1 UUID reveals when it was created and, traditionally, identifies the machine that created it. For anything user-facing that is a privacy and security problem.
+- The timestamp bits are arranged in an awkward order, so v1 is not *cleanly* sortable without rearranging them.
+
+In modern code, v1 is rarely the right answer. Its one virtue — embedded time — is delivered far better by v7.
+
+## UUID v4: pure random
+
+v4 fills almost all 122 usable bits with random data. No timestamp, no machine identity — just randomness.
+
+**The upside:** it is completely **opaque.** A v4 UUID reveals nothing — not when it was made, not where, not in what order. It is the safe, private default, and for two decades it has been *the* UUID most developers reach for.
+
+**The downside:** that randomness makes v4 UUIDs **unsortable.** Two UUIDs generated a second apart have no ordering relationship. This matters more than it sounds — see the database section below.
+
+## UUID v7: timestamp-prefixed and random
+
+v7 is the modern version, standardised relatively recently, and it is designed to give you the best of both.
+
+A v7 UUID puts a **millisecond timestamp in the leading bits**, followed by random bits. So v7 UUIDs are:
+
+- **Sortable** — generated in order, they sort in order, because the time prefix dominates.
+- **Opaque enough** — the only thing the timestamp reveals is roughly when the value was created, which is rarely sensitive. It does not leak machine identity the way v1 does.
+
+For most new systems, **v7 is the version to choose.**
+
+## Why sortability matters for databases
+
+Here is the practical reason v7 exists, and why it matters if you use UUIDs as primary keys.
+
+Most databases store primary keys in a B-tree index. When new keys arrive in **sorted order**, each insert lands neatly at the end of the index — fast, cache-friendly, low fragmentation. When new keys arrive in **random order** — as v4 UUIDs do — each insert lands in an unpredictable spot, scattering writes across the index, fragmenting pages, and trashing the cache.
+
+On a large, busy table this is a measurable performance difference. It is the single biggest argument against v4 as a primary key, and the single biggest argument *for* v7. v7 keys insert sequentially like an auto-incrementing integer, while keeping the "generate anywhere" advantage of a UUID.
+
+## A simple decision guide
+
+- **New system, UUIDs as database primary keys** → **v7.** Sortable inserts, opaque enough, no real downside.
+- **You need a fully opaque identifier and ordering is irrelevant** — a public token, an API key fragment, a value where even creation time should be hidden → **v4.**
+- **You are working with a legacy system that already uses v1** → keep v1 for consistency, but do not choose it for anything new.
+- **You just need "a unique ID" and have no opinion** → **v4** is the harmless classic; **v7** is the better-informed choice.
+
+## Generate them
+
+You can generate v1, v4 and v7 UUIDs — single or in batches — with the [UUID Generator](/tools/uuid-generator). It uses the browser's cryptographic random source, and you can copy or download a whole batch as a text file. If you are also handling tokens or identifiers, the [Hash Generator](/tools/hash-generator) and [JWT Decoder](/tools/jwt-decoder) cover the related ground.
+
+## The short version
+
+v1 embeds a timestamp and machine identity — it leaks information and is rarely the right modern choice. v4 is pure random: fully opaque, but unsortable, which hurts when used as a database key. v7 prefixes a timestamp before the random bits, making it sortable like an integer while staying opaque enough — and that makes it the right default for new systems. Generate any of them with the [UUID Generator](/tools/uuid-generator).
