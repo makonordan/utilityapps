@@ -17,6 +17,7 @@ const FILTERS = [
   { label: "Video", category: "Video Tools" },
   { label: "Audio", category: "Audio Tools" },
   { label: "Design", category: "Design Tools" },
+  { label: "Student", category: "Student Tools" },
   { label: "Calculator", category: "Calculator Tools" },
   { label: "Finance", category: "Finance Tools" },
   { label: "Health", category: "Health Tools" },

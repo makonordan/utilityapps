@@ -1590,6 +1590,88 @@ export const TOOLS: Tool[] = [
     cpc: 3,
     relatedTools: ["color-converter", "contrast-checker", "gradient-generator"],
   },
+
+  // ─── Student Tools ─────────────────────────────────────────────────────
+  {
+    id: "citation-generator",
+    name: "Citation Generator",
+    description:
+      "Generate APA 7, MLA 9, and Chicago citations for websites, books, and journal articles. Live preview, copy per style.",
+    longDescription:
+      "Free citation generator covering APA 7th edition, MLA 9th edition, and Chicago (bibliography). Fill in the source details once — author, title, year, and source-specific fields — and all three formatted citations render side by side, ready to copy. Runs entirely in your browser.",
+    category: "Student Tools",
+    icon: "Quote",
+    href: "/tools/citation-generator",
+    externalHref: null,
+    embedUrl: null,
+    keywords: ["citation generator", "apa citation", "mla citation", "chicago citation", "bibliography generator"],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 1_100_000,
+    cpc: 6,
+    relatedTools: ["paraphrasing-tool", "flashcard-maker", "study-timer"],
+  },
+  {
+    id: "paraphrasing-tool",
+    name: "Paraphrasing Tool",
+    description:
+      "Reword your own sentences with synonym substitution — a browser-side writing aid for clearer, less repetitive prose.",
+    longDescription:
+      "Free paraphrasing tool that rewords your own text using a built-in thesaurus. A writing aid for when a sentence feels clunky or repetitive — it swaps common words for synonyms while preserving capitalisation. Runs entirely in your browser; review and edit the output before using it.",
+    category: "Student Tools",
+    icon: "RefreshCw",
+    href: "/tools/paraphrasing-tool",
+    externalHref: null,
+    embedUrl: null,
+    keywords: ["paraphrasing tool", "paraphraser", "reword text", "rewrite sentences", "sentence rephraser"],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 1_400_000,
+    cpc: 7,
+    relatedTools: ["citation-generator", "flashcard-maker", "study-timer"],
+  },
+  {
+    id: "study-timer",
+    name: "Study Timer",
+    description:
+      "A flexible study stopwatch — start and stop per subject, log each session, and see your daily total study time.",
+    longDescription:
+      "Free study timer for students. Unlike a fixed Pomodoro cycle, this is a flexible stopwatch: label what you're studying, start the timer, and log each session when you're done. The daily log shows total study time per subject. Sessions persist in local storage and reset each day.",
+    category: "Student Tools",
+    icon: "Hourglass",
+    href: "/tools/study-timer",
+    externalHref: null,
+    embedUrl: null,
+    keywords: ["study timer", "study tracker", "study session timer", "homework timer", "online study timer"],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 620_000,
+    cpc: 3,
+    relatedTools: ["pomodoro-timer", "flashcard-maker", "citation-generator"],
+  },
+  {
+    id: "flashcard-maker",
+    name: "Flashcard Maker",
+    description:
+      "Create flashcard decks and study them with a flip-card mode that tracks what you know. JSON export and import.",
+    longDescription:
+      "Free flashcard maker for exam prep. Build decks of question/answer cards, then study them with a flip-card mode built around active recall — commit to an answer, flip, and mark each card Known or Still learning. Decks are saved in your browser's local storage and export to a JSON file for backup or transfer.",
+    category: "Student Tools",
+    icon: "BookOpen",
+    href: "/tools/flashcard-maker",
+    externalHref: null,
+    embedUrl: null,
+    keywords: ["flashcard maker", "flashcards online", "study flashcards", "create flashcards", "flashcard app"],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 740_000,
+    cpc: 4,
+    relatedTools: ["citation-generator", "study-timer", "paraphrasing-tool"],
+  },
 ];
 
 export const TOOLS_BY_ID: Record<string, Tool> = TOOLS.reduce(

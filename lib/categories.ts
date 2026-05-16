@@ -110,6 +110,15 @@ const CATEGORY_DEFINITIONS: Omit<Category, "toolCount">[] = [
     color: "#F43F5E",
     featured: true,
   },
+  {
+    id: "student-tools",
+    name: "Student Tools",
+    description:
+      "Citation generator, paraphrasing tool, study timer, and flashcard maker — built for students, homework, and exam prep.",
+    icon: "GraduationCap",
+    color: "#6366F1",
+    featured: true,
+  },
 ];
 
 export const CATEGORIES: Category[] = CATEGORY_DEFINITIONS.map((category) => ({
