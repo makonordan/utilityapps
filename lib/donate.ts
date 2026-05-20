@@ -1,40 +1,39 @@
 /**
  * Donation configuration for the /donate page.
  *
- * ┌─────────────────────────────────────────────────────────────────────┐
- * │  UPDATE EVERYTHING IN THIS FILE with your real, verified details.    │
- * │                                                                     │
- * │  • Set any link to "" (empty string) to hide that option entirely.   │
- * │  • Bank / crypto values left wrapped in [brackets] are treated as    │
- * │    "not set yet" — the page shows a polite "being set up" message    │
- * │    instead of broken placeholder details.                            │
- * │  • Add supporter names to SUPPORTERS as donations come in.           │
- * └─────────────────────────────────────────────────────────────────────┘
+ * Three options are exposed on the page:
+ *   1. KoraPay  — international, pay in any currency
+ *   2. PayPal   — international, by recipient email
+ *   3. Direct bank transfer — Nigeria (Paga)
+ *
+ * To change anything, just edit the values below. Set a link to "" to hide
+ * an option entirely. Values left as [bracketed placeholders] are treated as
+ * "not set" — the page shows a polite "being set up" message instead of fake
+ * details.
  */
 
 export const SUPPORT_EMAIL = "hello@utilityapps.site";
 
-/** One-time / recurring donation links. Empty string hides the button. */
+/** Multi-currency donation gateways. Empty string hides the button. */
 export const DONATE_LINKS = {
-  buyMeACoffee: "https://buymeacoffee.com/utilityapps",
-  koFi: "https://ko-fi.com/utilityapps",
-  paypal: "https://paypal.me/utilityapps",
-  paystack: "https://paystack.com/pay/utilityapps",
-  flutterwave: "https://flutterwave.com/pay/utilityapps",
+  // ⚠️ TEST URL — the "test-checkout" subdomain is KoraPay's sandbox and will
+  // NOT charge real money. Replace with your production checkout URL before
+  // promoting the page publicly.
+  korapay: "https://test-checkout.korapay.com/pay/EysLllh2Q1EBgDN",
 };
 
-/** Nigerian bank transfer details. Bracketed = not set yet. */
+/** PayPal recipient — donors send to this email from their own PayPal. */
+export const PAYPAL = {
+  accountName: "Daniel Makonor",
+  email: "danielstechandaireviews@gmail.com",
+};
+
+/** Nigerian bank / fintech transfer details. */
 export const BANK_DETAILS = {
-  accountName: "[Your Full Legal Name]",
-  bankName: "[Bank Name]",
-  accountNumber: "[Account Number]",
+  accountName: "Daniel Makonor",
+  bankName: "Paga",
+  accountNumber: "2887274150",
 };
-
-/** Crypto wallets. Bracketed addresses = not set yet. */
-export const CRYPTO_WALLETS: { label: string; address: string }[] = [
-  { label: "Bitcoin (BTC)", address: "[BTC wallet address]" },
-  { label: "USDT (TRC-20)", address: "[USDT wallet address]" },
-];
 
 /** Public thank-you wall. Add names (with permission) as donations arrive. */
 export const SUPPORTERS: string[] = [];
@@ -54,7 +53,7 @@ export function hasBankDetails(): boolean {
   );
 }
 
-/** Crypto wallets that have a real address set. */
-export function configuredWallets() {
-  return CRYPTO_WALLETS.filter((w) => !isPlaceholder(w.address));
+/** True when the PayPal email is configured. */
+export function hasPayPal(): boolean {
+  return !isPlaceholder(PAYPAL.email);
 }

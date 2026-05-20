@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, Heart, Mail, MapPin } from "lucide-react";
+import { ChevronRight, Heart, MapPin } from "lucide-react";
 
 import {
   BANK_DETAILS,
-  CRYPTO_WALLETS,
   DONATE_LINKS,
+  PAYPAL,
   SUPPORT_EMAIL,
   SUPPORTERS,
-  configuredWallets,
   hasBankDetails,
+  hasPayPal,
   isPlaceholder,
 } from "@/lib/donate";
 import { SITE_CONFIG } from "@/lib/utils";
@@ -288,48 +288,54 @@ export default function DonatePage() {
             Choose whichever is easiest for you. Every contribution matters, big or small.
           </p>
 
-          <DonateGroup title="One-time donations (international)">
-            <DonateButton
-              emoji="☕"
-              label="Buy Me a Coffee"
-              note="Card or PayPal — takes 30 seconds"
-              href={DONATE_LINKS.buyMeACoffee}
-            />
+          <DonateGroup title="Pay with any currency">
             <DonateButton
               emoji="💳"
-              label="Ko-fi"
-              note="Card payment via a secure gateway"
-              href={DONATE_LINKS.koFi}
-            />
-            <DonateButton
-              emoji="🅿️"
-              label="PayPal"
-              note="Send any amount directly"
-              href={DONATE_LINKS.paypal}
+              label="KoraPay"
+              note="Card, bank transfer or wallet — any currency"
+              href={DONATE_LINKS.korapay}
             />
           </DonateGroup>
 
-          <DonateGroup title="Local donations (Nigeria)">
-            <DonateButton
-              emoji="📱"
-              label="Paystack"
-              note="Card, bank transfer, USSD, mobile money"
-              href={DONATE_LINKS.paystack}
-            />
-            <DonateButton
-              emoji="📱"
-              label="Flutterwave"
-              note="Card, bank transfer, USSD, mobile money"
-              href={DONATE_LINKS.flutterwave}
-            />
-          </DonateGroup>
+          {/* PayPal — send to recipient email */}
+          {hasPayPal() && (
+            <div className="mt-4">
+              <details className="group rounded-2xl border border-surface-200 bg-white dark:border-surface-800 dark:bg-surface-900">
+                <summary className="flex cursor-pointer items-center justify-between gap-3 px-5 py-4 text-sm font-semibold text-surface-900 dark:text-white">
+                  <span className="inline-flex items-center gap-2">
+                    <span aria-hidden="true">🅿️</span> PayPal — send to my account
+                  </span>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-surface-400 transition-transform group-open:rotate-90" />
+                </summary>
+                <div className="border-t border-surface-100 px-5 py-4 text-sm dark:border-surface-800">
+                  <dl className="space-y-1.5">
+                    <DetailRow label="Recipient" value={PAYPAL.accountName} />
+                    <DetailRow label="Email" value={PAYPAL.email} />
+                  </dl>
+                  <p className="mt-3 text-xs text-surface-500 dark:text-surface-400">
+                    Open{" "}
+                    <a
+                      href="https://www.paypal.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-medium text-primary-600 hover:underline dark:text-primary-400"
+                    >
+                      PayPal
+                    </a>
+                    , choose <em>Send</em>, and use the email above. PayPal handles the currency
+                    conversion automatically.
+                  </p>
+                </div>
+              </details>
+            </div>
+          )}
 
           {/* Bank transfer — native <details> reveal, no JS needed */}
           <div className="mt-4">
             <details className="group rounded-2xl border border-surface-200 bg-white dark:border-surface-800 dark:bg-surface-900">
               <summary className="flex cursor-pointer items-center justify-between gap-3 px-5 py-4 text-sm font-semibold text-surface-900 dark:text-white">
                 <span className="inline-flex items-center gap-2">
-                  <span aria-hidden="true">🏦</span> Direct bank transfer
+                  <span aria-hidden="true">🏦</span> Direct bank transfer (Nigeria)
                 </span>
                 <ChevronRight className="h-4 w-4 shrink-0 text-surface-400 transition-transform group-open:rotate-90" />
               </summary>
@@ -363,45 +369,6 @@ export default function DonatePage() {
                       {SUPPORT_EMAIL}
                     </a>{" "}
                     to arrange a transfer.
-                  </p>
-                )}
-              </div>
-            </details>
-          </div>
-
-          {/* Crypto — native <details> reveal */}
-          <div className="mt-3">
-            <details className="group rounded-2xl border border-surface-200 bg-white dark:border-surface-800 dark:bg-surface-900">
-              <summary className="flex cursor-pointer items-center justify-between gap-3 px-5 py-4 text-sm font-semibold text-surface-900 dark:text-white">
-                <span className="inline-flex items-center gap-2">
-                  <span aria-hidden="true">₿</span> Cryptocurrency (Bitcoin / USDT)
-                </span>
-                <ChevronRight className="h-4 w-4 shrink-0 text-surface-400 transition-transform group-open:rotate-90" />
-              </summary>
-              <div className="border-t border-surface-100 px-5 py-4 text-sm dark:border-surface-800">
-                {configuredWallets().length > 0 ? (
-                  <dl className="space-y-2">
-                    {configuredWallets().map((w) => (
-                      <div key={w.label}>
-                        <dt className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
-                          {w.label}
-                        </dt>
-                        <dd className="mt-0.5 break-all font-mono text-xs text-surface-900 dark:text-white">
-                          {w.address}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                ) : (
-                  <p className="text-surface-600 dark:text-surface-300">
-                    Crypto wallet addresses are being set up. Email{" "}
-                    <a
-                      href={`mailto:${SUPPORT_EMAIL}`}
-                      className="font-medium text-primary-600 hover:underline dark:text-primary-400"
-                    >
-                      {SUPPORT_EMAIL}
-                    </a>{" "}
-                    if you'd like to contribute this way.
                   </p>
                 )}
               </div>
