@@ -167,12 +167,12 @@ export function ContactForm() {
       <p className="text-xs text-surface-500 dark:text-surface-400">
         We typically reply within two business days. For privacy or data requests, email{" "}
         <a
-          href="mailto:privacy@utilityapps.site"
+          href="mailto:hello@utilityapps.site"
           className="font-medium text-primary-600 hover:underline dark:text-primary-400"
         >
-          privacy@utilityapps.site
-        </a>
-        .
+          hello@utilityapps.site
+        </a>{" "}
+        with &ldquo;Privacy&rdquo; in the subject line.
       </p>
     </form>
   );

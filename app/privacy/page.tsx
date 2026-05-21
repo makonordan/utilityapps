@@ -198,7 +198,7 @@ export default function PrivacyPage() {
           cross-context behavioral advertising.
         </P>
         <P>
-          To exercise any of these rights, email <A href="mailto:privacy@utilityapps.site" external>privacy@utilityapps.site</A>.
+          To exercise any of these rights, email <A href="mailto:hello@utilityapps.site" external>hello@utilityapps.site</A>.
           We respond within 30 days.
         </P>
 
@@ -227,7 +227,7 @@ export default function PrivacyPage() {
         <H2 id="contact">10. Contact</H2>
         <P>
           For privacy questions or data requests:{" "}
-          <A href="mailto:privacy@utilityapps.site" external>privacy@utilityapps.site</A>. For all
+          <A href="mailto:hello@utilityapps.site" external>hello@utilityapps.site</A>. For all
           other inquiries, see our <A href="/contact">contact page</A>.
         </P>
       </LegalPage>

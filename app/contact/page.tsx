@@ -75,7 +75,7 @@ export default function ContactPage() {
             <SidebarCard
               icon={<Clock className="h-4 w-4" />}
               title="Response time"
-              body="We reply within 2 business days, often sooner. Priority emails (privacy / data requests) within 1 business day."
+              body="We reply within 2 business days, often sooner."
             />
 
             <div className="rounded-2xl border border-surface-200 bg-white p-5 dark:border-surface-800 dark:bg-surface-900">
@@ -92,31 +92,8 @@ export default function ContactPage() {
                     hello@utilityapps.site
                   </a>
                   <span className="ml-6 block text-xs text-surface-500 dark:text-surface-400">
-                    General &amp; tool requests
-                  </span>
-                </li>
-                <li>
-                  <a
-                    href="mailto:privacy@utilityapps.site"
-                    className="inline-flex items-center gap-2 font-medium text-surface-800 hover:text-primary-600 dark:text-surface-100 dark:hover:text-primary-400"
-                  >
-                    <Mail className="h-4 w-4" />
-                    privacy@utilityapps.site
-                  </a>
-                  <span className="ml-6 block text-xs text-surface-500 dark:text-surface-400">
-                    Privacy &amp; data requests
-                  </span>
-                </li>
-                <li>
-                  <a
-                    href="mailto:editorial@utilityapps.site"
-                    className="inline-flex items-center gap-2 font-medium text-surface-800 hover:text-primary-600 dark:text-surface-100 dark:hover:text-primary-400"
-                  >
-                    <Mail className="h-4 w-4" />
-                    editorial@utilityapps.site
-                  </a>
-                  <span className="ml-6 block text-xs text-surface-500 dark:text-surface-400">
-                    Press &amp; affiliate
+                    For all inquiries — general questions, privacy concerns, press requests,
+                    partnerships
                   </span>
                 </li>
               </ul>

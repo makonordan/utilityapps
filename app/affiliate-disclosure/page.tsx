@@ -128,7 +128,7 @@ export default function AffiliateDisclosurePage() {
         <P>
           Questions about how the affiliate program works or a concern about a specific
           recommendation? Email{" "}
-          <A href="mailto:editorial@utilityapps.site" external>editorial@utilityapps.site</A> or use
+          <A href="mailto:hello@utilityapps.site" external>hello@utilityapps.site</A> or use
           our <A href="/contact">contact form</A>.
         </P>
       </LegalPage>

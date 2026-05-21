@@ -14,6 +14,7 @@ import {
   type BlogPost,
   type Heading,
 } from "@/lib/blog";
+import { getCategoryTheme } from "@/lib/blogThemes";
 import { SITE_CONFIG, cn, formatDate } from "@/lib/utils";
 
 interface RouteParams {
@@ -116,6 +117,7 @@ export default async function BlogPostPage({ params }: RouteParams) {
 
         <div className="min-w-0">
           <Breadcrumb post={post} />
+          <BlogHero post={post} />
           <ArticleHeader post={post} />
 
           <Mdx code={post.body.code} />
@@ -199,6 +201,26 @@ function Breadcrumb({ post }: { post: BlogPost }) {
         </li>
       </ol>
     </nav>
+  );
+}
+
+function BlogHero({ post }: { post: BlogPost }) {
+  const theme = getCategoryTheme(post.category);
+  return (
+    <div
+      className="relative mt-6 h-44 overflow-hidden rounded-3xl sm:h-60"
+      style={{ backgroundImage: theme.gradient }}
+      aria-hidden="true"
+    >
+      <theme.Icon
+        className="absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 text-white/30 sm:h-44 sm:w-44"
+        strokeWidth={1.5}
+      />
+      <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_25%,rgba(255,255,255,0.22),transparent_60%)]" />
+      <span className="absolute bottom-4 left-5 rounded-full bg-white/25 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
+        {post.category}
+      </span>
+    </div>
   );
 }
 
@@ -316,13 +338,24 @@ function RelatedPosts({ posts }: { posts: { slug: string; url: string; title: st
         </Link>
       </header>
       <ul className="grid gap-4 md:grid-cols-3">
-        {posts.map((p) => (
+        {posts.map((p) => {
+          const theme = getCategoryTheme(p.category);
+          return (
           <li key={p.slug}>
             <Link
               href={p.url}
               className="group flex h-full flex-col overflow-hidden rounded-2xl border border-surface-200 bg-white transition hover:-translate-y-0.5 hover:shadow-card-hover dark:border-surface-800 dark:bg-surface-900"
             >
-              <div className={cn("h-24 bg-gradient-to-br", p.gradient)} aria-hidden="true" />
+              <div
+                className="relative h-24 overflow-hidden"
+                style={{ backgroundImage: theme.gradient }}
+                aria-hidden="true"
+              >
+                <theme.Icon
+                  className="absolute left-1/2 top-1/2 h-12 w-12 -translate-x-1/2 -translate-y-1/2 text-white/30"
+                  strokeWidth={1.5}
+                />
+              </div>
               <div className="flex flex-1 flex-col p-4">
                 <p className="text-[11px] font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
                   {p.category}
@@ -337,7 +370,8 @@ function RelatedPosts({ posts }: { posts: { slug: string; url: string; title: st
               </div>
             </Link>
           </li>
-        ))}
+          );
+        })}
       </ul>
     </section>
   );

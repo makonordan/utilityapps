@@ -10,6 +10,7 @@ import {
   getPopularPosts,
   type BlogPostMeta,
 } from "@/lib/blog";
+import { getCategoryTheme } from "@/lib/blogThemes";
 import { SITE_CONFIG, cn, formatDate } from "@/lib/utils";
 
 const PAGE_SIZE = 12;
@@ -182,29 +183,27 @@ function BlogHero({ defaultQuery }: { defaultQuery: string }) {
 }
 
 function FeaturedPostCard({ post }: { post: BlogPostMeta }) {
+  const theme = getCategoryTheme(post.category);
   return (
     <Link
       href={post.url}
       className="group mb-10 grid overflow-hidden rounded-3xl border border-surface-200 bg-white shadow-card transition hover:-translate-y-0.5 hover:shadow-card-hover sm:grid-cols-[1.2fr_1fr] dark:border-surface-800 dark:bg-surface-900"
     >
-      <div className={cn("relative h-48 overflow-hidden sm:h-auto", "bg-gradient-to-br", post.gradient)} aria-hidden="true">
-        {post.image ? (
-          <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={post.image}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <span className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
-          </>
-        ) : (
-          <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.4),transparent_60%)]" />
-        )}
-        <span className="absolute left-4 top-4 rounded-full bg-white/30 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-white backdrop-blur">
+      <div
+        className="relative h-48 overflow-hidden sm:h-auto"
+        style={{ backgroundImage: theme.gradient }}
+        aria-hidden="true"
+      >
+        <theme.Icon
+          className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 text-white/30"
+          strokeWidth={1.5}
+        />
+        <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_25%,rgba(255,255,255,0.22),transparent_60%)]" />
+        <span className="absolute left-4 top-4 rounded-full bg-white/25 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-white backdrop-blur">
           Featured
+        </span>
+        <span className="absolute bottom-4 left-4 rounded-full bg-white/25 px-2.5 py-0.5 text-[11px] font-semibold text-white backdrop-blur">
+          {post.category}
         </span>
       </div>
       <div className="flex flex-col p-6 sm:p-8">
@@ -233,28 +232,23 @@ function FeaturedPostCard({ post }: { post: BlogPostMeta }) {
 }
 
 function PostCard({ post }: { post: BlogPostMeta }) {
+  const theme = getCategoryTheme(post.category);
   return (
     <Link
       href={post.url}
       className="group flex h-full flex-col overflow-hidden rounded-2xl border border-surface-200 bg-white transition hover:-translate-y-0.5 hover:shadow-card-hover dark:border-surface-800 dark:bg-surface-900"
     >
-      <div className={cn("relative h-36 overflow-hidden", "bg-gradient-to-br", post.gradient)} aria-hidden="true">
-        {post.image ? (
-          <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={post.image}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <span className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
-          </>
-        ) : (
-          <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.4),transparent_60%)]" />
-        )}
-        <span className="absolute bottom-3 left-4 rounded-full bg-white/30 px-2 py-0.5 text-[11px] font-semibold text-white backdrop-blur">
+      <div
+        className="relative aspect-[16/9] overflow-hidden"
+        style={{ backgroundImage: theme.gradient }}
+        aria-hidden="true"
+      >
+        <theme.Icon
+          className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 text-white/30"
+          strokeWidth={1.5}
+        />
+        <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_25%,rgba(255,255,255,0.22),transparent_60%)]" />
+        <span className="absolute bottom-3 left-4 rounded-full bg-white/25 px-2.5 py-0.5 text-[11px] font-semibold text-white backdrop-blur">
           {post.category}
         </span>
       </div>

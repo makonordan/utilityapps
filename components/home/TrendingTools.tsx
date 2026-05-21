@@ -1,11 +1,87 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, TrendingUp } from "lucide-react";
+import { ArrowRight, ChevronDown, TrendingUp } from "lucide-react";
 
 import { ToolCard } from "@/components/tools/ToolCard";
-import type { RankedTool } from "@/lib/trending";
+import { TOOLS, type Tool } from "@/lib/tools";
 
-export function TrendingTools({ tools }: { tools: RankedTool[] }) {
-  if (tools.length === 0) return null;
+const PAGE = 8;
+
+// High-CPC categories (finance, health) lead the initial 8-tool view so the
+// most ad-valuable tools are visible first.
+const TRENDING_CATEGORY_ORDER = [
+  "Finance Tools",
+  "Image Tools",
+  "Health Tools",
+  "Calculator Tools",
+  "Text Tools",
+  "Developer Tools",
+  "Video Tools",
+  "Audio Tools",
+  // Remaining categories appended so "Load more" eventually shows every tool.
+  "SEO Tools",
+  "Productivity Tools",
+  "Design Tools",
+  "Student Tools",
+];
+
+/** Trending value = monthly searches weighted by commercial value (CPC). */
+function trendingScore(t: Tool): number {
+  return t.monthlySearches * Math.max(1, t.cpc);
+}
+function trendingPriority(a: Tool, b: Tool): number {
+  return trendingScore(b) - trendingScore(a);
+}
+
+/**
+ * Round-robin through categories, taking the highest-value tool from each in
+ * turn, so the first 8 are one-per-category and every tool eventually appears.
+ */
+function diversify(
+  all: Tool[],
+  order: string[],
+  rank: (a: Tool, b: Tool) => number
+): Tool[] {
+  const grouped = new Map<string, Tool[]>();
+  const known = new Set(order);
+  for (const cat of order) {
+    grouped.set(cat, all.filter((t) => t.category === cat).sort(rank));
+  }
+  const extra = [...new Set(all.map((t) => t.category))].filter((c) => !known.has(c));
+  for (const cat of extra) {
+    grouped.set(cat, all.filter((t) => t.category === cat).sort(rank));
+  }
+  const cats = [...order.filter((c) => grouped.get(c)?.length), ...extra];
+
+  const result: Tool[] = [];
+  let round = 0;
+  let added = true;
+  while (added && result.length < all.length) {
+    added = false;
+    for (const cat of cats) {
+      const tool = grouped.get(cat)?.[round];
+      if (tool) {
+        result.push(tool);
+        added = true;
+      }
+    }
+    round++;
+  }
+  return result;
+}
+
+// TOOLS is a static catalog, so the diversified order is computed once.
+const TRENDING_ORDERED = diversify(TOOLS, TRENDING_CATEGORY_ORDER, trendingPriority);
+
+export function TrendingTools() {
+  const [visibleCount, setVisibleCount] = useState(PAGE);
+
+  const visible = TRENDING_ORDERED.slice(0, visibleCount);
+  const allShown = visible.length >= TRENDING_ORDERED.length;
+
+  if (TRENDING_ORDERED.length === 0) return null;
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
@@ -31,13 +107,29 @@ export function TrendingTools({ tools }: { tools: RankedTool[] }) {
         </Link>
       </header>
 
-      <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">
-        {tools.map((tool) => (
-          <div key={tool.id} className="snap-start sm:snap-align-none">
-            <ToolCard tool={tool} rank={tool.rank} variant="trending" />
-          </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {visible.map((tool, i) => (
+          <ToolCard key={tool.id} tool={tool} rank={i + 1} variant="trending" />
         ))}
       </div>
+
+      {!allShown && (
+        <div className="mt-10 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setVisibleCount((c) => c + PAGE)}
+            className="inline-flex items-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40"
+          >
+            Load More Trending
+            <ChevronDown className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+      {allShown && TRENDING_ORDERED.length > PAGE && (
+        <p className="mt-10 text-center text-sm font-medium text-surface-500 dark:text-surface-400">
+          You&apos;ve seen all 200+ tools
+        </p>
+      )}
     </section>
   );
 }

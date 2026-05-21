@@ -12,7 +12,6 @@ import { Stats } from "@/components/home/Stats";
 import { TrendingTools } from "@/components/home/TrendingTools";
 import { YouTubeHub } from "@/components/home/YouTubeHub";
 import { getFeaturedPosts } from "@/lib/posts";
-import { getRankedTrendingTools } from "@/lib/trending";
 import { SITE_CONFIG } from "@/lib/utils";
 
 const HOME_TITLE = `${SITE_CONFIG.name} — 200+ Free AI Utility Tools for Everyday Work`;
@@ -50,10 +49,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [trending, posts] = await Promise.all([
-    getRankedTrendingTools(8),
-    getFeaturedPosts(3),
-  ]);
+  const posts = await getFeaturedPosts(3);
 
   return (
     <>
@@ -61,7 +57,7 @@ export default async function HomePage() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <AdSlot position="top" />
       </div>
-      <TrendingTools tools={trending} />
+      <TrendingTools />
       <AllTools />
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <AdSlot position="mid" />
