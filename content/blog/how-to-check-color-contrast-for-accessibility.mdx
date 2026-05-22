@@ -1,0 +1,92 @@
+---
+title: "How to Check Color Contrast for Accessibility"
+description: "How to check color contrast for accessibility — WCAG ratios explained, the AA and AAA thresholds, common mistakes, and a free contrast checker."
+date: "2026-04-13"
+category: "Design Tools"
+tags: ["color contrast", "accessibility", "wcag", "web design"]
+featured: false
+author: "UtilityApps Team"
+---
+
+Low-contrast text is one of the most common accessibility failures on the web — and one of the easiest to fix. If users cannot comfortably read your text, the quality of your design does not matter. Checking colour contrast takes seconds, and this guide explains exactly what to check and why.
+
+## Why contrast matters
+
+Colour contrast is the difference in brightness between text and its background. When that difference is too small, text becomes hard or impossible to read — and not just for a few people.
+
+It affects users with low vision and colour-blindness, but also anyone reading on a dim phone screen, in bright sunlight, or simply tired at the end of the day. Good contrast is not a niche accommodation; it makes your content readable for *everyone*, in every condition. It is also a legal requirement in many jurisdictions.
+
+## How contrast ratio works
+
+Contrast is measured as a **ratio** between the brightness of two colours, from 1:1 to 21:1.
+
+- **1:1** — identical colours, no contrast at all (invisible text).
+- **21:1** — pure black on pure white, the maximum possible.
+
+The ratio is calculated from the *relative luminance* of each colour — a brightness measure weighted for how the human eye perceives red, green and blue. This is why two colours that look distinct can still fail: the eye perceives some hues as much brighter than others, and the maths reflects that.
+
+## The WCAG thresholds
+
+The Web Content Accessibility Guidelines (WCAG) set the standard thresholds.
+
+**Level AA** — the practical target for almost every website:
+
+- **4.5:1** for normal body text.
+- **3:1** for large text (roughly 24px and up, or 18.66px and up if bold).
+
+**Level AAA** — a stricter, enhanced standard:
+
+- **7:1** for normal text.
+- **4.5:1** for large text.
+
+Aim for AA as a minimum on all text. Reach for AAA where you can, especially for long-form reading content.
+
+## Don't forget non-text elements
+
+Contrast rules are not only about text. WCAG also requires a **3:1** ratio for non-text elements that users need to perceive:
+
+- Icons that convey information.
+- The borders or outlines of form inputs.
+- Focus indicators — the outline that shows which element is selected.
+- The boundaries of buttons and interactive controls.
+
+A form field with a barely-visible border, or a focus ring no one can see, is an accessibility failure even though it contains no text.
+
+## Common contrast mistakes
+
+- **Light grey text on white.** The most frequent offender — it looks elegant in a mockup and fails in reality.
+- **Placeholder text as a label.** Placeholder text is usually low-contrast by default; never rely on it to carry essential information.
+- **Text over images.** Contrast varies across a photo. Use an overlay or a solid backing so text stays readable everywhere it sits.
+- **Coloured text on a coloured background.** Two mid-tone colours often look fine but fail the ratio.
+- **Pale "subtle" UI** — light icons, faint borders, low-contrast disabled states pushed too far.
+
+## How to check and fix it
+
+1. Identify the foreground colour and the background colour behind it.
+2. Run them through a contrast checker to get the ratio.
+3. Compare against the threshold — 4.5:1 for normal text, 3:1 for large text and non-text elements.
+4. If it fails, adjust. Usually you darken the text or lighten the background; nudging the lightness is often enough without abandoning your palette.
+5. Recheck, and test every important text/background pairing — including hover and focus states.
+
+Build this into your design process rather than auditing at the end. It is far cheaper to choose accessible colours up front.
+
+## Frequently asked questions
+
+**What is a good contrast ratio?**
+At least 4.5:1 for normal text and 3:1 for large text, to meet WCAG Level AA. For the stricter AAA level, aim for 7:1 and 4.5:1 respectively.
+
+**What counts as large text?**
+Roughly 24px (about 18pt) and above, or 18.66px (about 14pt) and above if bold. Large text is allowed a lower contrast threshold.
+
+**Does contrast apply to icons and buttons?**
+Yes. Non-text elements that convey meaning — informative icons, input borders, focus indicators — require a contrast ratio of at least 3:1.
+
+**Why does my text fail contrast even though the colours look different?**
+Contrast depends on perceived brightness, not how distinct the hues look. Two colours of similar luminance can look different yet still fail the ratio.
+
+**How do I fix low contrast without changing my brand colours?**
+Adjust the lightness rather than the hue — darken the text or lighten the background. A small luminance change is often enough to pass while keeping the palette.
+
+## Check your contrast now
+
+Test any colour pair against the WCAG standards with the free [Contrast Checker](/tools/contrast-checker) — enter your foreground and background colours to see the ratio and whether it passes AA and AAA.
