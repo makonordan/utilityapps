@@ -88,11 +88,11 @@ export const PRODUCTS: Product[] = [
   // Storage bucket. An owned product with no `file` shows as "Coming soon".
   {
     id: "ai-prompt-pack",
-    name: "AI Prompt Power Pack — 150+ Prompts",
+    name: "AI Prompt Pack — 60 Pro Prompts",
     description:
-      "150+ copy-paste prompts for ChatGPT, Claude and Gemini across writing, marketing, work and study.",
+      "60 copy-paste prompts for ChatGPT, Claude and Gemini across writing, marketing, work, code and study.",
     longDescription:
-      "A focused, no-filler prompt pack: 150+ prompts you can paste straight into ChatGPT, Claude or Gemini. Organised into clear sections — writing, marketing, business, coding, study and everyday life — each with a short note on how to adapt it to your situation. Delivered as a clean, searchable PDF you keep forever.",
+      "A focused, no-filler prompt pack: 60 prompts you can paste straight into ChatGPT, Claude or Gemini. Organised into six practical sections — writing, marketing, business, coding, study and everyday life — each with a short note on how to adapt it to your situation. Delivered as a clean, searchable PDF you keep forever.",
     price: 4,
     originalPrice: 4,
     currency: "USD",
@@ -111,7 +111,7 @@ export const PRODUCTS: Product[] = [
     bestseller: false,
     new: true,
     features: [
-      "150+ ready-to-use prompts",
+      "60 ready-to-use pro prompts",
       "Six practical sections — writing, marketing, work, code, study, life",
       "Works with ChatGPT, Claude and Gemini",
       "A short adaptation note on every prompt",
@@ -171,8 +171,8 @@ export const PRODUCTS: Product[] = [
     salesCount: 0,
     platform: "utilityapps",
     kind: "owned",
-    file: "resume-pack.zip",
-    fileFormat: "ZIP (Word)",
+    file: "resume-pack.docx",
+    fileFormat: "DOCX",
     featured: false,
     bestseller: false,
     new: true,
