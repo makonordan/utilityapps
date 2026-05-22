@@ -50,6 +50,17 @@ interface RawPost {
   _raw?: { flattenedPath?: string };
 }
 
+/**
+ * A post goes live only once its frontmatter `date` has arrived. Future-dated
+ * posts are hidden everywhere — the blog index, the sitemap, related lists, and
+ * even their own URL (404 until the day) — which lets us schedule a staggered
+ * rollout instead of publishing everything at once. Compared as YYYY-MM-DD
+ * strings so the gate flips at UTC midnight with no timezone ambiguity.
+ */
+export function isPublished(date: string): boolean {
+  return date.slice(0, 10) <= new Date().toISOString().slice(0, 10);
+}
+
 async function loadAllRawPosts(): Promise<RawPost[]> {
   try {
     const mod = (await import("contentlayer2/generated").catch(() => null)) as
@@ -84,6 +95,7 @@ function hydrate(post: RawPost, index: number): BlogPost {
 export async function getAllPosts(): Promise<BlogPost[]> {
   const raw = await loadAllRawPosts();
   return raw
+    .filter((p) => isPublished(p.date))
     .sort((a, b) => +new Date(b.date) - +new Date(a.date))
     .map((p, i) => hydrate(p, i));
 }

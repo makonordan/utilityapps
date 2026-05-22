@@ -21,6 +21,13 @@ interface RouteParams {
   params: Promise<{ slug: string }>;
 }
 
+// Re-render hourly so a post scheduled for a future date goes live on its date
+// without a redeploy. generateStaticParams only prebuilds already-published
+// posts; a future-dated slug is rendered on demand (dynamicParams) and 404s
+// until getPostBySlug starts returning it on its publish date.
+export const revalidate = 3600;
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
   const posts = await getAllPosts();
   return posts.map((p) => ({ slug: p.slug }));

@@ -1,3 +1,5 @@
+import { isPublished } from "./blog";
+
 export interface FeaturedPost {
   slug: string;
   title: string;
@@ -73,7 +75,7 @@ export async function getFeaturedPosts(limit: number = 3): Promise<FeaturedPost[
     if (!mod?.allPosts || mod.allPosts.length === 0) return PLACEHOLDER_POSTS.slice(0, limit);
 
     return mod.allPosts
-      .filter((p) => p.featured)
+      .filter((p) => p.featured && isPublished(p.date))
       .sort((a, b) => +new Date(b.date) - +new Date(a.date))
       .slice(0, limit)
       .map((p, i) => ({
@@ -114,6 +116,7 @@ async function getAllPosts(): Promise<FeaturedPost[]> {
       | null;
     if (!mod?.allPosts || mod.allPosts.length === 0) return PLACEHOLDER_POSTS;
     return mod.allPosts
+      .filter((p) => isPublished(p.date))
       .sort((a, b) => +new Date(b.date) - +new Date(a.date))
       .map((p, i) => ({
         slug: p.slug ?? p._raw?.flattenedPath?.replace(/^posts\//, "") ?? "",

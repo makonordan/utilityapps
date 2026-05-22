@@ -48,6 +48,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Re-render hourly so newly-published featured posts surface on the homepage.
+export const revalidate = 3600;
+
 export default async function HomePage() {
   const posts = await getFeaturedPosts(3);
 
