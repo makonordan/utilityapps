@@ -1,10 +1,16 @@
-export type ProductPlatform = "gumroad" | "etsy" | "shopify" | "gumroad-affiliate";
+export type ProductPlatform =
+  | "gumroad"
+  | "etsy"
+  | "shopify"
+  | "gumroad-affiliate"
+  | "utilityapps";
 
 const PLATFORM_LABELS: Record<ProductPlatform, string> = {
   gumroad: "Gumroad",
   "gumroad-affiliate": "Gumroad",
   etsy: "Etsy",
   shopify: "Shopify",
+  utilityapps: "UtilityApps",
 };
 
 export function platformLabel(platform: ProductPlatform): string {
@@ -37,12 +43,31 @@ export interface Product {
   reviewCount: number;
   salesCount: number;
   platform: ProductPlatform;
-  affiliateUrl: string;
+  /** "owned" = sold directly by us via Korapay checkout. Absent / "affiliate"
+   *  = an external buy link (the existing catalog). */
+  kind?: "owned" | "affiliate";
+  /** External purchase link. Required for affiliate products; unused for owned. */
+  affiliateUrl?: string;
+  /** Supabase Storage object path for an owned product's downloadable file.
+   *  Absent on an owned product => "coming soon" (not yet purchasable). */
+  file?: string;
+  /** Human-readable file format shown in the UI, e.g. "PDF", "XLSX". */
+  fileFormat?: string;
   featured: boolean;
   bestseller: boolean;
   new: boolean;
   features: string[];
   reviews: ProductReview[];
+}
+
+/** An owned product sold directly through the on-site Korapay checkout. */
+export function isOwnedProduct(p: Product): boolean {
+  return p.kind === "owned";
+}
+
+/** An owned product whose downloadable file has not been uploaded yet. */
+export function isComingSoon(p: Product): boolean {
+  return p.kind === "owned" && !p.file;
 }
 
 const r = (author: string, rating: number, body: string, date: string): ProductReview => ({
@@ -58,6 +83,205 @@ const r = (author: string, rating: number, body: string, date: string): ProductR
 const img = (seed: string): string => `https://picsum.photos/seed/${seed}/640/400`;
 
 export const PRODUCTS: Product[] = [
+  // ---------- UtilityApps Originals (owned — sold direct via Korapay) --------
+  // `file` is the object path inside the private `product-files` Supabase
+  // Storage bucket. An owned product with no `file` shows as "Coming soon".
+  {
+    id: "ai-prompt-pack",
+    name: "AI Prompt Power Pack — 150+ Prompts",
+    description:
+      "150+ copy-paste prompts for ChatGPT, Claude and Gemini across writing, marketing, work and study.",
+    longDescription:
+      "A focused, no-filler prompt pack: 150+ prompts you can paste straight into ChatGPT, Claude or Gemini. Organised into clear sections — writing, marketing, business, coding, study and everyday life — each with a short note on how to adapt it to your situation. Delivered as a clean, searchable PDF you keep forever.",
+    price: 4,
+    originalPrice: 4,
+    currency: "USD",
+    category: "AI Prompt Bundles",
+    tags: ["ChatGPT", "Claude", "prompts", "AI", "productivity"],
+    image: "from-primary-500 to-accent-500",
+    imageUrl: img("ua-ai-prompt-pack"),
+    rating: 0,
+    reviewCount: 0,
+    salesCount: 0,
+    platform: "utilityapps",
+    kind: "owned",
+    file: "ai-prompt-pack.pdf",
+    fileFormat: "PDF",
+    featured: true,
+    bestseller: false,
+    new: true,
+    features: [
+      "150+ ready-to-use prompts",
+      "Six practical sections — writing, marketing, work, code, study, life",
+      "Works with ChatGPT, Claude and Gemini",
+      "A short adaptation note on every prompt",
+      "Instant download — clean, searchable PDF",
+    ],
+    reviews: [],
+  },
+  {
+    id: "budget-spreadsheet",
+    name: "Simple Monthly Budget Spreadsheet",
+    description:
+      "An auto-calculating budget tracker for income, expenses, savings rate and category breakdowns.",
+    longDescription:
+      "A clean budget spreadsheet that does the maths for you. Enter your income and expenses and it automatically calculates your totals, your savings rate, and a breakdown by category. A 12-month overview tab tracks the trend across the year. Opens in Excel, Google Sheets and Apple Numbers — no formulas to set up yourself.",
+    price: 4,
+    originalPrice: 4,
+    currency: "USD",
+    category: "Finance & Business Templates",
+    tags: ["budget", "spreadsheet", "personal finance", "Excel", "Google Sheets"],
+    image: "from-success-500 to-primary-500",
+    imageUrl: img("ua-budget-spreadsheet"),
+    rating: 0,
+    reviewCount: 0,
+    salesCount: 0,
+    platform: "utilityapps",
+    kind: "owned",
+    file: "budget-spreadsheet.xlsx",
+    fileFormat: "XLSX",
+    featured: true,
+    bestseller: false,
+    new: true,
+    features: [
+      "Auto-calculating income and expense tracker",
+      "Live savings-rate and category breakdown",
+      "12-month overview tab for the whole year",
+      "Opens in Excel, Google Sheets and Numbers",
+      "Instant download",
+    ],
+    reviews: [],
+  },
+  {
+    id: "resume-pack",
+    name: "ATS-Friendly Resume Template Pack",
+    description:
+      "Clean, recruiter-tested resume layouts plus a matching cover letter — fully editable in Word.",
+    longDescription:
+      "Resume templates built the way Applicant Tracking Systems actually want them: single-column, standard fonts, and no graphics that break automated parsing. Includes several layouts for different career stages plus a matching cover letter, all fully editable in Microsoft Word or Google Docs, with a short guide on tailoring each section to the job.",
+    price: 4,
+    originalPrice: 4,
+    currency: "USD",
+    category: "Resume & Career Templates",
+    tags: ["resume", "CV", "ATS", "cover letter", "job search"],
+    image: "from-accent-500 to-primary-500",
+    imageUrl: img("ua-resume-pack"),
+    rating: 0,
+    reviewCount: 0,
+    salesCount: 0,
+    platform: "utilityapps",
+    kind: "owned",
+    file: "resume-pack.zip",
+    fileFormat: "ZIP (Word)",
+    featured: false,
+    bestseller: false,
+    new: true,
+    features: [
+      "Multiple ATS-safe resume layouts",
+      "Matching cover letter template",
+      "Fully editable in Word and Google Docs",
+      "Section-by-section tailoring guide",
+      "Instant download",
+    ],
+    reviews: [],
+  },
+  {
+    id: "canva-social-templates",
+    name: "Canva Social Media Template Pack",
+    description:
+      "Editable Canva templates for Instagram posts, stories and carousels — swap your brand in minutes.",
+    longDescription:
+      "A pack of editable Canva templates for Instagram posts, stories and carousels. Built on one consistent design system so changing the colours and fonts to your brand takes a couple of minutes. Delivered as a Canva template link you can copy straight into your own account.",
+    price: 4,
+    originalPrice: 4,
+    currency: "USD",
+    category: "Social Media Kits",
+    tags: ["Canva", "Instagram", "social media", "templates"],
+    image: "from-accent-500 to-warning-500",
+    imageUrl: img("ua-canva-templates"),
+    rating: 0,
+    reviewCount: 0,
+    salesCount: 0,
+    platform: "utilityapps",
+    kind: "owned",
+    fileFormat: "Canva link",
+    featured: false,
+    bestseller: false,
+    new: true,
+    features: [
+      "Editable Instagram post, story and carousel templates",
+      "One consistent design system",
+      "60-second brand swap",
+      "Delivered as a Canva template link",
+      "Instant access",
+    ],
+    reviews: [],
+  },
+  {
+    id: "lightroom-presets",
+    name: "Lightroom Mobile Preset Pack",
+    description:
+      "One-tap colour presets for Lightroom Mobile — consistent, professional edits in seconds.",
+    longDescription:
+      "A set of colour presets for Lightroom Mobile that give your photos a consistent, professional look with a single tap. Tuned to work across a wide range of lighting conditions, from bright daylight to indoor and golden-hour shots. Delivered as preset files you import once and keep.",
+    price: 4,
+    originalPrice: 4,
+    currency: "USD",
+    category: "Design & UI Kits",
+    tags: ["Lightroom", "presets", "photo editing", "mobile"],
+    image: "from-warning-500 to-accent-500",
+    imageUrl: img("ua-lightroom-presets"),
+    rating: 0,
+    reviewCount: 0,
+    salesCount: 0,
+    platform: "utilityapps",
+    kind: "owned",
+    fileFormat: "DNG / XMP",
+    featured: false,
+    bestseller: false,
+    new: true,
+    features: [
+      "One-tap colour presets for Lightroom Mobile",
+      "Tuned for daylight, indoor and golden-hour shots",
+      "Consistent look across a whole feed",
+      "Import once, keep forever",
+      "Instant download",
+    ],
+    reviews: [],
+  },
+  {
+    id: "notion-template",
+    name: "Notion Life & Productivity Dashboard",
+    description:
+      "An all-in-one Notion dashboard for tasks, goals, habits, notes and weekly planning.",
+    longDescription:
+      "A single Notion dashboard that brings tasks, goals, habits, notes and weekly planning into one calm place. Designed to be simple enough to actually stick with — no sprawling sub-pages, just the views you use every day. Delivered as a Notion template link you duplicate into your own workspace.",
+    price: 4.99,
+    originalPrice: 4.99,
+    currency: "USD",
+    category: "Design & UI Kits",
+    tags: ["Notion", "dashboard", "productivity", "planner"],
+    image: "from-primary-500 to-accent-600",
+    imageUrl: img("ua-notion-template"),
+    rating: 0,
+    reviewCount: 0,
+    salesCount: 0,
+    platform: "utilityapps",
+    kind: "owned",
+    fileFormat: "Notion link",
+    featured: false,
+    bestseller: false,
+    new: true,
+    features: [
+      "Tasks, goals, habits, notes and weekly planning in one place",
+      "Deliberately simple — built to actually stick with",
+      "Light and dark mode friendly",
+      "Duplicated straight into your own Notion workspace",
+      "Instant access",
+    ],
+    reviews: [],
+  },
+
   // ---------- AI Prompt Bundles (5) ----------
   {
     id: "ai-prompt-vault",
@@ -764,3 +988,8 @@ export function getRelatedProducts(productId: string, limit: number = 4): Produc
 
 /** Backwards-compat alias used by the homepage. */
 export const FEATURED_PRODUCTS = getFeaturedProducts(4);
+
+/** All products sold directly by us (owned), purchasable via Korapay checkout. */
+export function getOwnedProducts(): Product[] {
+  return PRODUCTS.filter(isOwnedProduct);
+}

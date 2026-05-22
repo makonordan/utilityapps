@@ -227,3 +227,29 @@ create policy if not exists search_queries_insert on public.search_queries
   for insert to anon, authenticated with check (true);
 create policy if not exists search_queries_select on public.search_queries
   for select to anon, authenticated using (true);
+
+-- 9. orders -----------------------------------------------------------------
+-- Digital-product orders sold directly via Korapay. Holds a customer email and
+-- the source-of-truth payment state. RLS is ON with NO policies at all, so the
+-- anon key cannot read or write it — the checkout and webhook routes use the
+-- service-role key exclusively (see lib/orders.ts).
+create table if not exists public.orders (
+  id          uuid primary key default gen_random_uuid(),
+  reference   text not null unique,
+  product_id  text not null,
+  email       text not null,
+  amount      numeric(10,2) not null,
+  currency    text not null default 'USD',
+  status      text not null default 'pending'
+    check (status in ('pending', 'paid', 'fulfilled', 'failed')),
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
+);
+
+create index if not exists orders_reference_idx  on public.orders (reference);
+create index if not exists orders_created_at_idx on public.orders (created_at desc);
+create index if not exists orders_status_idx     on public.orders (status);
+
+-- RLS on, no policies: the anon key is fully denied. Server routes use the
+-- service-role key, which bypasses RLS.
+alter table public.orders enable row level security;

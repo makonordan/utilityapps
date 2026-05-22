@@ -18,6 +18,8 @@ import {
   PRODUCTS,
   getProductById,
   getRelatedProducts,
+  isComingSoon,
+  isOwnedProduct,
   platformLabel,
   type Product,
   type ProductReview,
@@ -74,6 +76,8 @@ export default async function ProductDetailPage({ params }: RouteParams) {
       ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
       : 0;
 
+  const owned = isOwnedProduct(product);
+
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -83,25 +87,36 @@ export default async function ProductDetailPage({ params }: RouteParams) {
     sku: product.id,
     category: product.category,
     brand: { "@type": "Organization", name: SITE_CONFIG.name },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: product.rating.toFixed(1),
-      reviewCount: product.reviewCount,
-    },
-    review: product.reviews.map((r) => ({
-      "@type": "Review",
-      author: { "@type": "Person", name: r.author },
-      reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5 },
-      datePublished: r.date,
-      reviewBody: r.body,
-    })),
+    // Only emit rating/review markup once there are real reviews — empty
+    // aggregateRating is invalid structured data.
+    ...(product.reviewCount > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: product.rating.toFixed(1),
+            reviewCount: product.reviewCount,
+          },
+          review: product.reviews.map((r) => ({
+            "@type": "Review",
+            author: { "@type": "Person", name: r.author },
+            reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5 },
+            datePublished: r.date,
+            reviewBody: r.body,
+          })),
+        }
+      : {}),
     offers: {
       "@type": "Offer",
       price: product.price.toFixed(2),
       priceCurrency: product.currency,
-      availability: "https://schema.org/InStock",
-      url: product.affiliateUrl,
-      seller: { "@type": "Organization", name: platformLabel(product.platform) },
+      availability: isComingSoon(product)
+        ? "https://schema.org/PreOrder"
+        : "https://schema.org/InStock",
+      url: owned ? `${SITE_CONFIG.url}/products/${product.id}` : product.affiliateUrl,
+      seller: {
+        "@type": "Organization",
+        name: owned ? SITE_CONFIG.name : platformLabel(product.platform),
+      },
     },
   };
 
@@ -167,7 +182,7 @@ export default async function ProductDetailPage({ params }: RouteParams) {
           )}
         </Section>
 
-        <ReviewsSection product={product} />
+        {product.reviewCount > 0 && <ReviewsSection product={product} />}
 
         <Section title="You might also like">
           {related.length === 0 ? (
@@ -183,17 +198,30 @@ export default async function ProductDetailPage({ params }: RouteParams) {
           )}
         </Section>
 
-        <p
-          role="note"
-          className="mt-12 flex items-start gap-3 rounded-2xl border border-primary-200 bg-primary-50/60 p-4 text-xs text-primary-900 dark:border-primary-700/40 dark:bg-primary-500/10 dark:text-primary-100"
-        >
-          <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-          <span>
-            <strong className="font-semibold">Disclosure:</strong> The &quot;Buy on{" "}
-            {platformLabel(product.platform)}&quot; link is an affiliate link. We may earn a
-            commission when you purchase, at no extra cost to you.
-          </span>
-        </p>
+        {owned ? (
+          <p
+            role="note"
+            className="mt-12 flex items-start gap-3 rounded-2xl border border-primary-200 bg-primary-50/60 p-4 text-xs text-primary-900 dark:border-primary-700/40 dark:bg-primary-500/10 dark:text-primary-100"
+          >
+            <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+            <span>
+              After payment is confirmed, your download link is emailed to you automatically.
+              Payments are processed securely by Korapay.
+            </span>
+          </p>
+        ) : (
+          <p
+            role="note"
+            className="mt-12 flex items-start gap-3 rounded-2xl border border-primary-200 bg-primary-50/60 p-4 text-xs text-primary-900 dark:border-primary-700/40 dark:bg-primary-500/10 dark:text-primary-100"
+          >
+            <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+            <span>
+              <strong className="font-semibold">Disclosure:</strong> The &quot;Buy on{" "}
+              {platformLabel(product.platform)}&quot; link is an affiliate link. We may earn a
+              commission when you purchase, at no extra cost to you.
+            </span>
+          </p>
+        )}
       </article>
     </>
   );
@@ -262,6 +290,8 @@ function ProductHero({ product, discount }: { product: Product; discount: number
 }
 
 function PurchasePanel({ product, discount }: { product: Product; discount: number }) {
+  const owned = isOwnedProduct(product);
+  const comingSoon = isComingSoon(product);
   return (
     <div className="flex flex-col">
       <span className="text-xs font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
@@ -272,23 +302,31 @@ function PurchasePanel({ product, discount }: { product: Product; discount: numb
       </h1>
       <p className="mt-3 text-base text-surface-600 dark:text-surface-300">{product.description}</p>
 
-      <div className="mt-5 flex items-center gap-3 text-sm">
-        <span className="inline-flex items-center gap-1 text-warning-500">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star
-              key={i}
-              className={cn("h-4 w-4", i < Math.round(product.rating) ? "fill-warning-400" : "fill-transparent")}
-              aria-hidden="true"
-            />
-          ))}
-          <span className="ml-1 text-surface-700 dark:text-surface-200">
-            {product.rating.toFixed(1)}
+      {product.reviewCount > 0 ? (
+        <div className="mt-5 flex items-center gap-3 text-sm">
+          <span className="inline-flex items-center gap-1 text-warning-500">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star
+                key={i}
+                className={cn("h-4 w-4", i < Math.round(product.rating) ? "fill-warning-400" : "fill-transparent")}
+                aria-hidden="true"
+              />
+            ))}
+            <span className="ml-1 text-surface-700 dark:text-surface-200">
+              {product.rating.toFixed(1)}
+            </span>
           </span>
-        </span>
-        <span className="text-surface-500 dark:text-surface-400">
-          {formatNumber(product.reviewCount)} reviews · {formatNumber(product.salesCount)} sold
-        </span>
-      </div>
+          <span className="text-surface-500 dark:text-surface-400">
+            {formatNumber(product.reviewCount)} reviews · {formatNumber(product.salesCount)} sold
+          </span>
+        </div>
+      ) : (
+        <div className="mt-5">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-success-50 px-2.5 py-0.5 text-xs font-semibold text-success-700 dark:bg-success-500/15 dark:text-success-300">
+            New release
+          </span>
+        </div>
+      )}
 
       <div className="mt-6 flex items-baseline gap-3">
         <span className="text-4xl font-bold text-surface-900 dark:text-white">${product.price}</span>
@@ -302,14 +340,30 @@ function PurchasePanel({ product, discount }: { product: Product; discount: numb
         )}
       </div>
 
+      {comingSoon && (
+        <p className="mt-4 rounded-xl border border-surface-200 bg-surface-50 px-4 py-3 text-sm text-surface-600 dark:border-surface-800 dark:bg-surface-900 dark:text-surface-300">
+          This product launches soon — check back shortly.
+        </p>
+      )}
+
       <BuyButton product={product} variant="primary" className="mt-6 w-full sm:w-auto sm:self-start">
-        Buy on {platformLabel(product.platform)}
+        {owned ? undefined : `Buy on ${platformLabel(product.platform)}`}
       </BuyButton>
 
       <ul className="mt-6 grid gap-2 text-sm text-surface-700 dark:text-surface-200 sm:grid-cols-2">
-        <Trust Icon={Download}>Instant download after purchase</Trust>
-        <Trust Icon={ShieldCheck}>Buyer protection on {platformLabel(product.platform)}</Trust>
-        <Trust Icon={Check}>Free updates included</Trust>
+        <Trust Icon={Download}>
+          {owned ? "Download link emailed instantly" : "Instant download after purchase"}
+        </Trust>
+        <Trust Icon={ShieldCheck}>
+          {owned
+            ? "Secure checkout via Korapay"
+            : `Buyer protection on ${platformLabel(product.platform)}`}
+        </Trust>
+        {owned && product.fileFormat ? (
+          <Trust Icon={Check}>Format: {product.fileFormat}</Trust>
+        ) : (
+          <Trust Icon={Check}>Free updates included</Trust>
+        )}
         <Trust Icon={Check}>Personal &amp; commercial license</Trust>
       </ul>
     </div>

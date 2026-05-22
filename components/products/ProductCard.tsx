@@ -85,11 +85,15 @@ export function ProductCard({ product, className }: { product: Product; classNam
               </span>
             )}
           </div>
-          <span className="inline-flex items-center gap-1 text-xs text-surface-600 dark:text-surface-300">
-            <Star className="h-3.5 w-3.5 fill-warning-400 text-warning-400" aria-hidden="true" />
-            {product.rating.toFixed(1)}
-            <span className="text-surface-400">({formatNumber(product.reviewCount)})</span>
-          </span>
+          {product.reviewCount > 0 ? (
+            <span className="inline-flex items-center gap-1 text-xs text-surface-600 dark:text-surface-300">
+              <Star className="h-3.5 w-3.5 fill-warning-400 text-warning-400" aria-hidden="true" />
+              {product.rating.toFixed(1)}
+              <span className="text-surface-400">({formatNumber(product.reviewCount)})</span>
+            </span>
+          ) : product.fileFormat ? (
+            <span className="text-xs font-medium text-surface-400">{product.fileFormat}</span>
+          ) : null}
         </div>
 
         <BuyButton product={product} className="mt-4 w-full" />
@@ -149,11 +153,17 @@ export function FeaturedProductCard({ product }: { product: Product }) {
           {discount > 0 && (
             <span className="text-sm text-surface-400 line-through">${product.originalPrice}</span>
           )}
-          <span className="ml-auto inline-flex items-center gap-1 text-xs text-surface-600 dark:text-surface-300">
-            <Star className="h-3.5 w-3.5 fill-warning-400 text-warning-400" aria-hidden="true" />
-            {product.rating.toFixed(1)}
-            <span className="text-surface-400">({formatNumber(product.reviewCount)})</span>
-          </span>
+          {product.reviewCount > 0 ? (
+            <span className="ml-auto inline-flex items-center gap-1 text-xs text-surface-600 dark:text-surface-300">
+              <Star className="h-3.5 w-3.5 fill-warning-400 text-warning-400" aria-hidden="true" />
+              {product.rating.toFixed(1)}
+              <span className="text-surface-400">({formatNumber(product.reviewCount)})</span>
+            </span>
+          ) : product.fileFormat ? (
+            <span className="ml-auto text-xs font-medium text-surface-400">
+              {product.fileFormat}
+            </span>
+          ) : null}
         </div>
 
         <BuyButton product={product} variant="primary" className="mt-5 w-full">
