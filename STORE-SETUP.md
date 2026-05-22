@@ -4,12 +4,11 @@ The store now sells **owned digital products** directly: buyer enters their
 email → pays on Korapay → a confirmed payment triggers an automatic email with
 a time-limited download link.
 
-Six products are live in the catalog. Three are ready for files I generated
-(prompt pack, budget spreadsheet, resume pack); three are "Coming soon" until
-you create and upload their files (Canva templates, Lightroom presets, Notion
-template).
+Three products are in the catalog — the AI prompt pack, the budget
+spreadsheet and the resume pack. The downloadable file for each was generated
+for you (see step 4).
 
-Nothing is purchasable until the four steps below are done.
+Nothing is purchasable until the five steps below are done.
 
 ---
 
@@ -52,14 +51,17 @@ publicly accessible.
 Upload each file into the `product-files` bucket with the **exact** object name
 the catalog expects (see the `file:` field in [`lib/products.ts`](lib/products.ts)):
 
-| Product | Object name in bucket | Status |
-| --- | --- | --- |
-| AI Prompt Power Pack | `ai-prompt-pack.pdf` | Generated for you |
-| Simple Monthly Budget Spreadsheet | `budget-spreadsheet.xlsx` | Generated for you |
-| ATS-Friendly Resume Pack | `resume-pack.docx` | Generated for you |
-| Canva Social Media Template Pack | _set later_ | You create |
-| Lightroom Mobile Preset Pack | _set later_ | You create |
-| Notion Life & Productivity Dashboard | _set later_ | You create |
+The three files were generated for you and are in the local `product-files/`
+folder. Upload each into the `product-files` bucket with the **exact** object
+name below:
+
+| Product | Object name in bucket |
+| --- | --- |
+| AI Prompt Pack — 60 Pro Prompts | `ai-prompt-pack.pdf` |
+| Simple Monthly Budget Spreadsheet | `budget-spreadsheet.xlsx` |
+| ATS-Friendly Resume Template Pack | `resume-pack.docx` |
+
+Regenerate any file at any time with `node scripts/build-<name>.mjs`.
 
 A product is only purchasable once its file exists in the bucket — the checkout
 verifies the file is there **before** charging, so a buyer can never be charged
@@ -78,20 +80,12 @@ does not verify against your secret key.
 
 ---
 
-## Going live with the three "Coming soon" products
+## Adding more products later
 
-When you have created the Canva pack, Lightroom presets and Notion template:
-
-1. **File-based products (e.g. a preset `.zip`):** upload to the `product-files`
-   bucket, then set `file:` on that product in `lib/products.ts` to the object
-   name (and `fileFormat` to e.g. `"ZIP"`).
-2. **Link-based products (Canva / Notion templates):** these are delivered as a
-   share link, not a file. Put the share link in a tiny `.txt` or `.pdf`,
-   upload that to the bucket, and set `file:` to it — the buyer receives the
-   link to duplicate the template. (Or tell me and I'll wire a link-delivery
-   path that emails the URL directly.)
-
-Removing the `file:` field again turns a product back into "Coming soon".
+To add another product, append an entry to the `PRODUCTS` array in
+[`lib/products.ts`](lib/products.ts) with `kind: "owned"` and a `file:` set to
+its object name in the `product-files` bucket, then upload the file. A product
+with no `file:` shows as "Coming soon" and cannot be bought.
 
 ## How the flow works
 

@@ -11,10 +11,10 @@ export function ProductsPreview() {
       <header className="mb-8 flex items-end justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-surface-900 sm:text-3xl dark:text-white">
-            Premium Digital Products
+            Digital Products
           </h2>
           <p className="mt-1 text-sm text-surface-600 dark:text-surface-400">
-            Hand-built bundles that pay for themselves the first time you use them. Earn while you sleep.
+            Practical digital products that help you work faster — pay once, download instantly, keep forever.
           </p>
         </div>
         <Link
@@ -26,7 +26,7 @@ export function ProductsPreview() {
         </Link>
       </header>
 
-      <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {FEATURED_PRODUCTS.map((product) => {
           const badge = product.bestseller ? "Best Seller" : product.new ? "New" : null;
           return (
@@ -62,11 +62,19 @@ export function ProductsPreview() {
                     <span className="text-base font-bold text-surface-900 dark:text-white">
                       ${product.price}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-xs text-surface-600 dark:text-surface-300">
-                      <Star className="h-3.5 w-3.5 fill-warning-400 text-warning-400" />
-                      {product.rating.toFixed(1)}
-                      <span className="text-surface-400">({formatNumber(product.reviewCount)})</span>
-                    </span>
+                    {product.reviewCount > 0 ? (
+                      <span className="inline-flex items-center gap-1 text-xs text-surface-600 dark:text-surface-300">
+                        <Star className="h-3.5 w-3.5 fill-warning-400 text-warning-400" />
+                        {product.rating.toFixed(1)}
+                        <span className="text-surface-400">
+                          ({formatNumber(product.reviewCount)})
+                        </span>
+                      </span>
+                    ) : product.fileFormat ? (
+                      <span className="text-xs font-medium text-surface-400">
+                        {product.fileFormat}
+                      </span>
+                    ) : null}
                   </div>
                   <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-primary-600 transition group-hover:gap-2 dark:text-primary-400">
                     View Product
