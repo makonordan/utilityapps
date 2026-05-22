@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, Clock, Mail, Sparkles } from "lucide-react";
 
-import { LinkedinIcon, TwitterIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
+import { InstagramIcon, LinkedinIcon, TwitterIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { SITE_CONFIG } from "@/lib/utils";
 
@@ -34,9 +34,10 @@ const contactJsonLd = {
 };
 
 const SOCIALS = [
-  { Icon: TwitterIcon, label: "X (Twitter)", href: "https://x.com/utilityapps" },
-  { Icon: YoutubeIcon, label: "YouTube", href: "https://youtube.com/@utilityapps" },
-  { Icon: LinkedinIcon, label: "LinkedIn", href: "https://linkedin.com/company/utilityapps" },
+  { Icon: TwitterIcon, label: "X (Twitter)", href: "https://x.com/UtilityAppsSite" },
+  { Icon: YoutubeIcon, label: "YouTube", href: "https://www.youtube.com/@UtilityAppsSite" },
+  { Icon: LinkedinIcon, label: "LinkedIn", href: "https://www.linkedin.com/company/utilityapps/" },
+  { Icon: InstagramIcon, label: "Instagram", href: "https://www.instagram.com/utilityappssite" },
 ];
 
 export default function ContactPage() {

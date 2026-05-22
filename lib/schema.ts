@@ -35,8 +35,9 @@ export function generateOrganizationSchema(): object {
     logo: `${SITE_CONFIG.url}/icon.png`,
     sameAs: [
       `https://x.com/${SITE_CONFIG.twitterHandle.replace(/^@/, "")}`,
-      "https://youtube.com/@utilityapps",
-      "https://linkedin.com/company/utilityapps",
+      "https://www.youtube.com/@UtilityAppsSite",
+      "https://www.linkedin.com/company/utilityapps/",
+      "https://www.instagram.com/utilityappssite",
     ],
     contactPoint: {
       "@type": "ContactPoint",

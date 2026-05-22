@@ -53,7 +53,7 @@ export function MetaTagGenerator() {
     description: "Compress JPG, PNG, SVG, GIF up to 90% smaller with no quality loss. Free, no signup, runs in your browser.",
     url: "https://utilityapps.site/tools/compress-image",
     image: "https://utilityapps.site/og.png",
-    twitterHandle: "@utilityapps",
+    twitterHandle: "@UtilityAppsSite",
     type: "website",
   });
 

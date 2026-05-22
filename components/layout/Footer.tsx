@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { LinkedinIcon, TwitterIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
+import { InstagramIcon, LinkedinIcon, TwitterIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
 import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
 import { CATEGORIES } from "@/lib/categories";
 import { TOOLS } from "@/lib/tools";
@@ -26,9 +26,10 @@ const COMPANY = [
 ];
 
 const SOCIALS: { label: string; href: string; Icon: typeof TwitterIcon }[] = [
-  { label: "X (Twitter)", href: "https://x.com/utilityapps", Icon: TwitterIcon },
-  { label: "YouTube", href: "https://youtube.com/@utilityapps", Icon: YoutubeIcon },
-  { label: "LinkedIn", href: "https://linkedin.com/company/utilityapps", Icon: LinkedinIcon },
+  { label: "X (Twitter)", href: "https://x.com/UtilityAppsSite", Icon: TwitterIcon },
+  { label: "YouTube", href: "https://www.youtube.com/@UtilityAppsSite", Icon: YoutubeIcon },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/utilityapps/", Icon: LinkedinIcon },
+  { label: "Instagram", href: "https://www.instagram.com/utilityappssite", Icon: InstagramIcon },
 ];
 
 function FooterLogo() {

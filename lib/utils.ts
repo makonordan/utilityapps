@@ -45,7 +45,7 @@ export const SITE_CONFIG = {
   description: "200+ Free AI Utility Tools for Everyday Work",
   url: "https://utilityapps.site",
   ogImage: "https://utilityapps.site/og.png",
-  twitterHandle: "@utilityapps",
+  twitterHandle: "@UtilityAppsSite",
   author: "UtilityApps Team",
   locale: "en_US",
   keywords: [

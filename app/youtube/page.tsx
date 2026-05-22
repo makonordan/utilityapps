@@ -10,7 +10,7 @@ import { SITE_CONFIG, formatDate } from "@/lib/utils";
 const TITLE = `Free Tool Tutorials — ${SITE_CONFIG.name} YouTube Hub`;
 const DESCRIPTION =
   "Step-by-step video tutorials for every tool on UtilityApps. Calculators, image tools, AI workflows — explained in under 10 minutes each.";
-const CHANNEL_HANDLE = "@utilityapps";
+const CHANNEL_HANDLE = "@UtilityAppsSite";
 const CHANNEL_URL = `https://www.youtube.com/${CHANNEL_HANDLE}`;
 const SUBSCRIBER_COUNT = "12,400";
 
