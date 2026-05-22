@@ -83,9 +83,7 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
-  icons: {
-    icon: "/favicon.ico",
-  },
+  // Icons are auto-detected from app/favicon.ico and app/icon.svg.
 };
 
 export const viewport: Viewport = {
