@@ -10,6 +10,7 @@ const TYPE_STYLES: Record<string, { label: string; accent: string }> = {
   "image-tool": { label: "Image Tool", accent: "#7C3AED" },
   "sleep-tool": { label: "Sleep Tool", accent: "#4F46E5" },
   "travel-tool": { label: "Travel Tool", accent: "#0EA5E9" },
+  "pdf-tool": { label: "PDF Tool", accent: "#DC2626" },
   post: { label: "Article", accent: "#7C3AED" },
   product: { label: "Product", accent: "#F59E0B" },
   category: { label: "Category", accent: "#10B981" },

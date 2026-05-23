@@ -12,11 +12,11 @@ const PAGE = 8;
 // High-CPC categories (finance, health) lead the initial 8-tool view so the
 // most ad-valuable tools are visible first.
 const TRENDING_CATEGORY_ORDER = [
+  "PDF Tools",
   "Finance Tools",
   "Image Tools",
   "Health Tools",
   "Calculator Tools",
-  "Text Tools",
   "Developer Tools",
   "Video Tools",
   "Audio Tools",
@@ -27,6 +27,7 @@ const TRENDING_CATEGORY_ORDER = [
   "Student Tools",
   "Sleep Tools",
   "Travel Tools",
+  "Text Tools",
 ];
 
 /** Trending value = monthly searches weighted by commercial value (CPC). */

@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 
 const FILTERS = [
   { label: "All", category: null },
-  { label: "Text", category: "Text Tools" },
+  { label: "PDF", category: "PDF Tools" },
   { label: "Image", category: "Image Tools" },
   { label: "Video", category: "Video Tools" },
   { label: "Audio", category: "Audio Tools" },
@@ -23,9 +23,10 @@ const FILTERS = [
   { label: "Health", category: "Health Tools" },
   { label: "Sleep", category: "Sleep Tools" },
   { label: "Travel", category: "Travel Tools" },
+  { label: "Productivity", category: "Productivity Tools" },
   { label: "Developer", category: "Developer Tools" },
   { label: "SEO", category: "SEO Tools" },
-  { label: "Productivity", category: "Productivity Tools" },
+  { label: "Text", category: "Text Tools" },
 ];
 
 const PAGE = 8;
@@ -33,20 +34,21 @@ const PAGE = 8;
 // The 8 headline categories drive the first page, one tool each. The remaining
 // categories are appended so "Load more" eventually surfaces every tool.
 const BROWSE_CATEGORY_ORDER = [
-  "Text Tools",
+  "PDF Tools",
   "Image Tools",
   "Video Tools",
   "Audio Tools",
+  "Design Tools",
+  "Student Tools",
   "Calculator Tools",
   "Finance Tools",
   "Health Tools",
-  "Developer Tools",
-  "SEO Tools",
-  "Productivity Tools",
-  "Design Tools",
-  "Student Tools",
   "Sleep Tools",
   "Travel Tools",
+  "Productivity Tools",
+  "Developer Tools",
+  "SEO Tools",
+  "Text Tools",
 ];
 
 /** Within a category: featured first, then trending, then highest search volume. */
