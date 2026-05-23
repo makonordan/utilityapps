@@ -132,13 +132,16 @@ function ScrollProgress() {
 function ToolsMegaMenu() {
   const grouped = useMemo(() => groupToolsByCategory(), []);
 
+  // max-h + overflow-y-auto on the panel below: the 12-category grid is
+  // taller than most viewports, so cap to the visible area below the sticky
+  // header and let the menu scroll internally.
   return (
     <motion.div
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.18, ease: "easeOut" }}
-      className="absolute left-0 top-full z-50 mt-2 max-w-[960px] w-[calc(100vw-3rem)] rounded-3xl border border-surface-200 bg-white p-6 shadow-card-hover dark:border-surface-800 dark:bg-surface-900"
+      className="absolute left-0 top-full z-50 mt-2 max-h-[calc(100vh-6rem)] w-[calc(100vw-3rem)] max-w-[960px] overflow-y-auto rounded-3xl border border-surface-200 bg-white p-6 shadow-card-hover dark:border-surface-800 dark:bg-surface-900"
     >
       <div className="grid grid-cols-2 gap-x-8 gap-y-6 lg:grid-cols-4">
         {CATEGORIES.map((cat) => {
