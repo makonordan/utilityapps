@@ -1,7 +1,6 @@
 import {
   BookmarkRow,
   DbResult,
-  NewsletterSubscriberRow,
   fail,
   ok,
   supabase,
@@ -149,22 +148,24 @@ export async function getUserBookmarks(userId: string): Promise<DbResult<Bookmar
 export async function subscribeNewsletter(
   email: string,
   source: string | null = null
-): Promise<DbResult<NewsletterSubscriberRow>> {
+): Promise<DbResult<true>> {
   try {
     const normalized = email.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
       return fail("Invalid email address");
     }
-    const { data, error } = await supabase
+    // Insert-only with ON CONFLICT DO NOTHING (ignoreDuplicates: true). The
+    // anon key has INSERT but NOT SELECT or UPDATE on this table — emails are
+    // PII — so we must not chain `.select()` and must not try to UPDATE
+    // existing rows. A returning subscriber is a no-op, not an error.
+    const { error } = await supabase
       .from("newsletter_subscribers")
       .upsert(
         { email: normalized, source, confirmed: false },
-        { onConflict: "email", ignoreDuplicates: false }
-      )
-      .select()
-      .single();
+        { onConflict: "email", ignoreDuplicates: true }
+      );
     if (error) return fail(error);
-    return ok(data);
+    return ok(true);
   } catch (err) {
     return fail(err);
   }

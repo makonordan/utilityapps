@@ -175,11 +175,20 @@ export function ok<T>(data: T): DbResult<T> {
 }
 
 export function fail<T = never>(error: unknown): DbResult<T> {
+  // Supabase's PostgrestError is a plain object in some builds, not an Error
+  // instance — so also accept any object that exposes a string `.message`.
+  // Without this, real errors collapse to "Unknown database error" and the
+  // caller has no idea what actually went wrong.
   const message =
     error instanceof Error
       ? error.message
       : typeof error === "string"
         ? error
-        : "Unknown database error";
+        : error &&
+            typeof error === "object" &&
+            "message" in error &&
+            typeof (error as { message: unknown }).message === "string"
+          ? (error as { message: string }).message
+          : "Unknown database error";
   return { data: null, error: message };
 }
