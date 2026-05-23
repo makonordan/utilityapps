@@ -23,6 +23,7 @@ const TRENDING_CATEGORY_ORDER = [
   // Remaining categories appended so "Load more" eventually shows every tool.
   "SEO Tools",
   "Productivity Tools",
+  "Legal Tools",
   "Design Tools",
   "Student Tools",
   "Sleep Tools",

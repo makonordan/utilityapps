@@ -120,6 +120,15 @@ const CATEGORY_DEFINITIONS: Omit<Category, "toolCount">[] = [
     featured: true,
   },
   {
+    id: "legal-tools",
+    name: "Legal Tools",
+    description:
+      "Generate privacy policies, terms, NDAs, freelance contracts, DMCA notices and more — fill a form, download as PDF or Word, all in your browser.",
+    icon: "Scale",
+    color: "#1E40AF",
+    featured: true,
+  },
+  {
     id: "developer-tools",
     name: "Developer Tools",
     description:
