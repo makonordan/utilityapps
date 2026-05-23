@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
-import { A, H2, H3, LegalPage, P, UL } from "@/components/legal/LegalPage";
+import { A, H2, LegalPage, P, UL } from "@/components/legal/LegalPage";
 import { SITE_CONFIG } from "@/lib/utils";
 
 const TITLE = `Affiliate Disclosure — ${SITE_CONFIG.name}`;
 const DESCRIPTION =
-  "Affiliate programs and networks we participate in (or may participate in) across the US, UK and EU, how we mark affiliate links, and our editorial independence.";
+  "How affiliate links on UtilityApps work, how we mark them, and our commitment to editorial independence.";
 const LAST_UPDATED = "2026-05-23";
 
 export const metadata: Metadata = {
@@ -32,7 +32,7 @@ export default function AffiliateDisclosurePage() {
       />
       <LegalPage
         title="Affiliate Disclosure"
-        description="In plain English: how affiliate links on UtilityApps work, the programs we participate in, and our commitment to editorial independence."
+        description="In plain English: how affiliate links on UtilityApps work, how we mark them, and our commitment to editorial independence."
         breadcrumbLabel="Affiliate Disclosure"
         lastUpdated={LAST_UPDATED}
       >
@@ -52,168 +52,6 @@ export default function AffiliateDisclosurePage() {
           destination merchant or network can attribute a referral to us. When you click an
           affiliate link and complete a qualifying action — a sign-up, a purchase or an account
           opening — the merchant pays us a small commission. The price you pay is not affected.
-        </P>
-
-        <H2 id="programs">Programs and networks we participate in</H2>
-        <P>
-          {SITE_CONFIG.name} participates in, or may participate in, the affiliate programs and
-          networks below across the US, UK and EU. The list is illustrative — we join new
-          programs as we cover new topics, and drop ones that no longer fit. If you are unsure
-          whether a specific link is an affiliate link, the in-page label or the link&apos;s{" "}
-          <code>rel</code> attribute will say so.
-        </P>
-
-        <H3 id="affiliate-networks">Affiliate networks</H3>
-        <P>Aggregators that give us access to many merchants under a single account:</P>
-        <UL>
-          <li><strong>Impact</strong> (impact.com)</li>
-          <li><strong>ShareASale</strong></li>
-          <li><strong>CJ Affiliate</strong> (formerly Commission Junction)</li>
-          <li><strong>Rakuten Advertising</strong></li>
-          <li><strong>PartnerStack</strong></li>
-          <li><strong>Awin</strong></li>
-          <li><strong>FlexOffers</strong></li>
-        </UL>
-
-        <H3 id="loans-mortgages-credit">Loans, mortgages and credit</H3>
-        <UL>
-          <li>LendingTree</li>
-          <li>Rocket Mortgage</li>
-          <li>Better.com</li>
-          <li>Credible</li>
-          <li>LendingClub</li>
-          <li>SoFi (personal loans)</li>
-          <li>Upgrade</li>
-          <li>CardRatings.com</li>
-          <li>Credit Karma</li>
-          <li>NerdWallet</li>
-          <li>Discover, Chase, Capital One (via card-affiliate networks)</li>
-        </UL>
-
-        <H3 id="investing">Investing and retirement</H3>
-        <UL>
-          <li>SoFi Invest</li>
-          <li>Robinhood</li>
-          <li>M1 Finance</li>
-          <li>Wealthfront</li>
-          <li>Fidelity</li>
-          <li>Vanguard</li>
-          <li>Acorns</li>
-          <li>Betterment</li>
-          <li>Empower (formerly Personal Capital)</li>
-        </UL>
-
-        <H3 id="tax-accounting">Tax and freelance accounting</H3>
-        <UL>
-          <li>TurboTax (Intuit)</li>
-          <li>H&amp;R Block</li>
-          <li>FreshBooks</li>
-          <li>QuickBooks</li>
-        </UL>
-
-        <H3 id="money-transfer">International money transfer</H3>
-        <UL>
-          <li>Wise (formerly TransferWise)</li>
-          <li>Revolut</li>
-          <li>OFX</li>
-          <li>Remitly</li>
-        </UL>
-
-        <H3 id="productivity-writing">Productivity, writing and AI tools</H3>
-        <UL>
-          <li>Notion</li>
-          <li>Grammarly</li>
-          <li>ProWritingAid</li>
-          <li>Hemingway Editor</li>
-          <li>Jasper AI</li>
-          <li>Scrivener</li>
-        </UL>
-
-        <H3 id="design">Design and creative software</H3>
-        <UL>
-          <li>Canva</li>
-          <li>Adobe Creative Cloud</li>
-          <li>Shutterstock</li>
-          <li>Envato Elements</li>
-          <li>Figma</li>
-        </UL>
-
-        <H3 id="hosting-dev">Web hosting, dev tools and infrastructure</H3>
-        <UL>
-          <li>Hostinger</li>
-          <li>Bluehost</li>
-          <li>Vercel</li>
-          <li>Netlify</li>
-          <li>Cloudflare</li>
-          <li>DigitalOcean</li>
-          <li>NameCheap</li>
-          <li>GitHub Copilot</li>
-          <li>JetBrains</li>
-        </UL>
-
-        <H3 id="pdf-tools">PDF and document tools</H3>
-        <UL>
-          <li>Adobe Acrobat</li>
-          <li>PDFelement</li>
-          <li>Smallpdf</li>
-          <li>iLovePDF</li>
-        </UL>
-
-        <H3 id="health-fitness">Health, fitness and wellness</H3>
-        <UL>
-          <li>Noom</li>
-          <li>MyFitnessPal Premium</li>
-          <li>Fitbit</li>
-          <li>Apple Fitness</li>
-          <li>Whoop</li>
-          <li>Daily Harvest</li>
-          <li>Factor</li>
-          <li>HelloFresh</li>
-          <li>Examine.com</li>
-          <li>Calm</li>
-          <li>Headspace</li>
-        </UL>
-
-        <H3 id="sleep-home">Sleep and home essentials</H3>
-        <UL>
-          <li>Casper</li>
-          <li>Purple</li>
-          <li>Saatva</li>
-          <li>Eight Sleep</li>
-          <li>Hatch</li>
-        </UL>
-
-        <H3 id="education">Online courses and education</H3>
-        <UL>
-          <li>Coursera</li>
-          <li>Udemy</li>
-          <li>Skillshare</li>
-          <li>Chegg</li>
-        </UL>
-
-        <H3 id="vpn-privacy">VPN and privacy</H3>
-        <UL>
-          <li>NordVPN</li>
-          <li>ExpressVPN</li>
-        </UL>
-
-        <H3 id="travel">Travel and lodging</H3>
-        <UL>
-          <li>Expedia</li>
-          <li>Booking.com</li>
-          <li>Airbnb</li>
-        </UL>
-
-        <H3 id="cloud-storage">Cloud storage</H3>
-        <UL>
-          <li>Dropbox</li>
-          <li>pCloud</li>
-          <li>Sync.com</li>
-        </UL>
-
-        <P>
-          We add and remove programs as our coverage evolves and may participate in other programs
-          not listed here. This page is updated when significant changes occur.
         </P>
 
         <H2 id="how-we-mark-affiliate-links">How affiliate links are marked</H2>
