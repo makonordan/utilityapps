@@ -24,6 +24,11 @@ interface PdfToolShellProps {
   faqItems?: FAQItem[];
   howToSteps?: HowToStep[];
   className?: string;
+  /**
+   * Set true for Phase-2 server-backed tools (Office ↔ PDF via ConvertAPI).
+   * Swaps the trust badge and disclaimer banner to be honest about uploads.
+   */
+  serverProcessing?: boolean;
 }
 
 const TRUST_BADGES = [
@@ -45,6 +50,7 @@ export function PdfToolShell({
   faqItems,
   howToSteps,
   className,
+  serverProcessing = false,
 }: PdfToolShellProps) {
   const tool = TOOLS_BY_ID[toolId];
   const Icon = getIcon(tool?.icon ?? "FileText");
@@ -99,17 +105,35 @@ export function PdfToolShell({
                 {badge.label}
               </li>
             ))}
-            <li className="inline-flex items-center gap-1.5 rounded-full bg-success-50 px-2.5 py-1 text-[11px] font-semibold text-success-700 dark:bg-success-500/10 dark:text-success-300">
-              <ShieldCheck className="h-3 w-3" /> Browser-side
-            </li>
+            {serverProcessing ? (
+              <li className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-800 dark:bg-amber-500/10 dark:text-amber-300">
+                <ShieldCheck className="h-3 w-3" /> Server conversion
+              </li>
+            ) : (
+              <li className="inline-flex items-center gap-1.5 rounded-full bg-success-50 px-2.5 py-1 text-[11px] font-semibold text-success-700 dark:bg-success-500/10 dark:text-success-300">
+                <ShieldCheck className="h-3 w-3" /> Browser-side
+              </li>
+            )}
           </ul>
         </div>
       </header>
 
-      <p className="mt-4 inline-flex items-center gap-2 rounded-lg bg-surface-50 px-3 py-2 text-xs text-surface-600 dark:bg-surface-800/60 dark:text-surface-300">
-        <span aria-hidden="true">🔒</span>
-        Everything runs in your browser — your PDFs are not uploaded to a server.
-      </p>
+      {serverProcessing ? (
+        <p className="mt-4 inline-flex items-start gap-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-900 dark:bg-amber-500/10 dark:text-amber-200">
+          <span aria-hidden="true">⚠️</span>
+          <span>
+            <strong>Server-side conversion.</strong> Office ↔ PDF needs a Word/Excel/PowerPoint engine that
+            doesn&rsquo;t run in your browser, so this tool uploads your file to our conversion
+            partner, returns the result, and deletes the file immediately afterward. 10 MB per file,
+            10 conversions per hour per IP.
+          </span>
+        </p>
+      ) : (
+        <p className="mt-4 inline-flex items-center gap-2 rounded-lg bg-surface-50 px-3 py-2 text-xs text-surface-600 dark:bg-surface-800/60 dark:text-surface-300">
+          <span aria-hidden="true">🔒</span>
+          Everything runs in your browser — your PDFs are not uploaded to a server.
+        </p>
+      )}
 
       <AdSlot position="top" />
 

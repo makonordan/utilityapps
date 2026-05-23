@@ -16,7 +16,14 @@ export type PdfToolId =
   | "page-numbers-pdf"
   | "jpg-pdf"
   | "sign-pdf"
-  | "edit-pdf";
+  | "edit-pdf"
+  // Phase 2 — server-backed Office ↔ PDF conversions (ConvertAPI)
+  | "word-to-pdf"
+  | "pdf-to-word"
+  | "excel-to-pdf"
+  | "pdf-to-excel"
+  | "ppt-to-pdf"
+  | "pdf-to-ppt";
 
 export interface HowToStep {
   name: string;
@@ -26,6 +33,17 @@ export interface HowToStep {
 const STANDARD_PRIVACY: FAQItem = {
   q: "Are my PDFs uploaded to a server?",
   a: "No. Every PDF is opened, modified and saved entirely in your browser using pdf-lib. Nothing is sent to a server. You can disconnect from the internet after the page loads and the tool still works.",
+};
+
+// Honest disclaimer shared by all six Phase-2 server-backed Office tools.
+const SERVER_CONVERT_PRIVACY: FAQItem = {
+  q: "Is my file uploaded to a server?",
+  a: "Yes — Office ↔ PDF conversions need a Word/Excel/PowerPoint rendering engine that doesn't run in your browser. The file is uploaded to our conversion partner (ConvertAPI), converted, and deleted immediately afterward. We don't store, log, or share the file's contents. Files are capped at 10 MB and conversions are capped at 10 per hour per IP to keep the service available for everyone.",
+};
+
+const SERVER_LIMITS: FAQItem = {
+  q: "What are the size and rate limits?",
+  a: "Each file must be 10 MB or smaller. Each visitor (per IP address) can run up to 10 conversions per hour. These limits keep the conversion quota available for everyone — if you need more, the source files are usually best converted locally in Word, Excel or PowerPoint.",
 };
 
 export const PDF_FAQS: Record<PdfToolId, FAQItem[]> = {
@@ -188,6 +206,109 @@ export const PDF_FAQS: Record<PdfToolId, FAQItem[]> = {
     },
     STANDARD_PRIVACY,
   ],
+
+  // ============================================================ Phase 2
+  "word-to-pdf": [
+    {
+      q: "What Word formats does this tool accept?",
+      a: "Modern .docx files (Word 2007 and later) are the primary input. Older .doc files also work in most cases, but the layout may shift slightly because the .doc format was Microsoft's internal binary spec — modern engines do their best, but the result isn't always pixel-identical to Word's print preview.",
+    },
+    {
+      q: "Will fonts and formatting be preserved?",
+      a: "Common system fonts (Calibri, Arial, Times New Roman, Helvetica, Courier) and the layout you see in Word are preserved. Uncommon or licensed fonts are substituted with the closest equivalent — usually invisible at a glance, occasionally noticeable on body text.",
+    },
+    {
+      q: "What about tracked changes, comments and macros?",
+      a: "Tracked changes are accepted into the PDF as if you ran 'Accept All'. Comments are dropped to keep the PDF clean. Macros (.docm) are simply ignored — only the visible content gets converted.",
+    },
+    SERVER_LIMITS,
+    SERVER_CONVERT_PRIVACY,
+  ],
+
+  "pdf-to-word": [
+    {
+      q: "How accurate is the converted Word document?",
+      a: "Text and paragraph order come across very well for digital PDFs (those generated from Word, LaTeX, etc.). Scanned PDFs or image-only PDFs produce poor results because there's no text layer to extract — you'd need an OCR tool first.",
+    },
+    {
+      q: "Will the layout match the PDF exactly?",
+      a: "Mostly. Complex multi-column layouts, footnotes and floating images often shift to fit Word's flow model. Simple single-column reports, letters and articles convert almost perfectly. For pixel-perfect fidelity, keep the PDF and edit a separate Word copy.",
+    },
+    {
+      q: "Can I edit tables and images after converting?",
+      a: "Yes. Tables are reconstructed as Word tables you can edit, and embedded images are preserved. Vector graphics are usually flattened into images.",
+    },
+    SERVER_LIMITS,
+    SERVER_CONVERT_PRIVACY,
+  ],
+
+  "excel-to-pdf": [
+    {
+      q: "Will every sheet in my workbook become a page?",
+      a: "Yes — each worksheet becomes one or more pages in the PDF, in the order they appear in the workbook. Print areas, page breaks and fit-to-page settings you've set in Excel are honoured.",
+    },
+    {
+      q: "How are charts and formulas handled?",
+      a: "Charts are rendered into the PDF as they appear in Excel. Formulas are converted to their current displayed values — the PDF shows the answers, not the formulas behind them.",
+    },
+    {
+      q: "What about hidden sheets, columns and rows?",
+      a: "Anything hidden in the source workbook stays hidden in the PDF. If you need it included, unhide it in Excel first and re-export.",
+    },
+    SERVER_LIMITS,
+    SERVER_CONVERT_PRIVACY,
+  ],
+
+  "pdf-to-excel": [
+    {
+      q: "How well does table extraction work?",
+      a: "Best on PDFs with clearly bordered tables. Borderless tables, tables that span multiple pages, and merged cells are detected best-effort — they usually come through, but column alignment may need a quick clean-up.",
+    },
+    {
+      q: "Will formulas come across?",
+      a: "No. A PDF only stores the visible values, not the formulas behind them. The converted Excel file shows the same numbers as the PDF, as values rather than formulas.",
+    },
+    {
+      q: "What about pages that aren't tables?",
+      a: "Paragraphs of text are extracted into cells too, often one cell per line. Not ideal for prose — if your PDF is mostly text, use PDF → Word instead.",
+    },
+    SERVER_LIMITS,
+    SERVER_CONVERT_PRIVACY,
+  ],
+
+  "ppt-to-pdf": [
+    {
+      q: "Does the PDF keep each slide on its own page?",
+      a: "Yes. One slide per PDF page, at the slide's aspect ratio (16:9 by default, 4:3 if your deck uses that). Speaker notes are not included unless you've added them as text on the slide itself.",
+    },
+    {
+      q: "Are animations and transitions preserved?",
+      a: "No — a PDF is a static document, so animations are flattened to their initial state and transitions don't exist. For interactive playback, export from PowerPoint to video instead.",
+    },
+    {
+      q: "What about embedded video and audio?",
+      a: "Embedded media doesn't carry over to PDF. The slide is rendered as it appears in PowerPoint's design view, with the video frame showing as a static image.",
+    },
+    SERVER_LIMITS,
+    SERVER_CONVERT_PRIVACY,
+  ],
+
+  "pdf-to-ppt": [
+    {
+      q: "How is a PDF turned into a PowerPoint?",
+      a: "Each page of the PDF becomes a separate slide in the deck. The page content is rendered as an editable layer where possible (text boxes and shapes), with anything complex falling back to a background image of the page.",
+    },
+    {
+      q: "Will I be able to edit the text after converting?",
+      a: "Often, yes — text from digital PDFs typically converts to editable text boxes in PowerPoint. Scanned PDFs come through as images per slide (you'd need OCR first to make the text editable).",
+    },
+    {
+      q: "What slide size is used?",
+      a: "Standard 16:9 widescreen by default. If your PDF has pages in portrait orientation, PowerPoint may letterbox the content with margins.",
+    },
+    SERVER_LIMITS,
+    SERVER_CONVERT_PRIVACY,
+  ],
 };
 
 export const PDF_HOWTOS: Record<PdfToolId, HowToStep[]> = {
@@ -241,6 +362,36 @@ export const PDF_HOWTOS: Record<PdfToolId, HowToStep[]> = {
     { name: "Pick a page", text: "Choose the page from the thumbnails." },
     { name: "Add text or a shape", text: "Click on the page where the element should go, edit its properties, and save the PDF." },
   ],
+  "word-to-pdf": [
+    { name: "Add your Word document", text: "Drop a .docx (or .doc) file up to 10 MB." },
+    { name: "Convert on the server", text: "The file uploads to our conversion partner, gets rendered to PDF, and is deleted right after." },
+    { name: "Download the PDF", text: "The converted PDF streams back to your browser as a download." },
+  ],
+  "pdf-to-word": [
+    { name: "Add your PDF", text: "Drop a PDF up to 10 MB." },
+    { name: "Convert on the server", text: "We send the PDF to our conversion partner, which extracts the text and layout into a .docx." },
+    { name: "Download the Word document", text: "Open it in Word, Google Docs or LibreOffice — the source file is deleted from our server." },
+  ],
+  "excel-to-pdf": [
+    { name: "Add your Excel workbook", text: "Drop an .xlsx (or .xls) file up to 10 MB." },
+    { name: "Convert on the server", text: "Each worksheet is rendered to a PDF page, honouring your print-area settings." },
+    { name: "Download the PDF", text: "The PDF downloads in your browser and the workbook is deleted from our server." },
+  ],
+  "pdf-to-excel": [
+    { name: "Add your PDF", text: "Drop a PDF that contains tables." },
+    { name: "Convert on the server", text: "We send the PDF to our conversion partner, which detects tables and extracts them into cells." },
+    { name: "Download the Excel file", text: "Open the .xlsx in Excel or Google Sheets to clean up the layout if needed." },
+  ],
+  "ppt-to-pdf": [
+    { name: "Add your PowerPoint deck", text: "Drop a .pptx (or .ppt) file up to 10 MB." },
+    { name: "Convert on the server", text: "Each slide becomes a PDF page at the slide's aspect ratio." },
+    { name: "Download the PDF", text: "The PDF downloads in your browser and the source deck is deleted from our server." },
+  ],
+  "pdf-to-ppt": [
+    { name: "Add your PDF", text: "Drop a PDF — each page will become a slide." },
+    { name: "Convert on the server", text: "Pages convert to editable text boxes where possible, otherwise to slide backgrounds." },
+    { name: "Download the .pptx", text: "Open it in PowerPoint, Google Slides or Keynote and tweak as needed." },
+  ],
 };
 
 export const PDF_FEATURE_LISTS: Record<PdfToolId, string> = {
@@ -254,6 +405,12 @@ export const PDF_FEATURE_LISTS: Record<PdfToolId, string> = {
   "jpg-pdf": "Two directions in one tool: multi-image to PDF with page-size options, and PDF to high-quality JPEGs, no upload",
   "sign-pdf": "Drawable signature pad (mouse / finger / stylus), per-page placement, in-browser PDF embedding, no upload",
   "edit-pdf": "Add text and shape overlays to any page, font and colour controls, in-browser, no upload",
+  "word-to-pdf": "Word (.docx / .doc) → PDF via ConvertAPI, font and layout preserved, 10 MB file limit, files deleted after conversion",
+  "pdf-to-word": "PDF → Word (.docx) via ConvertAPI, paragraphs and tables reconstructed, editable in Word/Google Docs",
+  "excel-to-pdf": "Excel (.xlsx / .xls) → PDF via ConvertAPI, multi-sheet workbooks, print-area-aware, files deleted after conversion",
+  "pdf-to-excel": "PDF → Excel (.xlsx) via ConvertAPI, table detection from bordered tables, values not formulas",
+  "ppt-to-pdf": "PowerPoint (.pptx / .ppt) → PDF via ConvertAPI, one slide per page, aspect ratio preserved",
+  "pdf-to-ppt": "PDF → PowerPoint (.pptx) via ConvertAPI, each page becomes a slide, editable text where possible",
 };
 
 export const PDF_TOOL_PUBLISHED = "2026-05-23";
