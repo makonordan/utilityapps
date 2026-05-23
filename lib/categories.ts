@@ -128,6 +128,15 @@ const CATEGORY_DEFINITIONS: Omit<Category, "toolCount">[] = [
     color: "#4F46E5",
     featured: true,
   },
+  {
+    id: "travel-tools",
+    name: "Travel Tools",
+    description:
+      "Packing lists, luggage and visa checks, airport and airline data, time zone and flight time calculators, distance and coordinate tools — everything to plan a trip from the browser.",
+    icon: "Plane",
+    color: "#0EA5E9",
+    featured: true,
+  },
 ];
 
 export const CATEGORIES: Category[] = CATEGORY_DEFINITIONS.map((category) => ({
