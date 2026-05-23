@@ -1,3 +1,5 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
+
 import {
   BookmarkRow,
   DbResult,
@@ -7,6 +9,12 @@ import {
   ToolRatingRow,
   ToolUsageRow,
 } from "../supabase";
+// NOTE: do NOT `import { getSupabaseAdmin } from "../supabaseAdmin"` here.
+// supabaseAdmin is `server-only`; queries.ts is transitively imported by
+// client components (BookmarkButton → useBookmarks → queries.ts) so a
+// top-level import would break the client bundle. Server callers that need
+// service-role access pass the admin client in as `client` instead — see
+// `subscribeNewsletter` below.
 
 // --- tool_usage ------------------------------------------------------------
 
@@ -147,18 +155,26 @@ export async function getUserBookmarks(userId: string): Promise<DbResult<Bookmar
 
 export async function subscribeNewsletter(
   email: string,
-  source: string | null = null
+  source: string | null = null,
+  /**
+   * Optional Supabase client. Server callers should pass the service-role
+   * client (`getSupabaseAdmin()`) so the insert bypasses RLS — the anon
+   * client has no INSERT policy on newsletter_subscribers. Defaults to the
+   * anon client for compatibility, but in that mode the insert only works
+   * if the `newsletter_insert` RLS policy from schema.sql is applied.
+   */
+  client: SupabaseClient = supabase
 ): Promise<DbResult<true>> {
   try {
     const normalized = email.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
       return fail("Invalid email address");
     }
-    // Insert-only with ON CONFLICT DO NOTHING (ignoreDuplicates: true). The
-    // anon key has INSERT but NOT SELECT or UPDATE on this table — emails are
-    // PII — so we must not chain `.select()` and must not try to UPDATE
-    // existing rows. A returning subscriber is a no-op, not an error.
-    const { error } = await supabase
+    // Insert-only with ON CONFLICT DO NOTHING (ignoreDuplicates: true). We
+    // intentionally don't chain `.select()` so the response body never
+    // contains other subscribers' emails (PII). A returning subscriber is
+    // a no-op, not an error.
+    const { error } = await client
       .from("newsletter_subscribers")
       .upsert(
         { email: normalized, source, confirmed: false },

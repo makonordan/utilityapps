@@ -35,21 +35,37 @@ export async function POST(request: NextRequest) {
   const { email, source } = parsed.data;
 
   // 1+2. Persist via Supabase (upsert handles "already subscribed").
+  // Use the service-role client for both the "already subscribed?" lookup
+  // and the insert. The anon key has no SELECT policy on this table (emails
+  // are PII), so without service role the lookup silently returns no rows
+  // and we'd mis-report every returning subscriber as new. The insert via
+  // queries.subscribeNewsletter also prefers the admin client internally.
   let alreadySubscribed = false;
   try {
-    const [queries, db] = await Promise.all([
+    const [queries, admin] = await Promise.all([
       import("@/lib/db/queries").catch(() => null),
-      import("@/lib/supabase").catch(() => null),
+      import("@/lib/supabaseAdmin").catch(() => null),
     ]);
-    if (queries && db) {
-      const lookup = await db.supabase
-        .from("newsletter_subscribers")
-        .select("email")
-        .eq("email", email)
-        .maybeSingle();
-      alreadySubscribed = !!lookup.data;
+    if (queries) {
+      const adminClient = admin?.getSupabaseAdmin?.() ?? null;
+      if (adminClient) {
+        const lookup = await adminClient
+          .from("newsletter_subscribers")
+          .select("email")
+          .eq("email", email)
+          .maybeSingle();
+        alreadySubscribed = !!lookup.data;
+      }
 
-      const insert = await queries.subscribeNewsletter(email, source ?? null);
+      // Pass the admin client through so the insert bypasses RLS. If the
+      // service-role key isn't configured, queries.subscribeNewsletter will
+      // fall back to the anon client and rely on the `newsletter_insert`
+      // RLS policy from schema.sql.
+      const insert = await queries.subscribeNewsletter(
+        email,
+        source ?? null,
+        adminClient ?? undefined
+      );
       if (insert.error) {
         return Response.json(
           { success: false, error: insert.error },

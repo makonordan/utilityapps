@@ -244,7 +244,7 @@ function Categories() {
           What we build
         </p>
         <h2 className="mt-2 text-2xl font-bold tracking-tight text-surface-900 sm:text-3xl dark:text-white">
-          Eight categories, all free
+          {numberWord(CATEGORIES.length)} categories, all free
         </h2>
       </header>
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -374,4 +374,33 @@ function CtaBlock() {
       </div>
     </section>
   );
+}
+
+// Spell out small numbers so the hero copy reads naturally; fall back to
+// digits past twenty since "Twenty-three" feels worse than "23" in a heading.
+const NUMBER_WORDS = [
+  "Zero",
+  "One",
+  "Two",
+  "Three",
+  "Four",
+  "Five",
+  "Six",
+  "Seven",
+  "Eight",
+  "Nine",
+  "Ten",
+  "Eleven",
+  "Twelve",
+  "Thirteen",
+  "Fourteen",
+  "Fifteen",
+  "Sixteen",
+  "Seventeen",
+  "Eighteen",
+  "Nineteen",
+  "Twenty",
+];
+function numberWord(n: number): string {
+  return NUMBER_WORDS[n] ?? String(n);
 }
