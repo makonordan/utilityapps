@@ -14,8 +14,10 @@ import {
   GraduationCap,
   Heart,
   Image as ImageIcon,
+  Moon,
   Music,
   Palette,
+  Plane,
   Search,
   TrendingUp,
   Video,
@@ -91,6 +93,16 @@ const THEMES: Record<string, CategoryTheme> = {
     gradient: "linear-gradient(135deg, #4c1d95, #7c3aed, #c4b5fd)",
     Icon: Palette,
     accentColor: "#7c3aed",
+  },
+  "Sleep Tools": {
+    gradient: "linear-gradient(135deg, #312e81, #4f46e5, #a5b4fc)",
+    Icon: Moon,
+    accentColor: "#4f46e5",
+  },
+  "Travel Tools": {
+    gradient: "linear-gradient(135deg, #0c4a6e, #0ea5e9, #7dd3fc)",
+    Icon: Plane,
+    accentColor: "#0ea5e9",
   },
 };
 

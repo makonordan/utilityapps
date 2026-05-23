@@ -21,6 +21,8 @@ const FILTERS = [
   { label: "Calculator", category: "Calculator Tools" },
   { label: "Finance", category: "Finance Tools" },
   { label: "Health", category: "Health Tools" },
+  { label: "Sleep", category: "Sleep Tools" },
+  { label: "Travel", category: "Travel Tools" },
   { label: "Developer", category: "Developer Tools" },
   { label: "SEO", category: "SEO Tools" },
   { label: "Productivity", category: "Productivity Tools" },
@@ -43,6 +45,8 @@ const BROWSE_CATEGORY_ORDER = [
   "Productivity Tools",
   "Design Tools",
   "Student Tools",
+  "Sleep Tools",
+  "Travel Tools",
 ];
 
 /** Within a category: featured first, then trending, then highest search volume. */

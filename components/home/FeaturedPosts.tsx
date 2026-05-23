@@ -8,6 +8,8 @@ import {
   HeartPulse,
   Image as ImageIcon,
   type LucideIcon,
+  Moon,
+  Plane,
   Search,
   Sparkles,
   Type,
@@ -25,6 +27,8 @@ const CATEGORY_ICON: Record<string, LucideIcon> = {
   "Developer Tools": Code2,
   "SEO Tools": Search,
   "Productivity Tools": Sparkles,
+  "Sleep Tools": Moon,
+  "Travel Tools": Plane,
 };
 
 export function FeaturedPosts({ posts }: { posts: FeaturedPost[] }) {

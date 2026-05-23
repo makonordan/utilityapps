@@ -25,6 +25,8 @@ const TRENDING_CATEGORY_ORDER = [
   "Productivity Tools",
   "Design Tools",
   "Student Tools",
+  "Sleep Tools",
+  "Travel Tools",
 ];
 
 /** Trending value = monthly searches weighted by commercial value (CPC). */
