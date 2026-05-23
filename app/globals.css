@@ -15,9 +15,14 @@
   color-scheme: dark;
 }
 
-html,
-body {
+/* Give html an explicit height so percentage children resolve, but let body
+ * grow with content — `body { height: 100% }` locked it to the viewport and
+ * broke `position: sticky` on the flex-column body's children (the header). */
+html {
   height: 100%;
+}
+body {
+  min-height: 100%;
 }
 
 /* Smooth scroll for in-page anchor links (TOC, breadcrumb, hero CTAs). */
