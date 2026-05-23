@@ -119,6 +119,15 @@ const CATEGORY_DEFINITIONS: Omit<Category, "toolCount">[] = [
     color: "#6366F1",
     featured: true,
   },
+  {
+    id: "sleep-tools",
+    name: "Sleep Tools",
+    description:
+      "Sleep cycle and nap calculators, brown-noise generator, ambient sound mixer, and caffeine cutoff timing — all browser-based, no signup.",
+    icon: "Moon",
+    color: "#4F46E5",
+    featured: true,
+  },
 ];
 
 export const CATEGORIES: Category[] = CATEGORY_DEFINITIONS.map((category) => ({
