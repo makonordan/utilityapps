@@ -33,8 +33,11 @@ signed *download* URLs we issue from `/api/share/[slug]/access` are
 fetched directly from the browser — and Supabase will reject them
 without at least a read policy that matches the signed URL flow.
 
-In **Supabase → Storage → share-files → Policies → New policy**, run this
-SQL (the dashboard has a "Custom" template for raw SQL):
+The easiest path is the **SQL Editor** — Supabase also has a per-bucket
+"New policy" wizard but it splits the SQL across fields and is easy to
+fill out wrong. Use SQL Editor.
+
+Go to **SQL Editor → New query** (left sidebar, NOT under Storage), paste:
 
 ```sql
 -- Allow reads via signed URLs only. Without this policy, even valid
@@ -45,10 +48,29 @@ on storage.objects for select to anon, authenticated
 using (bucket_id = 'share-files');
 ```
 
+Click **Run**. Expect "Success. No rows returned."
+
 > **Note:** Signed-URL requests don't hit the row-level policy in
 > practice — they're authorised by the signature itself. But Supabase's
 > Storage RLS requires *some* SELECT policy to exist for the bucket, or
 > all reads fail. The policy above is the minimal one.
+
+<details>
+<summary>If you prefer the Storage → Policies wizard</summary>
+
+The wizard wants the SQL broken into three pieces — DON'T paste the
+full `create policy …` statement into the "Policy definition" box; it
+only accepts the boolean expression that goes inside `using (…)`. Fill
+it out like this:
+
+- **Allowed operation:** check **SELECT**
+- **Target roles:** leave blank (defaults to `public` which covers
+  `anon` and `authenticated`)
+- **Policy definition:** `bucket_id = 'share-files'`
+
+Click Review → Save.
+
+</details>
 
 ## 3. (Optional) CORS for direct uploads
 
