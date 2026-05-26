@@ -318,7 +318,30 @@ export async function initFileShare(
       .createSignedUploadUrl(path);
     if (error || !data) {
       console.error("[shares.initFileShare]", error);
-      return { ok: false, error: "Couldn't prepare the upload. Try again." };
+      // Translate the most common setup mistakes into actionable messages.
+      // Supabase's Storage errors come back as { message, statusCode }; the
+      // message text is stable enough to pattern-match.
+      const msg = (error?.message || "").toLowerCase();
+      if (msg.includes("bucket not found") || msg.includes("does not exist")) {
+        return {
+          ok: false,
+          error:
+            "File sharing isn't set up yet — the 'share-files' Storage bucket is missing in Supabase. See docs/share-tool-phase-2-setup.md.",
+        };
+      }
+      if (msg.includes("permission") || msg.includes("not allowed") || msg.includes("rls")) {
+        return {
+          ok: false,
+          error:
+            "Server has access to the 'share-files' bucket but the policy is wrong. See docs/share-tool-phase-2-setup.md step 2.",
+        };
+      }
+      return {
+        ok: false,
+        error: error?.message
+          ? `Couldn't prepare the upload: ${error.message}`
+          : "Couldn't prepare the upload. Try again.",
+      };
     }
     return {
       ok: true,
@@ -330,7 +353,11 @@ export async function initFileShare(
     };
   } catch (err) {
     console.error("[shares.initFileShare]", err);
-    return { ok: false, error: "Couldn't prepare the upload. Try again." };
+    const message = err instanceof Error ? err.message : String(err);
+    return {
+      ok: false,
+      error: `Couldn't prepare the upload: ${message}`,
+    };
   }
 }
 

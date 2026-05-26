@@ -10,7 +10,7 @@ const TOOL_ID = "share";
 
 const TITLE = "Free File, Text & Link Sharing — No Signup | UtilityApps";
 const DESCRIPTION =
-  "Share text snippets or shorten links instantly. Optional password, expiration, view limit and QR code. No signup, no signup, no tracking.";
+  "Share files up to 25 MB, text snippets, or shortened links instantly. Optional password, expiration, view limit and QR code. No signup, no tracking.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -69,11 +69,12 @@ export default function SharePage() {
           </span>
           <div className="flex-1 space-y-3">
             <h1 className="text-3xl font-bold tracking-tight text-surface-900 sm:text-4xl dark:text-white">
-              Share Anything — Text or Links
+              Share Anything — Files, Text or Links
             </h1>
             <p className="max-w-2xl text-base text-surface-600 dark:text-surface-300">
-              No signup. No login. Paste a snippet or drop in a long URL, hit
-              create, send the link. Expires when you say it expires.
+              No signup. No login. Drop a file (up to 25&nbsp;MB), paste a snippet, or
+              shorten a long URL — hit create, send the link. Expires when you say it
+              expires.
             </p>
             <ul className="flex flex-wrap items-center gap-2">
               <li className="inline-flex items-center gap-1.5 rounded-full bg-surface-100 px-2.5 py-1 text-[11px] font-semibold text-surface-700 dark:bg-surface-800 dark:text-surface-200">
@@ -91,8 +92,8 @@ export default function SharePage() {
 
         <p className="mt-5 inline-flex items-start gap-2 rounded-lg bg-surface-50 px-3 py-2 text-xs text-surface-600 dark:bg-surface-800/60 dark:text-surface-300">
           <span aria-hidden="true">🔒</span>
-          We store the content you share (text or URL) on our server only until
-          it expires — and we delete it automatically. We never sell your data.
+          We store the content you share (file, text or URL) on our server only
+          until it expires — and we delete it automatically. We never sell your data.
         </p>
 
         <section className="mt-8">
