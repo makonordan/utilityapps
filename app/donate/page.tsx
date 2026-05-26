@@ -14,7 +14,7 @@ import {
 } from "@/lib/donate";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TITLE = "Support UtilityApps — Help Keep 200+ Tools Free Forever";
+const TITLE = "Support UtilityApps — Help Keep Hundreds of Tools Free Forever";
 const DESCRIPTION =
   "UtilityApps is built and maintained by one person, funded only by ads and donations. Your support keeps every tool free with no signup required.";
 
@@ -165,7 +165,7 @@ export default function DonatePage() {
             Support the project
           </p>
           <h1 className="mt-3 text-balance text-3xl font-bold tracking-tight text-surface-900 sm:text-4xl dark:text-white">
-            Help keep 200+ tools free, forever
+            Help keep hundreds of tools free, forever
           </h1>
           <p className="mt-3 text-base text-surface-600 dark:text-surface-300">
             UtilityApps is built and maintained by one person, funded only by ads and donations.

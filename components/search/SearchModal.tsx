@@ -348,7 +348,7 @@ export function SearchModal() {
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search 200+ tools, articles, and products..."
+                placeholder="Search tools, articles, and products..."
                 aria-label="Search"
                 className="flex-1 bg-transparent text-base text-surface-900 placeholder:text-surface-400 focus:outline-none dark:text-white"
               />
@@ -722,7 +722,7 @@ function EmptyState({
 
       {recents.length === 0 && trending.length === 0 && (
         <p className="px-3 py-10 text-center text-sm text-surface-500 dark:text-surface-400">
-          Start typing to search 200+ free utility tools.
+          Start typing to search hundreds of free utility tools.
         </p>
       )}
     </div>

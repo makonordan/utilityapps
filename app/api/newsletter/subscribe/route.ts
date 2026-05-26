@@ -168,7 +168,7 @@ function welcomeEmailHtml(tools: ToolForEmail[]): string {
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;">
                 <tr>
                   <td>
-                    <a href="${SITE_CONFIG.url}/tools" style="display:inline-block; background:#0066FF; color:#ffffff; padding:12px 18px; border-radius:12px; text-decoration:none; font-weight:600; font-size:14px;">Browse all 200+ tools</a>
+                    <a href="${SITE_CONFIG.url}/tools" style="display:inline-block; background:#0066FF; color:#ffffff; padding:12px 18px; border-radius:12px; text-decoration:none; font-weight:600; font-size:14px;">Browse every tool</a>
                   </td>
                 </tr>
               </table>
@@ -198,7 +198,7 @@ You'll get one short email each Friday — no spam, no other emails. To get you 
 
 ${lines}
 
-Browse all 200+ tools: ${SITE_CONFIG.url}/tools
+Browse every tool: ${SITE_CONFIG.url}/tools
 
 Unsubscribe: ${SITE_CONFIG.url}/unsubscribe`;
 }

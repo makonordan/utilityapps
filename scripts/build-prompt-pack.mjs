@@ -156,7 +156,7 @@ write("2. Copy it, and replace anything in [square brackets] with your own detai
 write("3. Paste it into your AI tool. Read the 'Adapt it' tip to push it further.", { gap: 0.5 });
 write("4. Always review what the AI gives you before you use it — treat it as a draft.", { gap: 4 });
 write(
-  "UtilityApps  ·  utilityapps.site  ·  200+ free online tools",
+  "UtilityApps  ·  utilityapps.site  ·  Hundreds of free online tools",
   { size: 9, color: [148, 163, 184] }
 );
 

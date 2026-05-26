@@ -42,7 +42,7 @@ export function slugify(input: string): string {
 
 export const SITE_CONFIG = {
   name: "UtilityApps",
-  description: "200+ Free AI Utility Tools for Everyday Work",
+  description: "Hundreds of Free AI Utility Tools for Everyday Work",
   url: "https://utilityapps.site",
   ogImage: "https://utilityapps.site/og.png",
   twitterHandle: "@UtilityAppsSite",

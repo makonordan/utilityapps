@@ -217,7 +217,7 @@ children.push(
   bullet("Read it out loud once — it catches awkward wording and typos."),
   bullet("Make sure every claim is something you can talk about confidently in an interview."),
   body(" "),
-  body("UtilityApps · utilityapps.site · 200+ free online tools", { color: "94A3B8" })
+  body("UtilityApps · utilityapps.site · Hundreds of free online tools", { color: "94A3B8" })
 );
 
 const doc = new Document({

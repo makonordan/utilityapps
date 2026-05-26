@@ -19,7 +19,7 @@ import { SITE_CONFIG, formatNumber } from "@/lib/utils";
 
 const TITLE = `About ${SITE_CONFIG.name} — Free Tools for Everyone`;
 const DESCRIPTION =
-  "Why we built UtilityApps, what we believe about productivity software, and how we keep 200+ tools free for the world.";
+  "Why we built UtilityApps, what we believe about productivity software, and how we keep hundreds of tools free for the world.";
 
 export const metadata: Metadata = {
   title: TITLE,

@@ -67,7 +67,7 @@ export default function ToolsDirectoryPage() {
 
           <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-primary-200 bg-primary-50/70 px-3 py-1 text-xs font-semibold text-primary-700 dark:border-primary-700/50 dark:bg-primary-500/10 dark:text-primary-300">
             <Sparkles className="h-3.5 w-3.5" />
-            {TOOLS.length} tools live · 200+ planned
+            {TOOLS.length} tools live · hundreds more planned
           </div>
           <h1 className="mt-3 text-3xl font-bold tracking-tight text-surface-900 sm:text-5xl dark:text-white">
             All free online tools

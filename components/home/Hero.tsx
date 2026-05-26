@@ -29,7 +29,7 @@ const FLOATING_TOOLS = [
 const TRUST = [
   { Icon: Users, label: "Trusted by 50,000+ users" },
   { Icon: CheckCircle2, label: "No signup required" },
-  { Icon: Sparkles, label: "200+ free tools" },
+  { Icon: Sparkles, label: "Hundreds of free tools" },
   { Icon: Smartphone, label: "Mobile friendly" },
 ];
 
@@ -46,7 +46,7 @@ export function Hero() {
           className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-primary-200 bg-primary-50/70 px-3 py-1 text-xs font-semibold text-primary-700 backdrop-blur dark:border-primary-700/50 dark:bg-primary-500/10 dark:text-primary-300"
         >
           <Sparkles className="h-3.5 w-3.5" />
-          50,000+ users · 200+ tools · 0 signups
+          50,000+ users · hundreds of tools · 0 signups
         </motion.div>
 
         <motion.h1
@@ -70,8 +70,9 @@ export function Hero() {
           className="mx-auto mt-5 max-w-2xl text-base text-surface-600 sm:text-lg dark:text-surface-300"
         >
           <Balancer>
-            From mortgage math to image compression, BMI to PDF conversion — 200+ utilities that
-            run instantly in your browser. No signup, no uploads to strangers, no usage caps.
+            From mortgage math to image compression, BMI to PDF conversion — hundreds of
+            utilities that run instantly in your browser. No signup, no uploads to strangers,
+            no usage caps.
           </Balancer>
         </motion.p>
 

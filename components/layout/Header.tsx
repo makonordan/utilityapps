@@ -184,13 +184,13 @@ function ToolsMegaMenu() {
       </div>
       <div className="mt-6 flex items-center justify-between border-t border-surface-200 pt-4 dark:border-surface-800">
         <p className="text-sm text-surface-500 dark:text-surface-400">
-          200+ free tools — no signup, no upload limits.
+          Hundreds of free tools — no signup, no upload limits.
         </p>
         <Link
           href="/tools"
           className="inline-flex items-center gap-1 text-sm font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
         >
-          Browse all 200+ tools
+          Browse every tool
           <ChevronRight className="h-4 w-4" />
         </Link>
       </div>

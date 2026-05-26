@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
     MAX_TITLE
   );
   const description = truncate(
-    sp.get("description")?.trim() || "200+ free tools for everyday work. No signup required.",
+    sp.get("description")?.trim() || "Hundreds of free tools for everyday work. No signup required.",
     MAX_DESCRIPTION
   );
   const type = (sp.get("type") || "default").toLowerCase();

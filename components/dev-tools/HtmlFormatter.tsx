@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 type Mode = "pretty" | "minify";
 
-const SAMPLE = `<!DOCTYPE html><html><head><title>Hello</title></head><body><div class="container"><h1>UtilityApps</h1><p>200+ free tools</p><ul><li>JWT</li><li>Regex</li><li>YAML</li></ul></body></html>`;
+const SAMPLE = `<!DOCTYPE html><html><head><title>Hello</title></head><body><div class="container"><h1>UtilityApps</h1><p>Hundreds of free tools</p><ul><li>JWT</li><li>Regex</li><li>YAML</li></ul></body></html>`;
 
 export function HtmlFormatter() {
   const [input, setInput] = useState(SAMPLE);

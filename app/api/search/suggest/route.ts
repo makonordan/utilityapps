@@ -21,7 +21,7 @@ const TOOL_DIRECTORY = TOOLS.map((t) => ({
   keywords: t.keywords.slice(0, 6),
 }));
 
-const SYSTEM_PROMPT = `You are a search assistant for UtilityApps, a platform with 200+ free utility tools. \
+const SYSTEM_PROMPT = `You are a search assistant for UtilityApps, a platform with hundreds of free utility tools. \
 Given a user's search query, identify their intent and return the most relevant tools from the catalog below. \
 Respond with JSON only, matching this TypeScript shape:
 

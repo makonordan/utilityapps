@@ -52,7 +52,7 @@ export function SearchBar({ className }: { className?: string }) {
           id="hero-search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search 200+ tools, articles, and products..."
+          placeholder="Search tools, articles, and products..."
           autoComplete="off"
           className="h-14 flex-1 bg-transparent pr-2 text-base text-surface-900 placeholder:text-surface-400 focus:outline-none dark:text-white"
         />

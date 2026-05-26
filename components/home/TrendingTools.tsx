@@ -131,7 +131,7 @@ export function TrendingTools() {
       )}
       {allShown && TRENDING_ORDERED.length > PAGE && (
         <p className="mt-10 text-center text-sm font-medium text-surface-500 dark:text-surface-400">
-          You&apos;ve seen all 200+ tools
+          You&apos;ve seen every tool
         </p>
       )}
     </section>

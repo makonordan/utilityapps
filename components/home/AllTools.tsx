@@ -141,7 +141,7 @@ export function AllTools() {
       <header className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-surface-900 sm:text-3xl dark:text-white">
-            Browse 200+ Free Tools
+            Browse Hundreds of Free Tools
           </h2>
           <p className="mt-1 text-sm text-surface-600 dark:text-surface-400">
             Filter by category, search by keyword, or just scroll — every tool is free, no signup.
@@ -186,7 +186,7 @@ export function AllTools() {
           <EmptyState
             Icon={Search}
             title="No tools match those filters"
-            description="Try clearing the search or pick a different category — there are 70 tools live and 200+ planned."
+            description={`Try clearing the search or pick a different category — there are ${TOOLS.length} tools live and hundreds more planned.`}
             actions={[
               { label: "Clear filters", href: "/tools" },
               { label: "Suggest a tool", href: "/contact", variant: "secondary" },
@@ -224,7 +224,7 @@ export function AllTools() {
           )}
           {paginated && allShown && fullList.length > PAGE && (
             <p className="mt-10 text-center text-sm font-medium text-surface-500 dark:text-surface-400">
-              You&apos;ve seen all 200+ tools
+              You&apos;ve seen every tool
             </p>
           )}
         </>

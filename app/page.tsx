@@ -14,7 +14,7 @@ import { YouTubeHub } from "@/components/home/YouTubeHub";
 import { getFeaturedPosts } from "@/lib/posts";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const HOME_TITLE = `${SITE_CONFIG.name} — 200+ Free AI Utility Tools for Everyday Work`;
+const HOME_TITLE = `${SITE_CONFIG.name} — Hundreds of Free AI Utility Tools for Everyday Work`;
 const HOME_DESCRIPTION =
   "No signup. No downloads. 100% free online tools for creators, freelancers, developers, students, marketers and businesses.";
 
