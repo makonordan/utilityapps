@@ -6,10 +6,10 @@ import {
   ChevronRight,
   Globe2,
   HeartHandshake,
+  LayoutGrid,
   Lightbulb,
   ShieldCheck,
   Sparkles,
-  Users,
   Zap,
 } from "lucide-react";
 
@@ -78,9 +78,15 @@ const VALUES = [
 ];
 
 const STATS = [
-  { Icon: Sparkles, value: `${TOOLS.length}+`, label: "tools live" },
-  { Icon: Globe2, value: "180+", label: "countries served" },
-  { Icon: Users, value: "50,000+", label: "monthly users" },
+  // "+" only appears once the catalog actually crosses 200 — until then
+  // the count counts up to the real number so the claim stays honest.
+  {
+    Icon: Sparkles,
+    value: TOOLS.length >= 200 ? "200+" : String(TOOLS.length),
+    label: "tools live",
+  },
+  { Icon: LayoutGrid, value: String(CATEGORIES.length), label: "categories" },
+  { Icon: Globe2, value: "Worldwide", label: "no geo-locks" },
   { Icon: CheckCircle2, value: "100%", label: "free, no signup" },
 ];
 

@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { CATEGORIES } from "@/lib/categories";
+import { TOOLS } from "@/lib/tools";
+
 interface Stat {
   label: string;
   value: number;
@@ -9,9 +12,19 @@ interface Stat {
   prefix?: string;
 }
 
+// Tool/category counts are derived from the catalog so they grow as we
+// ship. The "Tools" stat only earns its "+" once we cross 200 — until
+// then the count counts up to the real number so the claim stays honest.
+const TOOL_COUNT = TOOLS.length;
+const CATEGORY_COUNT = CATEGORIES.length;
+
 const STATS: Stat[] = [
-  { label: "Tools", value: 200, suffix: "+" },
-  { label: "Users", value: 50000, suffix: "+" },
+  {
+    label: "Tools",
+    value: TOOL_COUNT,
+    suffix: TOOL_COUNT >= 200 ? "+" : undefined,
+  },
+  { label: "Categories", value: CATEGORY_COUNT },
   { label: "Signups Required", value: 0 },
   { label: "Free Forever", value: 100, suffix: "%" },
 ];

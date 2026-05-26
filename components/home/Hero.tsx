@@ -7,29 +7,30 @@ import {
   ArrowRight,
   Banknote,
   CheckCircle2,
-  HeartPulse,
   Image as ImageIcon,
+  Share2,
+  ShieldCheck,
   Smartphone,
   Sparkles,
   Type,
-  Users,
   Zap,
 } from "lucide-react";
 
 import { SearchBar } from "@/components/search/SearchBar";
-import { TOOLS } from "@/lib/tools";
+import { TOOLS, toolCountPhrase } from "@/lib/tools";
+import { CATEGORIES } from "@/lib/categories";
 import { cn } from "@/lib/utils";
 
 const FLOATING_TOOLS = [
   { id: "loan-calculator", icon: Banknote, accent: "from-primary-500 to-accent-500" },
   { id: "compress-image", icon: ImageIcon, accent: "from-accent-500 to-primary-500" },
-  { id: "bmi-calculator", icon: HeartPulse, accent: "from-success-500 to-primary-500" },
+  { id: "share", icon: Share2, accent: "from-blue-500 to-indigo-600" },
 ];
 
 const TRUST = [
-  { Icon: Users, label: "Trusted by 50,000+ users" },
+  { Icon: Sparkles, label: toolCountPhrase() },
   { Icon: CheckCircle2, label: "No signup required" },
-  { Icon: Sparkles, label: "Hundreds of free tools" },
+  { Icon: ShieldCheck, label: "100% browser-side" },
   { Icon: Smartphone, label: "Mobile friendly" },
 ];
 
@@ -46,7 +47,7 @@ export function Hero() {
           className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-primary-200 bg-primary-50/70 px-3 py-1 text-xs font-semibold text-primary-700 backdrop-blur dark:border-primary-700/50 dark:bg-primary-500/10 dark:text-primary-300"
         >
           <Sparkles className="h-3.5 w-3.5" />
-          50,000+ users · hundreds of tools · 0 signups
+          {toolCountPhrase()} · {CATEGORIES.length} categories · 0 signups
         </motion.div>
 
         <motion.h1
@@ -70,9 +71,9 @@ export function Hero() {
           className="mx-auto mt-5 max-w-2xl text-base text-surface-600 sm:text-lg dark:text-surface-300"
         >
           <Balancer>
-            From mortgage math to image compression, BMI to PDF conversion — hundreds of
-            utilities that run instantly in your browser. No signup, no uploads to strangers,
-            no usage caps.
+            From mortgage math to image compression, PDF conversion to link sharing —{" "}
+            {toolCountPhrase()} that run instantly in your browser. No signup, no uploads
+            to strangers, no usage caps.
           </Balancer>
         </motion.p>
 

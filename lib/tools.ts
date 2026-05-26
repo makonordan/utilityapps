@@ -2648,3 +2648,21 @@ export function getTrendingTools(): Tool[] {
 export function getNewTools(): Tool[] {
   return TOOLS.filter((tool) => tool.new);
 }
+
+/**
+ * Human-friendly tool count for marketing copy.
+ *
+ * Returns the exact number until we cross 200, then switches to "200+" so
+ * the copy doesn't keep climbing past round numbers. Use this anywhere we
+ * say "{N} tools" — Hero, Stats, mega-menu, about page — so the claim
+ * always matches the actual catalog without anyone updating literals.
+ */
+export function toolCountLabel(): string {
+  const n = TOOLS.length;
+  return n >= 200 ? "200+" : String(n);
+}
+
+/** Same but combined with the word "tools", for hero/copy use. */
+export function toolCountPhrase(): string {
+  return `${toolCountLabel()} free tools`;
+}

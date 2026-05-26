@@ -76,8 +76,24 @@ function diversify(
   return result;
 }
 
+// Tools we want as the very first cards regardless of trending score —
+// either brand-new launches we're spotlighting or evergreen jobs-to-be-done
+// that users won't think to search for by category. Order here = display
+// order. Diversification fills the slots after these.
+const PINNED_TOOL_IDS = ["share"];
+
+const PINNED_TOOLS: Tool[] = PINNED_TOOL_IDS
+  .map((id) => TOOLS.find((t) => t.id === id))
+  .filter((t): t is Tool => Boolean(t));
+
+const PINNED_IDS = new Set(PINNED_TOOLS.map((t) => t.id));
+const REST_TOOLS = TOOLS.filter((t) => !PINNED_IDS.has(t.id));
+
 // TOOLS is a static catalog, so the diversified order is computed once.
-const TRENDING_ORDERED = diversify(TOOLS, TRENDING_CATEGORY_ORDER, trendingPriority);
+const TRENDING_ORDERED = [
+  ...PINNED_TOOLS,
+  ...diversify(REST_TOOLS, TRENDING_CATEGORY_ORDER, trendingPriority),
+];
 
 export function TrendingTools() {
   const [visibleCount, setVisibleCount] = useState(PAGE);

@@ -17,7 +17,7 @@ import {
 import { useTheme } from "next-themes";
 
 import { CATEGORIES } from "@/lib/categories";
-import { TOOLS, type Tool } from "@/lib/tools";
+import { TOOLS, toolCountPhrase, type Tool } from "@/lib/tools";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -169,11 +169,17 @@ function ToolsMegaMenu() {
                       className="group flex items-start gap-2 rounded-lg px-2 py-1.5 text-sm text-surface-700 transition hover:bg-surface-50 hover:text-primary-600 dark:text-surface-200 dark:hover:bg-surface-800 dark:hover:text-primary-400"
                     >
                       <span className="font-medium">{tool.name}</span>
-                      {tool.featured && (
+                      {tool.new ? (
+                        // "New" trumps "Top" — new tools need spotlight more
+                        // than evergreen ones, so we show one pill not both.
+                        <span className="rounded-full bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">
+                          New
+                        </span>
+                      ) : tool.featured ? (
                         <span className="rounded-full bg-accent-50 px-1.5 py-0.5 text-[10px] font-semibold text-accent-600 dark:bg-accent-500/10 dark:text-accent-400">
                           Top
                         </span>
-                      )}
+                      ) : null}
                     </Link>
                   </li>
                 ))}
@@ -184,7 +190,7 @@ function ToolsMegaMenu() {
       </div>
       <div className="mt-6 flex items-center justify-between border-t border-surface-200 pt-4 dark:border-surface-800">
         <p className="text-sm text-surface-500 dark:text-surface-400">
-          Hundreds of free tools — no signup, no upload limits.
+          {toolCountPhrase()} — no signup, no upload limits.
         </p>
         <Link
           href="/tools"
