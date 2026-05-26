@@ -218,10 +218,25 @@ export async function incrementViewCount(slug: string): Promise<ShareRow | null>
   return data as ShareRow;
 }
 
-/** Delete a share by slug. Returns whether anything was deleted. */
+/**
+ * Delete a share by slug, including the backing Storage object for file
+ * shares. Returns whether anything was deleted. Storage failures don't
+ * block the DB delete — the goal is the share becoming unreachable.
+ */
 export async function deleteBySlug(slug: string): Promise<boolean> {
   const client = getSupabaseAdmin();
   if (!client) return false;
+  // Read first so we can clean up Storage if it's a file share.
+  const existing = await findBySlug(slug);
+  if (!existing) return false;
+  if (existing.type === "file" && existing.file_path) {
+    try {
+      await client.storage.from(SHARE_BUCKET).remove([existing.file_path]);
+    } catch (err) {
+      console.error("[shares.deleteBySlug] storage", err);
+      // continue — the DB delete is what makes the share unreachable
+    }
+  }
   const { error, count } = await client
     .from("shares")
     .delete({ count: "exact" })
@@ -231,6 +246,235 @@ export async function deleteBySlug(slug: string): Promise<boolean> {
     return false;
   }
   return (count ?? 0) > 0;
+}
+
+// =========================================================== File shares
+// Phase 2: signed direct-uploads to Supabase Storage. The Vercel function
+// never sees the file bytes, only metadata, so we sidestep the 4.5MB body
+// limit on the Hobby plan entirely.
+
+/** Bucket the file-share UI uploads into. Must exist in Supabase. */
+export const SHARE_BUCKET = "share-files";
+
+/**
+ * Issue a signed upload URL for a new file share. The slug is generated
+ * here so the URL path is predictable and we can call this once per
+ * upload without a separate "reserve slug" step. We do NOT insert a row
+ * yet — that happens in finalizeFileShare() after the client confirms
+ * the upload succeeded. Orphan files (where the client uploaded but
+ * never finalised) are far better than orphan rows with no file.
+ */
+export interface InitFileShareInput {
+  filename: string;
+  contentType: string;
+  size: number;
+  /** Pre-validated custom slug, or null/undefined for a random one. */
+  customSlug?: string | null;
+}
+
+export interface InitFileShareResult {
+  ok: boolean;
+  slug?: string;
+  /** Storage object key the client should upload to. */
+  path?: string;
+  /** Token to pass to supabase.storage.uploadToSignedUrl(). */
+  token?: string;
+  /** Full signed upload URL (for clients that POST directly). */
+  signedUrl?: string;
+  /** True when the slug came from `customSlug` rather than the generator. */
+  customSlugWasUsed?: boolean;
+  error?: string;
+}
+
+export async function initFileShare(
+  input: InitFileShareInput
+): Promise<InitFileShareResult> {
+  const client = getSupabaseAdmin();
+  if (!client) {
+    return { ok: false, error: "Server isn't configured to handle file shares." };
+  }
+  // Custom slug? Check uniqueness BEFORE issuing the upload URL so the
+  // user doesn't waste a 25MB upload on a slug we then reject.
+  let slug: string;
+  let customSlugWasUsed = false;
+  if (input.customSlug) {
+    const existing = await findBySlug(input.customSlug);
+    if (existing) {
+      return { ok: false, error: "That custom link is already taken." };
+    }
+    slug = input.customSlug;
+    customSlugWasUsed = true;
+  } else {
+    slug = await generateUniqueSlug();
+  }
+  // Keep the original filename for the Content-Disposition header on download
+  // but encode in the Storage path as `<slug>/<original>` so collisions are
+  // impossible and the slug is recoverable from the path.
+  const path = `${slug}/${input.filename}`;
+
+  try {
+    const { data, error } = await client.storage
+      .from(SHARE_BUCKET)
+      .createSignedUploadUrl(path);
+    if (error || !data) {
+      console.error("[shares.initFileShare]", error);
+      return { ok: false, error: "Couldn't prepare the upload. Try again." };
+    }
+    return {
+      ok: true,
+      slug,
+      path,
+      token: data.token,
+      signedUrl: data.signedUrl,
+      customSlugWasUsed,
+    };
+  } catch (err) {
+    console.error("[shares.initFileShare]", err);
+    return { ok: false, error: "Couldn't prepare the upload. Try again." };
+  }
+}
+
+/**
+ * After the client uploads to Storage via the signed URL, it calls this
+ * to verify the file actually exists at the expected path and create the
+ * share row. Belt-and-braces: even if the client lies, the row creation
+ * step queries Storage for the file metadata.
+ */
+export interface FinalizeFileShareInput {
+  slug: string;
+  path: string;
+  filename: string;
+  mimetype: string;
+  size: number;
+  password?: string | null;
+  viewLimit?: number | null;
+  expiresInHours?: number;
+  creatorIpHash: string;
+  customSlugWasUsed: boolean;
+}
+
+export async function finalizeFileShare(
+  input: FinalizeFileShareInput
+): Promise<CreateShareResult> {
+  const client = getSupabaseAdmin();
+  if (!client) {
+    return { ok: false, error: "Server isn't configured to handle file shares." };
+  }
+
+  // Verify the file is actually there. We do a HEAD-style metadata fetch
+  // by listing the parent dir (the slug folder) for the exact name.
+  // Storage's `list` returns an empty array if the file isn't there.
+  try {
+    const folder = input.path.split("/").slice(0, -1).join("/");
+    const wantedName = input.path.split("/").slice(-1)[0];
+    const { data: files, error } = await client.storage
+      .from(SHARE_BUCKET)
+      .list(folder, { limit: 5 });
+    if (error || !files) {
+      console.error("[shares.finalizeFileShare] list", error);
+      return { ok: false, error: "Couldn't verify the upload. Try again." };
+    }
+    const match = files.find((f) => f.name === wantedName);
+    if (!match) {
+      return {
+        ok: false,
+        error: "Upload didn't reach the server. Please try uploading again.",
+      };
+    }
+    const actualSize =
+      typeof match.metadata?.size === "number" ? match.metadata.size : null;
+    if (actualSize !== null && actualSize > 25 * 1024 * 1024) {
+      // Belt and suspenders — should never trigger because the bucket
+      // has its own size cap, but if it did we clean up and fail.
+      await client.storage.from(SHARE_BUCKET).remove([input.path]);
+      return { ok: false, error: "File exceeded the 25 MB cap." };
+    }
+  } catch (err) {
+    console.error("[shares.finalizeFileShare]", err);
+    return { ok: false, error: "Couldn't verify the upload. Try again." };
+  }
+
+  const hours = clampHours(input.expiresInHours ?? 168);
+  const expiresAt = new Date(Date.now() + hours * 60 * 60 * 1000).toISOString();
+
+  const insertRow = {
+    slug: input.slug,
+    type: "file" as const,
+    file_path: input.path,
+    file_name: input.filename,
+    file_size: input.size,
+    file_mimetype: input.mimetype,
+    text_content: null,
+    text_language: null,
+    original_url: null,
+    password_hash: input.password ? hashPassword(input.password) : null,
+    custom_slug: input.customSlugWasUsed,
+    view_limit: input.viewLimit ?? null,
+    view_count: 0,
+    expires_at: expiresAt,
+    creator_ip: input.creatorIpHash,
+    reported: false,
+    reported_at: null,
+  };
+
+  const { data, error } = await client
+    .from("shares")
+    .insert(insertRow)
+    .select("*")
+    .single();
+  if (error) {
+    console.error("[shares.finalizeFileShare] insert", error);
+    // Clean up the uploaded file so we don't leave an orphan.
+    await client.storage.from(SHARE_BUCKET).remove([input.path]);
+    return { ok: false, error: "Couldn't save the share. Please try again." };
+  }
+  return { ok: true, share: data as ShareRow };
+}
+
+/**
+ * Issue a short-lived signed download URL for a file share. The URL is
+ * what the recipient page hands the browser (img src, iframe src,
+ * download anchor) — so we want it to be a real fetch-able URL, not a
+ * proxy through the API.
+ */
+export async function createDownloadUrl(
+  path: string,
+  filename: string,
+  expiresInSeconds = 60 * 60
+): Promise<string | null> {
+  const client = getSupabaseAdmin();
+  if (!client) return null;
+  const { data, error } = await client.storage
+    .from(SHARE_BUCKET)
+    .createSignedUrl(path, expiresInSeconds, {
+      download: filename,
+    });
+  if (error || !data) {
+    console.error("[shares.createDownloadUrl]", error);
+    return null;
+  }
+  return data.signedUrl;
+}
+
+/**
+ * Same as createDownloadUrl but for inline-rendering surfaces (image
+ * preview, PDF iframe) — without the `download` hint so the browser
+ * renders rather than downloads.
+ */
+export async function createInlineUrl(
+  path: string,
+  expiresInSeconds = 60 * 60
+): Promise<string | null> {
+  const client = getSupabaseAdmin();
+  if (!client) return null;
+  const { data, error } = await client.storage
+    .from(SHARE_BUCKET)
+    .createSignedUrl(path, expiresInSeconds);
+  if (error || !data) {
+    console.error("[shares.createInlineUrl]", error);
+    return null;
+  }
+  return data.signedUrl;
 }
 
 /** Flag a share as reported. Cleanup (delete) is a follow-up step. */

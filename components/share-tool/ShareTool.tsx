@@ -7,20 +7,38 @@ import {
   Copy,
   Eye,
   EyeOff,
+  FileText,
   Link as LinkIcon,
   Loader2,
   Mail,
   MessageCircle,
+  Paperclip,
   Plus,
   QrCode,
   Send,
   Share2,
   Trash2,
   Type as TypeIcon,
+  Upload,
+  X,
 } from "lucide-react";
 import QRCode from "qrcode";
 
+import {
+  FILE_LIMIT_LABEL,
+  MAX_FILE_SIZE_BYTES,
+  formatBytes,
+  getExtension,
+  validateFileMetadata,
+} from "@/lib/file-validation";
 import { SITE_CONFIG, cn } from "@/lib/utils";
+
+// NOTE: lib/supabase throws at module load when NEXT_PUBLIC_SUPABASE_URL /
+// _ANON_KEY are absent (intentional — they're required in prod). That
+// trips Next.js prerender during `npm run build` in environments without
+// .env.local. We lazy-import inside submitFile() instead so the page can
+// prerender cleanly; the supabase client is only needed as a fallback
+// during a file upload anyway.
 
 /**
  * Phase-1 Share tool: text snippets + URL shortener.
@@ -30,7 +48,7 @@ import { SITE_CONFIG, cn } from "@/lib/utils";
  * creator's device — there's no server-side concept of a session.
  */
 
-type Tab = "text" | "url";
+type Tab = "file" | "text" | "url";
 type ExpiryHours = 1 | 24 | 168 | 720;
 
 const EXPIRY_OPTIONS: { value: ExpiryHours; label: string }[] = [
@@ -56,7 +74,7 @@ const INITIAL_OPTIONS: SharedOptions = {
 
 interface CreatedShare {
   slug: string;
-  type: "text" | "url";
+  type: "file" | "text" | "url";
   expiresAt: string;
   hasPassword: boolean;
   createdAt: string;
@@ -73,11 +91,12 @@ function readMyShares(): CreatedShare[] {
     const parsed = JSON.parse(raw) as unknown;
     if (!Array.isArray(parsed)) return [];
     return parsed
-      .filter((s): s is CreatedShare =>
-        !!s && typeof s === "object" &&
-        typeof (s as CreatedShare).slug === "string" &&
-        ((s as CreatedShare).type === "text" || (s as CreatedShare).type === "url")
-      )
+      .filter((s): s is CreatedShare => {
+        if (!s || typeof s !== "object") return false;
+        const cs = s as Partial<CreatedShare>;
+        if (typeof cs.slug !== "string") return false;
+        return cs.type === "file" || cs.type === "text" || cs.type === "url";
+      })
       .slice(0, MAX_LOCAL_SHARES);
   } catch {
     return [];
@@ -94,18 +113,23 @@ function writeMyShares(shares: CreatedShare[]) {
 }
 
 export function ShareTool() {
-  const [tab, setTab] = useState<Tab>("text");
+  const [tab, setTab] = useState<Tab>("file");
   const [options, setOptions] = useState<SharedOptions>(INITIAL_OPTIONS);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   // Tab-specific state
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [textContent, setTextContent] = useState("");
   const [textLanguage, setTextLanguage] = useState<string>("");
   const [urlInput, setUrlInput] = useState("");
 
   // Submission state
   const [submitting, setSubmitting] = useState(false);
+  /** Upload progress 0..1, only meaningful during file submit. */
+  const [uploadProgress, setUploadProgress] = useState(0);
+  /** Coarse phase label shown alongside the progress bar. */
+  const [uploadPhase, setUploadPhase] = useState<"" | "preparing" | "uploading" | "finalising">("");
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<CreatedShare | null>(null);
 
@@ -118,61 +142,175 @@ export function ShareTool() {
   const reset = () => {
     setResult(null);
     setError(null);
+    setSelectedFile(null);
     setTextContent("");
     setUrlInput("");
     setOptions(INITIAL_OPTIONS);
     setShowAdvanced(false);
+    setUploadProgress(0);
+    setUploadPhase("");
+  };
+
+  /** Text + URL share creation — single API call. */
+  const submitNonFile = async () => {
+    const endpoint = tab === "text" ? "/api/share/text" : "/api/share/url";
+    const body =
+      tab === "text"
+        ? {
+            content: textContent,
+            language: textLanguage || undefined,
+            expiresIn: options.expiresIn,
+            password: options.password || undefined,
+            customSlug: options.customSlug || undefined,
+            viewLimit: options.viewLimit ? Number(options.viewLimit) : undefined,
+          }
+        : {
+            url: urlInput,
+            expiresIn: options.expiresIn,
+            password: options.password || undefined,
+            customSlug: options.customSlug || undefined,
+            viewLimit: options.viewLimit ? Number(options.viewLimit) : undefined,
+          };
+
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const data = (await res.json()) as { slug?: string; expiresAt?: string; error?: string };
+    if (!res.ok || !data.slug) {
+      throw new Error(data.error ?? "Couldn't create the share.");
+    }
+    return { slug: data.slug, expiresAt: data.expiresAt };
+  };
+
+  /**
+   * File share creation — three-step flow:
+   *   1. POST /api/share/file/init  → signed upload URL + slug
+   *   2. PUT to Supabase Storage via the signed URL
+   *   3. POST /api/share/file/finalize → DB row + the live share
+   *
+   * The function bumps `uploadProgress` so the UI can show a progress bar.
+   * Supabase JS doesn't expose progress on uploadToSignedUrl(), so we fall
+   * back to a manual XMLHttpRequest PUT against the signedUrl — which DOES
+   * fire `progress` events. Compatibility with the Supabase-issued URL is
+   * fine because it's a presigned S3-style URL underneath.
+   */
+  const submitFile = async () => {
+    if (!selectedFile) throw new Error("Pick a file first.");
+
+    // Belt-and-braces client-side validation (server re-validates).
+    const meta = validateFileMetadata(
+      selectedFile.name,
+      selectedFile.size,
+      selectedFile.type
+    );
+    if (!meta.ok) throw new Error(meta.error);
+
+    setUploadPhase("preparing");
+    setUploadProgress(0);
+
+    // 1. Init
+    const initRes = await fetch("/api/share/file/init", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        filename: selectedFile.name,
+        size: selectedFile.size,
+        mimetype: selectedFile.type || "application/octet-stream",
+        customSlug: options.customSlug || undefined,
+      }),
+    });
+    const init = (await initRes.json()) as {
+      slug?: string;
+      path?: string;
+      token?: string;
+      signedUrl?: string;
+      customSlugWasUsed?: boolean;
+      error?: string;
+    };
+    if (!initRes.ok || !init.slug || !init.signedUrl || !init.path || !init.token) {
+      throw new Error(init.error ?? "Couldn't prepare the upload.");
+    }
+
+    // 2. Upload — XHR for real progress events. We use the supabase-js
+    //    helper as a fallback so the path/token vs signedUrl distinction
+    //    can't trip us if Supabase changes the URL shape.
+    setUploadPhase("uploading");
+    try {
+      await uploadWithProgress(init.signedUrl, selectedFile, (p) =>
+        setUploadProgress(p)
+      );
+    } catch (xhrErr) {
+      console.warn("[share-file] xhr upload failed, falling back to supabase-js", xhrErr);
+      const { supabase } = await import("@/lib/supabase");
+      const fallback = await supabase.storage
+        .from("share-files")
+        .uploadToSignedUrl(init.path, init.token, selectedFile);
+      if (fallback.error) {
+        throw new Error("Upload failed: " + fallback.error.message);
+      }
+      // No progress events in fallback — show 1.0 once it returns.
+      setUploadProgress(1);
+    }
+
+    // 3. Finalize
+    setUploadPhase("finalising");
+    const finRes = await fetch("/api/share/file/finalize", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        slug: init.slug,
+        path: init.path,
+        filename: selectedFile.name,
+        mimetype: selectedFile.type || "application/octet-stream",
+        size: selectedFile.size,
+        customSlugWasUsed: Boolean(init.customSlugWasUsed),
+        expiresIn: options.expiresIn,
+        password: options.password || undefined,
+        viewLimit: options.viewLimit ? Number(options.viewLimit) : undefined,
+      }),
+    });
+    const fin = (await finRes.json()) as {
+      slug?: string;
+      expiresAt?: string;
+      error?: string;
+    };
+    if (!finRes.ok || !fin.slug) {
+      throw new Error(fin.error ?? "Couldn't save the share.");
+    }
+    return { slug: fin.slug, expiresAt: fin.expiresAt };
   };
 
   const submit = async () => {
     setError(null);
     setSubmitting(true);
     try {
-      const endpoint = tab === "text" ? "/api/share/text" : "/api/share/url";
-      const body =
-        tab === "text"
-          ? {
-              content: textContent,
-              language: textLanguage || undefined,
-              expiresIn: options.expiresIn,
-              password: options.password || undefined,
-              customSlug: options.customSlug || undefined,
-              viewLimit: options.viewLimit ? Number(options.viewLimit) : undefined,
-            }
-          : {
-              url: urlInput,
-              expiresIn: options.expiresIn,
-              password: options.password || undefined,
-              customSlug: options.customSlug || undefined,
-              viewLimit: options.viewLimit ? Number(options.viewLimit) : undefined,
-            };
-
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      const data = (await res.json()) as { slug?: string; expiresAt?: string; error?: string };
-      if (!res.ok || !data.slug) {
-        setError(data.error ?? "Couldn't create the share.");
-        return;
-      }
-      const created: CreatedShare = {
-        slug: data.slug,
+      const created =
+        tab === "file" ? await submitFile() : await submitNonFile();
+      const createdRecord: CreatedShare = {
+        slug: created.slug,
         type: tab,
-        expiresAt: data.expiresAt ?? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        expiresAt:
+          created.expiresAt ??
+          new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
         hasPassword: Boolean(options.password),
         createdAt: new Date().toISOString(),
       };
-      setResult(created);
-      const next = [created, ...myShares.filter((s) => s.slug !== created.slug)];
+      setResult(createdRecord);
+      const next = [
+        createdRecord,
+        ...myShares.filter((s) => s.slug !== createdRecord.slug),
+      ];
       setMyShares(next);
       writeMyShares(next);
     } catch (err) {
       console.error(err);
-      setError("Couldn't reach the server. Check your connection.");
+      setError(err instanceof Error ? err.message : "Couldn't create the share.");
     } finally {
       setSubmitting(false);
+      setUploadPhase("");
+      setUploadProgress(0);
     }
   };
 
@@ -199,7 +337,9 @@ export function ShareTool() {
     !submitting &&
     (tab === "text"
       ? textContent.trim().length > 0 && textContent.length <= 100_000
-      : urlInput.trim().length > 0);
+      : tab === "url"
+        ? urlInput.trim().length > 0
+        : selectedFile != null && selectedFile.size <= MAX_FILE_SIZE_BYTES);
 
   return (
     <div className="space-y-6">
@@ -209,15 +349,24 @@ export function ShareTool() {
         <>
           <TabBar tab={tab} onChange={setTab} />
 
-          {tab === "text" ? (
+          {tab === "text" && (
             <TextInput
               value={textContent}
               onChange={setTextContent}
               language={textLanguage}
               onLanguageChange={setTextLanguage}
             />
-          ) : (
-            <UrlInput value={urlInput} onChange={setUrlInput} />
+          )}
+          {tab === "url" && <UrlInput value={urlInput} onChange={setUrlInput} />}
+          {tab === "file" && (
+            <FileInput
+              file={selectedFile}
+              onChange={(f) => {
+                setSelectedFile(f);
+                setError(null);
+              }}
+              onError={setError}
+            />
           )}
 
           <AdvancedPanel
@@ -248,7 +397,14 @@ export function ShareTool() {
           >
             {submitting ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" /> Creating…
+                <Loader2 className="h-4 w-4 animate-spin" />{" "}
+                {tab === "file" && uploadPhase === "uploading"
+                  ? `Uploading… ${Math.round(uploadProgress * 100)}%`
+                  : tab === "file" && uploadPhase === "preparing"
+                    ? "Preparing…"
+                    : tab === "file" && uploadPhase === "finalising"
+                      ? "Finalising…"
+                      : "Creating…"}
               </>
             ) : (
               <>
@@ -256,6 +412,15 @@ export function ShareTool() {
               </>
             )}
           </button>
+
+          {tab === "file" && submitting && uploadPhase === "uploading" && (
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface-200 dark:bg-surface-800">
+              <div
+                className="h-full bg-blue-600 transition-all"
+                style={{ width: `${Math.round(uploadProgress * 100)}%` }}
+              />
+            </div>
+          )}
         </>
       )}
 
@@ -270,11 +435,12 @@ export function ShareTool() {
 
 function TabBar({ tab, onChange }: { tab: Tab; onChange: (t: Tab) => void }) {
   const tabs: { value: Tab; label: string; icon: typeof TypeIcon }[] = [
+    { value: "file", label: "Share File", icon: Paperclip },
     { value: "text", label: "Share Text", icon: TypeIcon },
     { value: "url", label: "Shorten Link", icon: LinkIcon },
   ];
   return (
-    <div role="tablist" className="grid grid-cols-2 gap-1.5 rounded-xl bg-surface-100 p-1.5 dark:bg-surface-800">
+    <div role="tablist" className="grid grid-cols-3 gap-1.5 rounded-xl bg-surface-100 p-1.5 dark:bg-surface-800">
       {tabs.map(({ value, label, icon: Icon }) => {
         const active = tab === value;
         return (
@@ -297,6 +463,146 @@ function TabBar({ tab, onChange }: { tab: Tab; onChange: (t: Tab) => void }) {
       })}
     </div>
   );
+}
+
+// =========================================================== File input pane
+
+function FileInput({
+  file,
+  onChange,
+  onError,
+}: {
+  file: File | null;
+  onChange: (f: File | null) => void;
+  onError: (msg: string) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [dragging, setDragging] = useState(false);
+
+  const pick = (f: File | null) => {
+    if (!f) {
+      onChange(null);
+      return;
+    }
+    const meta = validateFileMetadata(f.name, f.size, f.type);
+    if (!meta.ok) {
+      onError(meta.error ?? "That file isn't allowed.");
+      onChange(null);
+      return;
+    }
+    onChange(f);
+  };
+
+  if (file) {
+    return (
+      <div className="flex items-center gap-3 rounded-xl border border-surface-200 bg-white px-3 py-2.5 dark:border-surface-800 dark:bg-surface-900">
+        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">
+          <FileText className="h-4 w-4" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium text-surface-900 dark:text-white">
+            {file.name}
+          </p>
+          <p className="text-[11px] text-surface-500 dark:text-surface-400">
+            {formatBytes(file.size)}
+            {getExtension(file.name) ? ` · .${getExtension(file.name)}` : ""}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => onChange(null)}
+          aria-label="Remove file"
+          className="rounded-lg p-1.5 text-surface-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/20"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <label
+      htmlFor="share-file-input"
+      onDragOver={(e) => {
+        e.preventDefault();
+        setDragging(true);
+      }}
+      onDragLeave={() => setDragging(false)}
+      onDrop={(e) => {
+        e.preventDefault();
+        setDragging(false);
+        const dropped = e.dataTransfer.files?.[0] ?? null;
+        pick(dropped);
+      }}
+      className={cn(
+        "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-10 text-center transition",
+        dragging
+          ? "border-blue-500 bg-blue-50 dark:border-blue-400/60 dark:bg-blue-500/10"
+          : "border-surface-300 bg-white hover:border-blue-400 dark:border-surface-700 dark:bg-surface-900 dark:hover:border-blue-500/60"
+      )}
+    >
+      <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-700 dark:text-blue-300">
+        <Upload className="h-5 w-5" />
+      </span>
+      <span className="text-sm font-semibold text-surface-900 dark:text-white">
+        Drop a file here or click to choose
+      </span>
+      <span className="text-xs text-surface-500 dark:text-surface-400">
+        {FILE_LIMIT_LABEL} · processed on our server, deleted after expiry
+      </span>
+      <input
+        ref={inputRef}
+        id="share-file-input"
+        type="file"
+        className="sr-only"
+        onChange={(e) => {
+          pick(e.target.files?.[0] ?? null);
+          e.target.value = "";
+        }}
+      />
+    </label>
+  );
+}
+
+// =========================================================== Upload helper
+
+/**
+ * Plain XHR PUT against a presigned Supabase upload URL so we can fire
+ * progress events. supabase-js's uploadToSignedUrl() doesn't expose
+ * progress, and we'd rather show a real bar than a fake spinner.
+ *
+ * Supabase signed-upload URLs accept multipart/form-data with a `cacheControl`
+ * and the file under the `file` field — but they also accept a raw PUT of
+ * the binary, which is the path we take here for simplicity + progress.
+ */
+function uploadWithProgress(
+  signedUrl: string,
+  file: File,
+  onProgress: (fraction: number) => void
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("PUT", signedUrl, true);
+    xhr.setRequestHeader(
+      "Content-Type",
+      file.type || "application/octet-stream"
+    );
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable && e.total > 0) {
+        onProgress(e.loaded / e.total);
+      }
+    };
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        onProgress(1);
+        resolve();
+      } else {
+        reject(new Error(`Upload failed (HTTP ${xhr.status})`));
+      }
+    };
+    xhr.onerror = () => reject(new Error("Upload network error"));
+    xhr.send(file);
+  });
 }
 
 // ============================================================ Text input pane
@@ -564,7 +870,11 @@ function ResultView({ created, onReset }: { created: CreatedShare; onReset: () =
   };
 
   const message = `${
-    created.type === "url" ? "I shortened a link for you" : "I shared a snippet with you"
+    created.type === "url"
+      ? "I shortened a link for you"
+      : created.type === "file"
+        ? "I shared a file with you"
+        : "I shared a snippet with you"
   }: ${shareUrl}`;
 
   return (

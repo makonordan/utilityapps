@@ -95,9 +95,42 @@ export async function POST(
     });
   }
 
-  // File shares come in Phase 2.
+  if (finalRow.type === "file") {
+    if (!finalRow.file_path || !finalRow.file_name) {
+      return NextResponse.json(
+        { error: "Share is missing file metadata." },
+        { status: 500 }
+      );
+    }
+    // Two signed URLs:
+    //   downloadUrl — has Content-Disposition: attachment so a click
+    //                 downloads with the original filename
+    //   inlineUrl   — same file, no download hint, so img/iframe render it
+    const downloadUrl = await shares.createDownloadUrl(
+      finalRow.file_path,
+      finalRow.file_name
+    );
+    const inlineUrl = await shares.createInlineUrl(finalRow.file_path);
+    if (!downloadUrl || !inlineUrl) {
+      return NextResponse.json(
+        { error: "Couldn't generate a download link. Try again." },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json({
+      type: "file",
+      filename: finalRow.file_name,
+      size: finalRow.file_size,
+      mimetype: finalRow.file_mimetype,
+      downloadUrl,
+      inlineUrl,
+      viewCount: finalRow.view_count,
+      viewLimit: finalRow.view_limit,
+    });
+  }
+
   return NextResponse.json(
-    { error: "File shares aren't enabled yet." },
-    { status: 501 }
+    { error: "Unknown share type." },
+    { status: 500 }
   );
 }

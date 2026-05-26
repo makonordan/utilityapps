@@ -19,6 +19,9 @@ export function isAllowedExpiry(n: number): n is ExpiryHours {
   return (ALLOWED_EXPIRY_HOURS as readonly number[]).includes(n);
 }
 
-/** Per-IP hourly create limits for Phase 1 (no Redis required). */
+/** Per-IP hourly create limits (no Redis — counted off the shares table). */
 export const TEXT_SHARES_PER_HOUR = 20;
 export const URL_SHARES_PER_HOUR = 20;
+/** File uploads are more expensive (Storage writes, 25 MB transfer) so the
+ *  limit is tighter. Matches the spec. */
+export const FILE_SHARES_PER_HOUR = 5;

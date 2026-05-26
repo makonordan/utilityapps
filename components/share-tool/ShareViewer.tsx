@@ -5,12 +5,16 @@ import {
   AlertTriangle,
   Check,
   Copy,
+  Download,
   ExternalLink,
+  FileText,
   Flag,
+  Image as ImageIcon,
   Loader2,
   Lock,
 } from "lucide-react";
 
+import { formatBytes, getExtension } from "@/lib/file-validation";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -22,11 +26,22 @@ interface Props {
   textLanguage: string | null;
 }
 
+interface FileViewData {
+  filename: string;
+  size: number | null;
+  mimetype: string | null;
+  downloadUrl: string;
+  inlineUrl: string;
+  viewCount: number;
+  viewLimit: number | null;
+}
+
 type State =
   | { kind: "loading" }
   | { kind: "password-required"; error?: string }
   | { kind: "text"; content: string; language: string | null; viewCount: number; viewLimit: number | null }
   | { kind: "url"; url: string; viewCount: number; viewLimit: number | null }
+  | { kind: "file"; data: FileViewData }
   | { kind: "unsupported"; message: string }
   | { kind: "error"; message: string };
 
@@ -70,6 +85,16 @@ export function ShareViewer({ slug, type, hasPassword }: Props) {
             viewCount: number;
             viewLimit: number | null;
           }
+        | {
+            type: "file";
+            filename: string;
+            size: number | null;
+            mimetype: string | null;
+            downloadUrl: string;
+            inlineUrl: string;
+            viewCount: number;
+            viewLimit: number | null;
+          }
         | { error: string; passwordRequired?: boolean };
 
       if (!res.ok) {
@@ -103,6 +128,21 @@ export function ShareViewer({ slug, type, hasPassword }: Props) {
           url: data.url,
           viewCount: data.viewCount,
           viewLimit: data.viewLimit,
+        });
+        return;
+      }
+      if ("type" in data && data.type === "file") {
+        setState({
+          kind: "file",
+          data: {
+            filename: data.filename,
+            size: data.size,
+            mimetype: data.mimetype,
+            downloadUrl: data.downloadUrl,
+            inlineUrl: data.inlineUrl,
+            viewCount: data.viewCount,
+            viewLimit: data.viewLimit,
+          },
         });
         return;
       }
@@ -141,6 +181,7 @@ export function ShareViewer({ slug, type, hasPassword }: Props) {
       {state.kind === "url" && (
         <UrlView url={state.url} viewCount={state.viewCount} viewLimit={state.viewLimit} />
       )}
+      {state.kind === "file" && <FileView data={state.data} />}
       {state.kind === "unsupported" && (
         <ErrorBlock message={state.message} />
       )}
@@ -361,7 +402,87 @@ function ReportRow({
       id="report"
       className="inline-flex items-center gap-1 text-xs text-surface-500 hover:text-red-600 dark:text-surface-400 dark:hover:text-red-400"
     >
-      <Flag className="h-3 w-3" /> Report this {type === "url" ? "link" : "snippet"}
+      <Flag className="h-3 w-3" />{" "}
+      Report this {type === "url" ? "link" : type === "file" ? "file" : "snippet"}
     </button>
+  );
+}
+
+// =============================================================== FileView
+
+const IMAGE_EXTS = new Set(["jpg", "jpeg", "png", "gif", "webp", "svg", "bmp", "avif", "heic"]);
+
+function isImage(mimetype: string | null, filename: string): boolean {
+  if (mimetype && mimetype.startsWith("image/")) return true;
+  return IMAGE_EXTS.has(getExtension(filename));
+}
+
+function isPdf(mimetype: string | null, filename: string): boolean {
+  if (mimetype === "application/pdf") return true;
+  return getExtension(filename) === "pdf";
+}
+
+function FileView({ data }: { data: FileViewData }) {
+  const { filename, size, mimetype, downloadUrl, inlineUrl, viewCount, viewLimit } = data;
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-3 rounded-xl border border-surface-200 bg-white px-3 py-2.5 dark:border-surface-800 dark:bg-surface-900">
+        <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">
+          {isImage(mimetype, filename) ? (
+            <ImageIcon className="h-5 w-5" />
+          ) : (
+            <FileText className="h-5 w-5" />
+          )}
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-semibold text-surface-900 dark:text-white">
+            {filename}
+          </p>
+          <p className="text-[11px] text-surface-500 dark:text-surface-400">
+            {size != null ? formatBytes(size) : "size unknown"}
+            {mimetype ? ` · ${mimetype}` : ""} · {viewCount} view
+            {viewCount === 1 ? "" : "s"}
+            {viewLimit ? ` of ${viewLimit}` : ""}
+          </p>
+        </div>
+        <a
+          href={downloadUrl}
+          rel="noopener noreferrer"
+          download={filename}
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-blue-700 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-blue-800"
+        >
+          <Download className="h-3.5 w-3.5" /> Download
+        </a>
+      </div>
+
+      {isImage(mimetype, filename) && (
+        <div className="rounded-xl border border-surface-200 bg-surface-50 p-3 text-center dark:border-surface-800 dark:bg-surface-900">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={inlineUrl}
+            alt={filename}
+            className="mx-auto max-h-[520px] max-w-full rounded-md shadow-sm"
+          />
+        </div>
+      )}
+
+      {isPdf(mimetype, filename) && (
+        <div className="overflow-hidden rounded-xl border border-surface-200 dark:border-surface-800">
+          <iframe
+            src={inlineUrl}
+            title={`Preview: ${filename}`}
+            className="h-[640px] w-full"
+          />
+        </div>
+      )}
+
+      {!isImage(mimetype, filename) && !isPdf(mimetype, filename) && (
+        <p className="rounded-xl bg-surface-50 px-3 py-2.5 text-sm text-surface-600 dark:bg-surface-800/60 dark:text-surface-300">
+          Inline preview isn&rsquo;t available for this file type. Click <strong>Download</strong>
+          to save it.
+        </p>
+      )}
+    </div>
   );
 }
