@@ -43,9 +43,15 @@ Go to **SQL Editor → New query** (left sidebar, NOT under Storage), paste:
 -- Allow reads via signed URLs only. Without this policy, even valid
 -- signed-URL reads return 400 because the bucket has no policy at all
 -- and `service_role` is not the role the browser uses to fetch the file.
-create policy if not exists "share_files_signed_read"
-on storage.objects for select to anon, authenticated
-using (bucket_id = 'share-files');
+--
+-- `drop ... if exists` + `create` (rather than `create policy if not
+-- exists`) keeps this idempotent AND works on PostgreSQL 15 / 16.
+-- `IF NOT EXISTS` on CREATE POLICY only landed in PostgreSQL 17, which
+-- Supabase's free tier isn't on yet.
+drop policy if exists "share_files_signed_read" on storage.objects;
+create policy "share_files_signed_read"
+  on storage.objects for select to anon, authenticated
+  using (bucket_id = 'share-files');
 ```
 
 Click **Run**. Expect "Success. No rows returned."

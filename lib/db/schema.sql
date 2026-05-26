@@ -86,9 +86,14 @@ create index if not exists products_clicks_recent_idx
   on public.products_clicks (created_at desc);
 
 alter table public.products_clicks enable row level security;
-create policy if not exists products_clicks_insert on public.products_clicks
+-- `drop ... if exists` + `create` keeps each policy idempotent without
+-- needing CREATE POLICY IF NOT EXISTS — that syntax only exists in
+-- PostgreSQL 17, and Supabase free-tier projects are on 15/16.
+drop policy if exists products_clicks_insert on public.products_clicks;
+create policy products_clicks_insert on public.products_clicks
   for insert to anon, authenticated with check (true);
-create policy if not exists products_clicks_select on public.products_clicks
+drop policy if exists products_clicks_select on public.products_clicks;
+create policy products_clicks_select on public.products_clicks
   for select to anon, authenticated using (true);
 
 -- 6. search_queries ---------------------------------------------------------
@@ -191,41 +196,57 @@ alter table public.tool_ratings           enable row level security;
 alter table public.blog_views             enable row level security;
 alter table public.search_queries         enable row level security;
 
+-- NOTE: every `create policy` below is paired with a `drop policy if
+-- exists` so the schema is idempotent (re-runnable). We deliberately
+-- don't use CREATE POLICY IF NOT EXISTS — that syntax landed in
+-- PostgreSQL 17, and Supabase free-tier projects are still on 15/16.
+
 -- tool_usage: anyone can record usage and read aggregate counts.
-create policy if not exists tool_usage_insert on public.tool_usage
+drop policy if exists tool_usage_insert on public.tool_usage;
+create policy tool_usage_insert on public.tool_usage
   for insert to anon, authenticated with check (true);
-create policy if not exists tool_usage_select on public.tool_usage
+drop policy if exists tool_usage_select on public.tool_usage;
+create policy tool_usage_select on public.tool_usage
   for select to anon, authenticated using (true);
 
 -- bookmarks: anyone can insert; reads/deletes scoped to matching user_id
 -- supplied via the `x-user-id` request header (set client-side).
-create policy if not exists bookmarks_insert on public.bookmarks
+drop policy if exists bookmarks_insert on public.bookmarks;
+create policy bookmarks_insert on public.bookmarks
   for insert to anon, authenticated with check (true);
-create policy if not exists bookmarks_select on public.bookmarks
+drop policy if exists bookmarks_select on public.bookmarks;
+create policy bookmarks_select on public.bookmarks
   for select to anon, authenticated
   using (user_id = coalesce(current_setting('request.headers', true)::json->>'x-user-id', user_id));
-create policy if not exists bookmarks_delete on public.bookmarks
+drop policy if exists bookmarks_delete on public.bookmarks;
+create policy bookmarks_delete on public.bookmarks
   for delete to anon, authenticated
   using (user_id = coalesce(current_setting('request.headers', true)::json->>'x-user-id', ''));
 
 -- newsletter_subscribers: anyone can subscribe; reads restricted to service role.
-create policy if not exists newsletter_insert on public.newsletter_subscribers
+drop policy if exists newsletter_insert on public.newsletter_subscribers;
+create policy newsletter_insert on public.newsletter_subscribers
   for insert to anon, authenticated with check (true);
 
 -- tool_ratings: anyone can rate and read aggregates.
-create policy if not exists tool_ratings_insert on public.tool_ratings
+drop policy if exists tool_ratings_insert on public.tool_ratings;
+create policy tool_ratings_insert on public.tool_ratings
   for insert to anon, authenticated with check (true);
-create policy if not exists tool_ratings_select on public.tool_ratings
+drop policy if exists tool_ratings_select on public.tool_ratings;
+create policy tool_ratings_select on public.tool_ratings
   for select to anon, authenticated using (true);
 
 -- blog_views: write goes through the increment_blog_view RPC; allow reads.
-create policy if not exists blog_views_select on public.blog_views
+drop policy if exists blog_views_select on public.blog_views;
+create policy blog_views_select on public.blog_views
   for select to anon, authenticated using (true);
 
 -- search_queries: anyone can log a search and read trending aggregates.
-create policy if not exists search_queries_insert on public.search_queries
+drop policy if exists search_queries_insert on public.search_queries;
+create policy search_queries_insert on public.search_queries
   for insert to anon, authenticated with check (true);
-create policy if not exists search_queries_select on public.search_queries
+drop policy if exists search_queries_select on public.search_queries;
+create policy search_queries_select on public.search_queries
   for select to anon, authenticated using (true);
 
 -- 9. orders -----------------------------------------------------------------
