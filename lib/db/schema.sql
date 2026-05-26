@@ -253,3 +253,46 @@ create index if not exists orders_status_idx     on public.orders (status);
 -- RLS on, no policies: the anon key is fully denied. Server routes use the
 -- service-role key, which bypasses RLS.
 alter table public.orders enable row level security;
+
+-- 10. shares -----------------------------------------------------------------
+-- Anonymous URL shortener + text-snippet share (file shares come in Phase 2).
+-- Like `orders`, RLS is ON with NO policies — the anon key has zero access.
+-- All reads and writes go through the service-role client in lib/db/shares.ts.
+-- Storing creator_ip + a hashed password (when set) is sensitive; keeping it
+-- server-only and excluded from the anon API surface is the simplest defense.
+create table if not exists public.shares (
+  id              uuid primary key default gen_random_uuid(),
+  slug            text not null unique,
+  type            text not null check (type in ('file', 'text', 'url')),
+  -- File-specific (Phase 2 only, columns kept nullable so Phase 1 can ship)
+  file_path       text,
+  file_name       text,
+  file_size       bigint,
+  file_mimetype   text,
+  -- Content for text and url shares
+  text_content    text,
+  text_language   text, -- optional prismjs language hint for syntax highlight
+  original_url    text,
+  -- Access controls
+  password_hash   text,
+  custom_slug     boolean not null default false,
+  view_limit      integer,
+  view_count      integer not null default 0,
+  expires_at      timestamptz not null,
+  created_at      timestamptz not null default now(),
+  -- Abuse tracking
+  creator_ip      text,
+  reported        boolean not null default false,
+  reported_at     timestamptz
+);
+
+create index if not exists shares_slug_idx          on public.shares (slug);
+create index if not exists shares_expires_at_idx    on public.shares (expires_at);
+create index if not exists shares_creator_ip_idx
+  on public.shares (creator_ip, created_at desc);
+create index if not exists shares_reported_idx
+  on public.shares (reported)
+  where reported = true;
+
+-- RLS on, no policies: server-only via service-role.
+alter table public.shares enable row level security;

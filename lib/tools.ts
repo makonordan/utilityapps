@@ -1224,6 +1224,35 @@ export const TOOLS: Tool[] = [
     cpc: 12,
     relatedTools: ["pomodoro-timer", "countdown-timer", "barcode-generator"],
   },
+  {
+    id: "share",
+    name: "Share",
+    description:
+      "Share text snippets or shorten links — no signup, password optional, auto-expires.",
+    longDescription:
+      "Two of the most common 'quick share' jobs in one tool, no signup. Paste a text snippet (up to 100 KB) and get a shareable link, optionally syntax-highlighted. Or paste a long URL and get a short utilityapps.site/s/abc link. Every share supports optional password, view limit, custom slug, and expires automatically (1 hour, 24 hours, 7 days, or 30 days). Auto-deletes on first abuse report.",
+    category: "Productivity Tools",
+    icon: "Share2",
+    href: "/tools/share",
+    externalHref: null,
+    embedUrl: null,
+    keywords: [
+      "share text online",
+      "share snippet",
+      "url shortener",
+      "free link shortener",
+      "share files no signup",
+      "anonymous text sharing",
+      "free wetransfer alternative",
+      "share password protected",
+    ],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 850_000,
+    cpc: 3,
+    relatedTools: ["qr-code-generator", "barcode-generator", "invoice-generator"],
+  },
 
   // ─── Developer Tools (in-house) ────────────────────────────────────────
   {
