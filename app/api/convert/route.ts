@@ -254,10 +254,11 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (err) {
-    console.error(
-      `[api/convert] ${target}`,
-      err instanceof Error ? err.message : err
-    );
+    const { reportError } = await import("@/lib/error-reporting");
+    reportError(err, {
+      tag: `api/convert/${target}`,
+      extra: { fileSize: blob.size, fileName: blob.name },
+    });
     return NextResponse.json(
       { error: "Conversion failed. Please try again." },
       { status: 500 }

@@ -2,6 +2,7 @@ import "server-only";
 
 import { createHash, randomBytes, scryptSync, timingSafeEqual } from "crypto";
 
+import { reportError } from "../error-reporting";
 import { getSupabaseAdmin } from "../supabaseAdmin";
 import { generateSlug, isGeneratedSlugAcceptable } from "../slug";
 
@@ -87,7 +88,7 @@ export async function findBySlug(slug: string): Promise<ShareRow | null> {
     .eq("slug", slug)
     .maybeSingle();
   if (error) {
-    console.error("[shares.findBySlug]", error);
+    reportError(error, { tag: "shares.findBySlug" });
     return null;
   }
   return (data as ShareRow | null) ?? null;
@@ -177,7 +178,7 @@ export async function createShare(input: CreateShareInput): Promise<CreateShareR
     .select("*")
     .single();
   if (error) {
-    console.error("[shares.createShare]", error);
+    reportError(error, { tag: "shares.createShare" });
     // Most likely cause: race condition where slug collided between
     // findBySlug() and insert. The unique index catches it.
     return { ok: false, error: "Couldn't create the share. Try again." };
@@ -212,7 +213,7 @@ export async function incrementViewCount(slug: string): Promise<ShareRow | null>
     .select("*")
     .single();
   if (error) {
-    console.error("[shares.incrementViewCount]", error);
+    reportError(error, { tag: "shares.incrementViewCount" });
     return null;
   }
   return data as ShareRow;
@@ -233,7 +234,7 @@ export async function deleteBySlug(slug: string): Promise<boolean> {
     try {
       await client.storage.from(SHARE_BUCKET).remove([existing.file_path]);
     } catch (err) {
-      console.error("[shares.deleteBySlug] storage", err);
+      reportError(err, { tag: "shares.deleteBySlug.storage" });
       // continue — the DB delete is what makes the share unreachable
     }
   }
@@ -242,7 +243,7 @@ export async function deleteBySlug(slug: string): Promise<boolean> {
     .delete({ count: "exact" })
     .eq("slug", slug);
   if (error) {
-    console.error("[shares.deleteBySlug]", error);
+    reportError(error, { tag: "shares.deleteBySlug" });
     return false;
   }
   return (count ?? 0) > 0;
@@ -317,7 +318,7 @@ export async function initFileShare(
       .from(SHARE_BUCKET)
       .createSignedUploadUrl(path);
     if (error || !data) {
-      console.error("[shares.initFileShare]", error);
+      reportError(error, { tag: "shares.initFileShare" });
       // Translate the most common setup mistakes into actionable messages.
       // Supabase's Storage errors come back as { message, statusCode }; the
       // message text is stable enough to pattern-match.
@@ -352,7 +353,7 @@ export async function initFileShare(
       customSlugWasUsed,
     };
   } catch (err) {
-    console.error("[shares.initFileShare]", err);
+    reportError(err, { tag: "shares.initFileShare" });
     const message = err instanceof Error ? err.message : String(err);
     return {
       ok: false,
@@ -398,7 +399,7 @@ export async function finalizeFileShare(
       .from(SHARE_BUCKET)
       .list(folder, { limit: 5 });
     if (error || !files) {
-      console.error("[shares.finalizeFileShare] list", error);
+      reportError(error, { tag: "shares.finalizeFileShare.list" });
       return { ok: false, error: "Couldn't verify the upload. Try again." };
     }
     const match = files.find((f) => f.name === wantedName);
@@ -417,7 +418,7 @@ export async function finalizeFileShare(
       return { ok: false, error: "File exceeded the 25 MB cap." };
     }
   } catch (err) {
-    console.error("[shares.finalizeFileShare]", err);
+    reportError(err, { tag: "shares.finalizeFileShare" });
     return { ok: false, error: "Couldn't verify the upload. Try again." };
   }
 
@@ -450,7 +451,7 @@ export async function finalizeFileShare(
     .select("*")
     .single();
   if (error) {
-    console.error("[shares.finalizeFileShare] insert", error);
+    reportError(error, { tag: "shares.finalizeFileShare.insert" });
     // Clean up the uploaded file so we don't leave an orphan.
     await client.storage.from(SHARE_BUCKET).remove([input.path]);
     return { ok: false, error: "Couldn't save the share. Please try again." };
@@ -477,7 +478,7 @@ export async function createDownloadUrl(
       download: filename,
     });
   if (error || !data) {
-    console.error("[shares.createDownloadUrl]", error);
+    reportError(error, { tag: "shares.createDownloadUrl" });
     return null;
   }
   return data.signedUrl;
@@ -498,7 +499,7 @@ export async function createInlineUrl(
     .from(SHARE_BUCKET)
     .createSignedUrl(path, expiresInSeconds);
   if (error || !data) {
-    console.error("[shares.createInlineUrl]", error);
+    reportError(error, { tag: "shares.createInlineUrl" });
     return null;
   }
   return data.signedUrl;
@@ -513,7 +514,7 @@ export async function reportShare(slug: string): Promise<boolean> {
     .update({ reported: true, reported_at: new Date().toISOString() })
     .eq("slug", slug);
   if (error) {
-    console.error("[shares.reportShare]", error);
+    reportError(error, { tag: "shares.reportShare" });
     return false;
   }
   return true;
@@ -528,7 +529,7 @@ export async function unreportShare(slug: string): Promise<boolean> {
     .update({ reported: false, reported_at: null })
     .eq("slug", slug);
   if (error) {
-    console.error("[shares.unreportShare]", error);
+    reportError(error, { tag: "shares.unreportShare" });
     return false;
   }
   return true;
@@ -566,7 +567,7 @@ export async function isRateLimited(
     .eq("creator_ip", creatorIpHash)
     .gte("created_at", since);
   if (error) {
-    console.error("[shares.isRateLimited]", error);
+    reportError(error, { tag: "shares.isRateLimited" });
     return false; // fail open — error logging beats a broken tool
   }
   return (count ?? 0) >= limitPerHour;
