@@ -29,8 +29,27 @@ export async function POST(request: NextRequest) {
     return Response.json({ success: false, error: "Unknown toolId" }, { status: 404 });
   }
 
-  const country =
-    typeof body.country === "string" && body.country.length <= 8 ? body.country : null;
+  // Country resolution priority:
+  //   1. `body.country` if the client supplied one (currently no caller does)
+  //   2. `x-vercel-ip-country` — Vercel's free geo header on every request
+  //   3. `cf-ipcountry` — fallback for Cloudflare-proxied environments
+  //   4. null — we don't synthesise a value
+  //
+  // Doing this server-side means we don't depend on the client knowing or
+  // sending its country (which it doesn't reliably), and we get the same
+  // ISO-3166 two-letter codes ("US", "GB", etc.) for every visit.
+  let country: string | null = null;
+  if (typeof body.country === "string" && body.country.length <= 8) {
+    country = body.country;
+  } else {
+    const geoHeader =
+      request.headers.get("x-vercel-ip-country") ||
+      request.headers.get("cf-ipcountry") ||
+      null;
+    if (geoHeader && geoHeader.length <= 8 && geoHeader.toUpperCase() !== "XX") {
+      country = geoHeader.toUpperCase();
+    }
+  }
 
   let device: string | null = null;
   if (typeof body.device === "string") {

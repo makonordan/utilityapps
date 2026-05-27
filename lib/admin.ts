@@ -59,15 +59,21 @@ export interface SubscriberGrowthPoint {
 
 // ----- Share tool stats --------------------------------------------------
 
-export interface ShareDailyPoint {
-  /** ISO date (YYYY-MM-DD). */
-  date: string;
+export interface ShareSeriesPoint {
+  /** Bucket key — `YYYY-MM-DD` for day, `YYYY-Www` for week, `YYYY-MM` for month. */
+  bucket: string;
+  /** Short human label shown under the bar (e.g. "12", "W04", "May"). */
+  label: string;
   file: number;
   text: number;
   url: number;
-  /** Sum of file_size for file shares created that day, bytes. */
+  /** Sum of file_size for file shares created in that bucket, bytes. */
   fileBytes: number;
 }
+
+/** Backwards-compat alias — older code referred to the daily series as
+ *  `ShareDailyPoint`. The new shape is identical structurally. */
+export type ShareDailyPoint = ShareSeriesPoint;
 
 export interface ReportedShareRow {
   slug: string;
@@ -98,14 +104,24 @@ export interface ShareStats {
   filesTotal: number;
   textTotal: number;
   urlTotal: number;
-  /** Last 30 days of new-share counts by type, plus daily file-bytes. */
-  daily: ShareDailyPoint[];
+  /** Time series at three granularities, all aligned to "ending now". */
+  series: {
+    /** Last 30 days, one bucket per day. */
+    day: ShareSeriesPoint[];
+    /** Last 12 ISO weeks, one bucket per week. */
+    week: ShareSeriesPoint[];
+    /** Last 12 months, one bucket per month. */
+    month: ShareSeriesPoint[];
+  };
   /** Currently-reported (hidden) shares awaiting moderation. */
   reportedQueue: ReportedShareRow[];
   /** Total bytes used by *currently stored* file shares. */
   storageBytes: number;
   /** Top 10 mimetypes among file shares ever uploaded. */
   topFileTypes: ShareFileTypeBreakdown[];
+  /** Raw counts so the UI can show "X of Y". */
+  customSlugCount: number;
+  passwordProtectedCount: number;
   /** What fraction of shares used a custom slug (0..1). */
   customSlugRate: number;
   /** What fraction were password-protected (0..1). */
@@ -380,8 +396,11 @@ export async function getAdminStats(): Promise<AdminStats> {
       const adminMod = await import("./supabaseAdmin").catch(() => null);
       const adminClient = adminMod?.getSupabaseAdmin() ?? null;
       if (adminClient) {
-        const thirtyDaysAgo = new Date(
-          Date.now() - 30 * 24 * 60 * 60 * 1000
+        // 12 months covers all three granularities at once — daily for the
+        // last 30 days, weekly for the last 12 weeks, monthly for the last
+        // 12 months. One query, three series.
+        const twelveMonthsAgo = new Date(
+          Date.now() - 365 * 24 * 60 * 60 * 1000
         ).toISOString();
         const [
           totalsRes,
@@ -392,11 +411,11 @@ export async function getAdminStats(): Promise<AdminStats> {
         ] = await Promise.all([
           // All-time totals by type
           adminClient.from("shares").select("type, file_size, reported"),
-          // Last 30 days by day + type
+          // Last 12 months — we'll bucket client-side three ways
           adminClient
             .from("shares")
             .select("type, created_at, file_size")
-            .gte("created_at", thirtyDaysAgo)
+            .gte("created_at", twelveMonthsAgo)
             .order("created_at", { ascending: true }),
           // Reported queue (max 50 — admin would normally clear faster than this)
           adminClient
@@ -433,29 +452,29 @@ export async function getAdminStats(): Promise<AdminStats> {
         }
         const total = totals.length;
 
-        // Bucket the 30-day rows into daily series with file/text/url counts
-        // and per-day file-bytes for the storage-trend chart.
-        const dailyMap = new Map<string, ShareDailyPoint>();
-        for (let i = 29; i >= 0; i -= 1) {
-          const day = new Date(Date.now() - i * 24 * 60 * 60 * 1000)
-            .toISOString()
-            .slice(0, 10);
-          dailyMap.set(day, { date: day, file: 0, text: 0, url: 0, fileBytes: 0 });
-        }
-        type DailyRow = {
+        type SeriesRow = {
           type: ShareTypeInternal;
           created_at: string;
           file_size: number | null;
         };
-        for (const row of (dailyRes.data ?? []) as DailyRow[]) {
-          const day = row.created_at.slice(0, 10);
-          const bucket = dailyMap.get(day);
-          if (!bucket) continue;
-          if (row.type === "file") {
-            bucket.file += 1;
-            bucket.fileBytes += row.file_size ?? 0;
-          } else if (row.type === "text") bucket.text += 1;
-          else if (row.type === "url") bucket.url += 1;
+        const rows = (dailyRes.data ?? []) as SeriesRow[];
+
+        // Pre-seed three series so empty buckets render as zero-bars (cleaner
+        // chart than gaps). Keys are bucket identifiers; the order of insertion
+        // determines the order they appear left-to-right.
+        const daySeries = buildEmptyDaySeries(30);
+        const weekSeries = buildEmptyWeekSeries(12);
+        const monthSeries = buildEmptyMonthSeries(12);
+
+        for (const row of rows) {
+          const dayKey = row.created_at.slice(0, 10);
+          const date = new Date(row.created_at);
+          const weekKey = isoWeekKey(date);
+          const monthKey = row.created_at.slice(0, 7);
+
+          incrementBucket(daySeries, dayKey, row);
+          incrementBucket(weekSeries, weekKey, row);
+          incrementBucket(monthSeries, monthKey, row);
         }
 
         type ReportedRow = {
@@ -513,10 +532,16 @@ export async function getAdminStats(): Promise<AdminStats> {
           filesTotal,
           textTotal,
           urlTotal,
-          daily: Array.from(dailyMap.values()),
+          series: {
+            day: Array.from(daySeries.values()),
+            week: Array.from(weekSeries.values()),
+            month: Array.from(monthSeries.values()),
+          },
           reportedQueue,
           storageBytes,
           topFileTypes,
+          customSlugCount: customCount,
+          passwordProtectedCount: passwordCount,
           customSlugRate: total > 0 ? customCount / total : 0,
           passwordProtectedRate: total > 0 ? passwordCount / total : 0,
         };
@@ -620,4 +645,101 @@ function emptyToolRow(tool: Tool): AdminToolRow {
     averageRating: 0,
     ratingCount: 0,
   };
+}
+
+// ----- Share-stats bucketing helpers --------------------------------------
+
+/** Seed a Map of empty {file:0,text:0,url:0,fileBytes:0} buckets, one per
+ *  day for the last N days, with the newest day last so the chart reads
+ *  left → right as old → new. */
+function buildEmptyDaySeries(days: number): Map<string, ShareSeriesPoint> {
+  const out = new Map<string, ShareSeriesPoint>();
+  for (let i = days - 1; i >= 0; i -= 1) {
+    const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
+    const bucket = d.toISOString().slice(0, 10);
+    out.set(bucket, {
+      bucket,
+      label: String(d.getUTCDate()), // day of month, e.g. "27"
+      file: 0,
+      text: 0,
+      url: 0,
+      fileBytes: 0,
+    });
+  }
+  return out;
+}
+
+function buildEmptyWeekSeries(weeks: number): Map<string, ShareSeriesPoint> {
+  const out = new Map<string, ShareSeriesPoint>();
+  for (let i = weeks - 1; i >= 0; i -= 1) {
+    const d = new Date(Date.now() - i * 7 * 24 * 60 * 60 * 1000);
+    const bucket = isoWeekKey(d);
+    out.set(bucket, {
+      bucket,
+      label: bucket.split("-W")[1] ? `W${bucket.split("-W")[1]}` : bucket,
+      file: 0,
+      text: 0,
+      url: 0,
+      fileBytes: 0,
+    });
+  }
+  return out;
+}
+
+const MONTH_LABELS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
+function buildEmptyMonthSeries(months: number): Map<string, ShareSeriesPoint> {
+  const out = new Map<string, ShareSeriesPoint>();
+  const now = new Date();
+  for (let i = months - 1; i >= 0; i -= 1) {
+    const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1));
+    const yyyy = d.getUTCFullYear();
+    const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
+    const bucket = `${yyyy}-${mm}`;
+    out.set(bucket, {
+      bucket,
+      label: MONTH_LABELS[d.getUTCMonth()],
+      file: 0,
+      text: 0,
+      url: 0,
+      fileBytes: 0,
+    });
+  }
+  return out;
+}
+
+/** ISO 8601 week key — `YYYY-Www`. Matches Postgres `to_char(d, 'IYYY-"W"IW')`. */
+function isoWeekKey(date: Date): string {
+  // Copy + go to Thursday in the current week so getISOWeek aligns.
+  const d = new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
+  );
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNum = Math.ceil(((d.getTime() - yearStart.getTime()) / 86_400_000 + 1) / 7);
+  return `${d.getUTCFullYear()}-W${String(weekNum).padStart(2, "0")}`;
+}
+
+/** Mutate the matching bucket in-place if it exists. Rows older than the
+ *  seeded window are silently ignored (the month series has the longest
+ *  window so anything that falls off month is fine to drop). */
+function incrementBucket(
+  series: Map<string, ShareSeriesPoint>,
+  key: string,
+  row: { type: ShareTypeInternal; file_size: number | null }
+): void {
+  const bucket = series.get(key);
+  if (!bucket) return;
+  if (row.type === "file") {
+    bucket.file += 1;
+    bucket.fileBytes += row.file_size ?? 0;
+  } else if (row.type === "text") {
+    bucket.text += 1;
+  } else if (row.type === "url") {
+    bucket.url += 1;
+  }
 }

@@ -168,7 +168,11 @@ function Header({
 
 function Sidebar({ tab, setTab }: { tab: Tab; setTab: (tab: Tab) => void }) {
   return (
-    <nav aria-label="Admin sections">
+    // `lg:sticky lg:top-6 lg:self-start` keeps the nav pinned while the
+    // main column scrolls. `self-start` is required inside the grid cell
+    // or the sticky element gets stretched to the grid row height and
+    // can't actually stick.
+    <nav aria-label="Admin sections" className="lg:sticky lg:top-6 lg:self-start">
       <ul className="flex gap-1.5 overflow-x-auto rounded-2xl border border-surface-200 bg-white p-1 lg:flex-col lg:overflow-visible dark:border-surface-800 dark:bg-surface-900">
         {TABS.map(({ id, label, Icon }) => {
           const active = tab === id;
@@ -313,9 +317,16 @@ function OverviewTab({ stats }: { stats: AdminStats }) {
 function GeographySection({ geo }: { geo: GeoStats }) {
   if (geo.totalEvents === 0) {
     return (
-      <p className="rounded-2xl border border-surface-200 bg-white p-4 text-sm text-surface-500 dark:border-surface-800 dark:bg-surface-900 dark:text-surface-400">
-        No events yet for the last 30 days.
-      </p>
+      <div className="rounded-2xl border border-surface-200 bg-white p-4 text-sm text-surface-600 dark:border-surface-800 dark:bg-surface-900 dark:text-surface-300">
+        <p>No tool-usage events in the last 30 days.</p>
+        <p className="mt-2 text-xs text-surface-500 dark:text-surface-400">
+          This populates once real visitors hit any tool page. Your own admin
+          views don&rsquo;t count (the tracker rate-limits to one event per
+          tool per session per hour). Country is detected server-side from
+          the request&rsquo;s <code>x-vercel-ip-country</code> header — works
+          automatically on Vercel.
+        </p>
+      </div>
     );
   }
   return (
@@ -435,7 +446,17 @@ function formatBytesShort(bytes: number): string {
   return `${(bytes / 1024 / 1024 / 1024).toFixed(2)} GB`;
 }
 
+type ShareGranularity = "day" | "week" | "month";
+
+const GRANULARITY_LABELS: Record<ShareGranularity, string> = {
+  day: "Day (last 30 days)",
+  week: "Week (last 12 weeks)",
+  month: "Month (last 12 months)",
+};
+
 function ShareTab({ stats }: { stats: ShareStats | null }) {
+  const [granularity, setGranularity] = useState<ShareGranularity>("day");
+
   if (!stats) {
     return (
       <p className="rounded-2xl border border-warning-200 bg-warning-50 p-4 text-sm text-warning-800 dark:border-warning-500/30 dark:bg-warning-500/10 dark:text-warning-200">
@@ -445,13 +466,13 @@ function ShareTab({ stats }: { stats: ShareStats | null }) {
     );
   }
 
-  // Derive a 30-day total for the per-day chart and the max daily count
-  // (so the sparkline scales nicely without a chart library).
-  const last30Total = stats.daily.reduce(
-    (sum, d) => sum + d.file + d.text + d.url,
+  // Active series + headline totals derived from it.
+  const series = stats.series[granularity];
+  const windowTotal = series.reduce(
+    (sum, p) => sum + p.file + p.text + p.url,
     0
   );
-  const last30Bytes = stats.daily.reduce((sum, d) => sum + d.fileBytes, 0);
+  const windowBytes = series.reduce((sum, p) => sum + p.fileBytes, 0);
 
   return (
     <div>
@@ -465,9 +486,15 @@ function ShareTab({ stats }: { stats: ShareStats | null }) {
         </li>
         <li>
           <StatCard
-            label="Shares last 30d"
-            value={formatNumber(last30Total)}
-            hint={`${formatBytesShort(last30Bytes)} of new files`}
+            label={
+              granularity === "day"
+                ? "Shares last 30 days"
+                : granularity === "week"
+                  ? "Shares last 12 weeks"
+                  : "Shares last 12 months"
+            }
+            value={formatNumber(windowTotal)}
+            hint={`${formatBytesShort(windowBytes)} of new files`}
           />
         </li>
         <li>
@@ -490,39 +517,70 @@ function ShareTab({ stats }: { stats: ShareStats | null }) {
         </li>
       </ul>
 
-      <Section title="Share types" description="Lifetime totals + 30-day trend">
-        <div className="grid gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
-          <div className="rounded-2xl border border-surface-200 bg-white p-4 dark:border-surface-800 dark:bg-surface-900">
-            <BarList
-              items={[
-                { label: "Files", count: stats.filesTotal },
-                { label: "Text snippets", count: stats.textTotal },
-                { label: "URLs", count: stats.urlTotal },
-              ]}
-              total={Math.max(1, stats.total)}
-            />
-            <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-surface-200 pt-3 text-xs dark:border-surface-800">
-              <div>
-                <dt className="text-surface-500 dark:text-surface-400">
-                  Custom slug
-                </dt>
-                <dd className="font-semibold text-surface-800 dark:text-surface-100">
-                  {(stats.customSlugRate * 100).toFixed(1)}%
-                </dd>
-              </div>
-              <div>
-                <dt className="text-surface-500 dark:text-surface-400">
-                  Password-protected
-                </dt>
-                <dd className="font-semibold text-surface-800 dark:text-surface-100">
-                  {(stats.passwordProtectedRate * 100).toFixed(1)}%
-                </dd>
-              </div>
-            </dl>
+      <Section
+        title="Type breakdown"
+        description="Lifetime counts and percentages across every share ever created"
+      >
+        <div className="grid gap-4 sm:grid-cols-3">
+          <ShareTypeCard label="Files" count={stats.filesTotal} total={stats.total} color="#0066FF" />
+          <ShareTypeCard label="Text snippets" count={stats.textTotal} total={stats.total} color="#7C3AED" />
+          <ShareTypeCard label="URLs" count={stats.urlTotal} total={stats.total} color="#14B8A6" />
+        </div>
+      </Section>
+
+      <Section
+        title="Share options uptake"
+        description="What fraction of shares opt in to each setting"
+      >
+        <div className="grid gap-4 sm:grid-cols-2">
+          <ShareTypeCard
+            label="Custom slug"
+            count={stats.customSlugCount}
+            total={stats.total}
+            color="#F59E0B"
+          />
+          <ShareTypeCard
+            label="Password-protected"
+            count={stats.passwordProtectedCount}
+            total={stats.total}
+            color="#EF4444"
+          />
+        </div>
+      </Section>
+
+      <Section
+        title="Shares over time"
+        description="Toggle the time window. Empty bars mean no shares that period."
+      >
+        <div className="rounded-2xl border border-surface-200 bg-white p-4 dark:border-surface-800 dark:bg-surface-900">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <div role="tablist" className="inline-flex rounded-lg bg-surface-100 p-1 dark:bg-surface-800">
+              {(["day", "week", "month"] as ShareGranularity[]).map((g) => {
+                const active = granularity === g;
+                return (
+                  <button
+                    key={g}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setGranularity(g)}
+                    className={cn(
+                      "rounded-md px-3 py-1.5 text-xs font-semibold capitalize transition",
+                      active
+                        ? "bg-white text-primary-700 shadow-sm dark:bg-surface-950 dark:text-primary-300"
+                        : "text-surface-600 dark:text-surface-300"
+                    )}
+                  >
+                    {g}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-xs text-surface-500 dark:text-surface-400">
+              {GRANULARITY_LABELS[granularity]}
+            </p>
           </div>
-          <div className="rounded-2xl border border-surface-200 bg-white p-4 dark:border-surface-800 dark:bg-surface-900">
-            <ShareDailyChart daily={stats.daily} />
-          </div>
+          <ShareSeriesChart series={series} granularity={granularity} />
         </div>
       </Section>
 
@@ -554,34 +612,93 @@ function ShareTab({ stats }: { stats: ShareStats | null }) {
   );
 }
 
-/** Stacked column chart for the 30-day share daily series — pure SVG so we
- *  don't drag a chart library in just for one widget. */
-function ShareDailyChart({ daily }: { daily: ShareStats["daily"] }) {
-  const max = Math.max(
-    1,
-    ...daily.map((d) => d.file + d.text + d.url)
+/** KPI-style card used for share-type counts AND the share-options uptake
+ *  cards (custom slug + password). Shows label, count, percentage and a
+ *  thin progress bar so the magnitude lands visually. */
+function ShareTypeCard({
+  label,
+  count,
+  total,
+  color,
+}: {
+  label: string;
+  count: number;
+  total: number;
+  color: string;
+}) {
+  const pct = total > 0 ? (count / total) * 100 : 0;
+  return (
+    <div className="rounded-2xl border border-surface-200 bg-white p-4 dark:border-surface-800 dark:bg-surface-900">
+      <p className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
+        {label}
+      </p>
+      <p className="mt-1.5 text-2xl font-bold tabular-nums text-surface-900 dark:text-white">
+        {formatNumber(count)}
+        <span className="ml-2 text-sm font-medium text-surface-500 dark:text-surface-400">
+          · {pct.toFixed(1)}%
+        </span>
+      </p>
+      <p className="mt-1 text-[11px] text-surface-500 dark:text-surface-400">
+        of {formatNumber(total)} total share{total === 1 ? "" : "s"}
+      </p>
+      <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-surface-100 dark:bg-surface-800">
+        <div
+          className="h-full rounded-full"
+          style={{ width: `${pct}%`, background: color }}
+        />
+      </div>
+    </div>
   );
-  const barWidth = 100 / daily.length;
+}
+
+/** Stacked column chart for the active time series. Pure SVG — one bar
+ *  per bucket, every bucket label rendered along the X axis (so the user
+ *  can read "12, 13, 14…" for day view or "Jan, Feb…" for month view).
+ *
+ *  We use a fixed viewBox of 600×200 to give bars and labels enough room
+ *  even on the 30-day view; the SVG scales responsively via CSS. */
+function ShareSeriesChart({
+  series,
+  granularity,
+}: {
+  series: ShareStats["series"]["day"];
+  granularity: ShareGranularity;
+}) {
+  const CHART_W = 600;
+  const CHART_H = 200;
+  const BAR_AREA_H = 160; // leaves 40px at the bottom for axis labels
+  const max = Math.max(1, ...series.map((p) => p.file + p.text + p.url));
+  const cellW = CHART_W / Math.max(1, series.length);
+  // Skip every Nth label for the day view so they don't overlap.
+  const labelEvery =
+    granularity === "day" && series.length > 15 ? 5 : 1;
+
   return (
     <div>
-      <svg viewBox="0 0 100 60" preserveAspectRatio="none" className="h-40 w-full">
-        {daily.map((d, i) => {
-          const total = d.file + d.text + d.url;
-          const h = (total / max) * 56; // leave 4px headroom
-          const fileH = (d.file / max) * 56;
-          const textH = (d.text / max) * 56;
-          const urlH = (d.url / max) * 56;
-          const x = i * barWidth + barWidth * 0.15;
-          const w = barWidth * 0.7;
-          let y = 60 - h;
+      <svg
+        viewBox={`0 0 ${CHART_W} ${CHART_H}`}
+        preserveAspectRatio="xMidYMid meet"
+        className="h-64 w-full"
+        role="img"
+        aria-label="Share creation over time, by type"
+      >
+        {/* Bars */}
+        {series.map((p, i) => {
+          const fileH = (p.file / max) * BAR_AREA_H;
+          const textH = (p.text / max) * BAR_AREA_H;
+          const urlH = (p.url / max) * BAR_AREA_H;
+          const totalH = fileH + textH + urlH;
+          const x = i * cellW + cellW * 0.15;
+          const w = cellW * 0.7;
+          let y = BAR_AREA_H - totalH;
+          const tooltip = `${p.label}: ${p.file + p.text + p.url} (${p.file}F · ${p.text}T · ${p.url}U)`;
           return (
-            <g key={d.date}>
-              {/* file = blue */}
-              {d.file > 0 && (
+            <g key={p.bucket}>
+              <title>{tooltip}</title>
+              {p.file > 0 && (
                 <rect x={x} y={y} width={w} height={fileH} fill="#0066FF" />
               )}
-              {/* text = indigo */}
-              {d.text > 0 && (
+              {p.text > 0 && (
                 <rect
                   x={x}
                   y={(y += fileH)}
@@ -590,8 +707,7 @@ function ShareDailyChart({ daily }: { daily: ShareStats["daily"] }) {
                   fill="#7C3AED"
                 />
               )}
-              {/* url = teal */}
-              {d.url > 0 && (
+              {p.url > 0 && (
                 <rect
                   x={x}
                   y={(y += textH)}
@@ -600,15 +716,47 @@ function ShareDailyChart({ daily }: { daily: ShareStats["daily"] }) {
                   fill="#14B8A6"
                 />
               )}
+              {/* Zero-bar placeholder so empty buckets still show as a thin */}
+              {/* baseline tick, otherwise the chart looks broken on a slow day. */}
+              {totalH === 0 && (
+                <rect
+                  x={x}
+                  y={BAR_AREA_H - 1}
+                  width={w}
+                  height={1}
+                  fill="currentColor"
+                  className="text-surface-300 dark:text-surface-700"
+                />
+              )}
             </g>
           );
         })}
+
+        {/* X-axis labels */}
+        {series.map((p, i) => {
+          if (i % labelEvery !== 0 && i !== series.length - 1) return null;
+          const cx = i * cellW + cellW / 2;
+          return (
+            <text
+              key={`l-${p.bucket}`}
+              x={cx}
+              y={CHART_H - 12}
+              textAnchor="middle"
+              className="fill-surface-500 dark:fill-surface-400"
+              fontSize={11}
+            >
+              {p.label}
+            </text>
+          );
+        })}
       </svg>
-      <div className="mt-3 flex flex-wrap items-center gap-3 text-[11px] text-surface-600 dark:text-surface-300">
+      <div className="mt-2 flex flex-wrap items-center gap-3 text-[11px] text-surface-600 dark:text-surface-300">
         <Legend color="#0066FF" label="Files" />
         <Legend color="#7C3AED" label="Text" />
         <Legend color="#14B8A6" label="URLs" />
-        <span className="ml-auto text-surface-400">Last 30 days</span>
+        <span className="ml-auto text-surface-400">
+          Hover any bar for the exact counts
+        </span>
       </div>
     </div>
   );
