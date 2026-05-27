@@ -20,7 +20,15 @@ import { CATEGORIES } from "@/lib/categories";
 import { TOOLS, toolCountPhrase, type Tool } from "@/lib/tools";
 import { cn } from "@/lib/utils";
 
-const NAV_LINKS = [
+interface NavLink {
+  label: string;
+  href: string;
+  /** Optional pill text shown next to the label (e.g. "Alpha" for new). */
+  badge?: string;
+}
+
+const NAV_LINKS: NavLink[] = [
+  { label: "API", href: "/api", badge: "Alpha" },
   { label: "Blog", href: "/blog" },
   { label: "Products", href: "/products" },
   { label: "YouTube", href: "/youtube" },
@@ -188,17 +196,28 @@ function ToolsMegaMenu() {
           );
         })}
       </div>
-      <div className="mt-6 flex items-center justify-between border-t border-surface-200 pt-4 dark:border-surface-800">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-surface-200 pt-4 dark:border-surface-800">
         <p className="text-sm text-surface-500 dark:text-surface-400">
           {toolCountPhrase()} — no signup, no upload limits.
         </p>
-        <Link
-          href="/tools"
-          className="inline-flex items-center gap-1 text-sm font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
-        >
-          Browse every tool
-          <ChevronRight className="h-4 w-4" />
-        </Link>
+        <div className="flex flex-wrap items-center gap-4">
+          <Link
+            href="/api"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-200"
+          >
+            Building with our tools? Try the API
+            <span className="rounded-full bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">
+              Alpha
+            </span>
+          </Link>
+          <Link
+            href="/tools"
+            className="inline-flex items-center gap-1 text-sm font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+          >
+            Browse every tool
+            <ChevronRight className="h-4 w-4" />
+          </Link>
+        </div>
       </div>
     </motion.div>
   );
@@ -323,9 +342,14 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                     <Link
                       href={link.href}
                       onClick={onClose}
-                      className="block rounded-xl px-3 py-2.5 text-sm font-medium text-surface-800 hover:bg-surface-100 dark:text-surface-100 dark:hover:bg-surface-800"
+                      className="flex items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-surface-800 hover:bg-surface-100 dark:text-surface-100 dark:hover:bg-surface-800"
                     >
-                      {link.label}
+                      <span>{link.label}</span>
+                      {link.badge && (
+                        <span className="rounded-full bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">
+                          {link.badge}
+                        </span>
+                      )}
                     </Link>
                   </li>
                 ))}
@@ -404,9 +428,14 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="rounded-xl px-3 py-2 text-sm font-medium text-surface-700 hover:bg-surface-100 hover:text-surface-900 dark:text-surface-200 dark:hover:bg-surface-800 dark:hover:text-white"
+                className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-surface-700 hover:bg-surface-100 hover:text-surface-900 dark:text-surface-200 dark:hover:bg-surface-800 dark:hover:text-white"
               >
                 {link.label}
+                {link.badge && (
+                  <span className="rounded-full bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">
+                    {link.badge}
+                  </span>
+                )}
               </Link>
             ))}
           </nav>

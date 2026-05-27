@@ -15,6 +15,7 @@ const RESOURCES = [
   { label: "Products", href: "/products" },
   { label: "YouTube", href: "/youtube" },
   { label: "Newsletter", href: "/newsletter" },
+  { label: "API (alpha)", href: "/api" },
 ];
 
 const COMPANY = [

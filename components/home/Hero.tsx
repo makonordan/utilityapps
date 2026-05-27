@@ -98,6 +98,27 @@ export function Hero() {
           </a>
         </motion.div>
 
+        {/* Developer-facing call-out. Sits between the main CTAs and the
+            search bar so devs see it without crowding the consumer pitch.
+            Subtle by default, lit blue on hover. */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
+          className="mt-3 text-center"
+        >
+          <a
+            href="/api"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-surface-500 transition hover:text-blue-700 dark:text-surface-400 dark:hover:text-blue-300"
+          >
+            Building with our tools? Get the API
+            <span className="rounded-full bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">
+              Alpha
+            </span>
+            <ArrowRight className="h-3 w-3" />
+          </a>
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
