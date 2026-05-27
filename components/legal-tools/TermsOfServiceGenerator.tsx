@@ -283,5 +283,5 @@ export function TermsOfServiceGenerator() {
     </div>
   );
 
-  return <LegalDocumentBuilder form={form} document={document} filenamePrefix="terms-of-service" />;
+  return <LegalDocumentBuilder toolId="terms-of-service-generator" form={form} document={document} filenamePrefix="terms-of-service" />;
 }

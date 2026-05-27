@@ -307,5 +307,5 @@ export function PrivacyPolicyGenerator() {
     </div>
   );
 
-  return <LegalDocumentBuilder form={form} document={document} filenamePrefix="privacy-policy" />;
+  return <LegalDocumentBuilder toolId="privacy-policy-generator" form={form} document={document} filenamePrefix="privacy-policy" />;
 }

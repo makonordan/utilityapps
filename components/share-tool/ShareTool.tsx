@@ -298,6 +298,10 @@ export function ShareTool() {
         createdAt: new Date().toISOString(),
       };
       setResult(createdRecord);
+      // Completion event — fire-and-forget so download UX stays snappy.
+      void import("@/lib/track").then(({ trackToolCompletionClient }) =>
+        trackToolCompletionClient("share")
+      );
       const next = [
         createdRecord,
         ...myShares.filter((s) => s.slug !== createdRecord.slug),

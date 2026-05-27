@@ -317,3 +317,34 @@ create index if not exists shares_reported_idx
 
 -- RLS on, no policies: server-only via service-role.
 alter table public.shares enable row level security;
+
+-- 11. tool_completions ------------------------------------------------------
+-- Parallel to `tool_usage` but only written when a tool successfully delivers
+-- its primary output (a download / a copy / a generated link / a saved file).
+-- Lets the admin compute a *completion rate* — uses ÷ visits — to distinguish
+-- "people clicked the tool" from "the tool actually worked for them".
+--
+-- Single-table design (not a `completed` column on tool_usage) so existing
+-- queries don't need conditional WHERE clauses and so the table can be
+-- aggregated independently for the dashboard.
+create table if not exists public.tool_completions (
+  id           bigint generated always as identity primary key,
+  tool_id      text not null,
+  user_session text,
+  created_at   timestamptz not null default now()
+);
+
+create index if not exists tool_completions_tool_id_idx
+  on public.tool_completions (tool_id);
+create index if not exists tool_completions_created_at_idx
+  on public.tool_completions (created_at desc);
+
+-- Same anon-INSERT / anon-SELECT policy shape as tool_usage so the dashboard
+-- can aggregate without the service-role round-trip. No PII in this table.
+alter table public.tool_completions enable row level security;
+drop policy if exists tool_completions_insert on public.tool_completions;
+create policy tool_completions_insert on public.tool_completions
+  for insert to anon, authenticated with check (true);
+drop policy if exists tool_completions_select on public.tool_completions;
+create policy tool_completions_select on public.tool_completions
+  for select to anon, authenticated using (true);

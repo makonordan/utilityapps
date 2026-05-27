@@ -57,6 +57,9 @@ export function MergePdf() {
       }
       const out = await merged.save();
       downloadBlob(out, "merged.pdf");
+      void import("@/lib/track").then(({ trackToolCompletionClient }) =>
+        trackToolCompletionClient("merge-pdf")
+      );
     } catch (err) {
       console.error(err);
       setError("Couldn't merge those PDFs. They may be password-protected or corrupt.");

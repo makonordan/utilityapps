@@ -54,6 +54,7 @@ export default function PdfToPptPage() {
         serverProcessing
       >
         <OfficeConverter
+          toolId={TOOL_ID}
           target="pdf-to-pptx"
           accept="application/pdf"
           dropLabel="Drop a PDF here or click to choose"

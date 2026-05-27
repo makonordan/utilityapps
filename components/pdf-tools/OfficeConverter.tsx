@@ -37,6 +37,11 @@ interface Props {
    * Content-Disposition header.
    */
   outputExt: string;
+  /**
+   * Tool ID (e.g. "word-to-pdf"). When set, a successful conversion fires
+   * a completion event so the admin dashboard can compute completion rate.
+   */
+  toolId?: string;
 }
 
 // Browser-reported MIME types we accept on the client (server re-validates).
@@ -52,6 +57,7 @@ export function OfficeConverter({
   dropLabel,
   actionLabel,
   outputExt,
+  toolId,
 }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
@@ -106,6 +112,11 @@ export function OfficeConverter({
       const blob = await res.blob();
       downloadBlob(blob, filename, blob.type);
       setDone(filename);
+      if (toolId) {
+        void import("@/lib/track").then(({ trackToolCompletionClient }) =>
+          trackToolCompletionClient(toolId)
+        );
+      }
     } catch (err) {
       console.error(err);
       setError("Couldn't reach the conversion server. Check your connection and try again.");

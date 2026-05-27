@@ -82,3 +82,65 @@ export async function trackToolUsageClient(
     // network errors are silent; tracking must never break UX
   }
 }
+
+// ---------------------------------------------------------- completions
+
+const COMPLETION_RATE_LIMIT_KEY = "utilityapps:tool-complete";
+/** Don't double-count completions if the user mashes a Download button
+ *  five times in a row. Same idea as the visit limiter but tighter. */
+const COMPLETION_RATE_LIMIT_MS = 5 * 60 * 1000; // 5 minutes
+
+function shouldTrackCompletion(toolId: string): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const raw = window.localStorage.getItem(COMPLETION_RATE_LIMIT_KEY);
+    const map: RateMap =
+      raw && typeof raw === "string" ? (JSON.parse(raw) as RateMap) : {};
+    const last = map[toolId];
+    if (typeof last === "number" && Date.now() - last < COMPLETION_RATE_LIMIT_MS) {
+      return false;
+    }
+    map[toolId] = Date.now();
+    // Prune past cutoff so the map can't grow unbounded.
+    const cutoff = Date.now() - COMPLETION_RATE_LIMIT_MS;
+    for (const k of Object.keys(map)) {
+      if (map[k] < cutoff) delete map[k];
+    }
+    window.localStorage.setItem(COMPLETION_RATE_LIMIT_KEY, JSON.stringify(map));
+    return true;
+  } catch {
+    return true;
+  }
+}
+
+/**
+ * Tracks a successful tool *completion* — fire from a tool component
+ * AFTER it successfully delivers its primary output (download, copy,
+ * link created, etc.).
+ *
+ * Rate-limited to one completion per tool per 5 minutes per browser
+ * so impatient users hitting Download three times don't inflate the
+ * completion count.
+ *
+ * Best-effort: never throws, never blocks the caller. Safe to fire-
+ * and-forget; do NOT `await` if you're in a download click handler
+ * (it adds latency to the UX).
+ */
+export async function trackToolCompletionClient(toolId: string): Promise<void> {
+  if (typeof window === "undefined") return;
+  if (!shouldTrackCompletion(toolId)) return;
+
+  try {
+    await fetch("/api/tools/complete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        toolId,
+        session: getOrCreateAnonId(),
+      }),
+      keepalive: true,
+    });
+  } catch {
+    // network errors are silent; tracking must never break UX
+  }
+}

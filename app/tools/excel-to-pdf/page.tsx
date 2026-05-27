@@ -54,6 +54,7 @@ export default function ExcelToPdfPage() {
         serverProcessing
       >
         <OfficeConverter
+          toolId={TOOL_ID}
           target="xlsx-to-pdf"
           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
           dropLabel="Drop an Excel workbook here or click to choose"

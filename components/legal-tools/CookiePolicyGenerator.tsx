@@ -211,5 +211,5 @@ export function CookiePolicyGenerator() {
     </div>
   );
 
-  return <LegalDocumentBuilder form={form} document={document} filenamePrefix="cookie-policy" />;
+  return <LegalDocumentBuilder toolId="cookie-policy-generator" form={form} document={document} filenamePrefix="cookie-policy" />;
 }

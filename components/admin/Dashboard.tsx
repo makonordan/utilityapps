@@ -388,21 +388,34 @@ function BarList({
 // ----- Tools ---------------------------------------------------------------
 
 function ToolsTab({ rows }: { rows: AdminToolRow[] }) {
-  type Sort = "usage" | "bookmarks" | "rating";
+  type Sort = "usage" | "bookmarks" | "rating" | "completion";
   const [sort, setSort] = useState<Sort>("usage");
   const sorted = useMemo(() => {
     const copy = [...rows];
     if (sort === "usage") copy.sort((a, b) => b.usageCount - a.usageCount);
     if (sort === "bookmarks") copy.sort((a, b) => b.bookmarkCount - a.bookmarkCount);
     if (sort === "rating") copy.sort((a, b) => b.averageRating - a.averageRating);
+    if (sort === "completion") {
+      // Uninstrumented tools sort to the bottom — "—" should never beat
+      // an actual measured rate.
+      copy.sort((a, b) => {
+        if (a.instrumented !== b.instrumented) return a.instrumented ? -1 : 1;
+        return b.completionRate - a.completionRate;
+      });
+    }
     return copy;
   }, [rows, sort]);
+
+  const instrumentedCount = rows.filter((r) => r.instrumented).length;
 
   return (
     <div>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-sm font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
-          All tools ({rows.length})
+          All tools ({rows.length}) ·{" "}
+          <span className="normal-case text-surface-400">
+            {instrumentedCount} report completion
+          </span>
         </h2>
         <label className="inline-flex items-center gap-2 text-xs">
           <span className="font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
@@ -416,16 +429,31 @@ function ToolsTab({ rows }: { rows: AdminToolRow[] }) {
             <option value="usage">Usage</option>
             <option value="bookmarks">Bookmarks</option>
             <option value="rating">Rating</option>
+            <option value="completion">Completion rate</option>
           </select>
         </label>
       </div>
 
       <DataTable
-        columns={["Tool", "Category", "Usage (30d)", "Bookmarks", "Rating"]}
+        columns={[
+          "Tool",
+          "Category",
+          "Usage (30d)",
+          "Completions (30d)",
+          "Completion rate",
+          "Bookmarks",
+          "Rating",
+        ]}
         rows={sorted.map((tool) => [
           tool.name,
           tool.category,
           formatNumber(tool.usageCount),
+          tool.instrumented ? formatNumber(tool.completionCount) : "—",
+          tool.instrumented
+            ? tool.usageCount > 0
+              ? `${(tool.completionRate * 100).toFixed(1)}%`
+              : "—"
+            : "—",
           formatNumber(tool.bookmarkCount),
           tool.ratingCount > 0
             ? `${tool.averageRating.toFixed(2)} (${tool.ratingCount})`

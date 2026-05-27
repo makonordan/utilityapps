@@ -281,5 +281,5 @@ export function FreelanceContractGenerator() {
     </div>
   );
 
-  return <LegalDocumentBuilder form={form} document={document} filenamePrefix="freelance-contract" />;
+  return <LegalDocumentBuilder toolId="freelance-contract-generator" form={form} document={document} filenamePrefix="freelance-contract" />;
 }

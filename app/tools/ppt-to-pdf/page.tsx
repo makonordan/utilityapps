@@ -54,6 +54,7 @@ export default function PptToPdfPage() {
         serverProcessing
       >
         <OfficeConverter
+          toolId={TOOL_ID}
           target="pptx-to-pdf"
           accept="application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint"
           dropLabel="Drop a PowerPoint deck here or click to choose"

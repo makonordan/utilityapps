@@ -37,6 +37,27 @@ export async function trackToolUsage(
   }
 }
 
+/**
+ * Record a successful completion event — fired by tools after they
+ * actually deliver their primary output. Used to compute completion
+ * rate per tool on the admin dashboard.
+ */
+export async function trackToolCompletion(
+  toolId: string,
+  userSession: string | null = null
+): Promise<DbResult<true>> {
+  try {
+    // Insert-only; no .select() needed.
+    const { error } = await supabase
+      .from("tool_completions")
+      .insert({ tool_id: toolId, user_session: userSession });
+    if (error) return fail(error);
+    return ok(true);
+  } catch (err) {
+    return fail(err);
+  }
+}
+
 export interface ToolUsageStats {
   toolId: string;
   total: number;

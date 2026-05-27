@@ -29,14 +29,30 @@ interface Props {
   document: LegalDocument;
   /** Filename prefix (no extension). Defaults to a slug of the title. */
   filenamePrefix?: string;
+  /**
+   * Tool ID (e.g. "privacy-policy-generator"). When set, a successful PDF
+   * or Word download fires a completion event so the admin dashboard can
+   * compute completion rate = downloads ÷ visits. Optional so existing
+   * callers don't break; new callers should pass it.
+   */
+  toolId?: string;
 }
 
-export function LegalDocumentBuilder({ form, document, filenamePrefix }: Props) {
+export function LegalDocumentBuilder({ form, document, filenamePrefix, toolId }: Props) {
   const [downloading, setDownloading] = useState<null | "pdf" | "docx">(null);
   const [error, setError] = useState<string | null>(null);
 
   const previewHtml = useMemo(() => renderToHtml(document), [document]);
   const base = filenamePrefix ?? slugify(document.title);
+
+  /** Fire the completion event after a successful download. Lazy import
+   *  keeps the tracker out of the initial bundle. */
+  const fireCompletion = () => {
+    if (!toolId) return;
+    void import("@/lib/track").then(({ trackToolCompletionClient }) =>
+      trackToolCompletionClient(toolId)
+    );
+  };
 
   const downloadPdf = async () => {
     setError(null);
@@ -44,6 +60,7 @@ export function LegalDocumentBuilder({ form, document, filenamePrefix }: Props) 
     try {
       const bytes = await renderToPdf(document);
       downloadFile(bytes, `${base}.pdf`, "application/pdf");
+      fireCompletion();
     } catch (err) {
       console.error(err);
       setError("Couldn't generate the PDF. Please try again.");
@@ -62,6 +79,7 @@ export function LegalDocumentBuilder({ form, document, filenamePrefix }: Props) 
         `${base}.docx`,
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
       );
+      fireCompletion();
     } catch (err) {
       console.error(err);
       setError("Couldn't generate the Word document. Please try again.");

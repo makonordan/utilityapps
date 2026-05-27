@@ -190,5 +190,5 @@ export function DmcaTakedownNotice() {
     </div>
   );
 
-  return <LegalDocumentBuilder form={form} document={document} filenamePrefix="dmca-takedown" />;
+  return <LegalDocumentBuilder toolId="dmca-takedown-notice" form={form} document={document} filenamePrefix="dmca-takedown" />;
 }

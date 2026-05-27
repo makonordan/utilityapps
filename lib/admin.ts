@@ -8,6 +8,13 @@ export interface AdminToolRow extends Tool {
   bookmarkCount: number;
   averageRating: number;
   ratingCount: number;
+  /** Successful-completion events in the last 30 days. */
+  completionCount: number;
+  /** completionCount / usageCount, 0..1. NaN-safe (0 if no usage). */
+  completionRate: number;
+  /** True when the tool has been instrumented to fire a completion event.
+   *  Until then we display "—" not "0%" so the rate isn't misread as broken. */
+  instrumented: boolean;
 }
 
 export interface NewsletterSubscriberSummary {
@@ -203,6 +210,34 @@ interface ContactMessageRecord {
  *  server-only import chain into admin.ts. */
 type ShareTypeInternal = "file" | "text" | "url";
 
+/**
+ * Tools that have been wired to fire `trackToolCompletionClient(toolId)`
+ * on success. Anything NOT in this set displays "—" for completion rate
+ * in the admin so a 0% reading isn't mistaken for "tool is broken".
+ *
+ * Add to this set whenever you instrument a new tool's success path.
+ */
+const INSTRUMENTED_TOOL_IDS = new Set<string>([
+  "share",
+  "merge-pdf",
+  // Legal Tools (all 8, via LegalDocumentBuilder)
+  "privacy-policy-generator",
+  "terms-of-service-generator",
+  "cookie-policy-generator",
+  "nda-generator",
+  "freelance-contract-generator",
+  "dmca-takedown-notice",
+  "gdpr-request-letter",
+  "cease-and-desist-letter",
+  // Office Tools (all 6, via OfficeConverter)
+  "word-to-pdf",
+  "pdf-to-word",
+  "excel-to-pdf",
+  "pdf-to-excel",
+  "ppt-to-pdf",
+  "pdf-to-ppt",
+]);
+
 export async function getAdminStats(): Promise<AdminStats> {
   const sb = await import("./supabase").catch(() => null);
   const queries = await import("./db/queries").catch(() => null);
@@ -231,6 +266,7 @@ export async function getAdminStats(): Promise<AdminStats> {
       affiliateClicksRes,
       subscriberDailyRes,
       geoUsageRes,
+      perToolCompletionsRes,
     ] = await Promise.all([
       supabase.from("tool_usage").select("id", { count: "exact", head: true }),
       supabase
@@ -269,10 +305,16 @@ export async function getAdminStats(): Promise<AdminStats> {
         .from("tool_usage")
         .select("country, device")
         .gte("created_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()),
+      // Per-tool completion events (last 30 days), used for completion rate.
+      supabase
+        .from("tool_completions")
+        .select("tool_id")
+        .gte("created_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()),
     ]);
 
     const toolUsageCounts = countBy(perToolUsageRes.data ?? [], (r) => r.tool_id);
     const bookmarkCounts = countBy(perToolBookmarksRes.data ?? [], (r) => r.tool_id);
+    const completionCounts = countBy(perToolCompletionsRes.data ?? [], (r) => r.tool_id);
 
     const ratingAccum = new Map<string, { sum: number; count: number }>();
     for (const row of perToolRatingsRes.data ?? []) {
@@ -285,12 +327,17 @@ export async function getAdminStats(): Promise<AdminStats> {
     const toolRows: AdminToolRow[] = Object.values(TOOLS_BY_ID)
       .map((tool) => {
         const ratings = ratingAccum.get(tool.id);
+        const usage = toolUsageCounts.get(tool.id) ?? 0;
+        const completions = completionCounts.get(tool.id) ?? 0;
         return {
           ...tool,
-          usageCount: toolUsageCounts.get(tool.id) ?? 0,
+          usageCount: usage,
           bookmarkCount: bookmarkCounts.get(tool.id) ?? 0,
           averageRating: ratings ? Number((ratings.sum / ratings.count).toFixed(2)) : 0,
           ratingCount: ratings?.count ?? 0,
+          completionCount: completions,
+          completionRate: usage > 0 ? completions / usage : 0,
+          instrumented: INSTRUMENTED_TOOL_IDS.has(tool.id),
         };
       })
       .sort((a, b) => b.usageCount - a.usageCount);
@@ -644,6 +691,9 @@ function emptyToolRow(tool: Tool): AdminToolRow {
     bookmarkCount: 0,
     averageRating: 0,
     ratingCount: 0,
+    completionCount: 0,
+    completionRate: 0,
+    instrumented: INSTRUMENTED_TOOL_IDS.has(tool.id),
   };
 }
 

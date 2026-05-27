@@ -201,5 +201,5 @@ export function NdaGenerator() {
     </div>
   );
 
-  return <LegalDocumentBuilder form={form} document={document} filenamePrefix="nda" />;
+  return <LegalDocumentBuilder toolId="nda-generator" form={form} document={document} filenamePrefix="nda" />;
 }

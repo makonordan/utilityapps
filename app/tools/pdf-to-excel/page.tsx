@@ -54,6 +54,7 @@ export default function PdfToExcelPage() {
         serverProcessing
       >
         <OfficeConverter
+          toolId={TOOL_ID}
           target="pdf-to-xlsx"
           accept="application/pdf"
           dropLabel="Drop a PDF here or click to choose"

@@ -54,6 +54,7 @@ export default function WordToPdfPage() {
         serverProcessing
       >
         <OfficeConverter
+          toolId={TOOL_ID}
           target="docx-to-pdf"
           accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"
           dropLabel="Drop a Word document here or click to choose"

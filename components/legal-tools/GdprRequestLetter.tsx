@@ -218,5 +218,5 @@ export function GdprRequestLetter() {
     </div>
   );
 
-  return <LegalDocumentBuilder form={form} document={document} filenamePrefix="gdpr-request" />;
+  return <LegalDocumentBuilder toolId="gdpr-request-letter" form={form} document={document} filenamePrefix="gdpr-request" />;
 }

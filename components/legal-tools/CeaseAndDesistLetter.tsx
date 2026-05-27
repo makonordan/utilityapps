@@ -260,5 +260,5 @@ export function CeaseAndDesistLetter() {
     </div>
   );
 
-  return <LegalDocumentBuilder form={form} document={document} filenamePrefix="cease-and-desist" />;
+  return <LegalDocumentBuilder toolId="cease-and-desist-letter" form={form} document={document} filenamePrefix="cease-and-desist" />;
 }
