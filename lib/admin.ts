@@ -151,6 +151,26 @@ export interface GeoStats {
   totalEvents: number;
 }
 
+export interface ApiWaitlistEntry {
+  email: string;
+  useCase: string | null;
+  source: string | null;
+  createdAt: string;
+}
+
+export interface ApiWaitlistSummary {
+  /** Total signups across all time. */
+  total: number;
+  /** Demand threshold the operator set themselves; surfaced in the UI
+   *  as a progress bar so "100 signups = build it" is visible. */
+  goal: number;
+  /** Most recent N signups (no PII shown unless admin opens the row). */
+  recent: ApiWaitlistEntry[];
+  /** True when SUPABASE_SERVICE_ROLE_KEY is set and we could read the
+   *  table. Falls back to null/0 otherwise. */
+  readable: boolean;
+}
+
 export interface AdminStats {
   totalToolViews: number;
   newsletterCount: number;
@@ -170,6 +190,8 @@ export interface AdminStats {
   contactReadable: boolean;
   /** Share tool stats — null when service-role key is missing. */
   shareStats: ShareStats | null;
+  /** API access waitlist — demand validation surface. */
+  apiWaitlist: ApiWaitlistSummary;
   /** Geo + device breakdown of tool_usage (last 30 days). */
   geo: GeoStats;
   source: "supabase" | "fallback";
@@ -193,6 +215,7 @@ const EMPTY_STATS: Omit<AdminStats, "source" | "fallbackReason"> = {
   recentContactMessages: [],
   contactReadable: false,
   shareStats: null,
+  apiWaitlist: { total: 0, goal: 100, recent: [], readable: false },
   geo: { topCountries: [], devices: [], totalEvents: 0 },
 };
 
@@ -597,6 +620,50 @@ export async function getAdminStats(): Promise<AdminStats> {
       console.error("[admin/stats] share stats", err);
     }
 
+    // API waitlist — service-role read for the same PII reason as
+    // contact_messages. Capped at 100 recent entries; the dashboard card
+    // shows just the count + a progress bar against the 100-signup
+    // validation threshold.
+    const apiWaitlist: ApiWaitlistSummary = {
+      total: 0,
+      goal: 100,
+      recent: [],
+      readable: false,
+    };
+    try {
+      const adminMod = await import("./supabaseAdmin").catch(() => null);
+      const adminClient = adminMod?.getSupabaseAdmin() ?? null;
+      if (adminClient) {
+        apiWaitlist.readable = true;
+        const [countRes, recentRes] = await Promise.all([
+          adminClient
+            .from("api_waitlist")
+            .select("id", { count: "exact", head: true }),
+          adminClient
+            .from("api_waitlist")
+            .select("email, use_case, source, created_at")
+            .order("created_at", { ascending: false })
+            .limit(20),
+        ]);
+        apiWaitlist.total = countRes.count ?? 0;
+        apiWaitlist.recent = (
+          (recentRes.data ?? []) as Array<{
+            email: string;
+            use_case: string | null;
+            source: string | null;
+            created_at: string;
+          }>
+        ).map((r) => ({
+          email: r.email,
+          useCase: r.use_case,
+          source: r.source,
+          createdAt: r.created_at,
+        }));
+      }
+    } catch (err) {
+      console.error("[admin/stats] api_waitlist", err);
+    }
+
     // Contact messages — read with the service-role client. The
     // contact_messages table has no anon SELECT policy (it holds PII), so the
     // anon `supabase` client cannot read it. Falls back to empty when the
@@ -661,6 +728,7 @@ export async function getAdminStats(): Promise<AdminStats> {
       recentContactMessages,
       contactReadable,
       shareStats,
+      apiWaitlist,
       geo,
       source: "supabase",
     };

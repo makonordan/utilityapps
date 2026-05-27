@@ -348,3 +348,23 @@ create policy tool_completions_insert on public.tool_completions
 drop policy if exists tool_completions_select on public.tool_completions;
 create policy tool_completions_select on public.tool_completions
   for select to anon, authenticated using (true);
+
+-- 12. api_waitlist ----------------------------------------------------------
+-- Demand-validation waitlist for the public API. Email is PII; same posture
+-- as `newsletter_subscribers` — anon-INSERT only, no anon-SELECT. The admin
+-- dashboard reads via service-role.
+create table if not exists public.api_waitlist (
+  id         bigint generated always as identity primary key,
+  email      text not null unique,
+  use_case   text,                    -- optional: "what would you build?"
+  source     text,                    -- optional: where they signed up from
+  created_at timestamptz not null default now()
+);
+
+create index if not exists api_waitlist_created_at_idx
+  on public.api_waitlist (created_at desc);
+
+alter table public.api_waitlist enable row level security;
+drop policy if exists api_waitlist_insert on public.api_waitlist;
+create policy api_waitlist_insert on public.api_waitlist
+  for insert to anon, authenticated with check (true);

@@ -208,6 +208,44 @@ export async function subscribeNewsletter(
   }
 }
 
+// --- api waitlist ----------------------------------------------------------
+
+/**
+ * Add an email to the API access waitlist. Same shape as
+ * subscribeNewsletter — anon INSERT only, dedupes via unique index.
+ *
+ * Server callers should pass the service-role client so the insert
+ * bypasses RLS; falls back to the anon client which requires the
+ * `api_waitlist_insert` policy from schema.sql.
+ */
+export async function addToApiWaitlist(
+  email: string,
+  useCase: string | null = null,
+  source: string | null = null,
+  client: SupabaseClient = supabase
+): Promise<DbResult<true>> {
+  try {
+    const normalized = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
+      return fail("Invalid email address");
+    }
+    const { error } = await client
+      .from("api_waitlist")
+      .upsert(
+        {
+          email: normalized,
+          use_case: useCase?.trim() || null,
+          source: source?.trim() || null,
+        },
+        { onConflict: "email", ignoreDuplicates: true }
+      );
+    if (error) return fail(error);
+    return ok(true);
+  } catch (err) {
+    return fail(err);
+  }
+}
+
 // --- contact ---------------------------------------------------------------
 
 export async function saveContactMessage(

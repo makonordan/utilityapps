@@ -27,6 +27,7 @@ import type {
   AdminStats,
   AdminToolRow,
   AffiliateClickRow,
+  ApiWaitlistSummary,
   BlogViewSummary,
   ContactMessageSummary,
   GeoStats,
@@ -305,6 +306,13 @@ function OverviewTab({ stats }: { stats: AdminStats }) {
         <GeographySection geo={stats.geo} />
       </Section>
 
+      <Section
+        title="API access waitlist"
+        description="Demand validation. 100 signups means real demand; 10 means build something else."
+      >
+        <ApiWaitlistCard waitlist={stats.apiWaitlist} />
+      </Section>
+
       <Section title="Recent newsletter signups">
         <SubscriberList items={stats.recentSubscribers.slice(0, 8)} />
       </Section>
@@ -342,6 +350,95 @@ function GeographySection({ geo }: { geo: GeoStats }) {
           <Smartphone className="h-3.5 w-3.5" /> Devices
         </p>
         <BarList items={geo.devices} total={geo.totalEvents} />
+      </div>
+    </div>
+  );
+}
+
+function ApiWaitlistCard({ waitlist }: { waitlist: ApiWaitlistSummary }) {
+  if (!waitlist.readable) {
+    return (
+      <div className="rounded-2xl border border-warning-200 bg-warning-50 p-4 text-sm text-warning-800 dark:border-warning-500/30 dark:bg-warning-500/10 dark:text-warning-200">
+        Waitlist count unavailable — the SUPABASE_SERVICE_ROLE_KEY env var
+        is needed to read the <code>api_waitlist</code> table.
+      </div>
+    );
+  }
+
+  const pct = Math.min(100, (waitlist.total / waitlist.goal) * 100);
+  const reached = waitlist.total >= waitlist.goal;
+  const close = !reached && waitlist.total >= waitlist.goal * 0.5;
+
+  return (
+    <div className="grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)]">
+      <div className="rounded-2xl border border-surface-200 bg-white p-5 dark:border-surface-800 dark:bg-surface-900">
+        <p className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
+          Signups
+        </p>
+        <p className="mt-1 text-4xl font-bold tabular-nums text-surface-900 dark:text-white">
+          {formatNumber(waitlist.total)}
+          <span className="ml-2 text-sm font-medium text-surface-500 dark:text-surface-400">
+            of {waitlist.goal}
+          </span>
+        </p>
+        <p
+          className={cn(
+            "mt-1 text-xs",
+            reached
+              ? "text-success-700 dark:text-success-300"
+              : close
+                ? "text-warning-700 dark:text-warning-300"
+                : "text-surface-500 dark:text-surface-400"
+          )}
+        >
+          {reached
+            ? "🎉 Demand validated — start building."
+            : close
+              ? `Getting close — ${waitlist.goal - waitlist.total} more to go.`
+              : `${waitlist.goal - waitlist.total} more for the green light.`}
+        </p>
+        <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-surface-100 dark:bg-surface-800">
+          <div
+            className={cn(
+              "h-full rounded-full transition-all",
+              reached
+                ? "bg-success-500"
+                : close
+                  ? "bg-warning-500"
+                  : "bg-primary-500"
+            )}
+            style={{ width: `${pct}%` }}
+          />
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-surface-200 bg-white p-5 dark:border-surface-800 dark:bg-surface-900">
+        <p className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
+          Most recent signups
+        </p>
+        {waitlist.recent.length === 0 ? (
+          <p className="mt-3 text-sm text-surface-500 dark:text-surface-400">
+            Nobody yet. Push the /api page on socials and watch this fill.
+          </p>
+        ) : (
+          <ul className="mt-3 divide-y divide-surface-200 dark:divide-surface-800">
+            {waitlist.recent.slice(0, 8).map((entry) => (
+              <li key={`${entry.email}-${entry.createdAt}`} className="py-2 text-sm">
+                <p className="truncate font-mono text-xs text-surface-800 dark:text-surface-100">
+                  {entry.email}
+                </p>
+                {entry.useCase && (
+                  <p className="mt-0.5 truncate text-[11px] text-surface-600 dark:text-surface-300">
+                    &ldquo;{entry.useCase}&rdquo;
+                  </p>
+                )}
+                <p className="mt-0.5 text-[10px] text-surface-400">
+                  {formatDate(entry.createdAt)}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
