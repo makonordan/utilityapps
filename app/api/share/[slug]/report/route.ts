@@ -25,10 +25,13 @@ export async function POST(
     return NextResponse.json({ ok: true });
   }
 
-  // Mark + delete in one quick pass. We mark first so the cleanup-by-cron
-  // (future) and the deletion both see the reported flag in the audit log.
+  // Soft-delete: mark `reported = true`. The recipient page and access
+  // route both already treat `reported = true` as 404, so the share is
+  // immediately unreachable. The row stays in the DB so the admin can
+  // (a) see it in the moderation queue, (b) restore false positives,
+  // (c) decide whether to hard-delete. A future cleanup cron will sweep
+  // reported rows older than 24h.
   await shares.reportShare(slug);
-  await shares.deleteBySlug(slug);
 
   // Email notification — best-effort. Failure does not break the report.
   if (process.env.RESEND_API_KEY) {
@@ -42,9 +45,10 @@ export async function POST(
         body: JSON.stringify({
           from: process.env.RESEND_FROM ?? "noreply@utilityapps.site",
           to: ["hello@utilityapps.site"],
-          subject: `[Share reported & removed] ${slug}`,
+          subject: `[Share reported] ${slug}`,
           text: [
-            `A share was reported and auto-deleted.`,
+            `A share was reported and is now hidden from recipients.`,
+            `Review and restore (or hard-delete) at ${SITE_CONFIG.url}/admin → Share tab.`,
             ``,
             `Slug: ${slug}`,
             `URL was: ${SITE_CONFIG.url}/s/${slug}`,

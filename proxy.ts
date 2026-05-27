@@ -49,5 +49,8 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  // Both the admin UI pages AND the /api/admin/* routes need the cookie
+  // check. /api/admin/auth itself is allowed through inside `proxy()` so
+  // the login flow can issue the cookie.
+  matcher: ["/admin/:path*", "/api/admin/:path*"],
 };

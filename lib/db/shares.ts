@@ -519,6 +519,21 @@ export async function reportShare(slug: string): Promise<boolean> {
   return true;
 }
 
+/** Admin-only: clear the reported flag so the share is reachable again. */
+export async function unreportShare(slug: string): Promise<boolean> {
+  const client = getSupabaseAdmin();
+  if (!client) return false;
+  const { error } = await client
+    .from("shares")
+    .update({ reported: false, reported_at: null })
+    .eq("slug", slug);
+  if (error) {
+    console.error("[shares.unreportShare]", error);
+    return false;
+  }
+  return true;
+}
+
 // --------------------------------------------------- expiration checks
 
 /** Returns true if the row should be treated as unavailable. */

@@ -2,16 +2,22 @@
 
 import { useMemo, useState } from "react";
 import {
+  AlertOctagon,
   ArrowUpRight,
   BarChart3,
   BookText,
   ChevronRight,
   CircleDollarSign,
+  Globe2,
   Inbox,
   LogOut,
   Mail,
   RefreshCcw,
+  RotateCcw,
   Search,
+  Share2,
+  Smartphone,
+  Trash2,
   Wrench,
 } from "lucide-react";
 
@@ -23,18 +29,30 @@ import type {
   AffiliateClickRow,
   BlogViewSummary,
   ContactMessageSummary,
+  GeoStats,
   NewsletterSubscriberSummary,
+  ReportedShareRow,
+  ShareStats,
   SubscriberGrowthPoint,
   ZeroResultSearch,
 } from "@/lib/admin";
 import { TOOLS_BY_ID } from "@/lib/tools";
 import { cn, formatDate, formatNumber } from "@/lib/utils";
 
-type Tab = "overview" | "tools" | "blog" | "newsletter" | "contact" | "search" | "revenue";
+type Tab =
+  | "overview"
+  | "tools"
+  | "share"
+  | "blog"
+  | "newsletter"
+  | "contact"
+  | "search"
+  | "revenue";
 
 const TABS: { id: Tab; label: string; Icon: typeof BarChart3 }[] = [
   { id: "overview", label: "Overview", Icon: BarChart3 },
   { id: "tools", label: "Tools", Icon: Wrench },
+  { id: "share", label: "Share", Icon: Share2 },
   { id: "blog", label: "Blog", Icon: BookText },
   { id: "newsletter", label: "Newsletter", Icon: Mail },
   { id: "contact", label: "Contact", Icon: Inbox },
@@ -58,6 +76,7 @@ export function Dashboard({ stats }: { stats: AdminStats }) {
         <main className="min-w-0">
           {tab === "overview" && <OverviewTab stats={stats} />}
           {tab === "tools" && <ToolsTab rows={stats.toolRows} />}
+          {tab === "share" && <ShareTab stats={stats.shareStats} />}
           {tab === "blog" && <BlogTab views={stats.blogViews} />}
           {tab === "newsletter" && (
             <NewsletterTab
@@ -275,10 +294,83 @@ function OverviewTab({ stats }: { stats: AdminStats }) {
         />
       </Section>
 
+      <Section
+        title="Where the traffic comes from"
+        description="Tool-usage events, last 30 days"
+      >
+        <GeographySection geo={stats.geo} />
+      </Section>
+
       <Section title="Recent newsletter signups">
         <SubscriberList items={stats.recentSubscribers.slice(0, 8)} />
       </Section>
     </div>
+  );
+}
+
+// ----- Geography (used inside Overview) ------------------------------------
+
+function GeographySection({ geo }: { geo: GeoStats }) {
+  if (geo.totalEvents === 0) {
+    return (
+      <p className="rounded-2xl border border-surface-200 bg-white p-4 text-sm text-surface-500 dark:border-surface-800 dark:bg-surface-900 dark:text-surface-400">
+        No events yet for the last 30 days.
+      </p>
+    );
+  }
+  return (
+    <div className="grid gap-4 lg:grid-cols-2">
+      <div className="rounded-2xl border border-surface-200 bg-white p-4 dark:border-surface-800 dark:bg-surface-900">
+        <p className="mb-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
+          <Globe2 className="h-3.5 w-3.5" /> Top countries
+        </p>
+        <BarList items={geo.topCountries} total={geo.totalEvents} />
+      </div>
+      <div className="rounded-2xl border border-surface-200 bg-white p-4 dark:border-surface-800 dark:bg-surface-900">
+        <p className="mb-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
+          <Smartphone className="h-3.5 w-3.5" /> Devices
+        </p>
+        <BarList items={geo.devices} total={geo.totalEvents} />
+      </div>
+    </div>
+  );
+}
+
+/** Horizontal bar list with label, count, and percentage. */
+function BarList({
+  items,
+  total,
+}: {
+  items: { label: string; count: number }[];
+  total: number;
+}) {
+  if (items.length === 0) {
+    return <p className="text-sm text-surface-500 dark:text-surface-400">No data.</p>;
+  }
+  const max = Math.max(...items.map((i) => i.count));
+  return (
+    <ul className="space-y-2">
+      {items.map((item) => {
+        const pct = total > 0 ? (item.count / total) * 100 : 0;
+        const widthPct = max > 0 ? (item.count / max) * 100 : 0;
+        return (
+          <li key={item.label}>
+            <div className="flex items-center justify-between text-xs text-surface-700 dark:text-surface-200">
+              <span className="truncate">{item.label}</span>
+              <span className="tabular-nums text-surface-500 dark:text-surface-400">
+                {formatNumber(item.count)} · {pct.toFixed(1)}%
+              </span>
+            </div>
+            <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-surface-100 dark:bg-surface-800">
+              <div
+                className="h-full rounded-full bg-primary-500"
+                style={{ width: `${widthPct}%` }}
+              />
+            </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
@@ -330,6 +422,329 @@ function ToolsTab({ rows }: { rows: AdminToolRow[] }) {
         ])}
         emptyText="No tools."
       />
+    </div>
+  );
+}
+
+// ----- Share ---------------------------------------------------------------
+
+function formatBytesShort(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  if (bytes < 1024 * 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+  return `${(bytes / 1024 / 1024 / 1024).toFixed(2)} GB`;
+}
+
+function ShareTab({ stats }: { stats: ShareStats | null }) {
+  if (!stats) {
+    return (
+      <p className="rounded-2xl border border-warning-200 bg-warning-50 p-4 text-sm text-warning-800 dark:border-warning-500/30 dark:bg-warning-500/10 dark:text-warning-200">
+        Share stats unavailable — the SUPABASE_SERVICE_ROLE_KEY env var is
+        needed to read the <code>shares</code> table.
+      </p>
+    );
+  }
+
+  // Derive a 30-day total for the per-day chart and the max daily count
+  // (so the sparkline scales nicely without a chart library).
+  const last30Total = stats.daily.reduce(
+    (sum, d) => sum + d.file + d.text + d.url,
+    0
+  );
+  const last30Bytes = stats.daily.reduce((sum, d) => sum + d.fileBytes, 0);
+
+  return (
+    <div>
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <li>
+          <StatCard
+            label="Total shares"
+            value={formatNumber(stats.total)}
+            hint="All time"
+          />
+        </li>
+        <li>
+          <StatCard
+            label="Shares last 30d"
+            value={formatNumber(last30Total)}
+            hint={`${formatBytesShort(last30Bytes)} of new files`}
+          />
+        </li>
+        <li>
+          <StatCard
+            label="Storage used"
+            value={formatBytesShort(stats.storageBytes)}
+            hint="Excludes hidden / reported"
+          />
+        </li>
+        <li>
+          <StatCard
+            label="Reported queue"
+            value={formatNumber(stats.reportedQueue.length)}
+            hint={
+              stats.reportedQueue.length > 0
+                ? "Needs review"
+                : "Nothing to review"
+            }
+          />
+        </li>
+      </ul>
+
+      <Section title="Share types" description="Lifetime totals + 30-day trend">
+        <div className="grid gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
+          <div className="rounded-2xl border border-surface-200 bg-white p-4 dark:border-surface-800 dark:bg-surface-900">
+            <BarList
+              items={[
+                { label: "Files", count: stats.filesTotal },
+                { label: "Text snippets", count: stats.textTotal },
+                { label: "URLs", count: stats.urlTotal },
+              ]}
+              total={Math.max(1, stats.total)}
+            />
+            <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-surface-200 pt-3 text-xs dark:border-surface-800">
+              <div>
+                <dt className="text-surface-500 dark:text-surface-400">
+                  Custom slug
+                </dt>
+                <dd className="font-semibold text-surface-800 dark:text-surface-100">
+                  {(stats.customSlugRate * 100).toFixed(1)}%
+                </dd>
+              </div>
+              <div>
+                <dt className="text-surface-500 dark:text-surface-400">
+                  Password-protected
+                </dt>
+                <dd className="font-semibold text-surface-800 dark:text-surface-100">
+                  {(stats.passwordProtectedRate * 100).toFixed(1)}%
+                </dd>
+              </div>
+            </dl>
+          </div>
+          <div className="rounded-2xl border border-surface-200 bg-white p-4 dark:border-surface-800 dark:bg-surface-900">
+            <ShareDailyChart daily={stats.daily} />
+          </div>
+        </div>
+      </Section>
+
+      <Section title="Most-shared file types" description="All-time, file shares only">
+        <div className="rounded-2xl border border-surface-200 bg-white p-4 dark:border-surface-800 dark:bg-surface-900">
+          {stats.topFileTypes.length === 0 ? (
+            <p className="text-sm text-surface-500 dark:text-surface-400">
+              No file shares yet.
+            </p>
+          ) : (
+            <BarList
+              items={stats.topFileTypes.map((t) => ({
+                label: t.mimetype,
+                count: t.count,
+              }))}
+              total={stats.filesTotal}
+            />
+          )}
+        </div>
+      </Section>
+
+      <Section
+        title="Reported shares"
+        description="Hidden from recipients. Restore false positives or hard-delete."
+      >
+        <ReportedQueue items={stats.reportedQueue} />
+      </Section>
+    </div>
+  );
+}
+
+/** Stacked column chart for the 30-day share daily series — pure SVG so we
+ *  don't drag a chart library in just for one widget. */
+function ShareDailyChart({ daily }: { daily: ShareStats["daily"] }) {
+  const max = Math.max(
+    1,
+    ...daily.map((d) => d.file + d.text + d.url)
+  );
+  const barWidth = 100 / daily.length;
+  return (
+    <div>
+      <svg viewBox="0 0 100 60" preserveAspectRatio="none" className="h-40 w-full">
+        {daily.map((d, i) => {
+          const total = d.file + d.text + d.url;
+          const h = (total / max) * 56; // leave 4px headroom
+          const fileH = (d.file / max) * 56;
+          const textH = (d.text / max) * 56;
+          const urlH = (d.url / max) * 56;
+          const x = i * barWidth + barWidth * 0.15;
+          const w = barWidth * 0.7;
+          let y = 60 - h;
+          return (
+            <g key={d.date}>
+              {/* file = blue */}
+              {d.file > 0 && (
+                <rect x={x} y={y} width={w} height={fileH} fill="#0066FF" />
+              )}
+              {/* text = indigo */}
+              {d.text > 0 && (
+                <rect
+                  x={x}
+                  y={(y += fileH)}
+                  width={w}
+                  height={textH}
+                  fill="#7C3AED"
+                />
+              )}
+              {/* url = teal */}
+              {d.url > 0 && (
+                <rect
+                  x={x}
+                  y={(y += textH)}
+                  width={w}
+                  height={urlH}
+                  fill="#14B8A6"
+                />
+              )}
+            </g>
+          );
+        })}
+      </svg>
+      <div className="mt-3 flex flex-wrap items-center gap-3 text-[11px] text-surface-600 dark:text-surface-300">
+        <Legend color="#0066FF" label="Files" />
+        <Legend color="#7C3AED" label="Text" />
+        <Legend color="#14B8A6" label="URLs" />
+        <span className="ml-auto text-surface-400">Last 30 days</span>
+      </div>
+    </div>
+  );
+}
+
+function Legend({ color, label }: { color: string; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <span className="inline-block h-2 w-2 rounded-sm" style={{ background: color }} />
+      {label}
+    </span>
+  );
+}
+
+function ReportedQueue({ items }: { items: ReportedShareRow[] }) {
+  // Local state so a restore/delete action removes the row from view
+  // without a full page refresh. The server still has the source of truth
+  // — a hard refresh re-fetches.
+  const [rows, setRows] = useState(items);
+  const [busySlug, setBusySlug] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const restore = async (slug: string) => {
+    setBusySlug(slug);
+    setError(null);
+    try {
+      const res = await fetch(
+        `/api/admin/shares/${encodeURIComponent(slug)}/restore`,
+        { method: "POST" }
+      );
+      if (!res.ok) {
+        const data = (await res.json().catch(() => null)) as { error?: string } | null;
+        setError(data?.error ?? "Couldn't restore.");
+        return;
+      }
+      setRows((prev) => prev.filter((r) => r.slug !== slug));
+    } catch {
+      setError("Network error.");
+    } finally {
+      setBusySlug(null);
+    }
+  };
+
+  const hardDelete = async (slug: string) => {
+    if (!confirm(`Hard-delete share ${slug}? This removes the row and (for files) the Storage object. Cannot be undone.`)) {
+      return;
+    }
+    setBusySlug(slug);
+    setError(null);
+    try {
+      const res = await fetch(`/api/admin/shares/${encodeURIComponent(slug)}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => null)) as { error?: string } | null;
+        setError(data?.error ?? "Couldn't delete.");
+        return;
+      }
+      setRows((prev) => prev.filter((r) => r.slug !== slug));
+    } catch {
+      setError("Network error.");
+    } finally {
+      setBusySlug(null);
+    }
+  };
+
+  if (rows.length === 0) {
+    return (
+      <div className="rounded-2xl border border-success-200 bg-success-50 p-4 text-sm text-success-800 dark:border-success-500/30 dark:bg-success-500/10 dark:text-success-300">
+        Nothing reported. Quiet day.
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3">
+      {error && (
+        <p className="rounded-md bg-error-50 px-3 py-2 text-xs text-error-700 dark:bg-error-500/10 dark:text-error-300">
+          {error}
+        </p>
+      )}
+      {rows.map((r) => (
+        <article
+          key={r.slug}
+          className="rounded-2xl border border-warning-200 bg-warning-50 p-4 dark:border-warning-500/30 dark:bg-warning-500/10"
+        >
+          <header className="flex flex-wrap items-start justify-between gap-2">
+            <div>
+              <p className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-warning-700 dark:text-warning-300">
+                <AlertOctagon className="h-3 w-3" /> {r.type} · /s/{r.slug}
+              </p>
+              <p className="mt-1 text-[11px] text-surface-500 dark:text-surface-400">
+                Reported {formatDate(r.reportedAt)} · created {formatDate(r.createdAt)} ·{" "}
+                {r.viewCount} view{r.viewCount === 1 ? "" : "s"}
+              </p>
+            </div>
+            <div className="flex gap-1.5">
+              <button
+                type="button"
+                disabled={busySlug === r.slug}
+                onClick={() => restore(r.slug)}
+                className="inline-flex items-center gap-1 rounded-md bg-white px-2.5 py-1.5 text-[11px] font-semibold text-surface-700 shadow-sm hover:bg-surface-50 disabled:opacity-50 dark:bg-surface-950 dark:text-surface-100"
+              >
+                <RotateCcw className="h-3 w-3" /> Restore
+              </button>
+              <button
+                type="button"
+                disabled={busySlug === r.slug}
+                onClick={() => hardDelete(r.slug)}
+                className="inline-flex items-center gap-1 rounded-md bg-error-600 px-2.5 py-1.5 text-[11px] font-semibold text-white hover:bg-error-700 disabled:opacity-50"
+              >
+                <Trash2 className="h-3 w-3" /> Delete
+              </button>
+            </div>
+          </header>
+
+          {r.type === "text" && r.textPreview && (
+            <pre className="mt-3 max-h-32 overflow-y-auto whitespace-pre-wrap break-words rounded-md bg-white p-2 font-mono text-[11px] text-surface-700 dark:bg-surface-950 dark:text-surface-200">
+              {r.textPreview}
+              {r.textPreview.length === 500 && "…"}
+            </pre>
+          )}
+          {r.type === "url" && r.originalUrl && (
+            <p className="mt-3 break-all rounded-md bg-white p-2 font-mono text-[11px] text-surface-700 dark:bg-surface-950 dark:text-surface-200">
+              → {r.originalUrl}
+            </p>
+          )}
+          {r.type === "file" && r.fileName && (
+            <p className="mt-3 rounded-md bg-white p-2 text-[11px] text-surface-700 dark:bg-surface-950 dark:text-surface-200">
+              📎 <strong>{r.fileName}</strong>
+              {r.fileMimetype ? ` · ${r.fileMimetype}` : ""}
+              {r.fileSize != null ? ` · ${formatBytesShort(r.fileSize)}` : ""}
+            </p>
+          )}
+        </article>
+      ))}
     </div>
   );
 }
