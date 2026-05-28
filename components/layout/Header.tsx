@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 
+import { PageTranslate } from "@/components/page-translate/PageTranslate";
 import { CATEGORIES } from "@/lib/categories";
 import { TOOLS, toolCountPhrase, type Tool } from "@/lib/tools";
 import { cn } from "@/lib/utils";
@@ -462,6 +463,7 @@ export function Header() {
           >
             <Search className="h-4 w-4" />
           </button>
+          <PageTranslate />
           <ThemeToggle />
           <a
             href="/donate"
