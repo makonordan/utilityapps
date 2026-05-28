@@ -24,6 +24,7 @@ const TRENDING_CATEGORY_ORDER = [
   "SEO Tools",
   "Productivity Tools",
   "Legal Tools",
+  "Language Tools",
   "Design Tools",
   "Student Tools",
   "Sleep Tools",

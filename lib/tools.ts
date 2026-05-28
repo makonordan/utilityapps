@@ -2619,6 +2619,35 @@ export const TOOLS: Tool[] = [
     cpc: 7,
     relatedTools: ["dmca-takedown-notice", "nda-generator", "gdpr-request-letter"],
   },
+
+  // ============================================================ Language Tools
+  {
+    id: "translator",
+    name: "Private Translator",
+    description:
+      "Translate text on your device — your words never leave your browser. No signup, no tracking.",
+    longDescription:
+      "A private translator powered by your browser's built-in, on-device AI translation model (Chrome / Edge 138+). Unlike Google Translate, your text is never sent to a server — it's translated locally and works offline once the language pack downloads. Auto-detects the source language, supports ~25 languages, and falls back to a one-click Google Translate link on browsers without on-device translation.",
+    category: "Language Tools",
+    icon: "Languages",
+    href: "/tools/translator",
+    externalHref: null,
+    embedUrl: null,
+    keywords: [
+      "private translator",
+      "offline translator",
+      "on-device translation",
+      "translate without sending data",
+      "browser translator",
+      "free translator no signup",
+    ],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 2_500_000,
+    cpc: 3,
+    relatedTools: ["paraphrasing-tool", "citation-generator"],
+  },
 ];
 
 export const TOOLS_BY_ID: Record<string, Tool> = TOOLS.reduce(

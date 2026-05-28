@@ -129,6 +129,15 @@ const CATEGORY_DEFINITIONS: Omit<Category, "toolCount">[] = [
     featured: true,
   },
   {
+    id: "language-tools",
+    name: "Language Tools",
+    description:
+      "Translate text privately, on your device — your words never leave your browser. Plus language detection and more, no signup.",
+    icon: "Languages",
+    color: "#0891B2",
+    featured: true,
+  },
+  {
     id: "developer-tools",
     name: "Developer Tools",
     description:
