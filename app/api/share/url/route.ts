@@ -17,10 +17,15 @@ const MAX_URL_LENGTH = 2048;
  * first report. This list catches the laziest abuse only.
  */
 const BLOCKED_HOSTS = new Set([
+  // SSRF-adjacent — never shorten URLs that point at the local machine
+  // or unroutable addresses.
   "localhost",
   "127.0.0.1",
   "0.0.0.0",
-  "utilityapps.site", // we'd loop a shortener that points back at us
+  // (utilityapps.site removed — was overly defensive. Reported shares
+  //  are already auto-hidden so the "obscure abuse via shortener" vector
+  //  is moot, and the block was preventing legitimate use like sharing
+  //  a tool or blog URL through the shortener.)
   // Add reported domains here as they come in.
 ]);
 
