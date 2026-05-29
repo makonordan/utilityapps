@@ -313,6 +313,13 @@ function OverviewTab({ stats }: { stats: AdminStats }) {
         <ApiWaitlistCard waitlist={stats.apiWaitlist} />
       </Section>
 
+      <Section
+        title="Chrome extension waitlist"
+        description="Banner signups. 100 in two weeks = build it; ~10 = build something else first."
+      >
+        <ApiWaitlistCard waitlist={stats.extensionWaitlist} />
+      </Section>
+
       <Section title="Recent newsletter signups">
         <SubscriberList items={stats.recentSubscribers.slice(0, 8)} />
       </Section>

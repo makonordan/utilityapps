@@ -10,6 +10,8 @@ interface Body {
   email?: unknown;
   useCase?: unknown;
   source?: unknown;
+  /** Which waitlist: "api" (default) or "extension". */
+  list?: unknown;
   /** Honeypot field — bots fill it; humans don't see it (display: none). */
   website?: unknown;
 }
@@ -17,11 +19,14 @@ interface Body {
 /**
  * POST /api/waitlist
  *
- * Demand-validation signup for the future public API. Anyone can post
- * (no signup, no auth), but we apply:
+ * Demand-validation signup. Handles two waitlists via the `list` field:
+ *   - "api"       (default) → api_waitlist, captures optional use-case
+ *   - "extension"           → extension_waitlist, email only
+ *
+ * Anyone can post (no signup, no auth), but we apply:
  *   - basic email validation (server-side)
  *   - honeypot field to block dumb bots
- *   - service-role insert that bypasses RLS, so the table can stay
+ *   - service-role insert that bypasses RLS, so the tables can stay
  *     write-only from the anon side (emails are PII)
  *
  * Best-effort error reporting — failures go to Sentry via reportError.
@@ -56,6 +61,8 @@ export async function POST(request: NextRequest) {
       ? body.source.trim().slice(0, MAX_SOURCE)
       : null;
 
+  const list = body.list === "extension" ? "extension" : "api";
+
   try {
     const [queries, admin] = await Promise.all([
       import("@/lib/db/queries").catch(() => null),
@@ -65,15 +72,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ ok: true, persisted: false });
     }
     const adminClient = admin?.getSupabaseAdmin?.() ?? undefined;
-    const result = await queries.addToApiWaitlist(
-      email,
-      useCase,
-      source ?? "api-page",
-      adminClient
-    );
+    const result =
+      list === "extension"
+        ? await queries.addToExtensionWaitlist(
+            email,
+            source ?? "extension-banner",
+            adminClient
+          )
+        : await queries.addToApiWaitlist(
+            email,
+            useCase,
+            source ?? "api-page",
+            adminClient
+          );
     if (result.error) {
       const { reportError } = await import("@/lib/error-reporting");
-      reportError(result.error, { tag: "api/waitlist", extra: { email } });
+      reportError(result.error, { tag: `api/waitlist/${list}`, extra: { email } });
       return NextResponse.json({ error: result.error }, { status: 400 });
     }
     return NextResponse.json({ ok: true });

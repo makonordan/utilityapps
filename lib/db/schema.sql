@@ -368,3 +368,23 @@ alter table public.api_waitlist enable row level security;
 drop policy if exists api_waitlist_insert on public.api_waitlist;
 create policy api_waitlist_insert on public.api_waitlist
   for insert to anon, authenticated with check (true);
+
+-- 13. extension_waitlist ----------------------------------------------------
+-- Demand-validation waitlist for a possible Chrome extension. Same posture
+-- as api_waitlist — anon-INSERT only, no anon-SELECT (email is PII; admin
+-- reads via service-role). Kept as its own table so the two waitlists'
+-- counts never mix.
+create table if not exists public.extension_waitlist (
+  id         bigint generated always as identity primary key,
+  email      text not null unique,
+  source     text,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists extension_waitlist_created_at_idx
+  on public.extension_waitlist (created_at desc);
+
+alter table public.extension_waitlist enable row level security;
+drop policy if exists extension_waitlist_insert on public.extension_waitlist;
+create policy extension_waitlist_insert on public.extension_waitlist
+  for insert to anon, authenticated with check (true);

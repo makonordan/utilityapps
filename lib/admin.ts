@@ -192,6 +192,8 @@ export interface AdminStats {
   shareStats: ShareStats | null;
   /** API access waitlist — demand validation surface. */
   apiWaitlist: ApiWaitlistSummary;
+  /** Chrome-extension waitlist — demand validation surface. */
+  extensionWaitlist: ApiWaitlistSummary;
   /** Geo + device breakdown of tool_usage (last 30 days). */
   geo: GeoStats;
   source: "supabase" | "fallback";
@@ -216,6 +218,7 @@ const EMPTY_STATS: Omit<AdminStats, "source" | "fallbackReason"> = {
   contactReadable: false,
   shareStats: null,
   apiWaitlist: { total: 0, goal: 100, recent: [], readable: false },
+  extensionWaitlist: { total: 0, goal: 100, recent: [], readable: false },
   geo: { topCountries: [], devices: [], totalEvents: 0 },
 };
 
@@ -664,6 +667,46 @@ export async function getAdminStats(): Promise<AdminStats> {
       console.error("[admin/stats] api_waitlist", err);
     }
 
+    // Chrome-extension waitlist — same service-role read pattern.
+    const extensionWaitlist: ApiWaitlistSummary = {
+      total: 0,
+      goal: 100,
+      recent: [],
+      readable: false,
+    };
+    try {
+      const adminMod = await import("./supabaseAdmin").catch(() => null);
+      const adminClient = adminMod?.getSupabaseAdmin() ?? null;
+      if (adminClient) {
+        extensionWaitlist.readable = true;
+        const [countRes, recentRes] = await Promise.all([
+          adminClient
+            .from("extension_waitlist")
+            .select("id", { count: "exact", head: true }),
+          adminClient
+            .from("extension_waitlist")
+            .select("email, source, created_at")
+            .order("created_at", { ascending: false })
+            .limit(20),
+        ]);
+        extensionWaitlist.total = countRes.count ?? 0;
+        extensionWaitlist.recent = (
+          (recentRes.data ?? []) as Array<{
+            email: string;
+            source: string | null;
+            created_at: string;
+          }>
+        ).map((r) => ({
+          email: r.email,
+          useCase: null,
+          source: r.source,
+          createdAt: r.created_at,
+        }));
+      }
+    } catch (err) {
+      console.error("[admin/stats] extension_waitlist", err);
+    }
+
     // Contact messages — read with the service-role client. The
     // contact_messages table has no anon SELECT policy (it holds PII), so the
     // anon `supabase` client cannot read it. Falls back to empty when the
@@ -729,6 +772,7 @@ export async function getAdminStats(): Promise<AdminStats> {
       contactReadable,
       shareStats,
       apiWaitlist,
+      extensionWaitlist,
       geo,
       source: "supabase",
     };

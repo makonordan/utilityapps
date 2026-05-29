@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 
 import { AdSenseScript } from "@/components/ads/AdSenseScript";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { ExtensionBanner } from "@/components/extension-banner/ExtensionBanner";
 import { CookieConsent } from "@/components/layout/CookieConsent";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -124,6 +125,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           Skip to main content
         </a>
         <ThemeProvider>
+          <ExtensionBanner />
           <Header />
           <main id="main-content" className="flex-1">
             {children}

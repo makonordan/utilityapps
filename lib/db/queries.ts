@@ -246,6 +246,34 @@ export async function addToApiWaitlist(
   }
 }
 
+/**
+ * Add an email to the Chrome extension waitlist. Mirror of
+ * addToApiWaitlist but against extension_waitlist and without a
+ * use-case field (the banner only captures email).
+ */
+export async function addToExtensionWaitlist(
+  email: string,
+  source: string | null = null,
+  client: SupabaseClient = supabase
+): Promise<DbResult<true>> {
+  try {
+    const normalized = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
+      return fail("Invalid email address");
+    }
+    const { error } = await client
+      .from("extension_waitlist")
+      .upsert(
+        { email: normalized, source: source?.trim() || null },
+        { onConflict: "email", ignoreDuplicates: true }
+      );
+    if (error) return fail(error);
+    return ok(true);
+  } catch (err) {
+    return fail(err);
+  }
+}
+
 // --- contact ---------------------------------------------------------------
 
 export async function saveContactMessage(
