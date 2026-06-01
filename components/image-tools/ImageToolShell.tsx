@@ -13,6 +13,7 @@ import { AdSlot } from "@/components/ads/AdSlot";
 import { ToolCard } from "@/components/tools/ToolCard";
 import { ToolFAQ, type FAQItem } from "@/components/tools/ToolFAQ";
 import { ToolRatingBadge } from "@/components/tools/ToolRatingBadge";
+import { ToolVsLinks } from "@/components/tools/ToolVsLinks";
 import { getIcon } from "@/lib/icons";
 import {
   IMAGE_TOOL_PUBLISHED,
@@ -279,6 +280,8 @@ export async function ImageToolShell({
 
       {/* All sibling image tools — every other tool in the category, so users
           can jump between them without going back to the hub. */}
+      <ToolVsLinks toolId={toolId} />
+
       {related.length > 0 && (
         <section className="mt-14 space-y-5">
           <div className="flex flex-wrap items-end justify-between gap-3">

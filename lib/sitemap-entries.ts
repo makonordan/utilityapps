@@ -2,7 +2,7 @@ import "server-only";
 
 import { CATEGORIES } from "./categories";
 import { getPostMetas } from "./blog";
-import { TOOL_VS_COMPETITOR } from "./competitorComparisons";
+import { TOOL_VS_COMPETITOR, getCompetitorsWithTools } from "./competitorComparisons";
 import { PRODUCTS } from "./products";
 import { TOOLS } from "./tools";
 import { SITE_CONFIG } from "./utils";
@@ -94,6 +94,18 @@ export async function getSitemapEntries(): Promise<SitemapEntry[]> {
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.65,
+    });
+  }
+
+  // Per-competitor alternative-hub pages (e.g. /alternatives/ilovepdf).
+  // Slightly higher priority than /vs/ since each hub fans out to multiple
+  // tools and serves as a category-level alternative entry point.
+  for (const competitor of getCompetitorsWithTools()) {
+    entries.push({
+      url: `${SITE_CONFIG.url}/alternatives/${competitor.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
     });
   }
 

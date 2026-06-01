@@ -164,6 +164,16 @@ export default async function VsPage({ params }: RouteParams) {
         <PrimaryCta tool={tool} />
       </section>
 
+      <section className="mx-auto max-w-5xl px-4 pb-10 sm:px-6">
+        <Link
+          href={`/alternatives/${competitor.slug}`}
+          className="inline-flex items-center gap-2 text-sm font-medium text-primary-700 hover:underline dark:text-primary-300"
+        >
+          See all free {competitor.name} alternatives
+          <ChevronRight className="h-4 w-4" aria-hidden="true" />
+        </Link>
+      </section>
+
       <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
         <ToolFAQ items={faqs} title="Common questions" />
       </section>

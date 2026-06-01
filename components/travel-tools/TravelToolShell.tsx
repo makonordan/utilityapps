@@ -6,6 +6,7 @@ import { AdSlot } from "@/components/ads/AdSlot";
 import { ToolCard } from "@/components/tools/ToolCard";
 import { ToolFAQ, type FAQItem } from "@/components/tools/ToolFAQ";
 import { ToolRatingBadge } from "@/components/tools/ToolRatingBadge";
+import { ToolVsLinks } from "@/components/tools/ToolVsLinks";
 import { getIcon } from "@/lib/icons";
 import {
   TRAVEL_TOOL_PUBLISHED,
@@ -140,6 +141,8 @@ export async function TravelToolShell({
           <ToolFAQ items={faqItems} />
         </div>
       )}
+
+      <ToolVsLinks toolId={toolId} />
 
       {related.length > 0 && (
         <section className="mt-14 space-y-5">
