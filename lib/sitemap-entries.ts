@@ -2,6 +2,7 @@ import "server-only";
 
 import { CATEGORIES } from "./categories";
 import { getPostMetas } from "./blog";
+import { TOOL_VS_COMPETITOR } from "./competitorComparisons";
 import { PRODUCTS } from "./products";
 import { TOOLS } from "./tools";
 import { SITE_CONFIG } from "./utils";
@@ -83,6 +84,17 @@ export async function getSitemapEntries(): Promise<SitemapEntry[]> {
         priority: 0.6,
       });
     }
+  }
+
+  // Competitor /vs/ comparison pages — high-intent commercial queries
+  // (e.g. "iLovePDF alternative", "merge pdf vs Smallpdf").
+  for (const entry of TOOL_VS_COMPETITOR) {
+    entries.push({
+      url: `${SITE_CONFIG.url}/vs/${entry.toolId}-vs-${entry.competitorSlug}`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.65,
+    });
   }
 
   for (const product of PRODUCTS) {
