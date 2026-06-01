@@ -16,10 +16,12 @@ const RESOURCES = [
   { label: "YouTube", href: "/youtube" },
   { label: "Newsletter", href: "/newsletter" },
   { label: "API (alpha)", href: "/api" },
+  { label: "Changelog", href: "/changelog" },
 ];
 
 const COMPANY = [
   { label: "About", href: "/about" },
+  { label: "Press kit", href: "/press" },
   { label: "Contact", href: "/contact" },
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },

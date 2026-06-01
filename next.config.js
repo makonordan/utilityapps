@@ -46,11 +46,24 @@ const nextConfig = {
     ],
   },
   async headers() {
+    // /embed/* must be iframable from third-party sites — that's the
+    // whole point. We swap X-Frame-Options for a permissive CSP
+    // frame-ancestors and re-apply the rest of the security headers.
+    const embedHeaders = securityHeaders
+      .filter((h) => h.key !== "X-Frame-Options")
+      .concat([
+        { key: "Content-Security-Policy", value: "frame-ancestors *" },
+      ]);
     return [
       // Default headers on every response.
       {
         source: "/:path*",
         headers: securityHeaders,
+      },
+      // Override for embeddable tool routes only.
+      {
+        source: "/embed/:path*",
+        headers: embedHeaders,
       },
       // Hashed build assets — already content-hashed, so cache forever.
       {

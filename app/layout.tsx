@@ -8,6 +8,7 @@ import { ExtensionBanner } from "@/components/extension-banner/ExtensionBanner";
 import { CookieConsent } from "@/components/layout/CookieConsent";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { HideOnEmbed } from "@/components/layout/HideOnEmbed";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { SearchModal } from "@/components/search/SearchModal";
 import { RecentlyUsed } from "@/components/tools/RecentlyUsed";
@@ -125,19 +126,25 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           Skip to main content
         </a>
         <ThemeProvider>
-          <ExtensionBanner />
-          <Header />
+          <HideOnEmbed>
+            <ExtensionBanner />
+            <Header />
+          </HideOnEmbed>
           <main id="main-content" className="flex-1">
             {children}
           </main>
-          <Footer />
-          <SearchModal />
-          <RecentlyUsed />
-          <CookieConsent />
+          <HideOnEmbed>
+            <Footer />
+            <SearchModal />
+            <RecentlyUsed />
+            <CookieConsent />
+          </HideOnEmbed>
         </ThemeProvider>
         <Analytics />
         <GoogleAnalytics />
-        <WhatsAppButton />
+        <HideOnEmbed>
+          <WhatsAppButton />
+        </HideOnEmbed>
       </body>
     </html>
   );
