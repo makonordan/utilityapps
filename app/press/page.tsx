@@ -44,7 +44,7 @@ const PITCH_TWO_SENTENCES =
   `${SITE_CONFIG.name} is a free-tools platform with more than ${TOOLS.length} utilities across PDF, image, video, audio, design, developer, productivity, student, legal, language, sleep, and travel categories. Most tools run entirely in the browser — no signup, no daily cap, and no Pro upsell.`;
 
 const PITCH_PARAGRAPH =
-  `${SITE_CONFIG.name} is a privacy-first free-tools platform built by Daniel Makonor under the Neospace Tech brand. It packs more than ${TOOLS.length} utilities — from PDF merging and image compression to citation generators and noise mixers — into a single fast-loading site. The product thesis is simple: tools that should be free, with no signup, no usage caps, and no Pro upsell. Most tools run entirely client-side so files never leave the user's browser. The site is monetized through tasteful display ads on surrounding pages and optional digital products, never by gating the tools themselves.`;
+  `${SITE_CONFIG.name} is a privacy-first free-tools platform built by Daniel Makonor. It packs more than ${TOOLS.length} utilities — from PDF merging and image compression to citation generators and noise mixers — into a single fast-loading site. The product thesis is simple: tools that should be free, with no signup, no usage caps, and no Pro upsell. Most tools run entirely client-side so files never leave the user's browser. The site is monetized through tasteful display ads on surrounding pages and optional digital products, never by gating the tools themselves.`;
 
 const BRAND_COLORS = [
   { name: "Brand Navy", hex: "#0E1A2B" },
@@ -81,7 +81,7 @@ const SOCIAL_LINKS = [
 
 const FOUNDER_NAME = "Daniel Makonor";
 const FOUNDER_BIO =
-  "Daniel Makonor is the founder of Neospace Tech and the operator behind UtilityApps. ~10 years in software, starting as a software engineer and data engineer, now operating as a software project manager and business analyst. Ships across telecoms, finance, oil and gas, healthcare, education, no-code, compliance, and public sector.";
+  `Daniel Makonor is the founder and operator of ${SITE_CONFIG.name}. ~10 years in software, starting as a software engineer and data engineer, now operating as a software project manager and business analyst. Ships across telecoms, finance, oil and gas, healthcare, education, no-code, compliance, and public sector.`;
 
 export default function PressPage() {
   const toolsCount = TOOLS.length;
@@ -140,7 +140,7 @@ export default function PressPage() {
           <h3 className="text-lg font-bold text-surface-900 dark:text-white">
             {FOUNDER_NAME}
             <span className="ml-2 text-sm font-medium text-surface-500 dark:text-surface-400">
-              Founder, Neospace Tech
+              Founder, {SITE_CONFIG.name}
             </span>
           </h3>
           <p className="mt-3 text-sm leading-relaxed text-surface-700 dark:text-surface-200">

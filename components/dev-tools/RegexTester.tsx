@@ -84,7 +84,7 @@ export function RegexTester() {
   const [pattern, setPattern] = useState("\\b(\\w+)@(\\w+\\.\\w+)\\b");
   const [flags, setFlags] = useState<Set<string>>(new Set(["g", "i"]));
   const [text, setText] = useState(
-    "Send queries to support@example.com or hello@neospace.tech.\nWe also accept sales@company.io."
+    "Send queries to support@example.com or hello@acme.io.\nWe also accept sales@company.io."
   );
 
   const flagString = useMemo(() => Array.from(flags).join(""), [flags]);
