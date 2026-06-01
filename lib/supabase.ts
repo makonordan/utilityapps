@@ -76,6 +76,48 @@ export interface ContactMessageRow {
   created_at: string;
 }
 
+export type SupporterTier = "supporter" | "power" | "patron" | "one_time";
+export type SupporterProvider = "bmac" | "stripe" | "paystack" | "manual";
+export type SupporterStatus = "active" | "cancelled" | "pending";
+export type SupporterCycle = "monthly" | "annual" | "one_time";
+
+/** Full supporter row — only readable via the service-role client. */
+export interface SupporterRow {
+  id: string;
+  email: string;
+  name: string;
+  display_name: string | null;
+  tier: SupporterTier;
+  payment_provider: SupporterProvider;
+  subscription_id: string | null;
+  amount_monthly: number;
+  currency: string;
+  billing_cycle: SupporterCycle;
+  status: SupporterStatus;
+  show_publicly: boolean;
+  joined_at: string;
+  last_payment_at: string | null;
+  next_payment_at: string | null;
+  total_contributed: number;
+}
+
+/** Anon-readable projection used by the /support wall. No PII. */
+export interface SupporterPublicRow {
+  display_name: string;
+  tier: SupporterTier;
+  joined_at: string;
+}
+
+export interface SupporterPaymentRow {
+  id: string;
+  supporter_id: string;
+  amount: number;
+  currency: string;
+  payment_method: string;
+  transaction_id: string;
+  paid_at: string;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -133,10 +175,31 @@ export interface Database {
         Update: Partial<Omit<ContactMessageRow, "id">>;
         Relationships: [];
       };
+      supporters: {
+        Row: SupporterRow;
+        Insert: Omit<SupporterRow, "id" | "joined_at"> & {
+          id?: string;
+          joined_at?: string;
+        };
+        Update: Partial<Omit<SupporterRow, "id">>;
+        Relationships: [];
+      };
+      supporter_payments: {
+        Row: SupporterPaymentRow;
+        Insert: Omit<SupporterPaymentRow, "id" | "paid_at"> & {
+          id?: string;
+          paid_at?: string;
+        };
+        Update: Partial<Omit<SupporterPaymentRow, "id">>;
+        Relationships: [];
+      };
     };
-    // We don't define any DB views — but supabase-js v2.105's `GenericSchema`
-    // contract requires a `Views` field. Empty object satisfies it.
-    Views: Record<string, never>;
+    Views: {
+      supporters_public: {
+        Row: SupporterPublicRow;
+        Relationships: [];
+      };
+    };
     Functions: {
       get_trending_tools: {
         Args: { window_days?: number; max_results?: number };

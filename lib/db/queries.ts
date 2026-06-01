@@ -6,6 +6,7 @@ import {
   fail,
   ok,
   supabase,
+  SupporterPublicRow,
   ToolRatingRow,
   ToolUsageRow,
 } from "../supabase";
@@ -391,6 +392,28 @@ export async function getTrendingSearches(
         searchCount: Number(row.search_count),
       }))
     );
+  } catch (err) {
+    return fail(err);
+  }
+}
+
+// --- supporters_public -----------------------------------------------------
+// Anon-safe projection of the supporters table for the /support wall.
+// Reads only display_name, tier, joined_at — never emails, amounts, or
+// subscription IDs. Backed by the `supporters_public` Postgres view whose
+// SELECT grant is explicit (the underlying table denies anon).
+
+export async function getPublicSupporters(
+  limit: number = 100
+): Promise<DbResult<SupporterPublicRow[]>> {
+  try {
+    const { data, error } = await supabase
+      .from("supporters_public")
+      .select("display_name, tier, joined_at")
+      .order("joined_at", { ascending: false })
+      .limit(limit);
+    if (error) return fail(error);
+    return ok((data ?? []) as SupporterPublicRow[]);
   } catch (err) {
     return fail(err);
   }

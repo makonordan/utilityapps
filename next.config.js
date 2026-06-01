@@ -84,6 +84,14 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // /donate was renamed to /support when the founding-supporter program
+      // launched. Permanent so any blog post / external link auto-forwards
+      // with SEO equity intact.
+      {
+        source: "/donate",
+        destination: "/support",
+        permanent: true,
+      },
       // The footer/Header/megamenu link to /categories/<id>; the canonical
       // SEO path is /tools/categories/<id>. Redirect old links permanently.
       {

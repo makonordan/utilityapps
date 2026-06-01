@@ -22,6 +22,7 @@ const RESOURCES = [
 const COMPANY = [
   { label: "About", href: "/about" },
   { label: "Press kit", href: "/press" },
+  { label: "Support UtilityApps", href: "/support" },
   { label: "Contact", href: "/contact" },
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },

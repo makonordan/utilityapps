@@ -359,12 +359,12 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
 
             <div className="border-t border-surface-200 px-4 py-4 dark:border-surface-800">
               <a
-                href="/donate"
+                href="/support"
                 onClick={onClose}
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary-500 to-accent-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:from-primary-600 hover:to-accent-600"
               >
                 <Heart className="h-4 w-4" />
-                Donate
+                Support
               </a>
             </div>
           </motion.aside>
@@ -466,11 +466,11 @@ export function Header() {
           <PageTranslate />
           <ThemeToggle />
           <a
-            href="/donate"
+            href="/support"
             className="hidden items-center gap-1.5 rounded-xl bg-gradient-to-r from-primary-500 to-accent-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:from-primary-600 hover:to-accent-600 md:inline-flex"
           >
             <Heart className="h-4 w-4" />
-            Donate
+            Support
           </a>
           <button
             type="button"

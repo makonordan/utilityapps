@@ -36,6 +36,7 @@ const STATIC_PAGES: { path: string; priority: number; changeFrequency: ChangeFre
   { path: "/affiliate-disclosure", priority: 0.4, changeFrequency: "monthly" },
   { path: "/press", priority: 0.5, changeFrequency: "monthly" },
   { path: "/changelog", priority: 0.6, changeFrequency: "weekly" },
+  { path: "/support", priority: 0.7, changeFrequency: "monthly" },
 ];
 
 export async function getSitemapEntries(): Promise<SitemapEntry[]> {

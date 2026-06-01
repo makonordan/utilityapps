@@ -388,3 +388,108 @@ alter table public.extension_waitlist enable row level security;
 drop policy if exists extension_waitlist_insert on public.extension_waitlist;
 create policy extension_waitlist_insert on public.extension_waitlist
   for insert to anon, authenticated with check (true);
+
+-- 14. supporters + supporter_payments ---------------------------------------
+-- Recurring & one-time financial supporters of UtilityApps. Feeds the
+-- /support wall and the supporter badge logic. Writes happen ONLY through
+-- payment-provider webhooks running with the service-role key — anon must
+-- not insert (would let anyone forge supporter status).
+--
+-- Anon-SELECT is allowed but only on a deliberately narrow surface (a view
+-- below) so the public supporter wall can render without exposing emails /
+-- subscription IDs / amounts.
+
+do $$ begin
+  create type public.supporter_tier as enum (
+    'supporter', 'power', 'patron', 'one_time'
+  );
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create type public.supporter_provider as enum (
+    'bmac', 'stripe', 'paystack', 'manual'
+  );
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create type public.supporter_status as enum (
+    'active', 'cancelled', 'pending'
+  );
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create type public.supporter_cycle as enum (
+    'monthly', 'annual', 'one_time'
+  );
+exception when duplicate_object then null; end $$;
+
+create table if not exists public.supporters (
+  id                uuid primary key default gen_random_uuid(),
+  email             text not null unique,
+  name              text not null,
+  display_name      text,
+  tier              public.supporter_tier not null,
+  payment_provider  public.supporter_provider not null,
+  subscription_id   text,
+  amount_monthly    numeric(10, 2) not null default 0,
+  currency          text not null default 'USD',
+  billing_cycle     public.supporter_cycle not null,
+  status            public.supporter_status not null default 'pending',
+  show_publicly     boolean not null default true,
+  joined_at         timestamptz not null default now(),
+  last_payment_at   timestamptz,
+  next_payment_at   timestamptz,
+  total_contributed numeric(10, 2) not null default 0
+);
+
+create index if not exists supporters_status_tier_idx
+  on public.supporters (status, tier, joined_at desc);
+create index if not exists supporters_public_wall_idx
+  on public.supporters (show_publicly, status, joined_at desc)
+  where show_publicly = true and status = 'active';
+
+alter table public.supporters enable row level security;
+-- No anon-SELECT / -INSERT / -UPDATE — the email + amount columns are PII
+-- and the row drives badge state. Writes only via service-role from
+-- webhooks; reads for the public wall go through the view below.
+drop policy if exists supporters_no_anon on public.supporters;
+create policy supporters_no_anon on public.supporters
+  for all to anon using (false) with check (false);
+
+-- Public-safe projection for the supporter wall. Anon can SELECT this
+-- view; it surfaces only display_name + tier + joined_at for active +
+-- show_publicly rows, nothing else.
+create or replace view public.supporters_public as
+select
+  coalesce(display_name, name) as display_name,
+  tier,
+  joined_at
+from public.supporters
+where status = 'active' and show_publicly = true;
+
+-- Views inherit RLS from base tables — granting select on the view alone
+-- isn't enough because the underlying `supporters` policy denies anon. We
+-- mark the view as security_invoker = off (default), then grant select.
+grant select on public.supporters_public to anon, authenticated;
+
+create table if not exists public.supporter_payments (
+  id              uuid primary key default gen_random_uuid(),
+  supporter_id    uuid not null references public.supporters(id) on delete cascade,
+  amount          numeric(10, 2) not null,
+  currency        text not null,
+  payment_method  text not null,
+  transaction_id  text not null,
+  paid_at         timestamptz not null default now(),
+  unique (supporter_id, transaction_id)
+);
+
+create index if not exists supporter_payments_supporter_idx
+  on public.supporter_payments (supporter_id, paid_at desc);
+create index if not exists supporter_payments_paid_at_idx
+  on public.supporter_payments (paid_at desc);
+
+alter table public.supporter_payments enable row level security;
+drop policy if exists supporter_payments_no_anon on public.supporter_payments;
+create policy supporter_payments_no_anon on public.supporter_payments
+  for all to anon using (false) with check (false);
+
