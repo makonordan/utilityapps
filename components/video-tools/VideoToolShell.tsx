@@ -5,6 +5,7 @@ import { ChevronRight, Cloud, ShieldCheck, Smartphone, Zap } from "lucide-react"
 import { AdSlot } from "@/components/ads/AdSlot";
 import { ToolCard } from "@/components/tools/ToolCard";
 import { ToolFAQ, type FAQItem } from "@/components/tools/ToolFAQ";
+import { ToolRatingBadge } from "@/components/tools/ToolRatingBadge";
 import { getIcon } from "@/lib/icons";
 import {
   VIDEO_TOOL_PUBLISHED,
@@ -13,6 +14,11 @@ import {
   type HowToStep,
 } from "@/lib/videoFaqs";
 import { TOOLS, TOOLS_BY_ID } from "@/lib/tools";
+import {
+  getCachedToolRating,
+  toAggregateRatingSchema,
+  type ToolRatingSummary,
+} from "@/lib/toolRating";
 import { SITE_CONFIG, cn } from "@/lib/utils";
 
 interface VideoToolShellProps {
@@ -38,7 +44,7 @@ function getRelatedVideoTools(currentId: string) {
   return TOOLS.filter((t) => t.category === "Video Tools" && t.id !== currentId);
 }
 
-export function VideoToolShell({
+export async function VideoToolShell({
   toolId,
   title,
   description,
@@ -54,6 +60,7 @@ export function VideoToolShell({
   const Icon = getIcon(tool?.icon ?? "Film");
   const related = getRelatedVideoTools(toolId);
   const steps = howToSteps ?? getVideoHowTo(toolId);
+  const rating = await getCachedToolRating(toolId);
 
   const isBrowserSide = processingLocation === "browser";
   const privacyText = isBrowserSide
@@ -101,6 +108,11 @@ export function VideoToolShell({
             {description}
           </p>
           <ul className="flex flex-wrap items-center gap-2">
+            {rating && (
+              <li>
+                <ToolRatingBadge rating={rating} />
+              </li>
+            )}
             {TRUST_BADGES.map((badge) => (
               <li
                 key={badge.label}
@@ -191,7 +203,7 @@ export function VideoToolShell({
         </section>
       )}
 
-      <SeoSchemas toolId={toolId} title={title} description={description} steps={steps} />
+      <SeoSchemas toolId={toolId} title={title} description={description} steps={steps} rating={rating} />
     </div>
   );
 }
@@ -201,11 +213,13 @@ function SeoSchemas({
   title,
   description,
   steps,
+  rating,
 }: {
   toolId: string;
   title: string;
   description: string;
   steps: HowToStep[];
+  rating: ToolRatingSummary | null;
 }) {
   const base = SITE_CONFIG.url;
   const tool = TOOLS_BY_ID[toolId];
@@ -245,6 +259,7 @@ function SeoSchemas({
     operatingSystem: "Web Browser",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     featureList,
+    ...(rating && { aggregateRating: toAggregateRatingSchema(rating) }),
     screenshot: `${base}/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&type=video-tool`,
     softwareVersion: "1.0",
     datePublished: VIDEO_TOOL_PUBLISHED,

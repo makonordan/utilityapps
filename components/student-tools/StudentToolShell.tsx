@@ -5,6 +5,7 @@ import { ChevronRight, GraduationCap, ShieldCheck, Smartphone, Zap } from "lucid
 import { AdSlot } from "@/components/ads/AdSlot";
 import { ToolCard } from "@/components/tools/ToolCard";
 import { ToolFAQ, type FAQItem } from "@/components/tools/ToolFAQ";
+import { ToolRatingBadge } from "@/components/tools/ToolRatingBadge";
 import { getIcon } from "@/lib/icons";
 import {
   STUDENT_TOOL_PUBLISHED,
@@ -13,6 +14,11 @@ import {
   type HowToStep,
 } from "@/lib/studentFaqs";
 import { TOOLS, TOOLS_BY_ID } from "@/lib/tools";
+import {
+  getCachedToolRating,
+  toAggregateRatingSchema,
+  type ToolRatingSummary,
+} from "@/lib/toolRating";
 import { SITE_CONFIG, cn } from "@/lib/utils";
 
 interface StudentToolShellProps {
@@ -36,7 +42,7 @@ function getRelatedStudentTools(currentId: string) {
   return TOOLS.filter((t) => t.category === "Student Tools" && t.id !== currentId);
 }
 
-export function StudentToolShell({
+export async function StudentToolShell({
   toolId,
   title,
   description,
@@ -50,6 +56,7 @@ export function StudentToolShell({
   const Icon = getIcon(tool?.icon ?? "GraduationCap");
   const related = getRelatedStudentTools(toolId);
   const steps = howToSteps ?? getStudentHowTo(toolId);
+  const rating = await getCachedToolRating(toolId);
 
   return (
     <div className={cn("mx-auto w-full max-w-5xl px-4 py-10 sm:py-14", className)}>
@@ -77,6 +84,11 @@ export function StudentToolShell({
           </h1>
           <p className="max-w-2xl text-base text-surface-600 dark:text-surface-300">{description}</p>
           <ul className="flex flex-wrap items-center gap-2">
+            {rating && (
+              <li>
+                <ToolRatingBadge rating={rating} />
+              </li>
+            )}
             {TRUST_BADGES.map((badge) => (
               <li
                 key={badge.label}
@@ -134,7 +146,7 @@ export function StudentToolShell({
         </section>
       )}
 
-      <SeoSchemas toolId={toolId} title={title} description={description} steps={steps} />
+      <SeoSchemas toolId={toolId} title={title} description={description} steps={steps} rating={rating} />
     </div>
   );
 }
@@ -144,11 +156,13 @@ function SeoSchemas({
   title,
   description,
   steps,
+  rating,
 }: {
   toolId: string;
   title: string;
   description: string;
   steps: HowToStep[];
+  rating: ToolRatingSummary | null;
 }) {
   const base = SITE_CONFIG.url;
   const tool = TOOLS_BY_ID[toolId];
@@ -177,6 +191,7 @@ function SeoSchemas({
     operatingSystem: "Web Browser",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     featureList,
+    ...(rating && { aggregateRating: toAggregateRatingSchema(rating) }),
     softwareVersion: "1.0",
     datePublished: STUDENT_TOOL_PUBLISHED,
     publisher: { "@type": "Organization", name: SITE_CONFIG.name, url: SITE_CONFIG.url },

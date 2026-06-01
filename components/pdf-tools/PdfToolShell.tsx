@@ -5,6 +5,7 @@ import { ChevronRight, ShieldCheck, Smartphone, Zap } from "lucide-react";
 import { AdSlot } from "@/components/ads/AdSlot";
 import { ToolCard } from "@/components/tools/ToolCard";
 import { ToolFAQ, type FAQItem } from "@/components/tools/ToolFAQ";
+import { ToolRatingBadge } from "@/components/tools/ToolRatingBadge";
 import { getIcon } from "@/lib/icons";
 import {
   PDF_TOOL_PUBLISHED,
@@ -13,6 +14,11 @@ import {
   type HowToStep,
 } from "@/lib/pdfFaqs";
 import { TOOLS, TOOLS_BY_ID } from "@/lib/tools";
+import {
+  getCachedToolRating,
+  toAggregateRatingSchema,
+  type ToolRatingSummary,
+} from "@/lib/toolRating";
 import { SITE_CONFIG, cn } from "@/lib/utils";
 
 interface PdfToolShellProps {
@@ -41,7 +47,7 @@ function getRelatedPdfTools(currentId: string) {
   return TOOLS.filter((t) => t.category === "PDF Tools" && t.id !== currentId);
 }
 
-export function PdfToolShell({
+export async function PdfToolShell({
   toolId,
   title,
   description,
@@ -56,6 +62,9 @@ export function PdfToolShell({
   const Icon = getIcon(tool?.icon ?? "FileText");
   const related = getRelatedPdfTools(toolId);
   const steps = howToSteps ?? getPdfHowTo(toolId);
+  // Cached hourly — keeps the page statically prerendered while still
+  // surfacing fresh ratings within a sensible SEO window.
+  const rating = await getCachedToolRating(toolId);
 
   return (
     <div className={cn("mx-auto w-full max-w-5xl px-4 py-10 sm:py-14", className)}>
@@ -96,6 +105,11 @@ export function PdfToolShell({
             {description}
           </p>
           <ul className="flex flex-wrap items-center gap-2">
+            {rating && (
+              <li>
+                <ToolRatingBadge rating={rating} />
+              </li>
+            )}
             {TRUST_BADGES.map((badge) => (
               <li
                 key={badge.label}
@@ -173,7 +187,13 @@ export function PdfToolShell({
         </section>
       )}
 
-      <SeoSchemas toolId={toolId} title={title} description={description} steps={steps} />
+      <SeoSchemas
+        toolId={toolId}
+        title={title}
+        description={description}
+        steps={steps}
+        rating={rating}
+      />
     </div>
   );
 }
@@ -183,11 +203,13 @@ function SeoSchemas({
   title,
   description,
   steps,
+  rating,
 }: {
   toolId: string;
   title: string;
   description: string;
   steps: HowToStep[];
+  rating: ToolRatingSummary | null;
 }) {
   const base = SITE_CONFIG.url;
   const tool = TOOLS_BY_ID[toolId];
@@ -227,6 +249,11 @@ function SeoSchemas({
     operatingSystem: "Web Browser",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     featureList,
+    // Conditionally embed the aggregateRating so Google's SoftwareApplication
+    // rich-snippet stars become eligible once we have ≥3 ratings on this tool.
+    // Below threshold the field is omitted entirely (per Google: don't ship
+    // empty/zero rating schemas).
+    ...(rating && { aggregateRating: toAggregateRatingSchema(rating) }),
     screenshot: `${base}/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&type=pdf-tool`,
     softwareVersion: "1.0",
     datePublished: PDF_TOOL_PUBLISHED,

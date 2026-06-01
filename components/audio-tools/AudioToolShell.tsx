@@ -5,6 +5,7 @@ import { ChevronRight, Music, ShieldCheck, Smartphone, Zap } from "lucide-react"
 import { AdSlot } from "@/components/ads/AdSlot";
 import { ToolCard } from "@/components/tools/ToolCard";
 import { ToolFAQ, type FAQItem } from "@/components/tools/ToolFAQ";
+import { ToolRatingBadge } from "@/components/tools/ToolRatingBadge";
 import { getIcon } from "@/lib/icons";
 import {
   AUDIO_TOOL_PUBLISHED,
@@ -13,6 +14,11 @@ import {
   type HowToStep,
 } from "@/lib/audioFaqs";
 import { TOOLS, TOOLS_BY_ID } from "@/lib/tools";
+import {
+  getCachedToolRating,
+  toAggregateRatingSchema,
+  type ToolRatingSummary,
+} from "@/lib/toolRating";
 import { SITE_CONFIG, cn } from "@/lib/utils";
 
 interface AudioToolShellProps {
@@ -36,7 +42,7 @@ function getRelatedAudioTools(currentId: string) {
   return TOOLS.filter((t) => t.category === "Audio Tools" && t.id !== currentId);
 }
 
-export function AudioToolShell({
+export async function AudioToolShell({
   toolId,
   title,
   description,
@@ -49,6 +55,7 @@ export function AudioToolShell({
   const tool = TOOLS_BY_ID[toolId];
   const Icon = getIcon(tool?.icon ?? "Music");
   const related = getRelatedAudioTools(toolId);
+  const rating = await getCachedToolRating(toolId);
   const steps = howToSteps ?? getAudioHowTo(toolId);
 
   return (
@@ -77,6 +84,11 @@ export function AudioToolShell({
           </h1>
           <p className="max-w-2xl text-base text-surface-600 dark:text-surface-300">{description}</p>
           <ul className="flex flex-wrap items-center gap-2">
+            {rating && (
+              <li>
+                <ToolRatingBadge rating={rating} />
+              </li>
+            )}
             {TRUST_BADGES.map((badge) => (
               <li
                 key={badge.label}
@@ -134,7 +146,13 @@ export function AudioToolShell({
         </section>
       )}
 
-      <SeoSchemas toolId={toolId} title={title} description={description} steps={steps} />
+      <SeoSchemas
+        toolId={toolId}
+        title={title}
+        description={description}
+        steps={steps}
+        rating={rating}
+      />
     </div>
   );
 }
@@ -144,11 +162,13 @@ function SeoSchemas({
   title,
   description,
   steps,
+  rating,
 }: {
   toolId: string;
   title: string;
   description: string;
   steps: HowToStep[];
+  rating: ToolRatingSummary | null;
 }) {
   const base = SITE_CONFIG.url;
   const tool = TOOLS_BY_ID[toolId];
@@ -178,6 +198,7 @@ function SeoSchemas({
     operatingSystem: "Web Browser",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     featureList,
+    ...(rating && { aggregateRating: toAggregateRatingSchema(rating) }),
     softwareVersion: "1.0",
     datePublished: AUDIO_TOOL_PUBLISHED,
     publisher: { "@type": "Organization", name: SITE_CONFIG.name, url: SITE_CONFIG.url },

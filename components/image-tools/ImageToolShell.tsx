@@ -12,6 +12,7 @@ import {
 import { AdSlot } from "@/components/ads/AdSlot";
 import { ToolCard } from "@/components/tools/ToolCard";
 import { ToolFAQ, type FAQItem } from "@/components/tools/ToolFAQ";
+import { ToolRatingBadge } from "@/components/tools/ToolRatingBadge";
 import { getIcon } from "@/lib/icons";
 import {
   IMAGE_TOOL_PUBLISHED,
@@ -20,6 +21,11 @@ import {
   type HowToStep,
 } from "@/lib/imageFaqs";
 import { TOOLS, TOOLS_BY_ID } from "@/lib/tools";
+import {
+  getCachedToolRating,
+  toAggregateRatingSchema,
+  type ToolRatingSummary,
+} from "@/lib/toolRating";
 import { SITE_CONFIG, cn } from "@/lib/utils";
 
 interface ImageToolShellProps {
@@ -105,7 +111,7 @@ function getRelatedImageTools(currentId: string) {
   );
 }
 
-export function ImageToolShell({
+export async function ImageToolShell({
   toolId,
   title,
   description,
@@ -123,6 +129,7 @@ export function ImageToolShell({
   const related = getRelatedImageTools(toolId);
   const blogLink = relatedBlog ?? RELATED_BLOG_BY_TOOL[toolId] ?? FALLBACK_BLOG;
   const steps = howToSteps ?? getImageHowTo(toolId);
+  const rating = await getCachedToolRating(toolId);
 
   const isBrowserSide = processingLocation === "browser";
   const privacyText = isBrowserSide
@@ -170,6 +177,11 @@ export function ImageToolShell({
             {description}
           </p>
           <ul className="flex flex-wrap items-center gap-2">
+            {rating && (
+              <li>
+                <ToolRatingBadge rating={rating} />
+              </li>
+            )}
             {TRUST_BADGES.map((badge) => (
               <li
                 key={badge.label}
@@ -300,6 +312,7 @@ export function ImageToolShell({
         title={title}
         description={description}
         steps={steps}
+        rating={rating}
       />
     </div>
   );
@@ -314,11 +327,13 @@ function SeoSchemas({
   title,
   description,
   steps,
+  rating,
 }: {
   toolId: string;
   title: string;
   description: string;
   steps: HowToStep[];
+  rating: ToolRatingSummary | null;
 }) {
   const base = SITE_CONFIG.url;
   const tool = TOOLS_BY_ID[toolId];
@@ -362,6 +377,7 @@ function SeoSchemas({
       priceCurrency: "USD",
     },
     featureList,
+    ...(rating && { aggregateRating: toAggregateRatingSchema(rating) }),
     screenshot: `${base}/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&type=image-tool`,
     softwareVersion: "1.0",
     datePublished: IMAGE_TOOL_PUBLISHED,

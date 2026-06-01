@@ -5,6 +5,7 @@ import { ChevronRight, ShieldCheck, Smartphone, Zap } from "lucide-react";
 import { AdSlot } from "@/components/ads/AdSlot";
 import { ToolCard } from "@/components/tools/ToolCard";
 import { ToolFAQ, type FAQItem } from "@/components/tools/ToolFAQ";
+import { ToolRatingBadge } from "@/components/tools/ToolRatingBadge";
 import { getIcon } from "@/lib/icons";
 import {
   PRODUCTIVITY_TOOL_PUBLISHED,
@@ -13,6 +14,11 @@ import {
   type HowToStep,
 } from "@/lib/productivityFaqs";
 import { TOOLS, TOOLS_BY_ID } from "@/lib/tools";
+import {
+  getCachedToolRating,
+  toAggregateRatingSchema,
+  type ToolRatingSummary,
+} from "@/lib/toolRating";
 import { SITE_CONFIG, cn } from "@/lib/utils";
 
 interface ProductivityToolShellProps {
@@ -36,7 +42,7 @@ function getRelatedProductivityTools(currentId: string) {
   return TOOLS.filter((t) => t.category === "Productivity Tools" && t.id !== currentId);
 }
 
-export function ProductivityToolShell({
+export async function ProductivityToolShell({
   toolId,
   title,
   description,
@@ -50,6 +56,7 @@ export function ProductivityToolShell({
   const Icon = getIcon(tool?.icon ?? "Sparkles");
   const related = getRelatedProductivityTools(toolId);
   const steps = howToSteps ?? getProductivityHowTo(toolId);
+  const rating = await getCachedToolRating(toolId);
 
   return (
     <div className={cn("mx-auto w-full max-w-5xl px-4 py-10 sm:py-14", className)}>
@@ -90,6 +97,11 @@ export function ProductivityToolShell({
             {description}
           </p>
           <ul className="flex flex-wrap items-center gap-2">
+            {rating && (
+              <li>
+                <ToolRatingBadge rating={rating} />
+              </li>
+            )}
             {TRUST_BADGES.map((badge) => (
               <li
                 key={badge.label}
@@ -149,7 +161,7 @@ export function ProductivityToolShell({
         </section>
       )}
 
-      <SeoSchemas toolId={toolId} title={title} description={description} steps={steps} />
+      <SeoSchemas toolId={toolId} title={title} description={description} steps={steps} rating={rating} />
     </div>
   );
 }
@@ -159,11 +171,13 @@ function SeoSchemas({
   title,
   description,
   steps,
+  rating,
 }: {
   toolId: string;
   title: string;
   description: string;
   steps: HowToStep[];
+  rating: ToolRatingSummary | null;
 }) {
   const base = SITE_CONFIG.url;
   const tool = TOOLS_BY_ID[toolId];
@@ -203,6 +217,7 @@ function SeoSchemas({
     operatingSystem: "Web Browser",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     featureList,
+    ...(rating && { aggregateRating: toAggregateRatingSchema(rating) }),
     screenshot: `${base}/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&type=productivity-tool`,
     softwareVersion: "1.0",
     datePublished: PRODUCTIVITY_TOOL_PUBLISHED,
