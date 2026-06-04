@@ -22,7 +22,6 @@ import {
   PROCESS,
   SERVICES,
   STUDIO_EMAIL,
-  formatWhatsapp,
   whatsappLink,
 } from "@/lib/studio";
 import { SITE_CONFIG, cn } from "@/lib/utils";
@@ -180,9 +179,10 @@ function Hero() {
           target="_blank"
           rel="noopener noreferrer"
           className="mt-5 inline-flex items-center gap-2 rounded-2xl border border-emerald-300 bg-emerald-50 px-4 py-2.5 text-sm font-semibold text-emerald-800 transition hover:border-emerald-400 hover:bg-emerald-100 dark:border-emerald-500/40 dark:bg-emerald-500/10 dark:text-emerald-200 dark:hover:bg-emerald-500/20"
+          aria-label="Message Daniel on WhatsApp for an immediate response"
         >
           <MessageCircle className="h-4 w-4" aria-hidden="true" />
-          Need an immediate response? WhatsApp Daniel on {formatWhatsapp()}
+          Need an immediate response? Message Daniel on WhatsApp
         </a>
 
         <ul className="mt-8 grid gap-3 text-sm font-medium text-surface-700 sm:grid-cols-2 sm:gap-x-10 dark:text-surface-200">
@@ -766,9 +766,10 @@ function FinalCta() {
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 hover:underline"
+            aria-label="Message UtilityApps Studio on WhatsApp"
           >
             <MessageCircle className="h-4 w-4" aria-hidden="true" />
-            WhatsApp {formatWhatsapp()}
+            Message us on WhatsApp
           </a>
           <Link href="/studio/contact" className="hover:underline">
             Or fill the form →

@@ -17,7 +17,7 @@ import type {
 
 export const STUDIO_EMAIL = process.env.NEXT_PUBLIC_STUDIO_EMAIL || "studio@utilityapps.site";
 export const STUDIO_CALENDLY_URL =
-  process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com/utilityapps/discovery";
+  process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com/makonordan/30min";
 /** Raw E.164 digits, no plus. Used to build wa.me links. The default is
  *  Daniel's direct WhatsApp Business line for immediate-response inbound. */
 export const STUDIO_WHATSAPP = process.env.NEXT_PUBLIC_STUDIO_WHATSAPP || "2348037723164";

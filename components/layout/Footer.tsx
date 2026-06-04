@@ -131,9 +131,14 @@ export function Footer() {
             <p className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
               Get weekly tools
             </p>
-            <div className="mt-3 max-w-sm">
+            {/* Stacked variant keeps input + button inside the narrow footer
+                column. The default sm:flex-row layout was pushing the
+                Subscribe button past the column edge and overlapping the
+                Company column. */}
+            <div className="mt-3">
               <NewsletterForm
                 source="footer"
+                variant="stacked"
                 buttonLabel="Subscribe"
                 successLabel="Subscribed"
               />

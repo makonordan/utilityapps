@@ -6,7 +6,7 @@ import { X } from "lucide-react";
 // Pre-filled "click to chat" link. The number is in international format
 // without the leading + or zeros, as wa.me requires.
 const WHATSAPP_URL =
-  "https://wa.me/2348164315819?text=Hi%20Daniel!%20I'm%20using%20UtilityApps%20and%20I'd%20like%20help%20with...";
+  "https://wa.me/2348037723164?text=Hi%20Daniel!%20I'm%20using%20UtilityApps%20and%20I'd%20like%20help%20with...";
 
 const TOOLTIP_DISMISSED_KEY = "ua-whatsapp-tooltip-dismissed";
 
