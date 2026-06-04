@@ -6,6 +6,11 @@ import {
   fail,
   ok,
   supabase,
+  StudioBudget,
+  StudioCompanySize,
+  StudioContactPref,
+  StudioInquiryRow,
+  StudioTimeline,
   SupporterPublicRow,
   ToolRatingRow,
   ToolUsageRow,
@@ -392,6 +397,65 @@ export async function getTrendingSearches(
         searchCount: Number(row.search_count),
       }))
     );
+  } catch (err) {
+    return fail(err);
+  }
+}
+
+// --- studio_inquiries ------------------------------------------------------
+// Discovery-call form submissions from /studio. Anon-INSERT only; reads go
+// through the service-role admin client elsewhere.
+
+export interface StudioInquiryInput {
+  name: string;
+  email: string;
+  company: string;
+  company_size: StudioCompanySize;
+  industry: string;
+  project_type: string;
+  project_description: string;
+  timeline: StudioTimeline;
+  budget_range: StudioBudget;
+  referral_source?: string | null;
+  preferred_contact: StudioContactPref;
+  whatsapp_number?: string | null;
+}
+
+export async function addStudioInquiry(
+  input: StudioInquiryInput,
+  client: SupabaseClient = supabase
+): Promise<DbResult<StudioInquiryRow>> {
+  try {
+    const normalized = {
+      name: input.name.trim(),
+      email: input.email.trim().toLowerCase(),
+      company: input.company.trim(),
+      company_size: input.company_size,
+      industry: input.industry.trim(),
+      project_type: input.project_type.trim(),
+      project_description: input.project_description.trim(),
+      timeline: input.timeline,
+      budget_range: input.budget_range,
+      referral_source: input.referral_source?.trim() || null,
+      preferred_contact: input.preferred_contact,
+      whatsapp_number: input.whatsapp_number?.trim() || null,
+    };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized.email)) {
+      return fail("Invalid email address");
+    }
+    if (normalized.project_description.length < 20) {
+      return fail("Project description is too short");
+    }
+    if (normalized.project_description.length > 2000) {
+      return fail("Project description is too long");
+    }
+    const { data, error } = await client
+      .from("studio_inquiries")
+      .insert(normalized)
+      .select("*")
+      .single();
+    if (error || !data) return fail(error ?? "insert failed");
+    return ok(data as StudioInquiryRow);
   } catch (err) {
     return fail(err);
   }

@@ -19,9 +19,11 @@ const RESOURCES = [
   { label: "Changelog", href: "/changelog" },
 ];
 
+
 const COMPANY = [
   { label: "About", href: "/about" },
   { label: "Press kit", href: "/press" },
+  { label: "Studio — custom development", href: "/studio" },
   { label: "Support UtilityApps", href: "/support" },
   { label: "Contact", href: "/contact" },
   { label: "Privacy", href: "/privacy" },

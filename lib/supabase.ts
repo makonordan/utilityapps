@@ -118,6 +118,37 @@ export interface SupporterPaymentRow {
   paid_at: string;
 }
 
+export type StudioCompanySize = "solo" | "small" | "medium" | "large";
+export type StudioTimeline = "asap" | "within_month" | "within_quarter" | "exploring";
+export type StudioBudget = "under_5k" | "5k_15k" | "15k_50k" | "over_50k" | "open";
+export type StudioContactPref = "email" | "video_call" | "whatsapp";
+export type StudioStatus =
+  | "new"
+  | "contacted"
+  | "qualified"
+  | "proposal_sent"
+  | "closed_won"
+  | "closed_lost";
+
+export interface StudioInquiryRow {
+  id: string;
+  name: string;
+  email: string;
+  company: string;
+  company_size: StudioCompanySize;
+  industry: string;
+  project_type: string;
+  project_description: string;
+  timeline: StudioTimeline;
+  budget_range: StudioBudget;
+  referral_source: string | null;
+  preferred_contact: StudioContactPref;
+  whatsapp_number: string | null;
+  status: StudioStatus;
+  notes: string | null;
+  created_at: string;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -191,6 +222,17 @@ export interface Database {
           paid_at?: string;
         };
         Update: Partial<Omit<SupporterPaymentRow, "id">>;
+        Relationships: [];
+      };
+      studio_inquiries: {
+        Row: StudioInquiryRow;
+        Insert: Omit<StudioInquiryRow, "id" | "status" | "notes" | "created_at"> & {
+          id?: string;
+          status?: StudioStatus;
+          notes?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Omit<StudioInquiryRow, "id">>;
         Relationships: [];
       };
     };

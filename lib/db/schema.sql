@@ -493,3 +493,71 @@ drop policy if exists supporter_payments_no_anon on public.supporter_payments;
 create policy supporter_payments_no_anon on public.supporter_payments
   for all to anon using (false) with check (false);
 
+-- 15. studio_inquiries ------------------------------------------------------
+-- Discovery-call inquiries from the /studio services page. Anon-INSERT
+-- only (the form posts directly); anon must NOT read this table —
+-- it holds names, emails, project descriptions, and budget signals.
+-- Admin reads via service-role (same posture as contact_messages).
+
+do $$ begin
+  create type public.studio_company_size as enum ('solo', 'small', 'medium', 'large');
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create type public.studio_timeline as enum (
+    'asap', 'within_month', 'within_quarter', 'exploring'
+  );
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create type public.studio_budget as enum (
+    'under_5k', '5k_15k', '15k_50k', 'over_50k', 'open'
+  );
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create type public.studio_contact_pref as enum ('email', 'video_call', 'whatsapp');
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create type public.studio_status as enum (
+    'new', 'contacted', 'qualified', 'proposal_sent', 'closed_won', 'closed_lost'
+  );
+exception when duplicate_object then null; end $$;
+
+create table if not exists public.studio_inquiries (
+  id                  uuid primary key default gen_random_uuid(),
+  name                text not null,
+  email               text not null,
+  company             text not null,
+  company_size        public.studio_company_size not null,
+  industry            text not null,
+  project_type        text not null,
+  project_description text not null check (char_length(project_description) <= 2000),
+  timeline            public.studio_timeline not null,
+  budget_range        public.studio_budget not null,
+  referral_source     text,
+  preferred_contact   public.studio_contact_pref not null,
+  whatsapp_number     text,
+  status              public.studio_status not null default 'new',
+  notes               text,
+  created_at          timestamptz not null default now()
+);
+
+create index if not exists studio_inquiries_created_at_idx
+  on public.studio_inquiries (created_at desc);
+create index if not exists studio_inquiries_status_idx
+  on public.studio_inquiries (status, created_at desc);
+
+alter table public.studio_inquiries enable row level security;
+
+-- Anon can INSERT (the marketing form is unauthenticated) but cannot
+-- SELECT / UPDATE / DELETE. Service-role bypasses RLS for admin reads.
+drop policy if exists studio_inquiries_insert on public.studio_inquiries;
+create policy studio_inquiries_insert on public.studio_inquiries
+  for insert to anon, authenticated with check (true);
+
+drop policy if exists studio_inquiries_no_anon_read on public.studio_inquiries;
+create policy studio_inquiries_no_anon_read on public.studio_inquiries
+  for select to anon using (false);
+

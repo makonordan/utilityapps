@@ -126,7 +126,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           Skip to main content
         </a>
         <ThemeProvider>
-          <HideOnEmbed>
+          <HideOnEmbed extraPrefixes={["/studio"]}>
             <ExtensionBanner />
             <Header />
           </HideOnEmbed>
