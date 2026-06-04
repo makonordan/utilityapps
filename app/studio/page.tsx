@@ -28,7 +28,7 @@ import { SITE_CONFIG, cn } from "@/lib/utils";
 
 const TITLE = "UtilityApps Studio — Custom Development for Businesses";
 const DESCRIPTION =
-  "We build custom calculators, dashboards, document generators, and AI-powered tools for businesses. AI-augmented development. Delivered in weeks. By the team behind UtilityApps.";
+  "We build digital products, web apps, internal dashboards, and AI-powered tools for businesses. AI-augmented development. Delivered in weeks. By the team behind UtilityApps.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     siteName: SITE_CONFIG.name,
     images: [
       {
-        url: `${SITE_CONFIG.url}/api/og?title=${encodeURIComponent("UtilityApps Studio")}&description=${encodeURIComponent("Custom internal tools, delivered in weeks")}&type=tool`,
+        url: `${SITE_CONFIG.url}/api/og?title=${encodeURIComponent("UtilityApps Studio")}&description=${encodeURIComponent("Custom internal tools, delivered in weeks")}&type=studio`,
         width: 1200,
         height: 630,
         alt: "UtilityApps Studio",

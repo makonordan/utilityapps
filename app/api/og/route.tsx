@@ -5,7 +5,13 @@ export const runtime = "edge";
 
 const SIZE = { width: 1200, height: 630 } as const;
 
-const TYPE_STYLES: Record<string, { label: string; accent: string }> = {
+/** `tagline` shows in the bottom-right strip of the OG image. Defaults to
+ *  the free-tools framing ("Free · No signup · Instant"); B2B surfaces
+ *  like /studio need a different message. */
+const TYPE_STYLES: Record<
+  string,
+  { label: string; accent: string; tagline?: string }
+> = {
   tool: { label: "Tool", accent: "#0066FF" },
   "image-tool": { label: "Image Tool", accent: "#7C3AED" },
   "sleep-tool": { label: "Sleep Tool", accent: "#4F46E5" },
@@ -16,8 +22,15 @@ const TYPE_STYLES: Record<string, { label: string; accent: string }> = {
   post: { label: "Article", accent: "#7C3AED" },
   product: { label: "Product", accent: "#F59E0B" },
   category: { label: "Category", accent: "#10B981" },
+  studio: {
+    label: "Studio",
+    accent: "#7C3AED",
+    tagline: "Custom development · Delivered in weeks",
+  },
   default: { label: "UtilityApps", accent: "#0066FF" },
 };
+
+const DEFAULT_TAGLINE = "Free · No signup · Instant";
 
 const MAX_TITLE = 90;
 const MAX_DESCRIPTION = 160;
@@ -175,7 +188,7 @@ export async function GET(request: NextRequest) {
           }}
         >
           <div style={{ display: "flex" }}>utilityapps.site</div>
-          <div style={{ display: "flex" }}>Free · No signup · Instant</div>
+          <div style={{ display: "flex" }}>{style.tagline ?? DEFAULT_TAGLINE}</div>
         </div>
       </div>
     ),
