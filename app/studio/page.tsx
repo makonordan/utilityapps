@@ -15,13 +15,14 @@ import { StudioFAQ } from "@/components/studio/StudioFAQ";
 import { getIcon } from "@/lib/icons";
 import { generateBreadcrumbSchema, jsonLdString } from "@/lib/schema";
 import {
+  EXPERIENCE_INDUSTRIES,
   FAQ,
   INDUSTRIES,
   PORTFOLIO,
   PROCESS,
   SERVICES,
   STUDIO_EMAIL,
-  STUDIO_WHATSAPP,
+  formatWhatsapp,
   whatsappLink,
 } from "@/lib/studio";
 import { SITE_CONFIG, cn } from "@/lib/utils";
@@ -151,8 +152,8 @@ function Hero() {
         </h1>
 
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-surface-600 dark:text-surface-300">
-          We design and build AI-powered tools, calculators, dashboards, and
-          document generators for small and growing businesses. Delivered in
+          We design and build digital products, web apps, internal dashboards,
+          and AI-powered tools for small and growing businesses. Delivered in
           weeks, not months. At a fraction of agency timelines.
         </p>
 
@@ -171,6 +172,18 @@ function Hero() {
             See what we&rsquo;ve built →
           </Link>
         </div>
+
+        <a
+          href={whatsappLink(
+            "Hi Daniel — I need an immediate response on a project for UtilityApps Studio."
+          )}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-5 inline-flex items-center gap-2 rounded-2xl border border-emerald-300 bg-emerald-50 px-4 py-2.5 text-sm font-semibold text-emerald-800 transition hover:border-emerald-400 hover:bg-emerald-100 dark:border-emerald-500/40 dark:bg-emerald-500/10 dark:text-emerald-200 dark:hover:bg-emerald-500/20"
+        >
+          <MessageCircle className="h-4 w-4" aria-hidden="true" />
+          Need an immediate response? WhatsApp Daniel on {formatWhatsapp()}
+        </a>
 
         <ul className="mt-8 grid gap-3 text-sm font-medium text-surface-700 sm:grid-cols-2 sm:gap-x-10 dark:text-surface-200">
           {[
@@ -508,12 +521,49 @@ function Portfolio() {
           ))}
         </div>
 
-        <p className="mt-10 text-center text-sm text-surface-500 dark:text-surface-400">
-          These are our public tools. Most of our client work is confidential —
-          ask about industry-specific examples during your discovery call.
-        </p>
+        <ConfidentialWorkCallout />
       </div>
     </section>
+  );
+}
+
+function ConfidentialWorkCallout() {
+  return (
+    <div className="mt-12 overflow-hidden rounded-3xl border border-primary-200 bg-gradient-to-br from-primary-50 via-white to-accent-50/40 p-6 sm:p-8 dark:border-primary-700/40 dark:from-primary-500/10 dark:via-surface-900 dark:to-accent-500/10">
+      <div className="flex items-start gap-4">
+        <span
+          aria-hidden="true"
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-600 text-white shadow-md"
+        >
+          <ShieldCheck className="h-5 w-5" />
+        </span>
+        <div className="flex-1">
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary-700 dark:text-primary-300">
+            What you don&rsquo;t see above
+          </p>
+          <h3 className="mt-1 text-xl font-bold tracking-tight text-surface-900 sm:text-2xl dark:text-white">
+            Most of our client work is confidential.
+          </h3>
+          <p className="mt-3 text-sm leading-relaxed text-surface-700 dark:text-surface-200">
+            The cards above are our public tools. Beyond them, Daniel has shipped
+            software, data, and AI projects under NDA across multiple industries —
+            ask about industry-specific examples during your discovery call.
+          </p>
+          <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
+            Industries shipped in
+          </p>
+          <ul className="mt-2 flex flex-wrap gap-1.5">
+            {EXPERIENCE_INDUSTRIES.map((industry) => (
+              <li key={industry}>
+                <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-semibold text-surface-800 ring-1 ring-inset ring-primary-200 dark:bg-surface-900 dark:text-surface-100 dark:ring-primary-700/40">
+                  {industry}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -718,7 +768,7 @@ function FinalCta() {
             className="inline-flex items-center gap-1.5 hover:underline"
           >
             <MessageCircle className="h-4 w-4" aria-hidden="true" />
-            WhatsApp +{STUDIO_WHATSAPP}
+            WhatsApp {formatWhatsapp()}
           </a>
           <Link href="/studio/contact" className="hover:underline">
             Or fill the form →

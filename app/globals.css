@@ -48,3 +48,13 @@ html {
   outline-offset: 2px;
   border-radius: 4px;
 }
+
+/* Tailwind v4 Preflight resets <button> cursor to the user-agent default
+ * (which is the arrow on Chrome) — restore the expected pointer cursor for
+ * clickable interactives. Disabled controls keep their not-allowed/wait
+ * cursor because the :not(:disabled) guard skips them. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary {
+  cursor: pointer;
+}

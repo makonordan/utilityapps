@@ -104,7 +104,7 @@ export function CalendlyButton({
     <button
       type="button"
       onClick={openPopup}
-      className={cn(className)}
+      className={cn("cursor-pointer", className)}
       aria-label={ariaLabel}
     >
       {children}

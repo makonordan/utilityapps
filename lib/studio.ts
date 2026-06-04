@@ -18,12 +18,24 @@ import type {
 export const STUDIO_EMAIL = process.env.NEXT_PUBLIC_STUDIO_EMAIL || "studio@utilityapps.site";
 export const STUDIO_CALENDLY_URL =
   process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com/utilityapps/discovery";
-/** Raw E.164 digits, no plus. Used to build wa.me links. */
-export const STUDIO_WHATSAPP = process.env.NEXT_PUBLIC_STUDIO_WHATSAPP || "2348164315819";
+/** Raw E.164 digits, no plus. Used to build wa.me links. The default is
+ *  Daniel's direct WhatsApp Business line for immediate-response inbound. */
+export const STUDIO_WHATSAPP = process.env.NEXT_PUBLIC_STUDIO_WHATSAPP || "2348037723164";
 
 export function whatsappLink(prefilledText?: string): string {
   const base = `https://wa.me/${STUDIO_WHATSAPP}`;
   return prefilledText ? `${base}?text=${encodeURIComponent(prefilledText)}` : base;
+}
+
+/** Pretty-prints the WhatsApp number as "+CC NNN NNN NNNN" for display.
+ *  Assumes Nigerian +234 format by default; falls back to a `+`-prefixed
+ *  digit string if the number isn't 13 digits long. */
+export function formatWhatsapp(digits: string = STUDIO_WHATSAPP): string {
+  const d = digits.replace(/\D+/g, "");
+  if (d.length === 13 && d.startsWith("234")) {
+    return `+234 ${d.slice(3, 6)} ${d.slice(6, 9)} ${d.slice(9, 13)}`;
+  }
+  return `+${d}`;
 }
 
 export function calendlyLinkFor(topic?: string): string {
@@ -31,6 +43,21 @@ export function calendlyLinkFor(topic?: string): string {
   const sep = STUDIO_CALENDLY_URL.includes("?") ? "&" : "?";
   return `${STUDIO_CALENDLY_URL}${sep}a1=${encodeURIComponent(topic)}`;
 }
+
+/** Industries Daniel has shipped software, data, or AI work in. Surfaced on
+ *  the portfolio section's confidentiality callout — public tools are the
+ *  showcase, but most actual client work is NDA-bound and lives across
+ *  these verticals. Keep in priority/familiarity order (most experience
+ *  first) — the page renders them as pills in this order. */
+export const EXPERIENCE_INDUSTRIES = [
+  "Telecoms",
+  "Healthcare",
+  "Education",
+  "Consulting",
+  "Finance",
+  "Oil and Gas",
+  "Ecommerce",
+] as const;
 
 // ── Services (4 cards) ─────────────────────────────────────────────────────
 
@@ -48,14 +75,24 @@ export interface StudioService {
 
 export const SERVICES: StudioService[] = [
   {
-    id: "calculators",
-    icon: "Calculator",
-    title: "Custom Calculators & Tools",
+    id: "digital-products",
+    icon: "Package",
+    title: "Digital Products & Tools",
     description:
-      "Embedded mortgage calculators for real estate. ROI calculators for finance firms. Quote generators for service businesses. Personalized recommendation engines. Anything that converts user inputs into useful, branded outputs.",
+      "Branded calculators, ROI engines, quote generators, recommendation tools, automated proposal and contract builders, invoice systems — anything that turns user inputs into useful, on-brand outputs you can ship to customers or use internally.",
     example:
-      "A real estate agency that wants a branded mortgage calculator on their site with built-in lead capture and CRM integration.",
-    delivery: "Typically 1–2 weeks",
+      "A real estate agency with a branded mortgage calculator plus lead capture; or a consultancy whose intake form auto-generates client-specific proposal PDFs.",
+    delivery: "Typically 1–3 weeks",
+  },
+  {
+    id: "webapp-app-dev",
+    icon: "Globe",
+    title: "Web Apps & App Development",
+    description:
+      "Full custom web applications and mobile apps — from MVPs validating a new business idea to internal SaaS platforms. Auth, payments, user dashboards, admin tools, API integrations, hosting. Built to be owned and extended by your team.",
+    example:
+      "A startup that needs a working MVP to take to investors; or an operations team replacing a tangle of spreadsheets with a single internal web app.",
+    delivery: "Typically 4–8 weeks",
   },
   {
     id: "dashboards",
@@ -66,16 +103,6 @@ export const SERVICES: StudioService[] = [
     example:
       "An accounting firm that needs a client-facing portal showing financial summaries, document uploads, and payment status.",
     delivery: "Typically 3–4 weeks",
-  },
-  {
-    id: "documents",
-    icon: "FileText",
-    title: "Document & Contract Generators",
-    description:
-      "Automated document creation. Custom contract templates with merge fields. Proposal generators. Invoice and quote builders. Templated communication systems that scale with your business.",
-    example:
-      "A consultancy that generates client-specific proposals automatically from intake form data, with PDF generation and e-signature integration.",
-    delivery: "Typically 2–3 weeks",
   },
   {
     id: "ai",
@@ -346,9 +373,9 @@ export const INDUSTRY_OPTIONS = [
 ];
 
 export const PROJECT_TYPE_OPTIONS = [
-  "Custom Calculator/Tool",
+  "Digital Product or Tool",
+  "Web App / App Development",
   "Internal Dashboard",
-  "Document/Contract Generator",
   "AI-Powered Tool",
   "Something else",
 ];
