@@ -29,7 +29,13 @@ export function PdfDropzone({
     if (!files) return;
     const arr = Array.from(files).filter((f) => {
       if (!accept) return true;
-      if (accept === "application/pdf") return f.type === "application/pdf";
+      if (accept === "application/pdf") {
+        // Accept by MIME OR by .pdf extension — some browsers (especially
+        // on Linux + file managers that don't sniff content) report
+        // `application/octet-stream` or empty MIME for perfectly valid
+        // PDFs. The downstream consumer re-validates the bytes.
+        return f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf");
+      }
       // For mixed accept, trust the input element / drop
       return true;
     });

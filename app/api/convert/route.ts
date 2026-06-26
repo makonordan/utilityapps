@@ -31,6 +31,14 @@ const MAX_SIZE = 10 * 1024 * 1024;
 interface ConversionConfig {
   /** What the user uploads. */
   inputMime: string[];
+  /**
+   * Filename extensions (with leading dot, lowercase) we accept as a
+   * fallback when the browser-reported MIME doesn't match `inputMime`.
+   * Real-world example: a valid .docx is just a ZIP, so browsers
+   * sometimes report `application/zip` or `application/octet-stream`
+   * instead of the official Word MIME.
+   */
+  inputExtensions: string[];
   /** Friendly name of the input format (for error messages). */
   inputName: string;
   /** ConvertAPI source format (left side of /convert/<from>/to/<to>). */
@@ -47,6 +55,7 @@ const CONVERSIONS: Record<string, ConversionConfig> = {
   // ----- PDF → Office
   "pdf-to-docx": {
     inputMime: ["application/pdf"],
+    inputExtensions: [".pdf"],
     inputName: "PDF",
     fromFormat: "pdf",
     toFormat: "docx",
@@ -56,6 +65,7 @@ const CONVERSIONS: Record<string, ConversionConfig> = {
   },
   "pdf-to-xlsx": {
     inputMime: ["application/pdf"],
+    inputExtensions: [".pdf"],
     inputName: "PDF",
     fromFormat: "pdf",
     toFormat: "xlsx",
@@ -65,6 +75,7 @@ const CONVERSIONS: Record<string, ConversionConfig> = {
   },
   "pdf-to-pptx": {
     inputMime: ["application/pdf"],
+    inputExtensions: [".pdf"],
     inputName: "PDF",
     fromFormat: "pdf",
     toFormat: "pptx",
@@ -78,6 +89,7 @@ const CONVERSIONS: Record<string, ConversionConfig> = {
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       "application/msword",
     ],
+    inputExtensions: [".docx", ".doc"],
     inputName: "Word document (.docx or .doc)",
     fromFormat: "docx",
     toFormat: "pdf",
@@ -89,6 +101,7 @@ const CONVERSIONS: Record<string, ConversionConfig> = {
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "application/vnd.ms-excel",
     ],
+    inputExtensions: [".xlsx", ".xls"],
     inputName: "Excel workbook (.xlsx or .xls)",
     fromFormat: "xlsx",
     toFormat: "pdf",
@@ -100,6 +113,7 @@ const CONVERSIONS: Record<string, ConversionConfig> = {
       "application/vnd.openxmlformats-officedocument.presentationml.presentation",
       "application/vnd.ms-powerpoint",
     ],
+    inputExtensions: [".pptx", ".ppt"],
     inputName: "PowerPoint deck (.pptx or .ppt)",
     fromFormat: "pptx",
     toFormat: "pdf",
@@ -107,6 +121,18 @@ const CONVERSIONS: Record<string, ConversionConfig> = {
     outputExt: ".pdf",
   },
 };
+
+/** Accept the upload if EITHER the browser-reported MIME matches OR the
+ *  filename extension matches. Browsers report .docx / .xlsx / .pptx
+ *  inconsistently — .docx is a ZIP at the byte level, so some browsers
+ *  surface `application/zip` or `application/octet-stream`. We trust the
+ *  extension as a fallback; the actual file format is re-verified by
+ *  ConvertAPI on the conversion side. */
+function isAcceptedFile(file: File, config: ConversionConfig): boolean {
+  if (file.type && config.inputMime.includes(file.type)) return true;
+  const lower = file.name.toLowerCase();
+  return config.inputExtensions.some((ext) => lower.endsWith(ext));
+}
 
 // ---------------------------------------------------- per-IP rate limit
 // In-memory token bucket. Best-effort only: Vercel serverless can spawn
@@ -188,7 +214,7 @@ export async function POST(request: NextRequest) {
   }
   const blob = file as File;
 
-  if (!config.inputMime.includes(blob.type)) {
+  if (!isAcceptedFile(blob, config)) {
     return NextResponse.json(
       {
         error: `Only ${config.inputName} files are accepted for this conversion.`,
@@ -259,9 +285,111 @@ export async function POST(request: NextRequest) {
       tag: `api/convert/${target}`,
       extra: { fileSize: blob.size, fileName: blob.name },
     });
+    return classifyConversionError(err);
+  }
+}
+
+/**
+ * Map exceptions out of the ConvertAPI client into actionable HTTP
+ * responses. Before this existed, every failure returned a generic
+ * "Conversion failed. Please try again." — which hid the actual problem
+ * from users AND made the support inbox useless because nobody could
+ * tell apart "your file is broken" from "ConvertAPI is down" from
+ * "secret expired".
+ *
+ * ConvertAPI's ClientError (node_modules/convertapi/lib/error.js) carries:
+ *   - data.Code:    numeric error code from the upstream API
+ *   - data.Message: human-readable description
+ *   - response:     the underlying axios response (status etc.)
+ *
+ * The Code ranges roughly split into:
+ *   4xxx → input/file problems the user can fix (corrupt, password
+ *          protected, unsupported format, too large)
+ *   5xxx → account/service problems the user can't fix (auth, quota,
+ *          billing, internal)
+ *
+ * We map those into 422 (file problem) vs 503 (service problem) so the
+ * front-end can show distinct messages — and so support escalations
+ * include the actual ConvertAPI code rather than "try again".
+ */
+interface ConvertApiClientError {
+  data?: { Code?: number; Message?: string };
+  response?: { status?: number };
+  message?: string;
+}
+
+function classifyConversionError(err: unknown): NextResponse {
+  const e = err as ConvertApiClientError;
+
+  const code = e?.data?.Code;
+  const upstreamMessage = e?.data?.Message?.trim();
+  const errMessage = typeof e?.message === "string" ? e.message : "";
+
+  // Network timeouts to ConvertAPI surface as ETIMEDOUT / ECONNRESET or
+  // "timeout exceeded" messages from the SDK itself.
+  if (/timeout|ETIMEDOUT|ECONNRESET/i.test(errMessage)) {
     return NextResponse.json(
-      { error: "Conversion failed. Please try again." },
-      { status: 500 }
+      {
+        error:
+          "The conversion took too long. Try a smaller file, or try again in a moment.",
+        code: "TIMEOUT",
+      },
+      { status: 504 }
     );
   }
+
+  if (typeof code === "number") {
+    // 4xxx codes describe the input file → tell the user.
+    if (code >= 4000 && code < 5000) {
+      return NextResponse.json(
+        {
+          error:
+            upstreamMessage ||
+            "Your file couldn't be converted. It may be corrupt, password-protected, or in an unsupported format.",
+          code: `CONVERTAPI_${code}`,
+        },
+        { status: 422 }
+      );
+    }
+    // 5xxx codes describe an account/service problem → tell the user it's
+    // on our side, log the upstream message for the operator.
+    if (code >= 5000 && code < 6000) {
+      return NextResponse.json(
+        {
+          error:
+            "The conversion service is temporarily unavailable. Please try again in a few minutes — if this keeps happening, email hello@utilityapps.site.",
+          code: `CONVERTAPI_${code}`,
+        },
+        { status: 503 }
+      );
+    }
+  }
+
+  // Authentication / billing failures from the SDK arrive with HTTP 401/403
+  // on the response object, not a Code field.
+  const status = e?.response?.status;
+  if (status === 401 || status === 403) {
+    return NextResponse.json(
+      {
+        error:
+          "The conversion service is temporarily unavailable. Please try again in a few minutes — if this keeps happening, email hello@utilityapps.site.",
+        code: "CONVERTAPI_AUTH",
+      },
+      { status: 503 }
+    );
+  }
+
+  // Unknown failure. Surface a short snippet of the message so users can
+  // include it in a support email. Trim to avoid leaking secrets that
+  // might appear in a stack trace.
+  const snippet = (upstreamMessage || errMessage).slice(0, 160);
+  return NextResponse.json(
+    {
+      error: snippet
+        ? `Conversion failed: ${snippet}`
+        : "Conversion failed. Please try again.",
+      code: "UNKNOWN",
+    },
+    { status: 500 }
+  );
 }

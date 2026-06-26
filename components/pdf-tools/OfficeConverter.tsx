@@ -44,12 +44,54 @@ interface Props {
   toolId?: string;
 }
 
-// Browser-reported MIME types we accept on the client (server re-validates).
-function isAllowed(file: File, accept: string): boolean {
-  if (!accept) return true;
-  const list = accept.split(",").map((s) => s.trim()).filter(Boolean);
-  return list.includes(file.type);
+/**
+ * Accept the file if EITHER the browser's reported MIME matches OR the
+ * filename extension matches the conversion's target.
+ *
+ * Browsers report .docx / .xlsx / .pptx inconsistently — a .docx is a
+ * ZIP archive, so some OS / browser combos surface `application/zip`
+ * or `application/octet-stream`. Strict MIME-only validation rejected
+ * valid Word files in the wild. The server re-checks, and ConvertAPI
+ * itself verifies the actual byte content, so trusting the extension
+ * here is safe.
+ */
+function isAllowed(file: File, target: ConvertTarget): boolean {
+  const expected = EXTENSIONS_BY_TARGET[target];
+  if (!expected) return true;
+  if (expected.mime.includes(file.type)) return true;
+  const lower = file.name.toLowerCase();
+  return expected.ext.some((ext) => lower.endsWith(ext));
 }
+
+const EXTENSIONS_BY_TARGET: Record<
+  ConvertTarget,
+  { mime: string[]; ext: string[] }
+> = {
+  "pdf-to-docx": { mime: ["application/pdf"], ext: [".pdf"] },
+  "pdf-to-xlsx": { mime: ["application/pdf"], ext: [".pdf"] },
+  "pdf-to-pptx": { mime: ["application/pdf"], ext: [".pdf"] },
+  "docx-to-pdf": {
+    mime: [
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/msword",
+    ],
+    ext: [".docx", ".doc"],
+  },
+  "xlsx-to-pdf": {
+    mime: [
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "application/vnd.ms-excel",
+    ],
+    ext: [".xlsx", ".xls"],
+  },
+  "pptx-to-pdf": {
+    mime: [
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      "application/vnd.ms-powerpoint",
+    ],
+    ext: [".pptx", ".ppt"],
+  },
+};
 
 export function OfficeConverter({
   target,
@@ -67,7 +109,7 @@ export function OfficeConverter({
   const pickFile = (files: File[]) => {
     const f = files[0];
     if (!f) return;
-    if (!isAllowed(f, accept)) {
+    if (!isAllowed(f, target)) {
       setError("That file type isn't supported by this converter.");
       return;
     }
@@ -92,11 +134,16 @@ export function OfficeConverter({
       const res = await fetch("/api/convert", { method: "POST", body: fd });
 
       if (!res.ok) {
-        // Try to read a JSON error payload; fall back to a status-based message.
+        // Try to read the structured error payload first — the server now
+        // returns `{ error, code }` (see classifyConversionError). The
+        // `code` lets us style retry-able vs hard-fail differently, and
+        // gives users something concrete to quote in a support email.
         let message = `Conversion failed (HTTP ${res.status}).`;
         try {
-          const data = (await res.json()) as { error?: string };
-          if (data.error) message = data.error;
+          const data = (await res.json()) as { error?: string; code?: string };
+          if (data.error) {
+            message = data.code ? `${data.error} (code ${data.code})` : data.error;
+          }
         } catch {
           /* not JSON — keep default */
         }
