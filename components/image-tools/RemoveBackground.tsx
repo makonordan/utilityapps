@@ -5,13 +5,12 @@ import {
   AlertTriangle,
   Check,
   Download,
-  ExternalLink,
   Eraser,
-  Info,
   Layers,
   Loader2,
   Palette,
   Scissors,
+  ShieldCheck,
   Wand2,
 } from "lucide-react";
 
@@ -33,12 +32,6 @@ const TOOL_ID = "remove-background";
 const CONFIG = IMAGE_TOOLS_CONFIG[TOOL_ID];
 const FORMAT_LABELS = SUPPORTED_FORMATS[TOOL_ID];
 
-const USAGE_KEY = "utilityapps_removebg_usage";
-const FREE_TIER_LIMIT = 50;
-const WARN_AT = 40;
-
-const AFFILIATE_PRICING_URL = "https://www.remove.bg/pricing";
-
 // ──────────────────────────────────────────────────────────────────────────
 // Types
 // ──────────────────────────────────────────────────────────────────────────
@@ -46,43 +39,18 @@ const AFFILIATE_PRICING_URL = "https://www.remove.bg/pricing";
 type BgChoice = "transparent" | "white" | "black" | "blur" | "custom";
 type BgFormat = "png" | "jpeg" | "webp";
 
-interface UsageRecord {
-  month: string; // YYYY-MM
-  count: number;
+/** Two-phase progress: model download (only on first ever run) → inference. */
+interface RemovalProgress {
+  /** "model" while the ONNX model is being fetched and cached, "inference"
+   *  while the cutout is being computed. */
+  phase: "model" | "inference";
+  /** 0..100 */
+  percent: number;
 }
 
 // ──────────────────────────────────────────────────────────────────────────
 // Helpers
 // ──────────────────────────────────────────────────────────────────────────
-
-function currentMonthKey(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-}
-
-function readUsage(): UsageRecord {
-  if (typeof window === "undefined") return { month: currentMonthKey(), count: 0 };
-  try {
-    const raw = window.localStorage.getItem(USAGE_KEY);
-    if (!raw) return { month: currentMonthKey(), count: 0 };
-    const parsed = JSON.parse(raw) as UsageRecord;
-    if (!parsed.month || parsed.month !== currentMonthKey()) {
-      return { month: currentMonthKey(), count: 0 };
-    }
-    return parsed;
-  } catch {
-    return { month: currentMonthKey(), count: 0 };
-  }
-}
-
-function writeUsage(record: UsageRecord): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(USAGE_KEY, JSON.stringify(record));
-  } catch {
-    /* ignore — quota / private mode */
-  }
-}
 
 function loadImg(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -118,20 +86,11 @@ export function RemoveBackground() {
   const [composeBusy, setComposeBusy] = useState(false);
 
   const [isProcessing, setIsProcessing] = useState(false);
+  const [progress, setProgress] = useState<RemovalProgress | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  const [usage, setUsage] = useState<UsageRecord>({
-    month: currentMonthKey(),
-    count: 0,
-  });
 
   // Composite cache so we don't redo identical work.
   const composeCacheRef = useRef<Map<string, { blob: Blob; url: string }>>(new Map());
-
-  // ───── Load usage on mount ─────
-  useEffect(() => {
-    setUsage(readUsage());
-  }, []);
 
   // ───── Cleanup all URLs on unmount ─────
   useEffect(() => {
@@ -168,47 +127,51 @@ export function RemoveBackground() {
     [originalUrl, processedUrl]
   );
 
-  // ───── Call API ─────
+  // ───── Run inference in-browser ─────
+  // First call downloads the ONNX model (~40 MB) from IMG.LY's CDN and
+  // caches it in the browser's storage. Subsequent calls are fast — no
+  // network, no API quota, no file leaving the device.
+  //
+  // The library is loaded via `import()` so the ~few-MB ONNX runtime
+  // isn't shipped in the initial bundle. Visitors who never click the
+  // button never pay the cost.
   const removeBg = useCallback(async () => {
     if (!file) return;
     setIsProcessing(true);
+    setProgress({ phase: "model", percent: 0 });
     setError(null);
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/tools/remove-background", {
-        method: "POST",
-        body: fd,
+      const { removeBackground } = await import("@imgly/background-removal");
+      const blob = await removeBackground(file, {
+        output: { format: "image/png", quality: 1 },
+        progress: (key, current, total) => {
+          // The library reports progress for both phases under different
+          // keys — "compute:inference" once the model is loaded and any
+          // "fetch:*" event during initial model download. Map both into
+          // a single 0..100 number per phase for our UI.
+          if (!total || total <= 0) return;
+          const percent = Math.min(100, Math.round((current / total) * 100));
+          const phase: RemovalProgress["phase"] = key.startsWith("compute")
+            ? "inference"
+            : "model";
+          setProgress({ phase, percent });
+        },
       });
-      if (!res.ok) {
-        // Server returns JSON for errors, PNG bytes for success.
-        let message = `Background removal failed (status ${res.status})`;
-        try {
-          const body = (await res.json()) as { error?: string };
-          if (body.error) message = body.error;
-        } catch {
-          /* keep default */
-        }
-        throw new Error(message);
-      }
-      const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       setProcessedBlob(blob);
       setProcessedUrl(url);
-
-      // Bump usage counter on success.
-      const next: UsageRecord = {
-        month: currentMonthKey(),
-        count: usage.month === currentMonthKey() ? usage.count + 1 : 1,
-      };
-      setUsage(next);
-      writeUsage(next);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Background removal failed");
+      console.error("[RemoveBackground]", err);
+      setError(
+        err instanceof Error
+          ? `Couldn't remove the background: ${err.message}`
+          : "Couldn't remove the background. Try a smaller image or a different one."
+      );
     } finally {
       setIsProcessing(false);
+      setProgress(null);
     }
-  }, [file, usage]);
+  }, [file]);
 
   // ───── Compose with chosen background ─────
   const composeWithBackground = useCallback(async () => {
@@ -308,9 +271,6 @@ export function RemoveBackground() {
   };
 
   // ───── Render ─────
-  const remaining = Math.max(0, FREE_TIER_LIMIT - usage.count);
-  const showLowWarning = usage.count >= WARN_AT && usage.count < FREE_TIER_LIMIT;
-  const showLimitHit = usage.count >= FREE_TIER_LIMIT;
   const previewUrl = bgChoice === "transparent" ? processedUrl : composedUrl;
   const previewLabel = bgChoice === "transparent" ? "Transparent" : "Background";
 
@@ -324,9 +284,9 @@ export function RemoveBackground() {
         formatLabels={FORMAT_LABELS}
       />
       <p className="inline-flex items-start gap-2 text-[11px] text-surface-500 dark:text-surface-400">
-        <Scissors className="h-3.5 w-3.5 shrink-0 text-primary-600 dark:text-primary-400" />
+        <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-success-600 dark:text-success-400" />
         Works best on portraits, products, animals, vehicles and isolated objects.
-        Uses an AI-powered API — 50 free removals per month.
+        Runs entirely in your browser — your image never leaves your device.
       </p>
 
       {file && originalUrl && (
@@ -352,7 +312,7 @@ export function RemoveBackground() {
             )}
 
             {/* Processing state */}
-            {isProcessing && <ProcessingPanel />}
+            {isProcessing && <ProcessingPanel progress={progress} />}
 
             {/* Error */}
             {error && (
@@ -390,21 +350,21 @@ export function RemoveBackground() {
             )}
           </div>
 
-          {/* Right sidebar: action + usage */}
+          {/* Right sidebar: action + privacy note */}
           <aside className="h-fit space-y-4 rounded-2xl border border-surface-200 bg-white p-5 dark:border-surface-800 dark:bg-surface-900">
             <header>
               <h2 className="text-sm font-semibold text-surface-900 dark:text-white">
                 Background removal
               </h2>
               <p className="mt-1 text-xs text-surface-500 dark:text-surface-400">
-                Runs through an AI API. One click — no manual masking.
+                Runs locally — no upload, no API, no usage cap.
               </p>
             </header>
 
             <button
               type="button"
               onClick={removeBg}
-              disabled={isProcessing || showLimitHit}
+              disabled={isProcessing}
               className="inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-primary-600 px-8 py-4 text-lg font-bold text-white shadow-lg ring-4 ring-primary-300/60 transition hover:bg-primary-700 hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 disabled:ring-0 disabled:hover:scale-100"
             >
               {isProcessing ? (
@@ -426,19 +386,9 @@ export function RemoveBackground() {
               <Eraser className="h-3 w-3" /> Start over
             </button>
 
-            <UsageBox
-              used={usage.count}
-              remaining={remaining}
-              showLowWarning={showLowWarning}
-              showLimitHit={showLimitHit}
-            />
+            <PrivacyNote />
           </aside>
         </div>
-      )}
-
-      {/* Affiliate upsell — only when there's a result or the warning is up */}
-      {(processedBlob || showLowWarning || showLimitHit) && (
-        <AffiliateUpsell />
       )}
     </div>
   );
@@ -448,7 +398,22 @@ export function RemoveBackground() {
 // Subviews
 // ──────────────────────────────────────────────────────────────────────────
 
-function ProcessingPanel() {
+function ProcessingPanel({ progress }: { progress: RemovalProgress | null }) {
+  const phaseLabel = !progress
+    ? "Preparing…"
+    : progress.phase === "model"
+      ? "Loading AI model (first time only, then cached)…"
+      : "Removing background…";
+  const phaseHint = !progress
+    ? "Hold on a second."
+    : progress.phase === "model"
+      ? "~40 MB download — happens once per browser, then it's instant."
+      : "Inference runs on your device. 3–15 seconds depending on image size.";
+
+  // When no progress event has fired yet, show an indeterminate shimmer
+  // so the bar doesn't sit at 0% looking broken.
+  const percent = progress?.percent ?? null;
+
   return (
     <div
       role="status"
@@ -462,16 +427,25 @@ function ProcessingPanel() {
         </span>
         <div>
           <p className="text-sm font-semibold text-surface-900 dark:text-white">
-            Removing background with AI…
+            {phaseLabel}
           </p>
-          <p className="text-xs text-surface-500 dark:text-surface-400">
-            Usually takes 3–8 seconds.
-          </p>
+          <p className="text-xs text-surface-500 dark:text-surface-400">{phaseHint}</p>
         </div>
+        {percent !== null && (
+          <span className="ml-auto text-xs font-bold tabular-nums text-primary-700 dark:text-primary-300">
+            {percent}%
+          </span>
+        )}
       </div>
-      {/* Shimmer */}
       <div className="h-2 w-full overflow-hidden rounded-full bg-primary-100 dark:bg-primary-500/20">
-        <div className="h-full w-1/3 animate-pulse rounded-full bg-primary-600" />
+        {percent !== null ? (
+          <div
+            className="h-full rounded-full bg-primary-600 transition-[width] duration-200"
+            style={{ width: `${percent}%` }}
+          />
+        ) : (
+          <div className="h-full w-1/3 animate-pulse rounded-full bg-primary-600" />
+        )}
       </div>
     </div>
   );
@@ -679,89 +653,17 @@ function BackgroundOptions({
   );
 }
 
-function UsageBox({
-  used,
-  remaining,
-  showLowWarning,
-  showLimitHit,
-}: {
-  used: number;
-  remaining: number;
-  showLowWarning: boolean;
-  showLimitHit: boolean;
-}) {
-  const pct = Math.min(100, (used / FREE_TIER_LIMIT) * 100);
+function PrivacyNote() {
   return (
-    <div
-      className={cn(
-        "space-y-2 rounded-xl border p-3",
-        showLimitHit
-          ? "border-error-300 bg-error-50/60 dark:border-error-500/40 dark:bg-error-500/10"
-          : showLowWarning
-            ? "border-warning-300 bg-warning-50/60 dark:border-warning-500/40 dark:bg-warning-500/10"
-            : "border-surface-200 bg-surface-50 dark:border-surface-700 dark:bg-surface-800/40"
-      )}
-    >
-      <div className="flex items-baseline justify-between">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-surface-600 dark:text-surface-300">
-          Free API calls this month
+    <div className="rounded-xl border border-success-200 bg-success-50/60 p-3 dark:border-success-500/40 dark:bg-success-500/10">
+      <p className="inline-flex items-start gap-2 text-[11px] text-success-800 dark:text-success-200">
+        <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+        <span>
+          <strong>100% in your browser.</strong> Your image is never uploaded.
+          No API keys, no usage cap, no signup. Works offline after the model
+          loads once.
         </span>
-        <span className="text-xs font-bold tabular-nums text-surface-900 dark:text-white">
-          {used} / {FREE_TIER_LIMIT}
-        </span>
-      </div>
-      <div className="h-1.5 overflow-hidden rounded-full bg-surface-200 dark:bg-surface-700">
-        <div
-          className={cn(
-            "h-full rounded-full transition-[width] duration-300",
-            showLimitHit
-              ? "bg-error-600"
-              : showLowWarning
-                ? "bg-warning-600"
-                : "bg-primary-600"
-          )}
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-      {showLowWarning && !showLimitHit && (
-        <p className="text-[11px] text-warning-800 dark:text-warning-200">
-          Running low — {remaining} left. Upgrade at remove.bg for unlimited use.
-        </p>
-      )}
-      {showLimitHit && (
-        <p className="inline-flex items-start gap-1.5 text-[11px] text-error-700 dark:text-error-300">
-          <Info className="mt-0.5 h-3 w-3 shrink-0" />
-          Free monthly limit reached. Resets at the start of next month.
-        </p>
-      )}
+      </p>
     </div>
-  );
-}
-
-function AffiliateUpsell() {
-  return (
-    <aside className="flex flex-wrap items-start gap-3 rounded-2xl border border-surface-200 bg-surface-50/60 p-4 text-sm dark:border-surface-700 dark:bg-surface-800/40">
-      <Info className="mt-0.5 h-4 w-4 shrink-0 text-primary-600 dark:text-primary-400" />
-      <div className="flex-1 space-y-1">
-        <p className="font-semibold text-surface-900 dark:text-white">
-          Need to remove backgrounds from a lot of images?
-        </p>
-        <p className="text-xs text-surface-600 dark:text-surface-300">
-          remove.bg offers bulk processing from $0.10 per image — useful for
-          product catalogues, e-commerce uploads or any time the free monthly
-          allowance isn&apos;t enough. (Affiliate link; we may earn a small
-          referral fee.)
-        </p>
-      </div>
-      <a
-        href={AFFILIATE_PRICING_URL}
-        target="_blank"
-        rel="noopener noreferrer sponsored"
-        className="inline-flex items-center gap-1 rounded-lg border border-primary-300 px-3 py-1.5 text-xs font-semibold text-primary-700 transition hover:border-primary-500 hover:bg-primary-50 dark:border-primary-500/60 dark:text-primary-200 dark:hover:bg-primary-500/10"
-      >
-        See pricing
-        <ExternalLink className="h-3 w-3" />
-      </a>
-    </aside>
   );
 }

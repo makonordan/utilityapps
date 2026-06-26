@@ -10,9 +10,9 @@ import { SITE_CONFIG } from "@/lib/utils";
 const TOOL_ID = "remove-background";
 const CONFIG = IMAGE_TOOLS_CONFIG[TOOL_ID];
 
-const TITLE = "Remove Background Free — AI Background Remover | Instant & Accurate";
+const TITLE = "Remove Background Free — In-Browser AI Background Remover | Private & Unlimited";
 const DESCRIPTION =
-  "Remove the background from any photo in seconds. AI-powered, free, accurate — perfect for portraits, products and e-commerce shots. Replace with a solid colour or blurred original.";
+  "Remove the background from any photo in seconds. AI runs entirely in your browser — no upload, no API key, no usage cap. Replace with transparent, a solid colour, or a blurred original.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -61,7 +61,7 @@ export default function RemoveBackgroundPage() {
       <ImageToolShell
         toolId={TOOL_ID}
         title="Remove Background"
-        description="Cut the background out of any photo in seconds with AI. Replace it with transparent, a solid colour, or a blurred version of the original."
+        description="Cut the background out of any photo in seconds. AI runs entirely in your browser — your image never leaves your device. Replace with transparent, a solid colour, or a blurred original."
         processingLocation={CONFIG.processingLocation}
         apiRequired={CONFIG.apiRequired}
         faqItems={getImageFaqs(TOOL_ID)}
@@ -76,35 +76,35 @@ export default function RemoveBackgroundPage() {
 function SeoContent() {
   return (
     <article>
-      <h2>One-click background removal</h2>
+      <h2>One-click background removal — in your browser</h2>
       <p>
         Drop a photo, click the button, and a few seconds later you have a
-        clean PNG with the subject isolated against transparency. Behind the
-        scenes the image is sent to a state-of-the-art segmentation model
-        trained on millions of subject/background pairs — the same approach
-        professional product photographers use, just instant and without
-        the manual masking work.
+        clean PNG with the subject isolated against transparency. The whole
+        thing — neural-network inference and all — runs on your device using
+        WebAssembly. Your image never leaves your browser. There&rsquo;s no
+        server, no API key, no usage cap.
       </p>
 
-      <h2>Why this tool is server-powered</h2>
+      <h2>How it works (the honest version)</h2>
       <p>
-        Most tools on this site run entirely in your browser. Background
-        removal is the exception: the model is too large and the inference
-        too computationally expensive to ship to the client without a
-        miserable wait time. Your image is sent over HTTPS to a vetted AI
-        service (remove.bg), processed, and discarded — the API doesn&apos;t
-        retain your file after the cutout is returned.
+        On your first run, a state-of-the-art segmentation model (about 40
+        MB) downloads from a content-delivery network and gets cached in
+        your browser&rsquo;s storage. Every run after that is instant —
+        no network at all once you&rsquo;ve loaded the model once. Inference
+        uses WebGPU on devices that support it (most modern Chrome / Edge /
+        Safari) and falls back to WASM-CPU everywhere else; the latter is
+        slower but still works.
       </p>
 
       <h2>Background replacement</h2>
       <p>
         After the cutout is ready, the new background is composited locally
-        in your browser — no extra API call:
+        on a canvas:
       </p>
       <ul>
         <li><strong>Transparent</strong> — keeps the alpha channel; perfect for layering into a design tool, slide deck or PDF.</li>
         <li><strong>White / Black</strong> — the catalogue standards. White is the e-commerce default; black is great for portraits and product shots with dramatic light.</li>
-        <li><strong>Blur original</strong> — keeps your subject in context but blurs the background heavily. Great for video conferencing-style portraits.</li>
+        <li><strong>Blur original</strong> — keeps your subject in context but blurs the background heavily. Great for video-conferencing-style portraits.</li>
         <li><strong>Custom colour</strong> — pick any hex value to match your brand.</li>
       </ul>
 
@@ -115,18 +115,18 @@ function SeoContent() {
         Hair, fur, lace and other fine edge detail are the long-standing
         hard cases — they sometimes lose a few strands or pick up halo
         artefacts. For pixel-perfect catalogue masters, refine the cutout
-        in a dedicated tool afterwards; for most social media and casual
-        product photos, the AI output is good enough to ship as-is.
+        in a dedicated tool afterwards; for most social-media and casual
+        product photos, the output is good enough to ship as-is.
       </p>
 
-      <h2>Privacy and usage</h2>
+      <h2>Privacy</h2>
       <p>
-        Files are sent over HTTPS only, not retained by the API after
-        processing, and never touch our analytics. The on-page usage
-        counter is stored in your browser&apos;s localStorage and resets at
-        the start of every calendar month. If you need more than 50
-        removals per month, remove.bg&apos;s paid plans are linked from the
-        tool itself.
+        Because the model runs on your machine, your image is never
+        uploaded. There is literally no path for your file to reach any
+        server we operate. No analytics event records the file, no logs
+        capture its bytes, and the &ldquo;Start over&rdquo; button drops the
+        in-memory copy immediately. If your tab is closed before processing
+        finishes, nothing persists.
       </p>
     </article>
   );

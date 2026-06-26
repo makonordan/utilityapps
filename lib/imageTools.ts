@@ -208,8 +208,8 @@ export const IMAGE_TOOLS_CONFIG = {
     maxFileSizeMB: 10,
     acceptedFormats: ["image/jpeg", "image/png", "image/webp"],
     supportsMultiple: false,
-    processingLocation: "api",
-    apiRequired: true,
+    processingLocation: "browser",
+    apiRequired: false,
   },
   "watermark-image": {
     maxFileSizeMB: 25,
