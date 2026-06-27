@@ -1,62 +1,101 @@
 import type { Metadata } from "next";
 
-import { RetiredToolNotice } from "@/components/pdf-tools/RetiredToolNotice";
+import { OfficeConverter } from "@/components/pdf-tools/OfficeConverter";
+import { PdfToolShell } from "@/components/pdf-tools/PdfToolShell";
+import { TrackToolVisit } from "@/components/tools/TrackToolVisit";
+import { getPdfFaqs, pdfToolOgUrl } from "@/lib/pdfFaqs";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TITLE = "PDF to Excel — Tool Not Currently Offered | UtilityApps";
+const TOOL_ID = "pdf-to-excel";
+
+const TITLE = "Free PDF to Excel — Extract Tables to .xlsx Online";
 const DESCRIPTION =
-  "We don't currently offer a reliable PDF → Excel conversion. PDFs have no native table structure, and recovering them well needs server-side software we don't run. See suggested alternatives for accurate table extraction.";
+  "Pull tables from a PDF into an editable Excel file. Best on bordered tables. 10 MB limit, no signup.";
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  // Soft-deprecated: keep the URL alive for inbound links but tell Google
-  // not to surface this in search since we no longer rank for it well.
-  robots: { index: false, follow: true },
-  alternates: { canonical: "/tools/pdf-to-excel" },
+  keywords: [
+    "pdf to excel",
+    "pdf to xlsx",
+    "convert pdf to excel",
+    "extract tables from pdf",
+    "pdf table to excel",
+    "pdf to spreadsheet",
+  ],
+  alternates: { canonical: `/tools/${TOOL_ID}` },
   openGraph: {
     type: "website",
     title: TITLE,
     description: DESCRIPTION,
-    url: `${SITE_CONFIG.url}/tools/pdf-to-excel`,
+    url: `${SITE_CONFIG.url}/tools/${TOOL_ID}`,
     siteName: SITE_CONFIG.name,
+    images: [{ url: pdfToolOgUrl(TITLE, DESCRIPTION), width: 1200, height: 630, alt: "PDF to Excel" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [pdfToolOgUrl(TITLE, DESCRIPTION)],
+    creator: SITE_CONFIG.twitterHandle,
   },
 };
 
-export default function PdfToExcelRetiredPage() {
+export default function PdfToExcelPage() {
   return (
-    <RetiredToolNotice
-      toolName="PDF to Excel"
-      reason="Pulling tables out of a PDF cleanly needs a real layout engine — PDFs store text positions, not table structure. The browser-only version we could ship would treat each line as a row and lose any sense of columns, which would frustrate more than it helps. Until we can run server-side conversion again, we recommend the alternatives below."
-      alternatives={[
-        {
-          label: "PDF to Word (browser-side)",
-          description:
-            "If you mostly want the text out of the PDF, our browser-side PDF → Word does the job — text-only, no upload.",
-          href: "/tools/pdf-to-word",
-        },
-        {
-          label: "Adobe Acrobat — Convert PDF to Excel",
-          description:
-            "Adobe's own engine. Free trial; subscription after that. Best fidelity for tables.",
-          href: "https://www.adobe.com/acrobat/online/pdf-to-excel.html",
-          external: true,
-        },
-        {
-          label: "Smallpdf — PDF to Excel",
-          description:
-            "Free tier with daily limits, paid subscription for unlimited use. Solid table detection.",
-          href: "https://smallpdf.com/pdf-to-excel",
-          external: true,
-        },
-        {
-          label: "iLovePDF — PDF to Excel",
-          description:
-            "Free tier, decent table detection. Files uploaded to their servers.",
-          href: "https://www.ilovepdf.com/pdf_to_excel",
-          external: true,
-        },
-      ]}
-    />
+    <>
+      <TrackToolVisit toolId={TOOL_ID} />
+      <PdfToolShell
+        toolId={TOOL_ID}
+        title="PDF to Excel"
+        description="Extract tables from a PDF into an editable .xlsx. Best results on PDFs with clearly bordered tables — borderless layouts may need a quick clean-up after."
+        faqItems={getPdfFaqs(TOOL_ID)}
+        seoContent={<SeoContent />}
+        serverProcessing
+      >
+        <OfficeConverter
+          toolId={TOOL_ID}
+          target="pdf-to-xlsx"
+          accept="application/pdf"
+          dropLabel="Drop a PDF here or click to choose"
+          actionLabel="Convert to Excel"
+          outputExt=".xlsx"
+        />
+      </PdfToolShell>
+    </>
+  );
+}
+
+function SeoContent() {
+  return (
+    <article>
+      <h2>How table extraction works</h2>
+      <p>
+        The conversion engine analyses each PDF page for grid-like structures — visible cell
+        borders, consistent column gutters, repeated row spacing — and reconstructs them as rows
+        and columns in an Excel sheet. Each PDF page typically becomes one worksheet (or one
+        section within a worksheet) in the output workbook.
+      </p>
+      <h2>What works best</h2>
+      <ul>
+        <li>Tables with visible borders and consistent column widths</li>
+        <li>Bank statements, invoices and financial reports</li>
+        <li>Single-table-per-page PDFs (cleanest output)</li>
+        <li>Digitally-generated PDFs with a text layer</li>
+      </ul>
+      <h2>What needs cleanup</h2>
+      <ul>
+        <li>Borderless tables — columns may merge or split unpredictably</li>
+        <li>Tables that span multiple pages — usually rebuilt per page, not joined</li>
+        <li>Merged cells, multi-row headers and footnotes — best-effort</li>
+        <li>Scanned PDFs (no text layer) — needs OCR first</li>
+      </ul>
+      <h2>Why no formulas?</h2>
+      <p>
+        A PDF stores the visible values shown on the page, not the formulas that produced them.
+        The converted Excel file therefore contains the same numbers as the PDF, as plain values
+        — useful for further analysis, but not editable as live formulas.
+      </p>
+    </article>
   );
 }

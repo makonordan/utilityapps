@@ -2257,9 +2257,9 @@ export const TOOLS: Tool[] = [
     id: "word-to-pdf",
     name: "Word to PDF",
     description:
-      "Convert a .docx (or .doc) to a PDF — in your browser, no upload, no signup.",
+      "Convert a .docx (or .doc) file to a PDF — layout and fonts preserved, 10 MB limit.",
     longDescription:
-      "Browser-side Word → PDF conversion. Drop a .docx (or older .doc), and a PDF is generated directly in this tab and downloaded — your file is never uploaded to a server. Best for plain documents (paragraphs, headings, lists, simple tables); multi-column layouts, footnotes, and custom fonts may shift.",
+      "Server-backed Word → PDF conversion via ConvertAPI. Drop a .docx (or older .doc), and a faithful PDF is returned and downloaded by your browser. Common fonts and layouts come through cleanly; the source file is deleted from our server after the conversion runs.",
     category: "PDF Tools",
     icon: "FileType",
     href: "/tools/word-to-pdf",
@@ -2277,15 +2277,15 @@ export const TOOLS: Tool[] = [
     featured: true,
     monthlySearches: 6_700_000,
     cpc: 5,
-    relatedTools: ["pdf-to-word", "excel-to-pdf", "merge-pdf"],
+    relatedTools: ["pdf-to-word", "excel-to-pdf", "ppt-to-pdf"],
   },
   {
     id: "pdf-to-word",
     name: "PDF to Word",
     description:
-      "Extract the text out of a PDF into an editable Word (.docx) — entirely in your browser.",
+      "Convert a PDF into an editable Word (.docx) document — best for digital, text-based PDFs.",
     longDescription:
-      "Browser-side PDF → Word conversion. Text and approximate headings are extracted from the PDF and written into a .docx; tables, images, and exact layout are not preserved. Use when you want to edit the words; for layout-faithful conversion use a paid service. Scanned PDFs need OCR first.",
+      "Server-backed PDF → Word conversion via ConvertAPI. The result is a .docx with editable paragraphs, headings, and reconstructed tables. Best on PDFs originally exported from Word or similar — scanned PDFs need OCR first.",
     category: "PDF Tools",
     icon: "FileType",
     href: "/tools/pdf-to-word",
@@ -2303,15 +2303,15 @@ export const TOOLS: Tool[] = [
     featured: true,
     monthlySearches: 8_300_000,
     cpc: 5,
-    relatedTools: ["word-to-pdf", "edit-pdf", "compress-pdf"],
+    relatedTools: ["word-to-pdf", "pdf-to-excel", "edit-pdf"],
   },
   {
     id: "excel-to-pdf",
     name: "Excel to PDF",
     description:
-      "Convert an Excel workbook (.xlsx / .xls) to a PDF — one section per sheet, in your browser.",
+      "Convert an Excel workbook (.xlsx / .xls) into a PDF — every sheet as a page.",
     longDescription:
-      "Browser-side Excel → PDF conversion. Each worksheet becomes a clean table section in the PDF, with the first row treated as a header. Long sheets paginate automatically. Charts, conditional formatting, and embedded images are not rendered — only the underlying data tables.",
+      "Server-backed Excel → PDF conversion via ConvertAPI. Each worksheet becomes one or more pages, honouring your print-area and page-break settings. Charts are rendered as they look in Excel; formulas convert to their current values.",
     category: "PDF Tools",
     icon: "FileSpreadsheet",
     href: "/tools/excel-to-pdf",
@@ -2329,14 +2329,86 @@ export const TOOLS: Tool[] = [
     featured: false,
     monthlySearches: 1_900_000,
     cpc: 4,
-    relatedTools: ["word-to-pdf", "merge-pdf", "compress-pdf"],
+    relatedTools: ["pdf-to-excel", "word-to-pdf", "compress-pdf"],
   },
-  // PDF → Excel, PowerPoint ↔ PDF were retired from the public catalogue
-  // when we moved the Office↔PDF tools fully browser-side. Reliable
-  // conversions for these three need a server-side Office engine (which we
-  // no longer run); the standalone routes still exist as soft-deprecated
-  // pages that explain the situation and point visitors to alternatives.
-  // See app/tools/{pdf-to-excel,ppt-to-pdf,pdf-to-ppt}/page.tsx.
+  {
+    id: "pdf-to-excel",
+    name: "PDF to Excel",
+    description:
+      "Pull tables out of a PDF into an editable Excel file — best on PDFs with bordered tables.",
+    longDescription:
+      "Server-backed PDF → Excel conversion via ConvertAPI. Detects tables and reconstructs them as rows and columns in a .xlsx file. Works best on PDFs with clearly bordered tables; complex layouts may need a quick clean-up after.",
+    category: "PDF Tools",
+    icon: "FileSpreadsheet",
+    href: "/tools/pdf-to-excel",
+    externalHref: null,
+    embedUrl: null,
+    keywords: [
+      "pdf to excel",
+      "pdf to xlsx",
+      "convert pdf to excel",
+      "extract tables from pdf",
+      "pdf table to excel",
+    ],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 2_400_000,
+    cpc: 6,
+    relatedTools: ["excel-to-pdf", "pdf-to-word", "edit-pdf"],
+  },
+  {
+    id: "ppt-to-pdf",
+    name: "PowerPoint to PDF",
+    description:
+      "Convert a PowerPoint deck (.pptx / .ppt) into a PDF — one slide per page.",
+    longDescription:
+      "Server-backed PowerPoint → PDF conversion via ConvertAPI. Each slide becomes a PDF page at the deck's aspect ratio (16:9 or 4:3). Animations are flattened to their initial state since PDF is a static format.",
+    category: "PDF Tools",
+    icon: "Presentation",
+    href: "/tools/ppt-to-pdf",
+    externalHref: null,
+    embedUrl: null,
+    keywords: [
+      "powerpoint to pdf",
+      "pptx to pdf",
+      "convert ppt to pdf",
+      "slides to pdf",
+      "powerpoint to pdf free",
+    ],
+    trending: false,
+    new: true,
+    featured: false,
+    monthlySearches: 1_200_000,
+    cpc: 4,
+    relatedTools: ["pdf-to-ppt", "word-to-pdf", "excel-to-pdf"],
+  },
+  {
+    id: "pdf-to-ppt",
+    name: "PDF to PowerPoint",
+    description:
+      "Turn a PDF into a PowerPoint deck — each page becomes an editable slide.",
+    longDescription:
+      "Server-backed PDF → PowerPoint conversion via ConvertAPI. Each page becomes its own slide; text comes through as editable text boxes where possible, otherwise as a slide background image.",
+    category: "PDF Tools",
+    icon: "Presentation",
+    href: "/tools/pdf-to-ppt",
+    externalHref: null,
+    embedUrl: null,
+    keywords: [
+      "pdf to powerpoint",
+      "pdf to pptx",
+      "convert pdf to ppt",
+      "pdf to slides",
+      "pdf to powerpoint free",
+    ],
+    trending: false,
+    new: true,
+    featured: false,
+    monthlySearches: 880_000,
+    cpc: 5,
+    relatedTools: ["ppt-to-pdf", "pdf-to-word", "edit-pdf"],
+  },
 
   // ============================================================== Legal Tools
   {
