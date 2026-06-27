@@ -412,18 +412,16 @@ function buildComparisonRows(tool: Tool, competitor: Competitor): ComparisonRow[
   ];
 }
 
-/** A few of our tools genuinely do call a server-side API (Office↔PDF,
- *  background removal, some video work). We tell the truth on the row
- *  rather than blanket-claim "browser" everywhere — that's a credibility
- *  signal that survives the read. */
+/** The few tools that still genuinely call a server-side API. Used to
+ *  honestly label the "Processing happens in your browser?" comparison
+ *  row instead of blanket-claiming "browser" everywhere — that
+ *  credibility matters more than a clean marketing story.
+ *
+ *  Office↔PDF + remove-background moved to fully browser-side. The PDF↔
+ *  Excel and PowerPoint↔PDF tools were retired entirely (those pages are
+ *  soft-deprecated notices now, not in the TOOLS catalogue). What's left:
+ *  upscale-image still uses a server-side AI API. */
 const SERVER_SIDE_TOOL_IDS = new Set<string>([
-  "pdf-to-word",
-  "pdf-to-excel",
-  "pdf-to-ppt",
-  "word-to-pdf",
-  "excel-to-pdf",
-  "ppt-to-pdf",
-  "remove-background",
   "upscale-image",
 ]);
 

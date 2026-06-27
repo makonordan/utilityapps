@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { OfficeConverter } from "@/components/pdf-tools/OfficeConverter";
+import { BrowserOfficeConverter } from "@/components/pdf-tools/BrowserOfficeConverter";
 import { PdfToolShell } from "@/components/pdf-tools/PdfToolShell";
 import { TrackToolVisit } from "@/components/tools/TrackToolVisit";
 import { getPdfFaqs, pdfToolOgUrl } from "@/lib/pdfFaqs";
@@ -8,9 +8,9 @@ import { SITE_CONFIG } from "@/lib/utils";
 
 const TOOL_ID = "excel-to-pdf";
 
-const TITLE = "Free Excel to PDF — Convert .xlsx Workbooks to PDF Online";
+const TITLE = "Free Excel to PDF — Convert .xlsx Workbooks to PDF in Your Browser";
 const DESCRIPTION =
-  "Convert Excel workbooks (.xlsx / .xls) into PDFs — every sheet as a page. 10 MB limit, no signup.";
+  "Convert Excel workbooks (.xlsx / .xls) into PDFs — every sheet on its own section, formatted as a clean table. Runs entirely in your browser, no upload, no signup.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -48,18 +48,18 @@ export default function ExcelToPdfPage() {
       <PdfToolShell
         toolId={TOOL_ID}
         title="Excel to PDF"
-        description="Drop an .xlsx (or .xls) and get a PDF where every sheet becomes a page. Print areas and page breaks set in Excel are honoured."
+        description="Drop an .xlsx (or .xls) and download a PDF — one section per sheet, rendered as a clean table. Runs entirely in your browser; data tables and column headers look great, charts and conditional formatting collapse to their underlying values."
         faqItems={getPdfFaqs(TOOL_ID)}
         seoContent={<SeoContent />}
-        serverProcessing
       >
-        <OfficeConverter
+        <BrowserOfficeConverter
           toolId={TOOL_ID}
-          target="xlsx-to-pdf"
+          target="excel-to-pdf"
           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
           dropLabel="Drop an Excel workbook here or click to choose"
           actionLabel="Convert to PDF"
           outputExt=".pdf"
+          qualityNote="Great for data tables (the common case). Charts, conditional formatting, embedded images, and complex merged-cell layouts collapse to their underlying values. Files never leave your browser."
         />
       </PdfToolShell>
     </>
@@ -71,22 +71,34 @@ function SeoContent() {
     <article>
       <h2>How sheets become pages</h2>
       <p>
-        Each worksheet in the workbook converts to one or more PDF pages in the order they appear
-        in Excel. Worksheets with print areas set use that exact range as the page boundary;
-        worksheets without print areas use the data range. Page breaks you&rsquo;ve inserted
-        manually are respected.
+        Each worksheet in the workbook converts to one section of the PDF in
+        sheet order. The first row of each sheet is treated as the header
+        and styled in a coloured band; the rest of the sheet renders as a
+        regular table with alternating row shading for readability. Long
+        sheets paginate automatically — the header doesn&rsquo;t repeat on
+        every page to keep the file small, but the sheet name + page counter
+        in the footer makes it easy to keep track.
       </p>
-      <h2>Tips for clean output</h2>
+      <h2>What translates well</h2>
       <ul>
-        <li>Set <strong>Page Layout → Print Area</strong> in Excel to control exactly what appears.</li>
-        <li>Use <strong>Page Layout → Scale to Fit</strong> for wide tables that would otherwise overflow.</li>
-        <li>Hide columns or rows you don&rsquo;t want to appear in the PDF (they stay hidden).</li>
-        <li>Use <strong>Page Layout → Orientation: Landscape</strong> for wide reports before exporting.</li>
+        <li>Data tables with text, numbers, and dates</li>
+        <li>Multi-sheet workbooks (you get one section per sheet)</li>
+        <li>Standard column headers</li>
+        <li>Empty sheets (rendered with a small placeholder rather than skipped)</li>
+      </ul>
+      <h2>What doesn&rsquo;t survive</h2>
+      <ul>
+        <li>Charts — collapse to nothing; only the underlying data table makes it through</li>
+        <li>Conditional formatting (colour scales, data bars) — values stay, colours don&rsquo;t</li>
+        <li>Cell merges across rows — usually flatten into the top-left value</li>
+        <li>Pivot tables, slicers, and form controls</li>
+        <li>Embedded images and shapes</li>
       </ul>
       <h2>What about formulas?</h2>
       <p>
-        Formulas convert to their current displayed values — the PDF shows the numbers, not the
-        formulas behind them. If you need both, keep the source workbook alongside.
+        Formulas convert to their current calculated values — the PDF shows
+        the numbers, not the formulas behind them. If you need both, keep
+        the source workbook alongside the PDF.
       </p>
     </article>
   );
