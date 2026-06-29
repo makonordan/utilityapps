@@ -48,7 +48,7 @@ export default function EditPdfPage() {
       <PdfToolShell
         toolId={TOOL_ID}
         title="Edit PDF"
-        description="Add text boxes, rectangles and ovals to a PDF — pick a tool, set its options, click on the page to place it, queue as many as you want, then save."
+        description="Add text, images, shapes and freehand drawings to any PDF. Select, drag, resize, reorder layers. Runs entirely in your browser — your file is never uploaded."
         faqItems={getPdfFaqs(TOOL_ID)}
         seoContent={<SeoContent />}
       >
