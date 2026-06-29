@@ -361,7 +361,10 @@ export function EditPdf() {
           y,
           width: 200,
           height: 32,
-          text: "New text",
+          // NEW_TEXT_PLACEHOLDER triggers TextContent's auto-edit-on-mount
+          // path — the textarea is focused immediately so the user can
+          // just start typing without discovering the double-click.
+          text: NEW_TEXT_PLACEHOLDER,
           fontFamily: "Helvetica",
           fontSize: 16,
           bold: false,
@@ -404,10 +407,10 @@ export function EditPdf() {
           color: "#dc2626",
           strokeWidth: 2,
         });
-      } else if (tool === "image") {
-        // Trigger the hidden file picker; insert happens in its onChange.
-        imageInputRef.current?.click();
       }
+      // Image is handled separately — the toolbar button opens the
+      // file picker directly so users don't need a second click to
+      // place anything. The image lands centered on the page.
     },
     [addAnnotation, nextZ, pageNumber, previewDims, tool]
   );
@@ -701,7 +704,11 @@ export function EditPdf() {
       </div>
 
       {/* Tool palette */}
-      <Toolbar tool={tool} onTool={setTool} />
+      <Toolbar
+        tool={tool}
+        onTool={setTool}
+        onAddImage={() => imageInputRef.current?.click()}
+      />
 
       {/* Floating format toolbar for the selected item */}
       {selected && (
@@ -739,12 +746,16 @@ export function EditPdf() {
                 onPointerUp={endDraw}
                 onPointerLeave={endDraw}
               >
-                {/* Background page */}
+                {/* Background page — pointer-events: none so clicks pass
+                    through to the parent div's onClick handler. Without
+                    this, e.target on a click was the img (not the div),
+                    and the placeOnCanvas guard would silently reject
+                    every click, making the entire tool look broken. */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={previewUrl}
                   alt={`Page ${pageNumber}`}
-                  className="block w-full rounded-md shadow-sm"
+                  className="pointer-events-none block w-full rounded-md shadow-sm"
                   draggable={false}
                 />
 
@@ -833,15 +844,22 @@ export function EditPdf() {
 
 // ─── Subcomponents ─────────────────────────────────────────────────────────
 
-function Toolbar({ tool, onTool }: { tool: Tool; onTool: (t: Tool) => void }) {
+function Toolbar({
+  tool,
+  onTool,
+  onAddImage,
+}: {
+  tool: Tool;
+  onTool: (t: Tool) => void;
+  onAddImage: () => void;
+}) {
   const buttons: {
     id: Tool;
     label: string;
     icon: typeof Hand;
   }[] = [
     { id: "hand", label: "Hand (select / pan)", icon: Hand },
-    { id: "text", label: "Add text", icon: Type },
-    { id: "image", label: "Add image", icon: ImageIcon },
+    { id: "text", label: "Add text — click on the page to place", icon: Type },
     { id: "draw", label: "Freehand draw", icon: Pencil },
   ];
   const shapeButtons: { id: Tool; label: string; icon: typeof LineIcon }[] = [
@@ -851,11 +869,17 @@ function Toolbar({ tool, onTool }: { tool: Tool; onTool: (t: Tool) => void }) {
   ];
   return (
     <div className="flex flex-wrap items-center gap-1 rounded-xl border border-surface-200 bg-white p-1.5 dark:border-surface-800 dark:bg-surface-900">
+      {/* Hand + Text + Draw (canvas-click tools) */}
       {buttons.map(({ id, label, icon: Icon }) => (
         <ToolBtn key={id} active={tool === id} onClick={() => onTool(id)} title={label}>
           <Icon className="h-4 w-4" />
         </ToolBtn>
       ))}
+      {/* Image is a one-shot action button — opens the file picker
+          immediately so users don't need a second click to place. */}
+      <ToolBtn active={false} onClick={onAddImage} title="Insert image (PNG or JPG)">
+        <ImageIcon className="h-4 w-4" />
+      </ToolBtn>
       <span className="mx-1 h-6 w-px bg-surface-200 dark:bg-surface-800" />
       <span className="flex items-center gap-1">
         <Shapes className="ml-1 h-3.5 w-3.5 text-surface-400" aria-hidden />
@@ -1559,9 +1583,13 @@ function BoxOverlay({ ann, pageDims, isSelected, isHandTool, onSelect, onChange 
   );
 }
 
+const NEW_TEXT_PLACEHOLDER = "Your text here";
+
 function TextContent({ ann, onChange }: { ann: TextAnn; onChange: (patch: Partial<TextAnn>) => void }) {
-  // Inline-edit on double-click — the textarea takes over while editing.
-  const [editing, setEditing] = useState(false);
+  // Inline-edit on double-click. A freshly-placed text box mounts with
+  // the default placeholder — start in edit mode so the user can type
+  // immediately instead of discovering the double-click.
+  const [editing, setEditing] = useState(ann.text === NEW_TEXT_PLACEHOLDER);
   return (
     <div
       onDoubleClick={(e) => {
@@ -1588,6 +1616,11 @@ function TextContent({ ann, onChange }: { ann: TextAnn; onChange: (patch: Partia
         <textarea
           autoFocus
           defaultValue={ann.text}
+          // Select-all on focus so a freshly-placed box with the
+          // default placeholder is replaced by the first keystroke,
+          // and so re-editing later highlights the current text for
+          // quick rewriting.
+          onFocus={(e) => e.target.select()}
           onBlur={(e) => {
             onChange({ text: e.target.value });
             setEditing(false);
