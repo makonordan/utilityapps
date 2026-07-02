@@ -1117,6 +1117,34 @@ export const TOOLS: Tool[] = [
 
   // ─── Productivity Tools ─────────────────────────────────────────────────
   {
+    id: "business-card",
+    name: "Digital Business Card",
+    description:
+      "Create free digital business cards with a QR code that saves contacts directly to phones — vCard format, no app needed.",
+    longDescription:
+      "Multiple digital business cards behind one master QR code. Scanning triggers the phone's native \"Add to Contacts\" dialog via vCard 3.0 — no app to install, works with any phone camera. Five themes, per-card branding, analytics. Free tier includes one card.",
+    category: "Productivity Tools",
+    icon: "IdCard",
+    href: "/tools/business-card",
+    externalHref: null,
+    embedUrl: null,
+    keywords: [
+      "digital business card",
+      "free digital business card",
+      "qr code business card",
+      "vcard qr code",
+      "scan to save contact",
+      "multiple business cards one qr",
+      "electronic business card",
+    ],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 1_100_000,
+    cpc: 6,
+    relatedTools: ["qr-code-generator", "barcode-generator", "invoice-generator"],
+  },
+  {
     id: "barcode-generator",
     name: "Barcode Generator",
     description:

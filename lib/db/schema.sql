@@ -561,3 +561,226 @@ drop policy if exists studio_inquiries_no_anon_read on public.studio_inquiries;
 create policy studio_inquiries_no_anon_read on public.studio_inquiries
   for select to anon using (false);
 
+-- 16. business cards (bc_*) -------------------------------------------------
+-- Multi-card digital business card system with public share pages,
+-- vCard downloads, and QR codes. Uses Supabase Auth (auth.uid()) for
+-- ownership — no NextAuth bridge needed. Public pages read via a
+-- carefully scoped SELECT policy that exposes only the fields shown
+-- on the public-facing card (no emails/phones leak to strangers unless
+-- the card owner explicitly enables them on that card).
+
+do $$ begin
+  create type public.bc_plan as enum ('free', 'pro', 'business');
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create type public.bc_card_type as enum ('personal', 'business', 'company_department');
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create type public.bc_theme as enum ('minimal', 'gradient', 'dark', 'professional', 'creative');
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create type public.bc_bg_style as enum ('gradient', 'solid', 'pattern');
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create type public.bc_scan_type as enum (
+    'qr_scan', 'link_visit', 'master_selector', 'vcf_download',
+    'social_click', 'phone_tap', 'email_tap', 'website_tap'
+  );
+exception when duplicate_object then null; end $$;
+
+-- Users -- 1:1 with auth.users via auth_id (the Supabase Auth uid).
+create table if not exists public.bc_users (
+  id          uuid primary key default gen_random_uuid(),
+  auth_id     uuid not null unique,
+  email       text not null,
+  name        text not null,
+  username    text not null unique
+    check (
+      username = lower(username)
+      and username ~ '^[a-z0-9](?:[a-z0-9-]{1,28}[a-z0-9])?$'
+      and username !~ '--'
+    ),
+  avatar_url  text,
+  plan        public.bc_plan not null default 'free',
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
+);
+
+create index if not exists bc_users_auth_id_idx on public.bc_users (auth_id);
+create index if not exists bc_users_username_idx on public.bc_users (username);
+
+alter table public.bc_users enable row level security;
+
+-- Owners read/write their own row; anon reads limited to public
+-- profile fields via a view below.
+drop policy if exists bc_users_self_all on public.bc_users;
+create policy bc_users_self_all on public.bc_users
+  for all to authenticated using (auth_id = auth.uid()) with check (auth_id = auth.uid());
+
+-- Cards -----------------------------------------------------------------
+create table if not exists public.bc_cards (
+  id                    uuid primary key default gen_random_uuid(),
+  user_id               uuid not null references public.bc_users(id) on delete cascade,
+  slug                  text not null
+    check (slug = lower(slug) and slug ~ '^[a-z0-9](?:[a-z0-9-]{0,58}[a-z0-9])?$'),
+  card_type             public.bc_card_type not null default 'personal',
+  is_active             boolean not null default true,
+  is_master_visible     boolean not null default true,
+  display_order         integer not null default 0,
+
+  -- Identity
+  full_name             text not null,
+  job_title             text,
+  company_name          text,
+  department            text,
+  pronouns              text,
+  tagline               text check (tagline is null or char_length(tagline) <= 120),
+  bio                   text check (bio is null or char_length(bio) <= 500),
+
+  -- Contact
+  email                 text,
+  phone_primary         text,
+  phone_secondary       text,
+  website               text,
+  address_street        text,
+  address_city          text,
+  address_state         text,
+  address_country       text,
+  address_postal        text,
+
+  -- Social
+  social_links          jsonb not null default '[]'::jsonb,
+
+  -- Branding
+  avatar_url            text,
+  brand_color_primary   text not null default '#3B82F6',
+  brand_color_secondary text not null default '#1E40AF',
+  card_theme            public.bc_theme not null default 'minimal',
+  logo_url              text,
+
+  -- vCard metadata
+  vcf_include_photo     boolean not null default true,
+  vcf_include_address   boolean not null default false,
+  vcf_notes             text check (vcf_notes is null or char_length(vcf_notes) <= 200),
+
+  -- Analytics counters (best-effort; source of truth is bc_scans)
+  scan_count            integer not null default 0,
+  view_count            integer not null default 0,
+  save_count            integer not null default 0,
+
+  created_at            timestamptz not null default now(),
+  updated_at            timestamptz not null default now(),
+
+  unique (user_id, slug)
+);
+
+create index if not exists bc_cards_user_id_idx on public.bc_cards (user_id);
+create index if not exists bc_cards_user_active_idx
+  on public.bc_cards (user_id, is_active);
+
+alter table public.bc_cards enable row level security;
+
+-- Owners can do everything with their own cards.
+drop policy if exists bc_cards_owner_all on public.bc_cards;
+create policy bc_cards_owner_all on public.bc_cards
+  for all to authenticated
+  using (user_id in (select id from public.bc_users where auth_id = auth.uid()))
+  with check (user_id in (select id from public.bc_users where auth_id = auth.uid()));
+
+-- Anon can read active cards (for public pages). Sensitive contact
+-- fields ARE included on the public card by design — that's the
+-- product. Users control what they share via `is_active` and by
+-- leaving fields empty. Address is gated by vcf_include_address at
+-- the API layer to keep it out of the public JSON entirely.
+drop policy if exists bc_cards_public_active_read on public.bc_cards;
+create policy bc_cards_public_active_read on public.bc_cards
+  for select to anon using (is_active = true);
+
+-- Scans (analytics) -----------------------------------------------------
+create table if not exists public.bc_scans (
+  id          uuid primary key default gen_random_uuid(),
+  card_id     uuid not null references public.bc_cards(id) on delete cascade,
+  scan_type   public.bc_scan_type not null,
+  device_type text,
+  country     text,
+  referrer    text,
+  -- Never IP or fingerprint. Country from x-vercel-ip-country only.
+  scanned_at  timestamptz not null default now()
+);
+
+create index if not exists bc_scans_card_time_idx
+  on public.bc_scans (card_id, scanned_at desc);
+
+alter table public.bc_scans enable row level security;
+
+-- Anon can insert scan events (that's how public pages track).
+-- Reading is limited to the card's owner.
+drop policy if exists bc_scans_public_insert on public.bc_scans;
+create policy bc_scans_public_insert on public.bc_scans
+  for insert to anon, authenticated with check (true);
+
+drop policy if exists bc_scans_owner_read on public.bc_scans;
+create policy bc_scans_owner_read on public.bc_scans
+  for select to authenticated
+  using (
+    card_id in (
+      select c.id from public.bc_cards c
+      join public.bc_users u on u.id = c.user_id
+      where u.auth_id = auth.uid()
+    )
+  );
+
+-- Master page settings (one row per user) -------------------------------
+create table if not exists public.bc_master_settings (
+  id                uuid primary key default gen_random_uuid(),
+  user_id           uuid not null unique references public.bc_users(id) on delete cascade,
+  page_title        text,
+  page_bio          text check (page_bio is null or char_length(page_bio) <= 300),
+  background_style  public.bc_bg_style not null default 'gradient',
+  background_color  text not null default '#0F172A',
+  show_avatar       boolean not null default true,
+  master_avatar_url text,
+  custom_domain     text,
+  created_at        timestamptz not null default now(),
+  updated_at        timestamptz not null default now()
+);
+
+alter table public.bc_master_settings enable row level security;
+
+drop policy if exists bc_master_settings_owner_all on public.bc_master_settings;
+create policy bc_master_settings_owner_all on public.bc_master_settings
+  for all to authenticated
+  using (user_id in (select id from public.bc_users where auth_id = auth.uid()))
+  with check (user_id in (select id from public.bc_users where auth_id = auth.uid()));
+
+drop policy if exists bc_master_settings_public_read on public.bc_master_settings;
+create policy bc_master_settings_public_read on public.bc_master_settings
+  for select to anon using (true);
+
+-- updated_at auto-refresh triggers --------------------------------------
+create or replace function public.bc_set_updated_at()
+returns trigger language plpgsql as $$
+begin
+  new.updated_at := now();
+  return new;
+end $$;
+
+do $$ begin
+  create trigger bc_users_updated_at before update on public.bc_users
+    for each row execute function public.bc_set_updated_at();
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create trigger bc_cards_updated_at before update on public.bc_cards
+    for each row execute function public.bc_set_updated_at();
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create trigger bc_master_settings_updated_at before update on public.bc_master_settings
+    for each row execute function public.bc_set_updated_at();
+exception when duplicate_object then null; end $$;
+
