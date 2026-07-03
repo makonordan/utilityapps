@@ -1123,7 +1123,7 @@ export const TOOLS: Tool[] = [
       "Create free digital business cards with a QR code that saves contacts directly to phones — vCard format, no app needed.",
     longDescription:
       "Multiple digital business cards behind one master QR code. Scanning triggers the phone's native \"Add to Contacts\" dialog via vCard 3.0 — no app to install, works with any phone camera. Five themes, per-card branding, analytics. Free tier includes one card.",
-    category: "Productivity Tools",
+    category: "Business Tools",
     icon: "IdCard",
     href: "/tools/business-card",
     externalHref: null,
@@ -1232,7 +1232,7 @@ export const TOOLS: Tool[] = [
       "Free branded invoice generator. Add your logo, fill the form, download a clean PDF. Multi-currency, tax + discount, line-item totals.",
     longDescription:
       "Online invoice generator for freelancers and small businesses. Auto-calculating line items, tax, and discount. Multi-currency formatting via the browser's Intl API. Optional logo upload embeds directly into the PDF — your client and pricing details stay on your device.",
-    category: "Productivity Tools",
+    category: "Business Tools",
     icon: "Receipt",
     href: "/tools/invoice-generator",
     externalHref: null,
@@ -1254,9 +1254,9 @@ export const TOOLS: Tool[] = [
   },
   {
     id: "share",
-    name: "Share",
+    name: "Quick Share",
     description:
-      "Share text snippets or shorten links — no signup, password optional, auto-expires.",
+      "Share files, text snippets, or shorten links — no signup, password optional, auto-expires.",
     longDescription:
       "Two of the most common 'quick share' jobs in one tool, no signup. Paste a text snippet (up to 100 KB) and get a shareable link, optionally syntax-highlighted. Or paste a long URL and get a short utilityapps.site/s/abc link. Every share supports optional password, view limit, custom slug, and expires automatically (1 hour, 24 hours, 7 days, or 30 days). Auto-deletes on first abuse report.",
     category: "Productivity Tools",

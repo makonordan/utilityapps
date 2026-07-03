@@ -57,7 +57,7 @@ export default function SharePage() {
             Tools
           </Link>
           <ChevronRight className="h-3 w-3" />
-          <span className="font-medium text-surface-700 dark:text-surface-200">Share</span>
+          <span className="font-medium text-surface-700 dark:text-surface-200">Quick Share</span>
         </nav>
 
         <header className="flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">

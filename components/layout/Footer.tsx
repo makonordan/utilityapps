@@ -3,12 +3,22 @@ import Link from "next/link";
 import { InstagramIcon, LinkedinIcon, TwitterIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
 import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
 import { CATEGORIES } from "@/lib/categories";
-import { TOOLS } from "@/lib/tools";
+import { TOOLS_BY_ID } from "@/lib/tools";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TOP_TOOLS = [...TOOLS]
-  .sort((a, b) => b.monthlySearches - a.monthlySearches)
-  .slice(0, 8);
+// Curated (not auto-ranked) — these are the five tools we most want new
+// visitors to notice from any page. Order matters: it's the reading order
+// in the footer column.
+const TOP_TOOL_IDS = [
+  "share",
+  "business-card",
+  "translator",
+  "visa-lookup",
+  "invoice-generator",
+] as const;
+const TOP_TOOLS = TOP_TOOL_IDS.map((id) => TOOLS_BY_ID[id]).filter(
+  (t): t is NonNullable<typeof t> => Boolean(t)
+);
 
 const RESOURCES = [
   { label: "Blog", href: "/blog" },

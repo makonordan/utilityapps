@@ -120,6 +120,15 @@ const CATEGORY_DEFINITIONS: Omit<Category, "toolCount">[] = [
     featured: true,
   },
   {
+    id: "business-tools",
+    name: "Business Tools",
+    description:
+      "Digital business cards, invoice generators, and other tools for solo founders, freelancers, and small teams — no signup, ready in a minute.",
+    icon: "Briefcase",
+    color: "#2563EB",
+    featured: true,
+  },
+  {
     id: "legal-tools",
     name: "Legal Tools",
     description:

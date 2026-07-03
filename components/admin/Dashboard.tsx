@@ -53,7 +53,7 @@ type Tab =
 const TABS: { id: Tab; label: string; Icon: typeof BarChart3 }[] = [
   { id: "overview", label: "Overview", Icon: BarChart3 },
   { id: "tools", label: "Tools", Icon: Wrench },
-  { id: "share", label: "Share", Icon: Share2 },
+  { id: "share", label: "Quick Share", Icon: Share2 },
   { id: "blog", label: "Blog", Icon: BookText },
   { id: "newsletter", label: "Newsletter", Icon: Mail },
   { id: "contact", label: "Contact", Icon: Inbox },
