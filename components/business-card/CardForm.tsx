@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { ChevronDown, Loader2, Plus, Trash2 } from "lucide-react";
 
+import { AvatarUpload } from "./AvatarUpload";
 import { CardView } from "./CardView";
 import type {
   BcCardRow,
@@ -394,14 +395,22 @@ export function CardForm({
                 onChange={(v) => set("brand_color_secondary", v)}
               />
             </Grid>
-            <Field label="Avatar URL" hint="Direct image link (upload UI coming later)">
-              <input
-                value={values.avatar_url ?? ""}
-                onChange={(e) => set("avatar_url", e.target.value || null)}
-                className={inputCls}
-                placeholder="https://…"
+            <AvatarUpload
+              label="Profile photo"
+              kind="avatar"
+              value={values.avatar_url ?? null}
+              onUploaded={(url) => set("avatar_url", url)}
+              onCleared={() => set("avatar_url", null)}
+            />
+            {(values.card_type === "business" || values.card_type === "company_department") && (
+              <AvatarUpload
+                label="Company logo"
+                kind="logo"
+                value={values.logo_url ?? null}
+                onUploaded={(url) => set("logo_url", url)}
+                onCleared={() => set("logo_url", null)}
               />
-            </Field>
+            )}
           </div>
         </Section>
 

@@ -784,3 +784,29 @@ do $$ begin
     for each row execute function public.bc_set_updated_at();
 exception when duplicate_object then null; end $$;
 
+-- 17. bc-avatars storage bucket --------------------------------------------
+-- Public bucket that holds user-uploaded card avatars and company logos.
+-- Uploads go through /api/business-card/upload (service-role), so we
+-- don't need per-user INSERT/UPDATE RLS policies on storage.objects —
+-- clients can never write to the bucket directly. Public SELECT is
+-- required so the CDN can serve the images to anyone rendering a
+-- public /bc/ page.
+
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'bc-avatars',
+  'bc-avatars',
+  true,
+  2 * 1024 * 1024, -- 2 MB hard cap; client compresses to ~200 KB
+  array['image/jpeg', 'image/png', 'image/webp']
+)
+on conflict (id) do update set
+  public = true,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+do $$ begin
+  create policy "bc_avatars_public_read"
+    on storage.objects for select
+    using (bucket_id = 'bc-avatars');
+exception when duplicate_object then null; end $$;

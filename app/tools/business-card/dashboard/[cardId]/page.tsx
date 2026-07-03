@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { ArrowLeft, Copy, ExternalLink, QrCode } from "lucide-react";
+import { ArrowLeft, Download, ExternalLink, QrCode } from "lucide-react";
 
 import { CardForm } from "@/components/business-card/CardForm";
+import { CopyLinkButton } from "@/components/business-card/CopyLinkButton";
 import { getBcUser } from "@/lib/businessCard/auth";
 import type { BcCardRow } from "@/lib/businessCard/types";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
@@ -56,6 +57,16 @@ export default async function EditCardPage({ params }: Params) {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          {/* Owner-facing 'save my own contact' — lets them test the flow
+              on their own phone AND re-save after every edit. Each edit
+              auto-saves in-place; tapping this again after an edit
+              downloads the fresh .vcf so their phone gets the update. */}
+          <a
+            href={`/api/business-card/vcf/${card.id}`}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-primary-700"
+          >
+            <Download className="h-3 w-3" /> Save to my phone
+          </a>
           <a
             href={url}
             target="_blank"
@@ -64,11 +75,12 @@ export default async function EditCardPage({ params }: Params) {
           >
             <ExternalLink className="h-3 w-3" /> View public
           </a>
+          <CopyLinkButton value={url} />
           <a
             href={`/api/business-card/qr/${card.id}?download=1`}
             className="inline-flex items-center gap-1.5 rounded-lg border border-surface-200 px-3 py-1.5 text-xs font-semibold text-surface-700 hover:border-surface-300 dark:border-surface-800 dark:text-surface-200"
           >
-            <QrCode className="h-3 w-3" /> QR
+            <QrCode className="h-3 w-3" /> Download QR
           </a>
         </div>
       </header>

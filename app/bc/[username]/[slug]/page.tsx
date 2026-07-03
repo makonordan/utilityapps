@@ -5,6 +5,7 @@ import { ChevronLeft } from "lucide-react";
 
 import { CardView } from "@/components/business-card/CardView";
 import { PageTracker } from "@/components/business-card/PageTracker";
+import { ShareCardSection } from "@/components/business-card/ShareCardSection";
 import { getPublicCard } from "@/lib/businessCard/publicQueries";
 import { SITE_CONFIG } from "@/lib/utils";
 
@@ -65,6 +66,10 @@ export default async function IndividualCardPage({ params }: Params) {
 
         <main className="flex-1">
           <CardView card={card} />
+          <ShareCardSection
+            cardId={card.id}
+            publicUrl={`${SITE_CONFIG.url}/bc/${username}/${slug}`}
+          />
         </main>
 
         <footer className="mt-10 pt-6 text-center text-[11px] text-white/70">
