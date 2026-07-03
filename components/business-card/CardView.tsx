@@ -1,13 +1,22 @@
 import Link from "next/link";
+import type { SVGProps } from "react";
+import { Globe, Mail, MapPin, Phone, type LucideIcon } from "lucide-react";
+
 import {
-  Calendar,
-  Globe,
-  Mail,
-  MapPin,
-  Phone,
-  Send,
-  type LucideIcon,
-} from "lucide-react";
+  BehanceIcon,
+  CalendlyIcon,
+  DribbbleIcon,
+  FacebookIcon,
+  GithubIcon,
+  InstagramIcon,
+  LinkedinIcon,
+  LinktreeIcon,
+  TelegramIcon,
+  TiktokIcon,
+  TwitterIcon,
+  WhatsappIcon,
+  YoutubeIcon,
+} from "@/components/icons/SocialIcons";
 
 import type { BcCardRow, BcSocialLink } from "@/lib/businessCard/types";
 import { cn } from "@/lib/utils";
@@ -346,7 +355,7 @@ function SocialGrid({ socials, styles }: { socials: BcSocialLink[]; styles: Them
               aria-label={s.label ?? s.platform}
               title={s.label ?? s.platform}
             >
-              <Icon className={cn("h-4 w-4", styles.iconColor)} />
+              <Icon className={cn("h-4 w-4", styles.iconColor)} width={16} height={16} />
             </a>
           </li>
         );
@@ -355,16 +364,43 @@ function SocialGrid({ socials, styles }: { socials: BcSocialLink[]; styles: Them
   );
 }
 
-/** Icon picker for social platforms. Lucide-react removed most brand
- *  glyphs in recent versions (trademark reasons), so we use generic
- *  icons and let the URL / aria-label carry the platform meaning. */
-function platformIcon(platform: BcSocialLink["platform"]): LucideIcon {
+/** Icon picker for social platforms. Brand glyphs are shipped as inline
+ *  currentColor SVGs (`components/icons/SocialIcons`) so they inherit the
+ *  themed foreground colour just like the lucide icons do. `custom` and
+ *  any unknown platform fall back to a generic globe. */
+type IconComponent =
+  | LucideIcon
+  | ((props: SVGProps<SVGSVGElement>) => React.ReactElement);
+
+function platformIcon(platform: BcSocialLink["platform"]): IconComponent {
   switch (platform) {
-    case "telegram":
+    case "linkedin":
+      return LinkedinIcon;
+    case "twitter":
+      return TwitterIcon;
+    case "instagram":
+      return InstagramIcon;
+    case "facebook":
+      return FacebookIcon;
+    case "youtube":
+      return YoutubeIcon;
+    case "tiktok":
+      return TiktokIcon;
+    case "github":
+      return GithubIcon;
+    case "dribbble":
+      return DribbbleIcon;
+    case "behance":
+      return BehanceIcon;
     case "whatsapp":
-      return Send;
+      return WhatsappIcon;
+    case "telegram":
+      return TelegramIcon;
     case "calendly":
-      return Calendar;
+      return CalendlyIcon;
+    case "linktree":
+      return LinktreeIcon;
+    case "custom":
     default:
       return Globe;
   }
