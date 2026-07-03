@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 
 import { CardView } from "@/components/business-card/CardView";
+import { OwnerActions } from "@/components/business-card/OwnerActions";
 import { PageTracker } from "@/components/business-card/PageTracker";
 import { ShareCardSection } from "@/components/business-card/ShareCardSection";
 import { getPublicCard } from "@/lib/businessCard/publicQueries";
@@ -66,6 +67,7 @@ export default async function IndividualCardPage({ params }: Params) {
 
         <main className="flex-1">
           <CardView card={card} />
+          <OwnerActions cardOwnerUsername={username} cardId={card.id} />
           <ShareCardSection
             cardId={card.id}
             publicUrl={`${SITE_CONFIG.url}/bc/${username}/${slug}`}

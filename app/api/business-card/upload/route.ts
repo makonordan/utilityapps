@@ -65,6 +65,19 @@ export async function POST(request: NextRequest) {
     upsert: false,
   });
   if (error) {
+    // Supabase Storage returns "Bucket not found" (404-ish) when the
+    // `bc-avatars` bucket hasn't been created yet. Rewrite that into an
+    // actionable message rather than leaking the raw string to end users.
+    if (/bucket not found/i.test(error.message)) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error:
+            "Image uploads aren't set up yet on this server. Please try again in a bit — we're finalising storage configuration.",
+        },
+        { status: 503 }
+      );
+    }
     return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
   }
 

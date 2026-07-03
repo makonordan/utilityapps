@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { CardView } from "@/components/business-card/CardView";
+import { OwnerActions } from "@/components/business-card/OwnerActions";
 import {
   getPublicMasterCards,
   getPublicMasterSettings,
@@ -75,6 +76,7 @@ export default async function MasterPage({ params }: Params) {
           {settings?.page_bio && (
             <p className="mx-auto mt-2 max-w-md text-sm text-white/80">{settings.page_bio}</p>
           )}
+          <OwnerActions cardOwnerUsername={username} />
         </header>
 
         {/* Card tiles */}

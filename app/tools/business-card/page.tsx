@@ -72,7 +72,7 @@ export default function BusinessCardLandingPage() {
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              href="/bc/demo"
+              href="/bc/danielmakonor"
               className="text-sm font-medium text-surface-600 underline decoration-dotted underline-offset-2 hover:text-surface-900 dark:text-surface-300 dark:hover:text-white"
             >
               See an example →
@@ -222,7 +222,7 @@ export default function BusinessCardLandingPage() {
               Continue with Google
             </GoogleSignInButton>
             <Link
-              href="/bc/demo"
+              href="/bc/danielmakonor"
               className="text-sm font-medium text-white/90 underline decoration-white/40 underline-offset-2 hover:text-white"
             >
               See the demo first
