@@ -207,6 +207,7 @@ export default function BusinessCardLandingPage() {
               price="$2"
               period="/ card · per year"
               features={[
+                "Everything in Pro",
                 "Custom email and domain",
                 "Unlimited team members",
                 "Admin privileges",
