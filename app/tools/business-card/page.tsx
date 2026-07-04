@@ -193,13 +193,10 @@ export default function BusinessCardLandingPage() {
               price="$1"
               period="/ card · one-time"
               features={[
-                "Everything in Free",
                 "$1 for every new card",
-                "All themes",
-                "Master QR code covers all your cards",
+                "All beautiful themes",
+                "Master QR code for all cards",
                 "Unlimited analytics",
-                "Custom slugs",
-                "No watermark",
               ]}
               cta="Coming soon"
               featured
