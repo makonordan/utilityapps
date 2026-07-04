@@ -12,7 +12,6 @@ const DESCRIPTION =
   "Step-by-step video tutorials for every tool on UtilityApps. Calculators, image tools, AI workflows — explained in under 10 minutes each.";
 const CHANNEL_HANDLE = "@UtilityAppsSite";
 const CHANNEL_URL = `https://www.youtube.com/${CHANNEL_HANDLE}`;
-const SUBSCRIBER_COUNT = "12,400";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -214,9 +213,7 @@ function SubscribeCTA() {
               One short tutorial every Friday — tools, calculators, and AI workflows you can use the
               same day.
             </p>
-            <p className="mt-2 text-xs text-surface-400">
-              {SUBSCRIBER_COUNT} subscribers · new uploads weekly
-            </p>
+            <p className="mt-2 text-xs text-surface-400">New uploads weekly</p>
           </div>
           <a
             href={`${CHANNEL_URL}?sub_confirmation=1`}

@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 
 const FILTERS = [
   { label: "All", category: null },
+  { label: "Business", category: "Business Tools" },
   { label: "PDF", category: "PDF Tools" },
   { label: "Image", category: "Image Tools" },
   { label: "Video", category: "Video Tools" },
@@ -36,6 +37,7 @@ const PAGE = 8;
 // The 8 headline categories drive the first page, one tool each. The remaining
 // categories are appended so "Load more" eventually surfaces every tool.
 const BROWSE_CATEGORY_ORDER = [
+  "Business Tools",
   "PDF Tools",
   "Image Tools",
   "Video Tools",
