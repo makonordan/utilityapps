@@ -16,21 +16,24 @@ export interface Video {
 }
 
 /**
- * Real UtilityApps channel videos. Only `id` is authoritative (YouTube is
- * the source of truth) — title/description/category should be filled in
- * per-video as we curate them. The YouTube thumbnail (loaded from
- * img.youtube.com) shows the actual video preview regardless, so a
- * placeholder title doesn't leave the page visually broken.
+ * Real UtilityApps channel videos.
  *
- * TODO(daniel): edit each entry below with the real title, description,
- * duration, and category once you've reviewed them on the channel.
+ * Titles were pulled from YouTube's public oEmbed endpoint
+ * (https://www.youtube.com/oembed?url=…) so they match exactly what the
+ * channel shows — including any typos in the original upload. If a title
+ * looks off, fix it on YouTube itself and re-copy it here.
+ *
+ * Descriptions are short category-aware blurbs (oEmbed doesn't return
+ * the real YouTube description — that'd need a Data API key). Duration
+ * and view counts are blank for the same reason; VideoCard hides those
+ * fields when empty.
  */
 const CHANNEL_VIDEOS: Omit<Video, "thumbnail">[] = [
   {
     id: "w8A2PZgfZEk",
-    title: "UtilityApps tutorial",
-    description: "Walkthrough on the UtilityApps YouTube channel.",
-    category: "Tools",
+    title: "Everyone Complicates Software Too Much | This Is the Real Secret",
+    description: "A software-mindset walkthrough on the Utility Apps Site YouTube channel.",
+    category: "Productivity",
     toolId: null,
     duration: "",
     views: "",
@@ -39,9 +42,9 @@ const CHANNEL_VIDEOS: Omit<Video, "thumbnail">[] = [
   },
   {
     id: "P0dpWIAa1JY",
-    title: "UtilityApps tutorial",
-    description: "Walkthrough on the UtilityApps YouTube channel.",
-    category: "Tools",
+    title: "This Simple Adjustment to Your Templates Will Change Everything",
+    description: "A productivity walkthrough on the Utility Apps Site YouTube channel.",
+    category: "Productivity",
     toolId: null,
     duration: "",
     views: "",
@@ -50,8 +53,9 @@ const CHANNEL_VIDEOS: Omit<Video, "thumbnail">[] = [
   },
   {
     id: "uDNlQ3-w1og",
-    title: "UtilityApps tutorial",
-    description: "Walkthrough on the UtilityApps YouTube channel.",
+    title:
+      "Stop Paying for Tools You Can Get Free — 100+ Online Utilities in One Website | No Sign Up",
+    description: "A tour of the UtilityApps toolkit on the Utility Apps Site YouTube channel.",
     category: "Tools",
     toolId: null,
     duration: "",
@@ -61,8 +65,9 @@ const CHANNEL_VIDEOS: Omit<Video, "thumbnail">[] = [
   },
   {
     id: "M2kOqC575Ms",
-    title: "UtilityApps tutorial",
-    description: "Walkthrough on the UtilityApps YouTube channel.",
+    title:
+      "The entire game behind UtilityApps | Every Tool You’ve Googled, Free & Private: UtilityApps",
+    description: "The story behind UtilityApps on the Utility Apps Site YouTube channel.",
     category: "Tools",
     toolId: null,
     duration: "",
@@ -72,9 +77,9 @@ const CHANNEL_VIDEOS: Omit<Video, "thumbnail">[] = [
   },
   {
     id: "g-2YcHf3mr8",
-    title: "UtilityApps tutorial",
-    description: "Walkthrough on the UtilityApps YouTube channel.",
-    category: "Tools",
+    title: "Your Brian will visualize better after watching this….",
+    description: "A mental-model walkthrough on the Utility Apps Site YouTube channel.",
+    category: "Productivity",
     toolId: null,
     duration: "",
     views: "",
@@ -83,9 +88,9 @@ const CHANNEL_VIDEOS: Omit<Video, "thumbnail">[] = [
   },
   {
     id: "oiPzsRh_N3I",
-    title: "UtilityApps tutorial",
-    description: "Walkthrough on the UtilityApps YouTube channel.",
-    category: "Tools",
+    title: "Picture this scenario for a moment and see what it takes to ….",
+    description: "A framing exercise on the Utility Apps Site YouTube channel.",
+    category: "Productivity",
     toolId: null,
     duration: "",
     views: "",
@@ -94,9 +99,9 @@ const CHANNEL_VIDEOS: Omit<Video, "thumbnail">[] = [
   },
   {
     id: "5wVIq3-8vuk",
-    title: "UtilityApps tutorial",
-    description: "Walkthrough on the UtilityApps YouTube channel.",
-    category: "Tools",
+    title: "The TRUTH No One Tells You About Human Attention (4 Stages of Engagement)",
+    description: "An attention & engagement breakdown on the Utility Apps Site YouTube channel.",
+    category: "Productivity",
     toolId: null,
     duration: "",
     views: "",
@@ -105,9 +110,10 @@ const CHANNEL_VIDEOS: Omit<Video, "thumbnail">[] = [
   },
   {
     id: "GlW5JVw8DzE",
-    title: "UtilityApps tutorial",
-    description: "Walkthrough on the UtilityApps YouTube channel.",
-    category: "Tools",
+    title:
+      "Stop Overcomplicating Productivity, Here You Have a Simple Approach | The Actual Guide",
+    description: "A productivity walkthrough on the Utility Apps Site YouTube channel.",
+    category: "Productivity",
     toolId: null,
     duration: "",
     views: "",
@@ -116,9 +122,10 @@ const CHANNEL_VIDEOS: Omit<Video, "thumbnail">[] = [
   },
   {
     id: "7r2J_x8wjtc",
-    title: "UtilityApps tutorial",
-    description: "Walkthrough on the UtilityApps YouTube channel.",
-    category: "Tools",
+    title:
+      "Stop Overcomplicating Productivity, Here You Have a Simple Approach | The Actual Guide.",
+    description: "A productivity walkthrough on the Utility Apps Site YouTube channel.",
+    category: "Productivity",
     toolId: null,
     duration: "",
     views: "",
