@@ -259,7 +259,29 @@ function OverviewTab({ stats }: { stats: AdminStats }) {
 
   return (
     <div>
-      <ul className="grid gap-4 sm:grid-cols-3">
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <li>
+          <StatCard
+            label="Uses today"
+            value={formatNumber(stats.totalUsageToday)}
+            hint="Real events, last 24h"
+          />
+        </li>
+        <li>
+          <StatCard
+            label="Site rating"
+            value={
+              stats.siteRating.average !== null
+                ? stats.siteRating.average.toFixed(2)
+                : "—"
+            }
+            hint={
+              stats.siteRating.count > 0
+                ? `${formatNumber(stats.siteRating.count)} ratings across ${stats.siteRating.toolsRated} tools`
+                : "No ratings yet"
+            }
+          />
+        </li>
         <li>
           <StatCard
             label="Total tool views"
@@ -492,10 +514,12 @@ function BarList({
 // ----- Tools ---------------------------------------------------------------
 
 function ToolsTab({ rows }: { rows: AdminToolRow[] }) {
-  type Sort = "usage" | "bookmarks" | "rating" | "completion";
-  const [sort, setSort] = useState<Sort>("usage");
+  type Sort = "today" | "usage" | "bookmarks" | "rating" | "completion";
+  const [sort, setSort] = useState<Sort>("today");
   const sorted = useMemo(() => {
     const copy = [...rows];
+    if (sort === "today")
+      copy.sort((a, b) => b.usageToday - a.usageToday || b.usageCount - a.usageCount);
     if (sort === "usage") copy.sort((a, b) => b.usageCount - a.usageCount);
     if (sort === "bookmarks") copy.sort((a, b) => b.bookmarkCount - a.bookmarkCount);
     if (sort === "rating") copy.sort((a, b) => b.averageRating - a.averageRating);
@@ -530,7 +554,8 @@ function ToolsTab({ rows }: { rows: AdminToolRow[] }) {
             onChange={(e) => setSort(e.target.value as Sort)}
             className="rounded-xl border border-surface-200 bg-white px-3 py-1.5 text-sm text-surface-800 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-surface-800 dark:bg-surface-900 dark:text-surface-100"
           >
-            <option value="usage">Usage</option>
+            <option value="today">Today</option>
+            <option value="usage">Usage (30d)</option>
             <option value="bookmarks">Bookmarks</option>
             <option value="rating">Rating</option>
             <option value="completion">Completion rate</option>
@@ -542,6 +567,7 @@ function ToolsTab({ rows }: { rows: AdminToolRow[] }) {
         columns={[
           "Tool",
           "Category",
+          "Today",
           "Usage (30d)",
           "Completions (30d)",
           "Completion rate",
@@ -551,6 +577,7 @@ function ToolsTab({ rows }: { rows: AdminToolRow[] }) {
         rows={sorted.map((tool) => [
           tool.name,
           tool.category,
+          formatNumber(tool.usageToday),
           formatNumber(tool.usageCount),
           tool.instrumented ? formatNumber(tool.completionCount) : "—",
           tool.instrumented

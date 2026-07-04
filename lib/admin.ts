@@ -4,6 +4,9 @@ import { PRODUCTS_BY_ID, type Product } from "./products";
 import { TOOLS_BY_ID, type Tool } from "./tools";
 
 export interface AdminToolRow extends Tool {
+  /** Usage events in the last 24 hours — the "today" column. */
+  usageToday: number;
+  /** Usage events in the last 30 days. Historical name kept for compat. */
   usageCount: number;
   bookmarkCount: number;
   averageRating: number;
@@ -171,8 +174,23 @@ export interface ApiWaitlistSummary {
   readable: boolean;
 }
 
+/** Site-wide rating aggregate — one number across every tool's ratings. */
+export interface SiteRatingSummary {
+  /** Weighted average across every tool_ratings row, or null when there
+   *  are zero ratings site-wide. */
+  average: number | null;
+  /** Total rating rows across all tools. */
+  count: number;
+  /** How many distinct tools have at least one rating. */
+  toolsRated: number;
+}
+
 export interface AdminStats {
   totalToolViews: number;
+  /** Total tool_usage events in the last 24 hours across every tool. */
+  totalUsageToday: number;
+  /** Site-wide rating across every tool. */
+  siteRating: SiteRatingSummary;
   newsletterCount: number;
   trendingTools: { toolId: string; usageCount: number }[];
   topSearches: SearchQuerySummary[];
@@ -202,6 +220,8 @@ export interface AdminStats {
 
 const EMPTY_STATS: Omit<AdminStats, "source" | "fallbackReason"> = {
   totalToolViews: 0,
+  totalUsageToday: 0,
+  siteRating: { average: null, count: 0, toolsRated: 0 },
   newsletterCount: 0,
   trendingTools: [],
   topSearches: [],
@@ -281,6 +301,7 @@ export async function getAdminStats(): Promise<AdminStats> {
     const [
       totalUsageRes,
       perToolUsageRes,
+      perToolUsageTodayRes,
       perToolBookmarksRes,
       perToolRatingsRes,
       newsletterCountRes,
@@ -299,6 +320,11 @@ export async function getAdminStats(): Promise<AdminStats> {
         .from("tool_usage")
         .select("tool_id")
         .gte("created_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()),
+      // Last 24h — powers the "Today" column and the totalUsageToday KPI.
+      supabase
+        .from("tool_usage")
+        .select("tool_id")
+        .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()),
       supabase.from("bookmarks").select("tool_id"),
       supabase.from("tool_ratings").select("tool_id, rating"),
       supabase.from("newsletter_subscribers").select("id", { count: "exact", head: true }),
@@ -339,6 +365,7 @@ export async function getAdminStats(): Promise<AdminStats> {
     ]);
 
     const toolUsageCounts = countBy(perToolUsageRes.data ?? [], (r) => r.tool_id);
+    const toolUsageTodayCounts = countBy(perToolUsageTodayRes.data ?? [], (r) => r.tool_id);
     const bookmarkCounts = countBy(perToolBookmarksRes.data ?? [], (r) => r.tool_id);
     const completionCounts = countBy(perToolCompletionsRes.data ?? [], (r) => r.tool_id);
 
@@ -350,13 +377,35 @@ export async function getAdminStats(): Promise<AdminStats> {
       ratingAccum.set(row.tool_id, entry);
     }
 
+    // Site-wide rating aggregate — one number across every tool_ratings row.
+    // Weighting by row (not per-tool average) so a tool with 100 ratings
+    // doesn't count the same as one with a single rating.
+    let siteRatingSum = 0;
+    let siteRatingCount = 0;
+    for (const row of perToolRatingsRes.data ?? []) {
+      siteRatingSum += row.rating;
+      siteRatingCount += 1;
+    }
+    const siteRating: SiteRatingSummary = {
+      average:
+        siteRatingCount > 0
+          ? Number((siteRatingSum / siteRatingCount).toFixed(2))
+          : null,
+      count: siteRatingCount,
+      toolsRated: ratingAccum.size,
+    };
+
+    const totalUsageToday = perToolUsageTodayRes.data?.length ?? 0;
+
     const toolRows: AdminToolRow[] = Object.values(TOOLS_BY_ID)
       .map((tool) => {
         const ratings = ratingAccum.get(tool.id);
         const usage = toolUsageCounts.get(tool.id) ?? 0;
+        const usageToday = toolUsageTodayCounts.get(tool.id) ?? 0;
         const completions = completionCounts.get(tool.id) ?? 0;
         return {
           ...tool,
+          usageToday,
           usageCount: usage,
           bookmarkCount: bookmarkCounts.get(tool.id) ?? 0,
           averageRating: ratings ? Number((ratings.sum / ratings.count).toFixed(2)) : 0,
@@ -366,7 +415,7 @@ export async function getAdminStats(): Promise<AdminStats> {
           instrumented: INSTRUMENTED_TOOL_IDS.has(tool.id),
         };
       })
-      .sort((a, b) => b.usageCount - a.usageCount);
+      .sort((a, b) => b.usageToday - a.usageToday || b.usageCount - a.usageCount);
 
     const zeroResultCounts = new Map<string, { count: number; lastSeen: string }>();
     for (const row of zeroResultRes.data ?? []) {
@@ -744,6 +793,8 @@ export async function getAdminStats(): Promise<AdminStats> {
 
     return {
       totalToolViews: totalUsageRes.count ?? 0,
+      totalUsageToday,
+      siteRating,
       newsletterCount: newsletterCountRes.count ?? 0,
       trendingTools: trendingRes.data ?? [],
       topSearches: (topSearchesRes.data ?? []).map((s) => ({
@@ -799,6 +850,7 @@ function countBy<T>(rows: T[], keyFn: (row: T) => string): Map<string, number> {
 function emptyToolRow(tool: Tool): AdminToolRow {
   return {
     ...tool,
+    usageToday: 0,
     usageCount: 0,
     bookmarkCount: 0,
     averageRating: 0,
