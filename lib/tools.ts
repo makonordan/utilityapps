@@ -1253,6 +1253,35 @@ export const TOOLS: Tool[] = [
     relatedTools: ["pomodoro-timer", "countdown-timer", "barcode-generator"],
   },
   {
+    id: "email-signature-generator",
+    name: "Email Signature Generator",
+    description:
+      "Create a professional email signature that works in Gmail, Outlook, Apple Mail and more. Copy-paste ready, no signup.",
+    longDescription:
+      "Free HTML email signature generator that outputs bulletproof, table-based markup rendering identically across Gmail, Outlook (desktop + web), Apple Mail, Yahoo, and every mobile mail app. Eight professional templates, live preview, one-click copy — no signup, no watermark. All rendering happens in your browser; your details never leave the device.",
+    category: "Business Tools",
+    icon: "Mail",
+    href: "/tools/email-signature-generator",
+    externalHref: null,
+    embedUrl: null,
+    keywords: [
+      "email signature generator",
+      "free email signature",
+      "gmail signature generator",
+      "outlook signature",
+      "html email signature",
+      "professional email signature",
+      "email signature template",
+      "business email signature",
+    ],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 400_000,
+    cpc: 6,
+    relatedTools: ["business-card", "invoice-generator", "qr-code-generator"],
+  },
+  {
     id: "share",
     name: "Quick Share",
     description:
