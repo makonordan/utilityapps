@@ -4,6 +4,8 @@ import { ArrowRight, Plus, QrCode } from "lucide-react";
 
 import { CopyLinkButton } from "@/components/business-card/CopyLinkButton";
 import { DashboardCardList } from "@/components/business-card/DashboardCardList";
+import { MonthlyScansCard } from "@/components/business-card/MonthlyScansCard";
+import { getMonthlyScanUsage } from "@/lib/businessCard/analytics";
 import { getBcUser } from "@/lib/businessCard/auth";
 import { PLAN_LIMITS } from "@/lib/businessCard/types";
 import type { BcCardRow } from "@/lib/businessCard/types";
@@ -25,15 +27,18 @@ export default async function DashboardPage() {
   if (!user) redirect("/tools/business-card/create");
 
   const admin = getSupabaseAdmin();
-  const { data } = admin
-    ? await admin
-        .from("bc_cards")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("display_order", { ascending: true })
-        .order("created_at", { ascending: false })
-    : { data: [] };
-  const cards = (data ?? []) as BcCardRow[];
+  const [cardsRes, usage] = await Promise.all([
+    admin
+      ? admin
+          .from("bc_cards")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("display_order", { ascending: true })
+          .order("created_at", { ascending: false })
+      : Promise.resolve({ data: [] as BcCardRow[] }),
+    getMonthlyScanUsage(user.id, user.plan),
+  ]);
+  const cards = (cardsRes.data ?? []) as BcCardRow[];
 
   const limits = PLAN_LIMITS[user.plan];
   const active = cards.filter((c) => c.is_active).length;
@@ -60,6 +65,11 @@ export default async function DashboardPage() {
           <Plus className="h-4 w-4" /> New card
         </Link>
       </header>
+
+      {/* Monthly scan usage — surfaces the plan cap explicitly so a free
+          user knows when analytics are being clipped instead of silently
+          under-counting. */}
+      {usage && <MonthlyScansCard usage={usage} plan={user.plan} />}
 
       {/* Master QR */}
       <section className="mt-8 grid gap-4 rounded-3xl border border-surface-200 bg-white p-6 sm:grid-cols-[1fr_180px] dark:border-surface-800 dark:bg-surface-900">

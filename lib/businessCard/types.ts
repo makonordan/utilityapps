@@ -127,7 +127,17 @@ export interface BcScanRow {
  *  so we never have client and server disagreeing on what's allowed. */
 export const PLAN_LIMITS: Record<
   BcPlan,
-  { maxCards: number | null; maxSocialLinks: number; themes: BcTheme[]; watermark: boolean; customSlug: boolean }
+  {
+    maxCards: number | null;
+    maxSocialLinks: number;
+    themes: BcTheme[];
+    watermark: boolean;
+    customSlug: boolean;
+    /** Cap on scans a user can see in analytics per calendar month. null = unlimited.
+     *  We always keep collecting scans (data integrity); the cap only gates
+     *  what's returned by the dashboard / analytics reads. */
+    monthlyScansCap: number | null;
+  }
 > = {
   free: {
     maxCards: 1,
@@ -135,6 +145,7 @@ export const PLAN_LIMITS: Record<
     themes: ["minimal", "professional"],
     watermark: true,
     customSlug: false,
+    monthlyScansCap: 50,
   },
   // Pro & Business are pay-per-card ($1 one-time / $2 per year respectively),
   // so there's no hard cap — billing gates each new card individually.
@@ -145,6 +156,7 @@ export const PLAN_LIMITS: Record<
     themes: ["minimal", "gradient", "dark", "professional", "creative"],
     watermark: false,
     customSlug: true,
+    monthlyScansCap: null,
   },
   business: {
     maxCards: null,
@@ -152,6 +164,7 @@ export const PLAN_LIMITS: Record<
     themes: ["minimal", "gradient", "dark", "professional", "creative"],
     watermark: false,
     customSlug: true,
+    monthlyScansCap: null,
   },
 };
 
