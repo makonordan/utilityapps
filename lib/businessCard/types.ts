@@ -136,15 +136,18 @@ export const PLAN_LIMITS: Record<
     watermark: true,
     customSlug: false,
   },
+  // Pro & Business are pay-per-card ($1 one-time / $2 per year respectively),
+  // so there's no hard cap — billing gates each new card individually.
+  // Until billing is wired up, both behave like unlimited plans.
   pro: {
-    maxCards: 5,
+    maxCards: null,
     maxSocialLinks: 10,
     themes: ["minimal", "gradient", "dark", "professional", "creative"],
     watermark: false,
     customSlug: true,
   },
   business: {
-    maxCards: null, // unlimited
+    maxCards: null,
     maxSocialLinks: 100,
     themes: ["minimal", "gradient", "dark", "professional", "creative"],
     watermark: false,

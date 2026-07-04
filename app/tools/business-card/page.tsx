@@ -190,17 +190,32 @@ export default function BusinessCardLandingPage() {
             />
             <PricingCard
               tier="Pro"
-              price="$5"
-              period="/month"
-              features={["5 cards", "All themes", "Master QR code", "Unlimited analytics", "Custom slugs", "No watermark"]}
+              price="$1"
+              period="/ card · one-time"
+              features={[
+                "Everything in Free",
+                "$1 for every new card",
+                "All themes",
+                "Master QR code covers all your cards",
+                "Unlimited analytics",
+                "Custom slugs",
+                "No watermark",
+              ]}
               cta="Coming soon"
               featured
             />
             <PricingCard
               tier="Business"
-              price="$15"
-              period="/month"
-              features={["Unlimited cards", "Custom domain", "Team management", "Bulk export", "API access", "White label"]}
+              price="$2"
+              period="/ card · per year"
+              features={[
+                "Custom email and domain",
+                "Unlimited team members",
+                "Admin privileges",
+                "Team management",
+                "Bulk export",
+                "White label",
+              ]}
               cta="Coming soon"
             />
           </div>

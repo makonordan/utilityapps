@@ -9,9 +9,12 @@ import { TOOLS, type Tool } from "@/lib/tools";
 
 const PAGE = 8;
 
-// High-CPC categories (finance, health) lead the initial 8-tool view so the
-// most ad-valuable tools are visible first.
+// Business Tools sits above the high-CPC categories because those are the
+// tools we're leaning on for growth right now. Beyond that, high-CPC
+// categories (finance, health) lead so the most ad-valuable tools are
+// visible first.
 const TRENDING_CATEGORY_ORDER = [
+  "Business Tools",
   "PDF Tools",
   "Finance Tools",
   "Image Tools",
@@ -81,7 +84,7 @@ function diversify(
 // either brand-new launches we're spotlighting or evergreen jobs-to-be-done
 // that users won't think to search for by category. Order here = display
 // order. Diversification fills the slots after these.
-const PINNED_TOOL_IDS = ["share"];
+const PINNED_TOOL_IDS = ["share", "business-card", "invoice-generator"];
 
 const PINNED_TOOLS: Tool[] = PINNED_TOOL_IDS
   .map((id) => TOOLS.find((t) => t.id === id))

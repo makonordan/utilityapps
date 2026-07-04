@@ -12,6 +12,15 @@ export interface Category {
 
 const CATEGORY_DEFINITIONS: Omit<Category, "toolCount">[] = [
   {
+    id: "business-tools",
+    name: "Business Tools",
+    description:
+      "Digital business cards, invoice generators, and other tools for solo founders, freelancers, and small teams — no signup, ready in a minute.",
+    icon: "Briefcase",
+    color: "#2563EB",
+    featured: true,
+  },
+  {
     id: "pdf-tools",
     name: "PDF Tools",
     description:
@@ -117,15 +126,6 @@ const CATEGORY_DEFINITIONS: Omit<Category, "toolCount">[] = [
       "PDF, QR code, and document utilities that streamline everyday office and freelance work.",
     icon: "Sparkles",
     color: "#A855F7",
-    featured: true,
-  },
-  {
-    id: "business-tools",
-    name: "Business Tools",
-    description:
-      "Digital business cards, invoice generators, and other tools for solo founders, freelancers, and small teams — no signup, ready in a minute.",
-    icon: "Briefcase",
-    color: "#2563EB",
     featured: true,
   },
   {
