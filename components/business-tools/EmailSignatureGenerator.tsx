@@ -4,9 +4,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import {
   AlertTriangle,
-  Check,
   ChevronDown,
-  Copy,
   Globe,
   Link2,
   Loader2,
@@ -16,6 +14,8 @@ import {
   Trash2,
   Upload,
 } from "lucide-react";
+
+import { SignatureExport } from "./SignatureExport";
 
 import {
   CalendlyIcon,
@@ -130,7 +130,6 @@ const PLATFORM_ORDER: SocialPlatform[] = [
 export function EmailSignatureGenerator() {
   const [data, setData] = useState<SignatureData>(INITIAL_DATA);
   const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">("desktop");
-  const [copiedKind, setCopiedKind] = useState<"html" | "text" | null>(null);
   const [previewOpen, setPreviewOpen] = useState(true);
 
   const html = useMemo(() => generateSignatureHtml(data), [data]);
@@ -149,57 +148,19 @@ export function EmailSignatureGenerator() {
     []
   );
 
-  const copyHtml = useCallback(async () => {
-    // Rich HTML copy — the mail client's WYSIWYG editor pastes the
-    // rendered signature, not the raw markup. text/plain fallback so
-    // pasting into a plain-text editor still gets something useful.
-    try {
-      if (
-        typeof ClipboardItem !== "undefined" &&
-        navigator.clipboard &&
-        "write" in navigator.clipboard
-      ) {
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            "text/html": new Blob([html], { type: "text/html" }),
-            "text/plain": new Blob([plainText], { type: "text/plain" }),
-          }),
-        ]);
-      } else {
-        await navigator.clipboard.writeText(html);
-      }
-      setCopiedKind("html");
-      setTimeout(() => setCopiedKind(null), 1600);
-    } catch {
-      // Silent — some browsers reject writes when not focused/allowed.
-    }
-  }, [html, plainText]);
-
-  const copyPlainText = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(plainText);
-      setCopiedKind("text");
-      setTimeout(() => setCopiedKind(null), 1600);
-    } catch {
-      /* silent */
-    }
-  }, [plainText]);
-
   return (
-    <div className="grid gap-6 lg:grid-cols-[55%_45%]">
-      {/* Mobile-first: preview appears above the form on small screens */}
-      <aside className="order-first lg:order-last lg:sticky lg:top-24 lg:h-fit">
-        <PreviewPanel
-          html={html}
-          mode={previewMode}
-          onModeChange={setPreviewMode}
-          open={previewOpen}
-          onOpenChange={setPreviewOpen}
-          onCopyHtml={copyHtml}
-          onCopyText={copyPlainText}
-          copiedKind={copiedKind}
-        />
-      </aside>
+    <div className="space-y-8">
+      <div className="grid gap-6 lg:grid-cols-[55%_45%]">
+        {/* Mobile-first: preview appears above the form on small screens */}
+        <aside className="order-first lg:order-last lg:sticky lg:top-24 lg:h-fit">
+          <PreviewPanel
+            html={html}
+            mode={previewMode}
+            onModeChange={setPreviewMode}
+            open={previewOpen}
+            onOpenChange={setPreviewOpen}
+          />
+        </aside>
 
       <div className="space-y-6">
         {(nameError || contactWarning) && (
@@ -414,7 +375,13 @@ export function EmailSignatureGenerator() {
             </Field>
           </div>
         </details>
+        </div>
       </div>
+
+      {/* Copy CTAs + reassurance strip + per-client install guide. Sits
+          as a full-width row so the export flow gets the same
+          horizontal space regardless of template. */}
+      <SignatureExport html={html} plainText={plainText} />
     </div>
   );
 }
@@ -427,18 +394,12 @@ function PreviewPanel({
   onModeChange,
   open,
   onOpenChange,
-  onCopyHtml,
-  onCopyText,
-  copiedKind,
 }: {
   html: string;
   mode: "desktop" | "mobile";
   onModeChange: (m: "desktop" | "mobile") => void;
   open: boolean;
   onOpenChange: (v: boolean) => void;
-  onCopyHtml: () => void;
-  onCopyText: () => void;
-  copiedKind: "html" | "text" | null;
 }) {
   const maxWidth = mode === "mobile" ? "360px" : "560px";
 
@@ -480,7 +441,9 @@ function PreviewPanel({
             />
           </div>
 
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+          {/* Desktop/mobile toggle only — copy buttons live in
+              SignatureExport below the whole layout now. */}
+          <div className="mt-3 flex items-center justify-start">
             <div className="inline-flex rounded-xl border border-surface-200 p-0.5 dark:border-surface-800">
               <button
                 type="button"
@@ -505,32 +468,6 @@ function PreviewPanel({
                 )}
               >
                 <Smartphone className="h-3 w-3" /> Mobile
-              </button>
-            </div>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={onCopyText}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-surface-200 px-3 py-1.5 text-xs font-semibold text-surface-700 transition hover:border-surface-300 dark:border-surface-800 dark:text-surface-200"
-              >
-                {copiedKind === "text" ? (
-                  <Check className="h-3 w-3 text-success-600" />
-                ) : (
-                  <Copy className="h-3 w-3" />
-                )}
-                Plain text
-              </button>
-              <button
-                type="button"
-                onClick={onCopyHtml}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-primary-700"
-              >
-                {copiedKind === "html" ? (
-                  <Check className="h-3 w-3" />
-                ) : (
-                  <Copy className="h-3 w-3" />
-                )}
-                Copy signature
               </button>
             </div>
           </div>
