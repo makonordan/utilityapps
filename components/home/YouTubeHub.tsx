@@ -1,18 +1,13 @@
 import Link from "next/link";
 import { ArrowRight, Play } from "lucide-react";
 
-const VIDEOS = [
-  {
-    id: "dQw4w9WgXcQ",
-    title: "How to compress images without losing quality",
-    duration: "6:42",
-  },
-  {
-    id: "9bZkp7q19f0",
-    title: "Loan vs mortgage calculator — which one to use",
-    duration: "8:15",
-  },
-];
+/**
+ * Featured tutorials on the homepage. Titles/durations aren't hardcoded
+ * — the YouTube player renders the video's canonical title on hover and
+ * on click, so we stay in sync with whatever the channel decides to call
+ * a video without needing to touch this file.
+ */
+const VIDEO_IDS = ["w8A2PZgfZEk", "P0dpWIAa1JY"] as const;
 
 export function YouTubeHub() {
   return (
@@ -36,15 +31,15 @@ export function YouTubeHub() {
       </header>
 
       <div className="grid gap-6 md:grid-cols-2">
-        {VIDEOS.map((video) => (
+        {VIDEO_IDS.map((id) => (
           <figure
-            key={video.id}
+            key={id}
             className="overflow-hidden rounded-2xl border border-surface-200 bg-surface-100 dark:border-surface-800 dark:bg-surface-900"
           >
             <div className="relative aspect-video">
               <iframe
-                title={video.title}
-                src={`https://www.youtube-nocookie.com/embed/${video.id}?rel=0&modestbranding=1`}
+                title="UtilityApps tutorial"
+                src={`https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1`}
                 loading="lazy"
                 allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -53,21 +48,18 @@ export function YouTubeHub() {
               />
             </div>
             <figcaption className="flex items-center justify-between gap-3 p-4">
-              <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-surface-900 dark:text-white">
-                  {video.title}
-                </p>
-                <p className="text-xs text-surface-500 dark:text-surface-400">
-                  <Play className="mr-1 inline h-3 w-3" />
-                  {video.duration}
-                </p>
-              </div>
-              <Link
-                href={`/youtube/${video.id}`}
+              <p className="text-xs text-surface-500 dark:text-surface-400">
+                <Play className="mr-1 inline h-3 w-3" />
+                From the UtilityApps YouTube channel
+              </p>
+              <a
+                href={`https://www.youtube.com/watch?v=${id}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-xs font-semibold text-primary-600 dark:text-primary-400"
               >
-                Watch →
-              </Link>
+                Watch on YouTube →
+              </a>
             </figcaption>
           </figure>
         ))}
