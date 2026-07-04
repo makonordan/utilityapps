@@ -184,7 +184,7 @@ export default function BusinessCardLandingPage() {
               tier="Free"
               price="$0"
               period="forever"
-              features={["1 card", "Basic themes", "Individual QR code", "500 scans/month analytics"]}
+              features={["1 card", "Basic themes", "Individual QR code", "50 scans/month analytics"]}
               cta="Get started"
               href="/tools/business-card/create"
             />
@@ -196,6 +196,7 @@ export default function BusinessCardLandingPage() {
                 "$1 for every new card",
                 "All beautiful themes",
                 "Master QR code for all cards",
+                "Unlimited scans",
                 "Unlimited analytics",
               ]}
               cta="Coming soon"
