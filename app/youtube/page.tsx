@@ -161,13 +161,17 @@ function FeaturedVideo({
           </h2>
           <p className="mt-3 text-base text-surface-600 dark:text-surface-300">{description}</p>
           <ul className="mt-5 flex flex-wrap items-center gap-3 text-xs text-surface-500 dark:text-surface-400">
-            <li className="inline-flex items-center gap-1 rounded-full bg-surface-100 px-2 py-0.5 font-semibold dark:bg-surface-800">
-              <Play className="h-3 w-3" /> {duration}
-            </li>
-            <li className="inline-flex items-center gap-1">
-              <Eye className="h-3 w-3" /> {views} views
-            </li>
-            <li>·</li>
+            {duration && (
+              <li className="inline-flex items-center gap-1 rounded-full bg-surface-100 px-2 py-0.5 font-semibold dark:bg-surface-800">
+                <Play className="h-3 w-3" /> {duration}
+              </li>
+            )}
+            {views && (
+              <li className="inline-flex items-center gap-1">
+                <Eye className="h-3 w-3" /> {views} views
+              </li>
+            )}
+            {(duration || views) && <li>·</li>}
             <li>
               <time dateTime={publishedAt}>{formatDate(publishedAt)}</time>
             </li>

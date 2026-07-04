@@ -56,9 +56,11 @@ export function VideoCard({ video }: { video: Video }) {
           fallbackIconNode={renderCategoryIcon(video.category)}
           fallbackEyebrow={video.category}
         />
-        <span className="pointer-events-none absolute bottom-2 right-2 rounded-md bg-black/80 px-1.5 py-0.5 text-[11px] font-semibold text-white">
-          {video.duration}
-        </span>
+        {video.duration && (
+          <span className="pointer-events-none absolute bottom-2 right-2 rounded-md bg-black/80 px-1.5 py-0.5 text-[11px] font-semibold text-white">
+            {video.duration}
+          </span>
+        )}
       </div>
       <div className="flex flex-1 flex-col p-4">
         <div className="flex items-center gap-2">
@@ -70,10 +72,12 @@ export function VideoCard({ video }: { video: Video }) {
           >
             {video.category}
           </span>
-          <span className="inline-flex items-center gap-1 text-[11px] text-surface-500 dark:text-surface-400">
-            <Eye className="h-3 w-3" />
-            {video.views} views
-          </span>
+          {video.views && (
+            <span className="inline-flex items-center gap-1 text-[11px] text-surface-500 dark:text-surface-400">
+              <Eye className="h-3 w-3" />
+              {video.views} views
+            </span>
+          )}
         </div>
         <h3 className="mt-2 text-base font-semibold leading-snug">
           <a
