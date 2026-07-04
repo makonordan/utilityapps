@@ -50,10 +50,11 @@ import { cn } from "@/lib/utils";
  * bulletproof HTML from generateSignatureHtml on every keystroke.
  *
  * All rendering happens in-browser. The only network call is the
- * OPTIONAL image upload — signed-in users can hit
- * /api/business-card/upload (which drops the image into the
- * bc-avatars Supabase Storage bucket and returns a public URL);
- * everyone else can paste a URL to a photo they already host.
+ * OPTIONAL image upload — anyone can POST to
+ * /api/email-signature/upload (no auth) which lands the image in the
+ * bc-avatars Supabase Storage bucket under an anonymous randomised
+ * path and returns a public URL. Alternatively users can paste a URL
+ * to a photo they already host.
  *
  * The tool has no auth of its own, no database writes, no server
  * rendering step for the signature itself. Refresh the page and the
@@ -589,7 +590,7 @@ function ImagePicker({
       const form = new FormData();
       form.append("file", blob, filenameFor(f, blob));
       form.append("kind", kind);
-      const res = await fetch("/api/business-card/upload", {
+      const res = await fetch("/api/email-signature/upload", {
         method: "POST",
         body: form,
       });
@@ -598,12 +599,6 @@ function ImagePicker({
         url?: string;
         error?: string;
       };
-      if (res.status === 401) {
-        setError(
-          "Sign in with Google (top right) to upload — or paste an image URL below instead."
-        );
-        return;
-      }
       if (!res.ok || !json.ok || !json.url) {
         setError(json.error ?? "Upload failed");
         return;
