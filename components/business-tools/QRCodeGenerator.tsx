@@ -643,28 +643,28 @@ function LiveQrCanvas({ data, styling }: { data: string; styling: Styling }) {
     };
   }, [debouncedData, styling]);
 
-  if (!debouncedData) {
-    return (
-      <div className="relative">
-        <div
-          ref={containerRef}
-          aria-hidden="true"
-          className="mx-auto flex h-[300px] w-[300px] items-center justify-center opacity-20 blur-sm"
-        />
+  // Single stable container across both states — a conditional swap
+  // between two different <div>s would move containerRef and orphan the
+  // qr-code-styling canvas on the unmounted subtree, which is why the
+  // preview used to go blank the moment the first field was filled in.
+  const showPlaceholder = !debouncedData;
+  return (
+    <div className="relative mx-auto h-[300px] w-[300px]">
+      <div
+        ref={containerRef}
+        className={cn(
+          "flex h-full w-full items-center justify-center rounded-2xl bg-white p-2 dark:bg-surface-100",
+          showPlaceholder && "opacity-20 blur-sm"
+        )}
+      />
+      {showPlaceholder && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <p className="rounded-2xl bg-white/80 px-4 py-3 text-center text-xs font-medium text-surface-600 shadow backdrop-blur dark:bg-surface-900/80 dark:text-surface-300">
             Fill in the details to generate your QR code.
           </p>
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      ref={containerRef}
-      className="mx-auto flex h-[300px] w-[300px] items-center justify-center rounded-2xl bg-white p-2 dark:bg-surface-100"
-    />
+      )}
+    </div>
   );
 }
 
