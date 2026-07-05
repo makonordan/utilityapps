@@ -32,6 +32,10 @@ import {
 } from "@/lib/eventTicket";
 import { cn } from "@/lib/utils";
 
+import { BulkTicketPanel } from "./BulkTicketPanel";
+
+export type TicketMode = "single" | "bulk";
+
 /**
  * /tools/event-ticket-generator client component.
  *
@@ -94,6 +98,7 @@ export function EventTicketGenerator() {
   const [verificationBaseUrl, setVerificationBaseUrl] = useState("");
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const [previewOpen, setPreviewOpen] = useState(true);
+  const [mode, setMode] = useState<TicketMode>("single");
 
   const qrContent = useMemo(
     () => buildQrContent(qrMode, data, verificationBaseUrl),
@@ -162,6 +167,8 @@ export function EventTicketGenerator() {
       </aside>
 
       <div className="space-y-6">
+        <ModeToggle value={mode} onChange={setMode} />
+
         {nameError && (
           <p className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-300">
             <AlertTriangle className="h-3 w-3" /> {nameError}
@@ -176,6 +183,7 @@ export function EventTicketGenerator() {
           data={data}
           onChange={set}
           onRegenerateId={regenerateTicketId}
+          mode={mode}
         />
 
         <CheckInQrSection
@@ -187,6 +195,14 @@ export function EventTicketGenerator() {
         />
 
         <BrandingSection data={data} onChange={set} />
+
+        {mode === "bulk" && (
+          <BulkTicketPanel
+            baseData={data}
+            qrMode={qrMode}
+            verificationBaseUrl={verificationBaseUrl}
+          />
+        )}
       </div>
     </div>
   );
@@ -330,15 +346,23 @@ function TicketDetailsSection({
   data,
   onChange,
   onRegenerateId,
+  mode,
 }: {
   data: TicketData;
   onChange: <K extends keyof TicketData>(key: K, value: TicketData[K]) => void;
   onRegenerateId: () => void;
+  /** In bulk mode, per-attendee fields (name, seat, ticket ID) are
+   *  driven by the batch and hidden from this section. Ticket type,
+   *  price, and terms remain here as batch defaults. */
+  mode: TicketMode;
 }) {
+  const isBulk = mode === "bulk";
   return (
-    <Section title="Ticket details">
+    <Section
+      title={isBulk ? "Ticket defaults (apply to every ticket in the batch)" : "Ticket details"}
+    >
       <div className="space-y-4">
-        <Field label="Ticket type">
+        <Field label="Ticket type" hint={isBulk ? "Batch default — CSV rows can override per attendee." : undefined}>
           <div className="mb-2 flex flex-wrap gap-1.5">
             {TICKET_TYPE_PRESETS.map((preset) => (
               <button
@@ -365,15 +389,17 @@ function TicketDetailsSection({
           />
         </Field>
         <Grid>
-          <Field label="Seat info" hint='Optional — e.g. "Row A, Seat 12"'>
-            <input
-              value={data.seatInfo}
-              onChange={(e) => onChange("seatInfo", e.target.value)}
-              className={inputCls}
-              placeholder="Row A · Seat 12"
-              maxLength={60}
-            />
-          </Field>
+          {!isBulk && (
+            <Field label="Seat info" hint='Optional — e.g. "Row A, Seat 12"'>
+              <input
+                value={data.seatInfo}
+                onChange={(e) => onChange("seatInfo", e.target.value)}
+                className={inputCls}
+                placeholder="Row A · Seat 12"
+                maxLength={60}
+              />
+            </Field>
+          )}
           <Field label="Price" hint="Display only — no payment processing.">
             <input
               value={data.price}
@@ -383,33 +409,37 @@ function TicketDetailsSection({
               maxLength={40}
             />
           </Field>
-          <Field label="Attendee name" hint="Personalise the ticket. Leave blank for bearer tickets.">
-            <input
-              value={data.attendeeName}
-              onChange={(e) => onChange("attendeeName", e.target.value)}
-              className={inputCls}
-              placeholder="Daniel Makonor"
-              maxLength={80}
-            />
-          </Field>
-          <Field label="Ticket ID" hint="Encoded in the check-in QR.">
-            <div className="flex gap-2">
+          {!isBulk && (
+            <Field label="Attendee name" hint="Personalise the ticket. Leave blank for bearer tickets.">
               <input
-                value={data.ticketId}
-                onChange={(e) => onChange("ticketId", e.target.value)}
-                className={cn(inputCls, "font-mono uppercase")}
-                maxLength={40}
+                value={data.attendeeName}
+                onChange={(e) => onChange("attendeeName", e.target.value)}
+                className={inputCls}
+                placeholder="Daniel Makonor"
+                maxLength={80}
               />
-              <button
-                type="button"
-                onClick={onRegenerateId}
-                title="Generate a new random ID"
-                className="inline-flex shrink-0 items-center gap-1 rounded-xl border border-surface-200 px-3 text-xs font-semibold text-surface-700 transition hover:border-primary-300 dark:border-surface-800 dark:text-surface-200"
-              >
-                <RefreshCw className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </Field>
+            </Field>
+          )}
+          {!isBulk && (
+            <Field label="Ticket ID" hint="Encoded in the check-in QR.">
+              <div className="flex gap-2">
+                <input
+                  value={data.ticketId}
+                  onChange={(e) => onChange("ticketId", e.target.value)}
+                  className={cn(inputCls, "font-mono uppercase")}
+                  maxLength={40}
+                />
+                <button
+                  type="button"
+                  onClick={onRegenerateId}
+                  title="Generate a new random ID"
+                  className="inline-flex shrink-0 items-center gap-1 rounded-xl border border-surface-200 px-3 text-xs font-semibold text-surface-700 transition hover:border-primary-300 dark:border-surface-800 dark:text-surface-200"
+                >
+                  <RefreshCw className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </Field>
+          )}
         </Grid>
         <Field label="Terms / fine print" hint="Optional — refund policy, ID requirement, transfer rules.">
           <textarea
@@ -422,6 +452,45 @@ function TicketDetailsSection({
         </Field>
       </div>
     </Section>
+  );
+}
+
+// ── Mode toggle ────────────────────────────────────────────────────────
+
+function ModeToggle({
+  value,
+  onChange,
+}: {
+  value: TicketMode;
+  onChange: (m: TicketMode) => void;
+}) {
+  return (
+    <div
+      role="tablist"
+      aria-label="Ticket generation mode"
+      className="inline-flex rounded-2xl border border-surface-200 bg-white p-1 dark:border-surface-800 dark:bg-surface-900"
+    >
+      {(["single", "bulk"] as const).map((m) => {
+        const active = value === m;
+        return (
+          <button
+            key={m}
+            role="tab"
+            aria-selected={active}
+            type="button"
+            onClick={() => onChange(m)}
+            className={cn(
+              "rounded-xl px-4 py-1.5 text-sm font-semibold transition",
+              active
+                ? "bg-primary-500 text-white shadow-sm"
+                : "text-surface-600 hover:text-surface-900 dark:text-surface-300 dark:hover:text-white"
+            )}
+          >
+            {m === "single" ? "Single ticket" : "Bulk tickets"}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
@@ -639,15 +708,20 @@ function PreviewPanel({
 
 // ── Ticket preview switch ───────────────────────────────────────────────
 
-function TicketPreview({
-  data,
-  qrDataUrl,
-  template,
-}: {
+/** Ticket-data + QR needed by every template preview. Exported so
+ *  BulkTicketPanel can reuse the same shape when driving its hidden
+ *  off-screen renderer. */
+export interface TicketPreviewProps {
   data: TicketData;
   qrDataUrl: string;
   template: TemplateDefinition;
-}) {
+}
+
+export function TicketPreview({
+  data,
+  qrDataUrl,
+  template,
+}: TicketPreviewProps) {
   switch (template.id) {
     case "classic-stub":
       return <ClassicStubTicket data={data} qrDataUrl={qrDataUrl} />;
