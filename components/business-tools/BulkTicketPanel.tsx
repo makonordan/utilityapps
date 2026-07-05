@@ -10,7 +10,9 @@ import {
 } from "react";
 import {
   AlertTriangle,
+  Archive,
   CheckCircle2,
+  FileSpreadsheet,
   FileText,
   Info,
   Loader2,
@@ -67,8 +69,15 @@ interface ParsedAttendee {
   /** Empty string = fall back to batch default. */
   ticketType: string;
   seatInfo: string;
+  /** Optional — populated from the 4th CSV column. When present,
+   *  unlocks the "Prepare mail merge" export path. */
+  email: string;
   ticketId: string;
 }
+
+/** What the user actually clicks to kick off generation. Determines the
+ *  output shape (single PDF vs ZIP vs ZIP + manifest). */
+type BulkExportKind = "pdf" | "zip" | "mailmerge";
 
 type BulkMethod = "quantity" | "named";
 
@@ -91,7 +100,11 @@ export function BulkTicketPanel({
   const [rawList, setRawList] = useState<string>("");
 
   // ── Generation state
-  const [progress, setProgress] = useState<{ current: number; total: number } | null>(null);
+  const [progress, setProgress] = useState<{
+    current: number;
+    total: number;
+    kind: BulkExportKind;
+  } | null>(null);
   const [generateError, setGenerateError] = useState<string | null>(null);
   const [lastFilename, setLastFilename] = useState<string | null>(null);
 
@@ -113,6 +126,7 @@ export function BulkTicketPanel({
           name: "",
           ticketType: "",
           seatInfo: "",
+          email: "",
           ticketId: generateTicketId(prefix || DEFAULT_PREFIX, i),
         });
       }
@@ -145,140 +159,186 @@ export function BulkTicketPanel({
   const overCap = attendees.length > MAX_TICKETS;
   const canGenerate =
     attendees.length > 0 && !overCap && !progress;
+  const hasAnyEmail = useMemo(
+    () => attendees.some((a) => a.email && /@/.test(a.email)),
+    [attendees]
+  );
 
   // ── Bulk generation ──────────────────────────────────────────────────
 
-  const generateAll = useCallback(async () => {
-    if (!canGenerate) return;
-    if (!baseData.eventName.trim()) {
-      setGenerateError("Event name is required.");
-      return;
-    }
-    setGenerateError(null);
-    setLastFilename(null);
-
-    // Dynamic imports so the browser-only libraries never touch the
-    // server bundle.
-    const [{ default: QRCode }, jsPdfModule, html2canvasModule] = await Promise.all([
-      import("qrcode"),
-      import("jspdf"),
-      import("html2canvas"),
-    ]);
-    const JsPdf = jsPdfModule.default;
-    const html2canvas = html2canvasModule.default;
-
-    const template = TEMPLATES_BY_ID[baseData.template];
-    const isPortrait = template.orientation === "vertical";
-    const pdf = new JsPdf({
-      orientation: isPortrait ? "portrait" : "landscape",
-      unit: "mm",
-      format: "a4",
-    });
-    // A4: 210 × 297 mm. Portrait template → tall page, ticket takes
-    // most of the top half. Landscape template → wide page, ticket
-    // centred in the top area.
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-
-    setProgress({ current: 0, total: attendees.length });
-
-    try {
-      for (let i = 0; i < attendees.length; i++) {
-        const attendee = attendees[i];
-        // Build the merged TicketData for this attendee. Empty per-row
-        // fields fall back to the batch defaults from baseData.
-        const ticketData: TicketData = {
-          ...baseData,
-          ticketId: attendee.ticketId,
-          attendeeName: attendee.name || baseData.attendeeName,
-          ticketType: attendee.ticketType || baseData.ticketType,
-          seatInfo: attendee.seatInfo || baseData.seatInfo,
-        };
-        const qrContent = buildQrContent(qrMode, ticketData, verificationBaseUrl);
-        ticketData.qrContent = qrContent;
-
-        const qrDataUrl = await QRCode.toDataURL(qrContent, {
-          width: 480,
-          margin: 1,
-          errorCorrectionLevel: qrMode === "json" ? "H" : "M",
-          color: { dark: "#000000", light: "#FFFFFF" },
-        });
-
-        setRenderedTicket({ data: ticketData, qrDataUrl });
-        setProgress({ current: i + 1, total: attendees.length });
-
-        // Wait for React commit + a browser paint so html2canvas sees
-        // the freshly-rendered ticket, not the previous one.
-        await nextPaint();
-
-        const container = hiddenRef.current;
-        if (!container) throw new Error("Hidden renderer detached");
-        const canvas = await html2canvas(container, {
-          backgroundColor: "#ffffff",
-          useCORS: true,
-          scale: 2,
-          logging: false,
-        });
-        const imgData = canvas.toDataURL("image/png");
-
-        // Fit the ticket to the page keeping its aspect ratio, top-
-        // centred with a 12mm margin. Keeps room for a "cut here" line
-        // and organiser notes.
-        const margin = 12;
-        const usableW = pageWidth - margin * 2;
-        const usableH = pageHeight - margin * 2;
-        const imgRatio = canvas.width / canvas.height;
-        const usableRatio = usableW / usableH;
-        let drawW: number;
-        let drawH: number;
-        if (imgRatio >= usableRatio) {
-          drawW = usableW;
-          drawH = usableW / imgRatio;
-        } else {
-          drawH = usableH;
-          drawW = usableH * imgRatio;
-        }
-        const drawX = (pageWidth - drawW) / 2;
-        const drawY = margin;
-
-        if (i > 0) pdf.addPage();
-        pdf.addImage(imgData, "PNG", drawX, drawY, drawW, drawH);
-        // Ticket ID printed below in mono for scanability if someone
-        // tears the ticket without the QR.
-        pdf.setFontSize(9);
-        pdf.setTextColor(120);
-        pdf.text(
-          `#${attendee.ticketId}${attendee.name ? "  ·  " + attendee.name : ""}`,
-          pageWidth / 2,
-          drawY + drawH + 6,
-          { align: "center" }
-        );
+  const runBatch = useCallback(
+    async (kind: BulkExportKind) => {
+      if (!canGenerate) return;
+      if (!baseData.eventName.trim()) {
+        setGenerateError("Event name is required.");
+        return;
       }
+      setGenerateError(null);
+      setLastFilename(null);
 
-      const safeEventName =
-        baseData.eventName
-          .trim()
-          .replace(/[^\w\d]+/g, "-")
-          .toLowerCase()
-          .slice(0, 40) || "event";
-      const filename = `tickets-${safeEventName}-${attendees.length}.pdf`;
-      pdf.save(filename);
-      setLastFilename(filename);
-    } catch (err) {
-      setGenerateError(
-        err instanceof Error ? err.message : "Ticket generation failed."
-      );
-    } finally {
-      setProgress(null);
-      setRenderedTicket(null);
-    }
-  }, [
-    canGenerate,
-    baseData,
-    qrMode,
-    verificationBaseUrl,
-    attendees,
-  ]);
+      // Dynamic imports — every library used here is browser-only.
+      // JSZip only loaded for the two zip paths.
+      const [{ default: QRCode }, jsPdfModule, html2canvasModule, jszipModule] =
+        await Promise.all([
+          import("qrcode"),
+          import("jspdf"),
+          import("html2canvas"),
+          kind === "pdf"
+            ? Promise.resolve<{ default: unknown }>({ default: null })
+            : import("jszip"),
+        ]);
+      const JsPdf = jsPdfModule.default;
+      const html2canvas = html2canvasModule.default;
+      const JSZip =
+        kind === "pdf"
+          ? null
+          : (jszipModule.default as unknown as JSZipCtor);
+
+      const template = TEMPLATES_BY_ID[baseData.template];
+      const isPortrait = template.orientation === "vertical";
+      const pdf =
+        kind === "pdf"
+          ? new JsPdf({
+              orientation: isPortrait ? "portrait" : "landscape",
+              unit: "mm",
+              format: "a4",
+            })
+          : null;
+      const pageWidth = pdf?.internal.pageSize.getWidth() ?? 0;
+      const pageHeight = pdf?.internal.pageSize.getHeight() ?? 0;
+
+      const zip = JSZip ? new JSZip() : null;
+      // Track { filename, name, email, ticketId } for the mail-merge
+      // manifest. Only written to the zip when kind === "mailmerge".
+      const manifest: {
+        filename: string;
+        name: string;
+        email: string;
+        ticketId: string;
+      }[] = [];
+
+      setProgress({ current: 0, total: attendees.length, kind });
+
+      try {
+        for (let i = 0; i < attendees.length; i++) {
+          const attendee = attendees[i];
+          const ticketData: TicketData = {
+            ...baseData,
+            ticketId: attendee.ticketId,
+            attendeeName: attendee.name || baseData.attendeeName,
+            ticketType: attendee.ticketType || baseData.ticketType,
+            seatInfo: attendee.seatInfo || baseData.seatInfo,
+          };
+          const qrContent = buildQrContent(qrMode, ticketData, verificationBaseUrl);
+          ticketData.qrContent = qrContent;
+
+          const qrDataUrl = await QRCode.toDataURL(qrContent, {
+            width: 480,
+            margin: 1,
+            errorCorrectionLevel: qrMode === "json" ? "H" : "M",
+            color: { dark: "#000000", light: "#FFFFFF" },
+          });
+
+          setRenderedTicket({ data: ticketData, qrDataUrl });
+          setProgress({ current: i + 1, total: attendees.length, kind });
+          await nextPaint();
+
+          const container = hiddenRef.current;
+          if (!container) throw new Error("Hidden renderer detached");
+          const canvas = await html2canvas(container, {
+            backgroundColor: "#ffffff",
+            useCORS: true,
+            scale: 2,
+            logging: false,
+          });
+
+          if (kind === "pdf" && pdf) {
+            const margin = 12;
+            const usableW = pageWidth - margin * 2;
+            const usableH = pageHeight - margin * 2;
+            const imgRatio = canvas.width / canvas.height;
+            const usableRatio = usableW / usableH;
+            let drawW: number;
+            let drawH: number;
+            if (imgRatio >= usableRatio) {
+              drawW = usableW;
+              drawH = usableW / imgRatio;
+            } else {
+              drawH = usableH;
+              drawW = usableH * imgRatio;
+            }
+            const drawX = (pageWidth - drawW) / 2;
+            const drawY = margin;
+            if (i > 0) pdf.addPage();
+            pdf.addImage(canvas.toDataURL("image/png"), "PNG", drawX, drawY, drawW, drawH);
+            pdf.setFontSize(9);
+            pdf.setTextColor(120);
+            pdf.text(
+              `#${attendee.ticketId}${attendee.name ? "  ·  " + attendee.name : ""}`,
+              pageWidth / 2,
+              drawY + drawH + 6,
+              { align: "center" }
+            );
+          } else if (zip) {
+            const blob = await canvasToBlob(canvas, "image/png");
+            if (!blob) throw new Error("PNG encode failed");
+            const filename = ticketFilename(attendee);
+            zip.file(filename, blob);
+            if (kind === "mailmerge") {
+              manifest.push({
+                filename,
+                name: attendee.name,
+                email: attendee.email,
+                ticketId: attendee.ticketId,
+              });
+            }
+          }
+        }
+
+        const safeEventName =
+          baseData.eventName
+            .trim()
+            .replace(/[^\w\d]+/g, "-")
+            .toLowerCase()
+            .slice(0, 40) || "event";
+
+        if (kind === "pdf" && pdf) {
+          const filename = `tickets-${safeEventName}-${attendees.length}.pdf`;
+          pdf.save(filename);
+          setLastFilename(filename);
+        } else if (zip) {
+          if (kind === "mailmerge") {
+            // README so the organiser knows what to do with the zip
+            // when it lands on their disk without having to remember
+            // this UI.
+            zip.file("README.txt", buildMailMergeReadme(safeEventName, manifest.length));
+            zip.file("attendees.csv", buildManifestCsv(manifest));
+          }
+          const zipBlob = await zip.generateAsync({ type: "blob" });
+          const filename =
+            kind === "mailmerge"
+              ? `tickets-${safeEventName}-mailmerge.zip`
+              : `tickets-${safeEventName}-${attendees.length}.zip`;
+          downloadBlob(zipBlob, filename);
+          setLastFilename(filename);
+        }
+      } catch (err) {
+        setGenerateError(
+          err instanceof Error ? err.message : "Ticket generation failed."
+        );
+      } finally {
+        setProgress(null);
+        setRenderedTicket(null);
+      }
+    },
+    [
+      canGenerate,
+      baseData,
+      qrMode,
+      verificationBaseUrl,
+      attendees,
+    ]
+  );
 
   // ── Render ───────────────────────────────────────────────────────────
 
@@ -334,7 +394,17 @@ export function BulkTicketPanel({
         )}
 
         {progress && (
-          <ProgressBar current={progress.current} total={progress.total} />
+          <ProgressBar
+            current={progress.current}
+            total={progress.total}
+            label={
+              progress.kind === "pdf"
+                ? "Generating PDF"
+                : progress.kind === "mailmerge"
+                  ? "Preparing mail-merge bundle"
+                  : "Generating ZIP"
+            }
+          />
         )}
 
         {lastFilename && !progress && (
@@ -346,27 +416,60 @@ export function BulkTicketPanel({
           </p>
         )}
 
-        <button
-          type="button"
-          onClick={generateAll}
-          disabled={!canGenerate}
-          className={cn(
-            "inline-flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold text-white transition disabled:opacity-60",
-            "bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 shadow-glow"
+        <div className="grid gap-2 sm:grid-cols-2">
+          <BulkExportButton
+            primary
+            onClick={() => runBatch("pdf")}
+            busy={progress?.kind === "pdf"}
+            disabled={!canGenerate}
+            icon={FileText}
+            label={
+              progress?.kind === "pdf"
+                ? `Generating PDF ${progress.current} of ${progress.total}…`
+                : `Download all as PDF · ${attendees.length}`
+            }
+            hint="Multi-page A4 PDF, one ticket per page"
+          />
+          <BulkExportButton
+            onClick={() => runBatch("zip")}
+            busy={progress?.kind === "zip"}
+            disabled={!canGenerate}
+            icon={Archive}
+            label={
+              progress?.kind === "zip"
+                ? `Generating ZIP ${progress.current} of ${progress.total}…`
+                : `Download all as ZIP · ${attendees.length}`
+            }
+            hint="Individual PNG files zipped, named by ticket ID"
+          />
+          {hasAnyEmail && (
+            <BulkExportButton
+              onClick={() => runBatch("mailmerge")}
+              busy={progress?.kind === "mailmerge"}
+              disabled={!canGenerate}
+              icon={FileSpreadsheet}
+              label={
+                progress?.kind === "mailmerge"
+                  ? `Preparing mail-merge ${progress.current} of ${progress.total}…`
+                  : "Prepare mail-merge bundle"
+              }
+              hint="ZIP + attendees.csv + README for Gmail / Outlook mail-merge"
+              className="sm:col-span-2"
+            />
           )}
-        >
-          {progress ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Generating ticket {progress.current} of {progress.total}…
-            </>
-          ) : (
-            <>
-              <Users className="h-4 w-4" />
-              Generate {attendees.length || 0} tickets
-            </>
-          )}
-        </button>
+        </div>
+
+        {/* Honest guidance for the mail-merge path — surface even before
+            the button is clicked so users know what to do with the ZIP. */}
+        {hasAnyEmail && (
+          <div className="flex items-start gap-2 rounded-2xl border border-success-200 bg-success-50/50 p-3 text-[11px] text-success-800 dark:border-success-500/30 dark:bg-success-500/10 dark:text-success-200">
+            <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-success-600 dark:text-success-400" />
+            <p>
+              <strong>To email everyone automatically, use these files with your email tool&rsquo;s mail-merge feature.</strong>{" "}
+              We don&rsquo;t send emails on your behalf — your tickets stay private to you. The bundle contains a PNG per attendee plus <code>attendees.csv</code> (name, email, ticket ID, filename) ready to feed a Gmail mail-merge extension, Outlook Mail Merge, or similar.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Off-screen renderer — sized to the template aspect so
@@ -572,7 +675,7 @@ function NamedListInputs({
           <textarea
             value={rawList}
             onChange={(e) => onRawListChange(e.target.value)}
-            placeholder={`Ada Lovelace\nAlan Turing\nGrace Hopper\n\n…or a CSV:\nname,ticketType,seatInfo\nAda Lovelace,VIP,A1\nAlan Turing,General,B4`}
+            placeholder={`Ada Lovelace\nAlan Turing\nGrace Hopper\n\n…or a CSV (email column unlocks mail-merge):\nname,ticketType,seatInfo,email\nAda Lovelace,VIP,A1,ada@example.com\nAlan Turing,General,B4,alan@example.com`}
             className="min-h-[160px] w-full resize-y rounded-xl border border-surface-200 bg-white px-3 py-2.5 font-mono text-xs text-surface-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-surface-800 dark:bg-surface-900 dark:text-white"
           />
         </label>
@@ -614,7 +717,7 @@ function NamedListInputs({
       <div className="flex items-start gap-2 rounded-xl border border-primary-200 bg-primary-50/60 p-3 text-[11px] text-primary-900 dark:border-primary-500/40 dark:bg-primary-500/10 dark:text-primary-100">
         <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
         <p>
-          First row is treated as a header only if it starts with <code>name</code>. Any of the three columns (name, ticketType, seatInfo) can be left blank — batch defaults from the sections above fill them in.
+          First row is treated as a header only if it starts with <code>name</code>. Any of the four columns (name, ticketType, seatInfo, email) can be left blank — batch defaults from the sections above fill them in. When any row has an email, a mail-merge export path unlocks below.
         </p>
       </div>
     </div>
@@ -674,8 +777,13 @@ function AttendeeTable({
   onRemove: (index: number) => void;
 }) {
   const showRemove = method === "named";
-  // Cap the visible rows so an 500-row textarea doesn't blow out the
-  // form; expose a count of hidden rows if truncated.
+  // Only show the email column when at least one row has one — for
+  // quantity-mode batches the column is always empty, which just wastes
+  // horizontal space.
+  const showEmail = useMemo(
+    () => attendees.some((a) => a.email && /@/.test(a.email)),
+    [attendees]
+  );
   const DISPLAY_CAP = 25;
   const shown = attendees.slice(0, DISPLAY_CAP);
   const hiddenRows = attendees.length - shown.length;
@@ -690,6 +798,7 @@ function AttendeeTable({
               <th className="px-3 py-2 font-semibold">Name</th>
               <th className="px-3 py-2 font-semibold">Type</th>
               <th className="px-3 py-2 font-semibold">Seat</th>
+              {showEmail && <th className="px-3 py-2 font-semibold">Email</th>}
               <th className="px-3 py-2 font-semibold">Ticket ID</th>
               {showRemove && <th className="px-3 py-2" aria-label="Remove" />}
             </tr>
@@ -707,6 +816,11 @@ function AttendeeTable({
                 <td className="px-3 py-2 text-surface-700 dark:text-surface-300">
                   {a.seatInfo || <span className="text-surface-400">—</span>}
                 </td>
+                {showEmail && (
+                  <td className="px-3 py-2 text-surface-700 dark:text-surface-300">
+                    {a.email || <span className="text-surface-400">—</span>}
+                  </td>
+                )}
                 <td className="px-3 py-2 font-mono text-[11px] text-surface-800 dark:text-surface-200">
                   {a.ticketId}
                 </td>
@@ -738,13 +852,21 @@ function AttendeeTable({
 
 // ── Progress bar ────────────────────────────────────────────────────────
 
-function ProgressBar({ current, total }: { current: number; total: number }) {
+function ProgressBar({
+  current,
+  total,
+  label,
+}: {
+  current: number;
+  total: number;
+  label: string;
+}) {
   const pct = Math.min(100, Math.round((current / Math.max(total, 1)) * 100));
   return (
     <div>
       <div className="mb-1 flex items-baseline justify-between text-xs">
         <span className="font-semibold text-surface-800 dark:text-surface-100">
-          Generating…
+          {label}…
         </span>
         <span className="tabular-nums text-surface-500">
           {current} / {total} · {pct}%
@@ -758,6 +880,175 @@ function ProgressBar({ current, total }: { current: number; total: number }) {
       </div>
     </div>
   );
+}
+
+// ── Bulk export button ─────────────────────────────────────────────────
+
+function BulkExportButton({
+  primary,
+  onClick,
+  busy,
+  disabled,
+  icon: Icon,
+  label,
+  hint,
+  className,
+}: {
+  primary?: boolean;
+  onClick: () => void;
+  busy: boolean;
+  disabled: boolean;
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  hint: string;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className={cn(
+        "flex items-start gap-3 rounded-2xl px-3.5 py-3 text-left transition disabled:opacity-60",
+        primary
+          ? "bg-gradient-to-r from-primary-500 to-accent-500 text-white shadow-glow hover:from-primary-600 hover:to-accent-600"
+          : "border border-surface-200 bg-white text-surface-800 hover:border-surface-300 dark:border-surface-800 dark:bg-surface-900 dark:text-surface-100",
+        className
+      )}
+    >
+      <span
+        className={cn(
+          "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl",
+          primary
+            ? "bg-white/20 text-white"
+            : "bg-primary-50 text-primary-700 dark:bg-primary-500/15 dark:text-primary-300"
+        )}
+      >
+        {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Icon className="h-4 w-4" />}
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-semibold leading-tight">{label}</p>
+        <p
+          className={cn(
+            "mt-0.5 text-[11px] leading-snug",
+            primary ? "text-white/85" : "text-surface-500 dark:text-surface-400"
+          )}
+        >
+          {hint}
+        </p>
+      </div>
+    </button>
+  );
+}
+
+// ── Manifest + filename helpers ─────────────────────────────────────────
+
+/** Slug-safe attendee filename. Empty names fall back to the ticket
+ *  ID so every file has a unique, human-readable name. */
+function ticketFilename(a: ParsedAttendee): string {
+  const slug = slugifyName(a.name);
+  return slug
+    ? `ticket-${a.ticketId}-${slug}.png`
+    : `ticket-${a.ticketId}.png`;
+}
+
+function slugifyName(name: string): string {
+  return name
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 40);
+}
+
+/** Mail-merge manifest — Gmail Mail Merge, Outlook Mail Merge, YAMM,
+ *  MailMeteor, and every spreadsheet-driven bulk sender reads a CSV
+ *  with an email column + a filename column for attachments. Empty
+ *  emails still get a row so the organiser can chase them manually. */
+function buildManifestCsv(rows: {
+  name: string;
+  email: string;
+  ticketId: string;
+  filename: string;
+}[]): string {
+  const lines = ["name,email,ticket_id,filename"];
+  for (const r of rows) {
+    lines.push(
+      [
+        csvField(r.name),
+        csvField(r.email),
+        csvField(r.ticketId),
+        csvField(r.filename),
+      ].join(",")
+    );
+  }
+  return lines.join("\n") + "\n";
+}
+
+function csvField(v: string): string {
+  const s = v ?? "";
+  if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+  return s;
+}
+
+function buildMailMergeReadme(eventName: string, count: number): string {
+  return `Mail-merge bundle for ${eventName} (${count} tickets)
+============================================================
+
+Files in this ZIP:
+  tickets/*.png    One PNG per attendee, named ticket-<ID>-<name>.png
+  attendees.csv    name, email, ticket_id, filename
+  README.txt       This file
+
+How to send the tickets to your attendees:
+
+1. Extract the ZIP so all files are in one folder on your machine.
+2. Open attendees.csv in Google Sheets (or Excel).
+3. Install a mail-merge tool if you don't have one already:
+     - Gmail:   YAMM, Mail Merge for Gmail, or GMass
+     - Outlook: Outlook Mail Merge, MailMeteor for Outlook
+4. Follow the tool's flow to compose the email template, pointing
+   the "attachment" field at the 'filename' column.
+5. Test with a single row first, then run the merge.
+
+Reminder: this tool never touched your guest list. Every ticket was
+generated in your browser, and the emails go from your own inbox.
+`;
+}
+
+// ── Download / canvas helpers ──────────────────────────────────────────
+
+function downloadBlob(blob: Blob, filename: string): void {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function canvasToBlob(
+  canvas: HTMLCanvasElement,
+  mime: string
+): Promise<Blob | null> {
+  return new Promise((resolve) => canvas.toBlob((b) => resolve(b), mime));
+}
+
+// ── JSZip minimal type shim ────────────────────────────────────────────
+
+/** Only the surface we touch — file() and generateAsync(). Keeps the
+ *  cast at the dynamic-import site local instead of pulling the whole
+ *  library's types (which are large and would force @types/jszip as a
+ *  dev dep). */
+interface JSZipInstance {
+  file(name: string, blob: Blob | string): void;
+  generateAsync(opts: { type: "blob" }): Promise<Blob>;
+}
+
+interface JSZipCtor {
+  new (): JSZipInstance;
 }
 
 // ── CSV / name-list parser ──────────────────────────────────────────────
@@ -781,13 +1072,16 @@ function parseAttendeeList(text: string): Omit<ParsedAttendee, "ticketId">[] {
   return rows
     .map((line): Omit<ParsedAttendee, "ticketId"> => {
       if (!anyCommas) {
-        return { name: line, ticketType: "", seatInfo: "" };
+        return { name: line, ticketType: "", seatInfo: "", email: "" };
       }
       const cols = parseCsvRow(line);
       return {
         name: (cols[0] ?? "").trim(),
         ticketType: (cols[1] ?? "").trim(),
         seatInfo: (cols[2] ?? "").trim(),
+        // 4th column is optional — populated only when the org's CSV
+        // has an email column. Presence gates the mail-merge export.
+        email: (cols[3] ?? "").trim(),
       };
     })
     .filter((a) => a.name);

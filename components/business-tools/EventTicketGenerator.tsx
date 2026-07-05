@@ -33,6 +33,7 @@ import {
 import { cn } from "@/lib/utils";
 
 import { BulkTicketPanel } from "./BulkTicketPanel";
+import { TicketExport } from "./TicketExport";
 
 export type TicketMode = "single" | "bulk";
 
@@ -164,6 +165,18 @@ export function EventTicketGenerator() {
           open={previewOpen}
           onOpenChange={setPreviewOpen}
         />
+        {/* Single-mode export lives inside the preview aside so users
+            see the download options right next to what they're
+            downloading. Bulk mode has its own export controls at the
+            bottom of the form column. */}
+        {mode === "single" && (
+          <TicketExport
+            data={data}
+            template={TEMPLATES_BY_ID[data.template]}
+            qrMode={qrMode}
+            verificationBaseUrl={verificationBaseUrl}
+          />
+        )}
       </aside>
 
       <div className="space-y-6">
