@@ -1264,6 +1264,37 @@ export const TOOLS: Tool[] = [
     relatedTools: ["pomodoro-timer", "countdown-timer", "barcode-generator"],
   },
   {
+    id: "event-ticket-generator",
+    name: "Event Ticket Generator",
+    description:
+      "Create and download free event tickets and passes with check-in QR codes. Design, personalize, and print or email your own tickets. No fees, no signup.",
+    longDescription:
+      "Free browser-based event-ticket designer for meetups, workshops, gigs, and small conferences. Six templates (classic stub, modern gradient, concert, VIP pass, minimal, wristband), custom colours, logo + banner image support, and a check-in QR code that encodes either the ticket ID, a verification URL you host, or a compact JSON payload for custom scanners. Export a single ticket or bulk-download a whole batch as PDF/PNG. No payments, no attendee database on our side — you keep every list yourself.",
+    category: "Business Tools",
+    icon: "Ticket",
+    href: "/tools/event-ticket-generator",
+    externalHref: null,
+    embedUrl: null,
+    keywords: [
+      "event ticket generator",
+      "free ticket maker",
+      "create event tickets",
+      "printable tickets",
+      "ticket template",
+      "event pass generator",
+      "qr code ticket",
+      "make tickets online",
+      "ticket maker free",
+      "admission ticket template",
+    ],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 300_000,
+    cpc: 5,
+    relatedTools: ["business-card", "qr-code-generator", "invoice-generator"],
+  },
+  {
     id: "email-signature-generator",
     name: "Email Signature Generator",
     description:
