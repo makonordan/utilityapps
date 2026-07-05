@@ -810,3 +810,128 @@ do $$ begin
     on storage.objects for select
     using (bucket_id = 'bc-avatars');
 exception when duplicate_object then null; end $$;
+
+
+-- 18. instant-poll -----------------------------------------------------------
+-- Public write model: anyone can create polls and vote without auth. All
+-- abuse prevention lives in the API routes (per-IP rate limits, wordlist
+-- check, device-hash dedupe, per-request creator_token). RLS on this section
+-- keeps individual votes private while letting everyone read poll metadata
+-- and aggregate counts via poll_results.
+
+create table if not exists public.polls (
+  id             uuid primary key default gen_random_uuid(),
+  -- Short URL-safe code used in /tools/instant-poll/[public_id]. Generated
+  -- by lib/pollUtils generatePublicId() from an unambiguous 55-char alphabet
+  -- (no 0/O/1/l/I). 8 chars → ~1.4e13 combinations, collision-negligible.
+  public_id      text unique not null,
+  question       text not null check (char_length(question) <= 200 and char_length(question) > 0),
+  -- [{ id: string, text: string }, ...]. Between 2 and 10 options; the API
+  -- route validates the array shape before insert.
+  options        jsonb not null,
+  poll_type      text not null default 'single'
+                   check (poll_type in ('single', 'multiple')),
+  created_at     timestamptz not null default now(),
+  -- Auto-expiry: default 30 days from creation. Votes rejected after this;
+  -- results still readable. A scheduled function can purge expired polls
+  -- for storage hygiene but isn't required for correctness.
+  expires_at     timestamptz not null default (now() + interval '30 days'),
+  is_closed      boolean not null default false,
+  total_votes    integer not null default 0,
+  -- Random secret stored ONLY in the creator's browser localStorage. Server
+  -- checks equality on close/delete requests. Never returned in the public
+  -- poll payload — the API route strips it from selects that fan out to
+  -- viewers.
+  creator_token  text not null,
+  -- Small object of per-poll toggles. Extend as needed; jsonb keeps schema
+  -- migrations cheap.
+  settings       jsonb not null default
+                   '{"showResultsBeforeVote": false, "allowMultiplePerDevice": false}'::jsonb
+);
+
+create unique index if not exists polls_public_id_idx on public.polls (public_id);
+create index if not exists polls_expires_at_idx on public.polls (expires_at);
+
+create table if not exists public.poll_votes (
+  id           uuid primary key default gen_random_uuid(),
+  poll_id      uuid not null references public.polls(id) on delete cascade,
+  -- Array of option ids the voter picked. Always an array — single-choice
+  -- polls just have length 1 — so the aggregate view treats both modes
+  -- uniformly.
+  option_ids   jsonb not null,
+  -- Hash of (poll_id, device_token, user_agent) computed by
+  -- lib/pollUtils computeVoterHash. Prevents trivial double-voting without
+  -- storing anything personally identifying. NOT an IP hash.
+  voter_hash   text not null,
+  voted_at     timestamptz not null default now()
+);
+
+create index if not exists poll_votes_poll_id_idx on public.poll_votes (poll_id);
+-- Composite index makes the duplicate-vote check
+-- (SELECT 1 FROM poll_votes WHERE poll_id=? AND voter_hash=?) instant.
+create index if not exists poll_votes_dedupe_idx on public.poll_votes (poll_id, voter_hash);
+
+-- Aggregate view: one row per poll with { option_id -> count } + total.
+-- Consumers hit this view (or the API) for the results panel because the
+-- underlying poll_votes table has no public SELECT policy — individual
+-- votes stay private, only aggregates leak.
+create or replace view public.poll_results as
+select
+  poll_id,
+  jsonb_object_agg(option_id, cnt) as counts,
+  sum(cnt)::int as total
+from (
+  select
+    v.poll_id,
+    o.value as option_id,
+    count(*)::int as cnt
+  from public.poll_votes v
+  cross join lateral jsonb_array_elements_text(v.option_ids) o(value)
+  group by v.poll_id, o.value
+) t
+group by poll_id;
+
+alter table public.polls      enable row level security;
+alter table public.poll_votes enable row level security;
+
+-- Anyone reads polls — needed for public poll pages. The API route
+-- strips creator_token before returning to viewers.
+do $$ begin
+  create policy polls_public_read on public.polls
+    for select using (true);
+exception when duplicate_object then null; end $$;
+
+-- Anyone creates polls. Validation + creator_token injection happens in
+-- the API route; the raw client never picks the token itself.
+do $$ begin
+  create policy polls_public_insert on public.polls
+    for insert with check (true);
+exception when duplicate_object then null; end $$;
+
+-- Anon client cannot update/delete polls directly. Close + delete flows
+-- go through the API route using the service-role client (which bypasses
+-- RLS entirely). "using (false)" is a hard block; the service-role
+-- bypass makes it a route-only capability.
+do $$ begin
+  create policy polls_no_client_update on public.polls
+    for update using (false);
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create policy polls_no_client_delete on public.polls
+    for delete using (false);
+exception when duplicate_object then null; end $$;
+
+-- Anyone can INSERT votes — the vote endpoint is public. Duplicate
+-- prevention runs before the insert in the API route.
+do $$ begin
+  create policy poll_votes_public_insert on public.poll_votes
+    for insert with check (true);
+exception when duplicate_object then null; end $$;
+
+-- No public SELECT on poll_votes — the aggregate view is how consumers
+-- read counts. Individual votes stay private even to the poll creator.
+do $$ begin
+  create policy poll_votes_no_public_select on public.poll_votes
+    for select using (false);
+exception when duplicate_object then null; end $$;

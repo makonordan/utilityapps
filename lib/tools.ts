@@ -1295,6 +1295,37 @@ export const TOOLS: Tool[] = [
     relatedTools: ["business-card", "qr-code-generator", "invoice-generator"],
   },
   {
+    id: "instant-poll",
+    name: "Instant Poll",
+    description:
+      "Create a shareable poll in under 10 seconds. No login, no signup. Perfect for WhatsApp groups, team standups, and quick decisions.",
+    longDescription:
+      "Radically simple poll tool built for speed. Type a question, add options, share the link. No Google account, no Microsoft sign-in, no dashboard to navigate. Optimised for pasting into WhatsApp, Slack, Discord, or any group chat. Optional single-vote or multi-select mode. Results update live as people vote. Polls auto-expire after 30 days.",
+    category: "Productivity Tools",
+    icon: "BarChart3",
+    href: "/tools/instant-poll",
+    externalHref: null,
+    embedUrl: null,
+    keywords: [
+      "instant poll",
+      "quick poll",
+      "shareable poll",
+      "whatsapp poll",
+      "group poll",
+      "no signup poll",
+      "free poll maker",
+      "poll link generator",
+      "team vote",
+      "google forms alternative",
+    ],
+    trending: true,
+    new: true,
+    featured: true,
+    monthlySearches: 500_000,
+    cpc: 4,
+    relatedTools: ["qr-code-generator", "event-ticket-generator", "meta-tag-generator"],
+  },
+  {
     id: "email-signature-generator",
     name: "Email Signature Generator",
     description:
