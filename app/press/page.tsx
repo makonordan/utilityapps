@@ -86,7 +86,6 @@ const FOUNDER_BIO =
 export default function PressPage() {
   const toolsCount = TOOLS.length;
   const categoriesCount = CATEGORIES.length;
-  const totalSearches = TOOLS.reduce((sum, t) => sum + (t.monthlySearches ?? 0), 0);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
@@ -125,7 +124,7 @@ export default function PressPage() {
         <div className="grid gap-3 sm:grid-cols-3">
           <Stat label="Tools live" value={formatNumber(toolsCount)} />
           <Stat label="Categories" value={String(categoriesCount)} />
-          <Stat label="Combined keyword volume" value={`${formatNumber(totalSearches)}/mo`} />
+          <Stat label="Runs in the browser" value="100%" />
         </div>
       </Section>
 

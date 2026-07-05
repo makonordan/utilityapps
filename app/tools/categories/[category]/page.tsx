@@ -99,10 +99,10 @@ export default async function CategoryPage({ params }: RouteParams) {
         <section className="mx-auto max-w-7xl px-4 pt-10 sm:px-6">
           <header className="mb-4">
             <p className="text-xs font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
-              Most popular
+              Featured
             </p>
             <h2 className="mt-1 text-xl font-bold tracking-tight text-surface-900 dark:text-white">
-              The 5 most-used {cat.name.toLowerCase()} this month
+              5 {cat.name.toLowerCase()} worth starting with
             </h2>
           </header>
           <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
@@ -116,8 +116,8 @@ export default async function CategoryPage({ params }: RouteParams) {
                     <p className="truncate text-sm font-semibold text-surface-900 dark:text-white">
                       {tool.name}
                     </p>
-                    <p className="text-[11px] text-surface-500 dark:text-surface-400">
-                      {formatNumber(tool.monthlySearches)}/mo
+                    <p className="line-clamp-1 text-[11px] text-surface-500 dark:text-surface-400">
+                      {tool.description}
                     </p>
                   </div>
                   <ArrowRight className="h-4 w-4 shrink-0 text-surface-400 transition group-hover:translate-x-0.5 group-hover:text-primary-500" />

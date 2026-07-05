@@ -702,11 +702,6 @@ function StructuredData({ tools }: { tools: Tool[] }) {
       price: "0",
       priceCurrency: "USD",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      ratingCount: "1280",
-    },
   };
 
   const itemList = {

@@ -241,7 +241,7 @@ function ToolPill({
           {tool.name}
         </p>
         <p className="text-[11px] text-surface-500 dark:text-surface-400">
-          {tool.category} · {formatNumber(tool.monthlySearches)}/mo
+          {tool.category}
         </p>
       </div>
     </div>

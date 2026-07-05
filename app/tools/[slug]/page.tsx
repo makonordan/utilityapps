@@ -141,11 +141,6 @@ export default async function ToolPage({ params }: RouteParams) {
     url: `${SITE_CONFIG.url}/tools/${tool.id}`,
     image: `${SITE_CONFIG.url}/og/tools/${tool.id}`,
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.8",
-      reviewCount: Math.max(50, Math.round(tool.monthlySearches / 5000)),
-    },
     publisher: {
       "@type": "Organization",
       name: SITE_CONFIG.name,
