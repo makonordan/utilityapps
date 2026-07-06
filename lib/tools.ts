@@ -1296,13 +1296,13 @@ export const TOOLS: Tool[] = [
   },
   {
     id: "instant-poll",
-    name: "Instant Poll",
+    name: "Instant Poll Maker",
     description:
-      "Create a shareable poll in under 10 seconds. No login, no signup. Perfect for WhatsApp groups, team standups, and quick decisions.",
+      "Create a free poll and share the link in seconds. No login. Perfect for WhatsApp groups and quick decisions. Live results.",
     longDescription:
       "Radically simple poll tool built for speed. Type a question, add options, share the link. No Google account, no Microsoft sign-in, no dashboard to navigate. Optimised for pasting into WhatsApp, Slack, Discord, or any group chat. Optional single-vote or multi-select mode. Results update live as people vote. Polls auto-expire after 30 days.",
     category: "Productivity Tools",
-    icon: "BarChart3",
+    icon: "BarChart2",
     href: "/tools/instant-poll",
     externalHref: null,
     embedUrl: null,
@@ -1321,7 +1321,7 @@ export const TOOLS: Tool[] = [
     trending: true,
     new: true,
     featured: true,
-    monthlySearches: 500_000,
+    monthlySearches: 200_000,
     cpc: 4,
     relatedTools: ["qr-code-generator", "event-ticket-generator", "meta-tag-generator"],
   },

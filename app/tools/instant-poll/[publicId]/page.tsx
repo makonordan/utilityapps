@@ -36,23 +36,27 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     };
   }
 
-  const { poll, results } = fetched;
-  // Cap the OG title so it fits inside link-unfurler chrome. The full
-  // question still renders on the page itself; this is just the
-  // preview.
+  const { poll } = fetched;
+  // Cap the display question so it fits inside link-unfurler chrome
+  // and the browser tab title. The full question still renders on the
+  // page itself.
   const displayQuestion =
     poll.question.length > 80 ? `${poll.question.slice(0, 77)}…` : poll.question;
-  const title = `${displayQuestion} — Vote | ${SITE_CONFIG.name}`;
-  const description =
-    results.total > 0
-      ? `${poll.options.length} options · ${results.total.toLocaleString()} ${
-          results.total === 1 ? "vote" : "votes"
-        } so far. Cast yours in seconds — no signup.`
-      : `${poll.options.length} options. Be the first to vote — no signup, one tap.`;
+  // Description per spec — invitational + option count.
+  const description = `Vote now — instant poll, no login. ${poll.options.length} options.`;
   const canonical = `/tools/instant-poll/${poll.publicId}`;
+  // Cache-busting query param so a link that goes viral doesn't keep
+  // showing the day-one vote count in unfurlers forever. Rounded to
+  // the minute so the same request in quick succession still hits the
+  // OG route's own 30s CDN cache.
+  const ogCacheKey = Math.floor(Date.now() / 60_000);
+  const ogUrl = `${SITE_CONFIG.url}/api/poll/${poll.publicId}/og?v=${ogCacheKey}`;
 
   return {
-    title,
+    // Per spec: the browser tab / share preview title IS the poll
+    // question. No trailing " | UtilityApps" — the OG image and
+    // description both surface the brand.
+    title: displayQuestion,
     description,
     alternates: { canonical },
     openGraph: {
@@ -63,11 +67,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       siteName: SITE_CONFIG.name,
       images: [
         {
-          url: `${SITE_CONFIG.url}/api/og?title=${encodeURIComponent(
-            displayQuestion
-          )}&description=${encodeURIComponent(
-            "Vote in seconds — no signup"
-          )}&type=tool`,
+          url: ogUrl,
           width: 1200,
           height: 630,
           alt: `Poll: ${displayQuestion}`,
@@ -78,11 +78,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       card: "summary_large_image",
       title: displayQuestion,
       description,
+      images: [ogUrl],
     },
-    // Individual polls shouldn't get indexed by Google — they're
-    // ephemeral (30-day lifetime) and often internal-facing. Their
-    // metadata still populates for social shares because those pull
-    // OG tags directly.
+    // Individual polls are ephemeral (30-day life) and often
+    // internal-facing — noindex so Google's crawler doesn't flood
+    // its index with abandoned "Where should we eat" polls. OG tags
+    // still populate for social shares (they read HTML directly).
     robots: { index: false, follow: false },
   };
 }
