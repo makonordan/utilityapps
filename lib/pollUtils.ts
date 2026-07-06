@@ -25,7 +25,7 @@
  * aloud in a WhatsApp voice note:
  *   - 0 / O  (zero vs uppercase O)
  *   - 1 / l / I  (one vs lowercase L vs uppercase i)
- * Left with 55 chars → an 8-char id gives 55^8 ≈ 1.4 × 10^13 slots,
+ * Left with 54 chars → an 8-char id gives 54^8 ≈ 7.2 × 10^13 slots,
  * so accidental collisions are negligible even at millions of polls.
  */
 const PUBLIC_ID_CHARSET =
