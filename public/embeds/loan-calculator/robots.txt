@@ -1,0 +1,10 @@
+# https://calcfinance.com/robots.txt
+
+User-agent: *
+Allow: /
+
+# Disallow Next.js internals
+Disallow: /_next/
+Disallow: /api/
+
+Sitemap: https://calcfinance.com/sitemap.xml

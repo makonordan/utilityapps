@@ -1,0 +1,79 @@
+---
+title: "MP3 vs WAV vs FLAC: Which Audio Format Should You Use?"
+description: "A practical guide to MP3, WAV and FLAC — lossy vs lossless, file sizes, sound quality, and exactly when to use each format. Plus a free audio converter."
+date: "2026-05-12"
+category: "Audio Tools"
+tags: ["mp3 vs wav", "flac", "audio formats", "audio quality"]
+featured: false
+author: "UtilityApps Team"
+---
+
+MP3, WAV and FLAC are the three audio formats most people actually encounter — and they represent three genuinely different trade-offs. Picking the right one is not about which sounds "best" in the abstract; it is about matching the format to what you are doing. This guide explains what each is good at and gives you a clear rule for choosing.
+
+## The core distinction: lossy vs lossless
+
+Just as with image formats, the dividing line is whether compression discards information.
+
+**Lossless** formats preserve every sample of the original recording exactly. Decode the file and you get back the precise audio that went in. WAV and FLAC are lossless.
+
+**Lossy** formats permanently discard parts of the audio that the human ear is unlikely to notice — very quiet sounds masked by louder ones, frequencies at the edges of hearing. MP3 is lossy. The discarded data cannot be recovered.
+
+This single distinction drives everything else.
+
+## WAV: uncompressed and lossless
+
+WAV stores audio as raw, uncompressed samples. It is the closest thing to the original recording.
+
+- **Quality:** perfect — nothing is removed or compressed.
+- **File size:** very large. A 3-minute stereo track at CD quality is roughly 30 MB.
+- **Best for:** recording, editing, and any work-in-progress audio. Producers and podcasters keep WAV masters because every edit and export stays clean.
+- **Weakness:** the size makes it impractical for distribution, streaming, or storing a large music library.
+
+## FLAC: compressed but still lossless
+
+FLAC (Free Lossless Audio Codec) is the clever middle option. It compresses audio *losslessly* — it finds a more efficient way to store the same samples, the way a ZIP file shrinks a document without changing it.
+
+- **Quality:** identical to WAV. Decoded, a FLAC file is bit-for-bit the same as the original.
+- **File size:** roughly half the size of the equivalent WAV.
+- **Best for:** archiving a music collection, audiophile listening, and anywhere you want perfect quality without WAV's bulk.
+- **Weakness:** still much larger than MP3, and not every device or platform supports it natively.
+
+## MP3: lossy, small, universal
+
+MP3 is the format that made digital music portable. It throws away perceptually unimportant data to achieve dramatic size savings.
+
+- **Quality:** very good at higher bitrates, noticeably degraded at low ones (more on bitrate below).
+- **File size:** small — a 3-minute track at 192 kbps is around 4 MB, roughly an eighth of the WAV.
+- **Best for:** sharing, streaming, podcasts, phone storage, and anywhere universal compatibility matters. Every device made in the last 25 years plays MP3.
+- **Weakness:** the discarded data is gone forever. Re-encoding an MP3 to a "better" format cannot bring quality back.
+
+## Bitrate: the setting that decides MP3 quality
+
+MP3 quality is controlled by **bitrate** — how many kilobits per second the file uses.
+
+- **128 kbps** — acceptable for speech and podcasts, audible compression artefacts on music.
+- **192 kbps** — the practical sweet spot for music; transparent for most listeners.
+- **320 kbps** — the MP3 maximum; the safest choice when you want lossy convenience with minimal compromise.
+
+Higher bitrate means better sound and larger files. For music, 192–320 kbps is the sensible range.
+
+## A simple rule for choosing
+
+- **Recording or editing audio?** Work in **WAV**. Keep every intermediate file lossless.
+- **Archiving music you care about?** Store **FLAC**. Perfect quality, half the WAV size.
+- **Sharing, streaming, or saving phone space?** Use **MP3** at 192–320 kbps. Universal and small.
+
+A useful workflow: keep a FLAC or WAV master, and export MP3 copies for distribution. You never lose the high-quality original, and listeners get a convenient file.
+
+## Converting between them
+
+You can move audio between all three formats with the [Audio Converter](/tools/audio-converter), which runs entirely in your browser. Two things to keep in mind:
+
+- Converting **lossless to lossless** (WAV to FLAC, or back) loses nothing.
+- Converting **lossy to lossless** (MP3 to WAV) does *not* restore quality — it just wraps the already-degraded audio in a bigger container. The damage was done at the MP3 stage.
+
+If you only need a section of a track, the [MP3 Cutter](/tools/mp3-cutter) trims audio without re-encoding, so a lossless cut stays lossless.
+
+## The short version
+
+WAV is the perfect, bulky master. FLAC is perfect quality at half the size — the right archive format. MP3 is small, universal, and lossy — the right distribution format at 192–320 kbps. Keep a lossless master, share MP3 copies, and use the [Audio Converter](/tools/audio-converter) to move between them.

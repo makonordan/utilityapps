@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+/* Tell Tailwind v4 to read our JS config (colors, animations, fonts). */
+@config "../tailwind.config.ts";
+
+/* Class-based dark mode: only apply `dark:` utilities when an ancestor has `.dark`. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Theme tokens — the toggle in the header swaps the `.dark` class on <html>. */
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+/* Give html an explicit height so percentage children resolve, but let body
+ * grow with content — `body { height: 100% }` locked it to the viewport and
+ * broke `position: sticky` on the flex-column body's children (the header). */
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+}
+
+/* Smooth scroll for in-page anchor links (TOC, breadcrumb, hero CTAs). */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Selection style picks up the brand. */
+::selection {
+  background-color: rgba(0, 102, 255, 0.18);
+  color: inherit;
+}
+
+/* Default focus ring uses the brand primary. */
+:focus-visible {
+  outline: 2px solid rgb(0 102 255 / 0.6);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Tailwind v4 Preflight resets <button> cursor to the user-agent default
+ * (which is the arrow on Chrome) — restore the expected pointer cursor for
+ * clickable interactives. Disabled controls keep their not-allowed/wait
+ * cursor because the :not(:disabled) guard skips them. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary {
+  cursor: pointer;
+}

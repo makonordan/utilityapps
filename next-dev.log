@@ -1,0 +1,54 @@
+▲ Next.js 16.2.5 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.111:3000
+- Environments: .env.local
+✓ Ready in 1384ms
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\Bluechip\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Bluechip\Desktop\Claude\utilityapps\package-lock.json
+
+Warning: Custom Cache-Control headers detected for the following routes:
+  - /_next/static/:path*
+
+Setting a custom Cache-Control header can break Next.js development behavior.
+
+○ Compiling / ...
+(node:27624) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/Bluechip/Desktop/Claude/utilityapps/tailwind.config.ts?id=1778911400412 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\Users\Bluechip\Desktop\Claude\utilityapps\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ GET / 200 in 12.8s (next.js: 8.7s, application-code: 4.1s)
+ GET / 200 in 1191ms (next.js: 25ms, application-code: 1166ms)
+ GET / 200 in 1170ms (next.js: 6ms, application-code: 1165ms)
+ GET /tools/citation-generator 200 in 1979ms (next.js: 1358ms, application-code: 621ms)
+ GET /tools/paraphrasing-tool 200 in 2.1s (next.js: 1632ms, application-code: 420ms)
+ GET /tools/study-timer 200 in 1805ms (next.js: 1311ms, application-code: 495ms)
+ GET /tools/flashcard-maker 200 in 2.1s (next.js: 1484ms, application-code: 629ms)
+✓ Compiled in 679ms
+○ Compiling /blog/[slug] ...
+ GET /blog/how-to-create-a-css-gradient 200 in 33.5s (next.js: 20.4s, generate-params: 10.8s, application-code: 13.1s)
+✓ Finished filesystem cache database compaction in 16.2s
+✓ Compiled in 157ms
+ GET /blog/how-to-convert-a-video-to-gif 200 in 1914ms (next.js: 444ms, generate-params: 19ms, application-code: 1471ms)
+ GET /blog/how-to-calculate-a-percentage 200 in 699ms (next.js: 19ms, generate-params: 13ms, application-code: 680ms)
+ GET /blog/uuid-v1-vs-v4-vs-v7 200 in 781ms (next.js: 62ms, generate-params: 53µs, application-code: 719ms)
+ POST /api/newsletter/subscribe 200 in 1517ms (next.js: 1412ms, application-code: 105ms)
+[contact] (resend not configured) inbound message {
+  name: 'Diagnostic Test',
+  email: 'test-check@example.com',
+  subject: 'General inquiry',
+  message: 'This is a diagnostic test message to verify the contact endpoint.'
+}
+ POST /api/contact 200 in 799ms (next.js: 740ms, application-code: 60ms)
+✓ Compiled in 1125ms
+[contact] (resend not configured) inbound message {
+  name: 'Wiring Test',
+  email: 'wiring@example.com',
+  subject: 'Bug report',
+  message: 'Verifying the contact route still returns success after the DB-save change.'
+}
+ POST /api/contact 200 in 267ms (next.js: 165ms, application-code: 101ms)
+ GET /donate 200 in 4.0s (next.js: 2.5s, application-code: 1521ms)

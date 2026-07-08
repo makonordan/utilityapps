@@ -1,0 +1,191 @@
+import type { FAQItem } from "@/components/tools/ToolFAQ";
+
+import type { BlogPostMeta } from "./blog";
+import type { Product } from "./products";
+import type { Tool } from "./tools";
+import { SITE_CONFIG } from "./utils";
+
+const ORG = {
+  "@type": "Organization" as const,
+  name: SITE_CONFIG.name,
+  url: SITE_CONFIG.url,
+  logo: { "@type": "ImageObject", url: `${SITE_CONFIG.url}/icon.png` },
+};
+
+const PUBLISHER = {
+  "@type": "Organization" as const,
+  name: SITE_CONFIG.name,
+  url: SITE_CONFIG.url,
+  logo: { "@type": "ImageObject", url: `${SITE_CONFIG.url}/icon.png` },
+};
+
+export interface BreadcrumbCrumb {
+  name: string;
+  url: string;
+}
+
+export function generateOrganizationSchema(): object {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: SITE_CONFIG.name,
+    legalName: SITE_CONFIG.author,
+    url: SITE_CONFIG.url,
+    description: SITE_CONFIG.description,
+    logo: `${SITE_CONFIG.url}/icon.png`,
+    sameAs: [
+      `https://x.com/${SITE_CONFIG.twitterHandle.replace(/^@/, "")}`,
+      "https://www.youtube.com/@UtilityAppsSite",
+      "https://www.linkedin.com/company/utilityapps/",
+      "https://www.instagram.com/utilityappssite",
+    ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: "hello@utilityapps.site",
+      contactType: "customer support",
+      availableLanguage: ["English"],
+    },
+  };
+}
+
+export function generateWebSiteSchema(): object {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_CONFIG.name,
+    alternateName: "UtilityApps — Free AI Tools",
+    url: SITE_CONFIG.url,
+    description: SITE_CONFIG.description,
+    publisher: ORG,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${SITE_CONFIG.url}/search?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+
+export function generateBreadcrumbSchema(items: BreadcrumbCrumb[]): object {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: item.url.startsWith("http") ? item.url : `${SITE_CONFIG.url}${item.url}`,
+    })),
+  };
+}
+
+export function generateFAQSchema(faqs: FAQItem[]): object {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map(({ q, a }) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
+  };
+}
+
+export function generateToolSchema(tool: Tool): object {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: tool.name,
+    description: tool.longDescription,
+    applicationCategory: tool.category.replace(/ Tools$/, "Application"),
+    operatingSystem: "Any (Web)",
+    url: `${SITE_CONFIG.url}${tool.href}`,
+    image: `${SITE_CONFIG.url}/og/tools/${tool.id}`,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    publisher: PUBLISHER,
+  };
+}
+
+export function generateArticleSchema(post: BlogPostMeta, options: { wordCount?: number } = {}): object {
+  const url = `${SITE_CONFIG.url}${post.url}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.description,
+    image: post.image ?? `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: { "@type": "Organization", name: post.author, url: SITE_CONFIG.url },
+    publisher: PUBLISHER,
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    articleSection: post.category,
+    keywords: post.tags.join(", "),
+    ...(options.wordCount ? { wordCount: options.wordCount } : {}),
+  };
+}
+
+export function generateProductSchema(
+  product: Product,
+  options: { includeReviews?: boolean } = {}
+): object {
+  const includeReviews = options.includeReviews !== false && product.reviews.length > 0;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.longDescription,
+    image: `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`,
+    sku: product.id,
+    category: product.category,
+    brand: { "@type": "Organization", name: SITE_CONFIG.name },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: product.rating.toFixed(1),
+      reviewCount: product.reviewCount,
+    },
+    ...(includeReviews
+      ? {
+          review: product.reviews.map((r) => ({
+            "@type": "Review",
+            author: { "@type": "Person", name: r.author },
+            reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5 },
+            datePublished: r.date,
+            reviewBody: r.body,
+          })),
+        }
+      : {}),
+    offers: {
+      "@type": "Offer",
+      price: product.price.toFixed(2),
+      priceCurrency: product.currency,
+      availability: "https://schema.org/InStock",
+      url: product.affiliateUrl,
+    },
+  };
+}
+
+export function generateItemListSchema(name: string, items: { name: string; url: string }[]): object {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      url: item.url.startsWith("http") ? item.url : `${SITE_CONFIG.url}${item.url}`,
+    })),
+  };
+}
+
+/**
+ * Serialize a JSON-LD object into the safe string form for embedding inside
+ * a <script type="application/ld+json"> tag. Replaces `<` to defuse the
+ * `</script>` injection vector.
+ */
+export function jsonLdString(data: object): string {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}

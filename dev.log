@@ -1,0 +1,7 @@
+
+> utilityapps@0.1.0 dev
+> contentlayer2 dev & next dev
+
+Warning: Contentlayer might not work as expected on Windows
+Contentlayer config change detected. Updating type definitions and data...
+Generated 13 documents in .contentlayer

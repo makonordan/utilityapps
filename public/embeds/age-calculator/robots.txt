@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://agecalc.com/sitemap.xml

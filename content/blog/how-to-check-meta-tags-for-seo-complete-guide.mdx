@@ -1,0 +1,89 @@
+---
+title: "How to Check Meta Tags for SEO: A Complete Guide"
+description: "How to check meta tags for SEO — audit your title, description, Open Graph and canonical tags, spot the common mistakes, and fix them with a free tool."
+date: "2026-05-30"
+category: "SEO Tools"
+tags: ["meta tags", "seo audit", "open graph", "technical seo"]
+featured: false
+author: "UtilityApps Team"
+---
+
+Meta tags are small pieces of HTML that tell search engines and social platforms what a page is about. They are easy to get wrong and easy to forget — which is why checking them should be a routine part of every SEO audit. This guide walks through exactly what to look for.
+
+## Why meta tags still matter
+
+Meta tags do not contain your content, but they shape how that content is *presented*. The title and description are what users actually see in search results, so they directly influence click-through rate. Open Graph tags control how your page looks when shared on social media. And canonical tags quietly prevent duplicate-content problems that can dilute your rankings. Skip them and you leave easy wins on the table.
+
+## Checking the title tag
+
+The `<title>` tag is the most important meta element. When you audit it, confirm:
+
+- **Length.** Aim for roughly 50–60 characters. Longer titles get truncated in search results with an ellipsis.
+- **Uniqueness.** Every page needs its own title. Duplicate titles across pages confuse search engines.
+- **Keyword placement.** Put the primary keyword near the front, where it carries the most weight and survives truncation.
+- **It exists at all.** A surprising number of pages ship with a missing or default title like "Untitled" or "Home".
+
+## Checking the meta description
+
+The meta description does not directly affect rankings, but it heavily affects whether people click. Check that it:
+
+- Runs about **140–160 characters** — long enough to be useful, short enough to avoid truncation.
+- Is unique to the page.
+- Reads like ad copy: it describes the page accurately and gives a reason to click.
+- Is present. When it is missing, search engines generate one from page text — usually less compelling than one you wrote.
+
+## Checking Open Graph and Twitter tags
+
+When someone shares your page, Open Graph tags decide what the preview looks like. Audit for:
+
+- **`og:title`** and **`og:description`** — the headline and summary of the shared card.
+- **`og:image`** — the preview image. A missing or wrongly sized image produces an ugly, low-trust card. Aim for 1200×630 pixels.
+- **`og:url`** — the canonical URL of the page.
+- **`twitter:card`** — set to `summary_large_image` for a prominent image card.
+
+A page with no Open Graph tags will still share, but the result looks broken and gets fewer clicks.
+
+## Checking the canonical tag
+
+The canonical tag (`<link rel="canonical">`) tells search engines which URL is the "real" version of a page when several URLs show the same content. Check that:
+
+- Every page has one.
+- It points to the correct, preferred URL — using HTTPS and the right domain (with or without `www`, consistently).
+- It is self-referential on the main version of the page.
+- It is not accidentally pointing every page to the homepage — a common and damaging mistake.
+
+## Checking the robots and viewport tags
+
+Two more tags worth a quick look:
+
+- **`<meta name="robots">`** — make sure pages you *want* indexed are not accidentally set to `noindex`. This single mistake can wipe a page from search entirely.
+- **`<meta name="viewport">`** — required for mobile-friendly rendering. Its absence hurts mobile usability and, by extension, rankings.
+
+## Common meta tag mistakes
+
+- Duplicate titles and descriptions across many pages.
+- Titles and descriptions that are truncated because they are too long.
+- Missing Open Graph images, producing poor social previews.
+- A stray `noindex` left over from a staging environment.
+- Canonical tags pointing to the wrong URL.
+
+## Frequently asked questions
+
+**How long should a title tag be?**
+Around 50–60 characters. Beyond that, search engines truncate it. Keep the primary keyword near the start so it survives any truncation.
+
+**Do meta descriptions affect rankings?**
+Not directly. They influence click-through rate, which matters for traffic. A well-written description earns more clicks than an auto-generated one.
+
+**What happens if I have no canonical tag?**
+Search engines guess which URL is canonical, which can split ranking signals across duplicate URLs. An explicit, correct canonical tag prevents that.
+
+**Why does my page look broken when shared?**
+Almost always missing or mis-sized Open Graph tags — especially `og:image`. Add `og:title`, `og:description` and a 1200×630 `og:image`.
+
+**Can a meta tag remove my page from Google?**
+Yes. A `<meta name="robots" content="noindex">` tag tells search engines not to index the page. Check for stray noindex tags left from staging.
+
+## Audit and generate your meta tags
+
+Check what your pages are sending and build correct, complete tags with the free [Meta Tag Generator](/tools/meta-tag-generator) — preview your title, description and Open Graph card before you publish, all in the browser.

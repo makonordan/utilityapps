@@ -1,0 +1,90 @@
+---
+title: "What Is a JWT and How to Decode One Safely"
+description: "A clear explanation of JSON Web Tokens — the three parts, how signatures work, what decoding does and does not prove, and how to inspect a token safely."
+date: "2026-05-14"
+category: "Developer Tools"
+tags: ["jwt", "authentication", "web security", "tokens"]
+featured: false
+author: "UtilityApps Team"
+---
+
+A JSON Web Token, or JWT, is one of the most common ways modern web apps prove who a user is. If you have ever inspected an API request and seen a long string of seemingly random characters in the `Authorization` header, that was almost certainly a JWT. This guide explains what is actually inside one, how the signature works, and the single most important thing to understand before you trust a decoded token.
+
+## The three parts
+
+A JWT is three base64url-encoded segments joined by dots:
+
+```
+xxxxx.yyyyy.zzzzz
+```
+
+Each segment has a job.
+
+### 1. The header
+
+The first segment decodes to a small JSON object describing how the token was signed:
+
+```
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+```
+
+`alg` is the signing algorithm. `typ` is almost always `JWT`.
+
+### 2. The payload
+
+The second segment is the interesting part — the **claims**. These are statements about the user and the token:
+
+```
+{
+  "sub": "1234567890",
+  "name": "Jane Doe",
+  "iat": 1716000000,
+  "exp": 1716086400
+}
+```
+
+Some claim names are standardised: `sub` (subject — usually the user ID), `iat` (issued-at time), `exp` (expiry time), `iss` (issuer), `aud` (audience). The rest are whatever the application chose to include.
+
+### 3. The signature
+
+The third segment is the proof. It is computed by signing the header and payload together with a secret (or private key). It exists so the server can verify the token has not been altered.
+
+## Decoding is not the same as verifying
+
+This is the part that trips people up, and it matters for security.
+
+**Decoding** a JWT just means base64-decoding the header and payload. Anyone can do it. The payload is *not encrypted* — it is merely encoded. Never put a password, a credit card number, or any secret in a JWT payload, because anyone who sees the token can read it.
+
+**Verifying** a JWT means recomputing the signature with the secret and checking it matches. Only verification proves the token is genuine and unmodified.
+
+So: a decoded payload tells you what a token *claims*. It does not tell you whether those claims are *true*. A server must always verify the signature before trusting anything inside.
+
+You can decode any token and inspect its claims with the [JWT Decoder](/tools/jwt-decoder) — and for HS256, HS384 and HS512 tokens it will also verify the signature if you supply the shared secret.
+
+## How the signature actually works
+
+There are two families of signing algorithm.
+
+**HMAC (HS256, HS384, HS512)** uses a single shared secret. The same secret signs and verifies. This is simple but means every party that can verify a token could also forge one — fine for a single backend, risky across organisations.
+
+**RSA and ECDSA (RS256, ES256)** use a key pair. A private key signs; a public key verifies. The verifier never needs the signing secret, so you can hand the public key to anyone. This is the right choice when multiple independent services need to verify tokens.
+
+A safety note: never paste a private key into a browser tool to "verify" an RS256 token. That defeats the purpose of asymmetric crypto. Verify those server-side.
+
+## Reading expiry and issued-at times
+
+The `exp` and `iat` claims are Unix timestamps — seconds since 1 January 1970. A value like `1716086400` is not human-readable on its own, which is why a decoder converts it for you. An expired token (`exp` in the past) should be rejected by any correctly written server even though it still decodes perfectly.
+
+## Common reasons a token "does not work"
+
+- **Expired** — `exp` is in the past.
+- **Wrong secret** — verification fails because the secret used to sign differs from the one used to verify.
+- **Algorithm mismatch** — the server expects RS256 but the token says HS256, or vice versa.
+- **Clock skew** — the verifying server's clock is far enough off that a valid token looks not-yet-valid or already-expired.
+
+## The short version
+
+A JWT is three base64url segments: a header, a payload of claims, and a signature. The payload is readable by anyone — never put secrets in it. Decoding shows what a token claims; only signature verification proves those claims are genuine. Inspect any token with the [JWT Decoder](/tools/jwt-decoder), check the encoding with the [Base64 Encoder](/tools/base64-encoder), and explore the hashing behind signatures with the [Hash Generator](/tools/hash-generator).

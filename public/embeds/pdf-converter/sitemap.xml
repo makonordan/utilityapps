@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://pdf2word.com/</loc>
+<lastmod>2026-05-07T20:07:10.186Z</lastmod>
+<changefreq>daily</changefreq>
+<priority>1</priority>
+</url>
+<url>
+<loc>https://pdf2word.com/tools/pdf-to-jpg</loc>
+<lastmod>2026-05-07T20:07:10.186Z</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.8</priority>
+</url>
+<url>
+<loc>https://pdf2word.com/tools/pdf-to-excel</loc>
+<lastmod>2026-05-07T20:07:10.186Z</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.8</priority>
+</url>
+<url>
+<loc>https://pdf2word.com/about</loc>
+<lastmod>2026-05-07T20:07:10.186Z</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.6</priority>
+</url>
+<url>
+<loc>https://pdf2word.com/privacy</loc>
+<lastmod>2026-05-07T20:07:10.186Z</lastmod>
+<changefreq>yearly</changefreq>
+<priority>0.3</priority>
+</url>
+</urlset>

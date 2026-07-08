@@ -1,0 +1,76 @@
+---
+title: "How to Convert a Video to GIF (Free, In Your Browser)"
+description: "Turn any video clip into an animated GIF — the right fps and width, how to keep file size sane, and when an MP4 beats a GIF. Free browser tool included."
+date: "2026-05-10"
+category: "Video Tools"
+tags: ["video to gif", "gif", "animated gif", "video tools"]
+featured: true
+author: "UtilityApps Team"
+---
+
+A GIF is the simplest way to share a short, looping moment — a reaction, a product demo, a bug reproduction. Unlike a video it autoplays everywhere, loops forever, and needs no player. The trade-off is file size: GIFs are an old format and they balloon quickly. This guide shows how to convert a video to a GIF that looks good without becoming a 20 MB monster.
+
+## The settings that decide everything
+
+Three settings control both the look and the size of your GIF: clip length, frame rate, and width.
+
+### Clip length
+
+Keep it short. Under six seconds is the sweet spot. A GIF is meant to be a glance, not a film, and length multiplies file size directly — a ten-second GIF is roughly twice the bytes of a five-second one.
+
+### Frame rate (fps)
+
+Frame rate is how many frames play per second. It is the biggest single lever on file size:
+
+- **10–12 fps** — the right choice for most social GIFs, screen recordings, and reactions. Motion is slightly choppy but perfectly readable.
+- **15–20 fps** — noticeably smoother, good for fast motion, but the file grows substantially.
+- **24 fps and up** — film-smooth, and usually far too large for a GIF.
+
+If your GIF is too big, the first thing to lower is fps.
+
+### Width
+
+GIFs do not need to be full resolution. **480 pixels wide** is plenty for social media and embedding. Dropping from 1080px to 480px cuts the pixel count — and the file size — by roughly three-quarters.
+
+## Why colour matters in a GIF
+
+A GIF can only show 256 colours per frame. Convert a video naively and gradients, skin tones and brand colours come out dithered and washed out.
+
+The fix is a **palette pass**: the encoder first scans the clip to build the best possible 256-colour palette, then applies it. Good conversion tools do this automatically — it is the difference between a clean GIF and a muddy one. The [Video to GIF tool](/tools/video-to-gif) uses a two-step palette workflow so colours stay accurate.
+
+## Step by step
+
+1. **Trim first.** Cut the clip down to just the moment you want. The [Video Trimmer](/tools/video-trimmer) does this losslessly. A shorter source means a smaller GIF.
+2. **Open the [Video to GIF tool](/tools/video-to-gif)** and drop the clip in.
+3. **Set the range** — start time and a length of one to six seconds.
+4. **Choose fps and width** — start at 10 fps and 480px.
+5. **Convert and check the size.** If it is too big, lower the fps or the width before the length.
+
+## When you should not use a GIF
+
+Here is the honest part: in 2026, a GIF is often the wrong choice. A short, compressed **MP4** is typically a tenth of the size of the equivalent GIF, supports far more colours, and — crucially — autoplays silently on Twitter/X, Slack, Discord and most modern platforms exactly the way a GIF does.
+
+Use a GIF when:
+
+- The destination genuinely requires a GIF (some older forums, some email clients, some chat tools).
+- You want a tiny, simple loop and file size is not a concern.
+
+Use an MP4 when:
+
+- You want smooth motion, accurate colour, or a longer clip.
+- File size matters — which is almost always.
+
+If MP4 is the better fit, the [Video Compressor](/tools/video-compressor) will shrink the clip while keeping it crisp.
+
+## Keeping the file size down
+
+If you need a GIF and it is too large, in order of impact:
+
+1. **Lower the frame rate** — 12 fps to 10 fps is a free saving.
+2. **Reduce the width** — 480px is usually enough.
+3. **Shorten the clip** — trim a second off each end.
+4. **Pick a less busy section** — GIFs of fast, detailed motion compress worse than calm scenes.
+
+## The short version
+
+Convert a video to a GIF by trimming it short, setting 10–12 fps at around 480px wide, and using a tool with a palette pass for clean colour. The [Video to GIF tool](/tools/video-to-gif) handles all of that in your browser. But before you do — ask whether a compressed MP4 from the [Video Compressor](/tools/video-compressor) would serve you better. Most of the time, it would.

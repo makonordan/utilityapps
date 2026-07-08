@@ -1,0 +1,64 @@
+---
+title: "How to Compress a Video Without Losing Quality"
+description: "Compress videos for email, social and the web without a visible quality drop — what bitrate, resolution and codec actually do, and a free in-browser tool."
+date: "2026-05-04"
+category: "Video Tools"
+tags: ["compress video", "video compression", "h.264", "video tools"]
+featured: false
+author: "UtilityApps Team"
+---
+
+A single minute of phone video can be 100 MB or more. That is too large to email, too large for many upload limits, and far heavier than it needs to be for the web. The good news: most video files carry a lot of waste, and compressing them properly removes the waste without a visible drop in quality. This guide explains how.
+
+## The three things that determine video size
+
+Video file size comes down to three settings. Understanding them is the whole game.
+
+### Resolution
+
+Resolution is the pixel dimensions — 4K (3840×2160), 1080p (1920×1080), 720p (1280×720). Phones often record in 4K by default, but 4K has *four times* the pixels of 1080p. For anything watched on a phone, in a social feed, or embedded in a web page, **1080p is plenty** and 720p is often fine. Dropping from 4K to 1080p alone can cut a file by 70% before any other change.
+
+### Bitrate
+
+Bitrate is how many bits per second the video uses to store the picture — the single biggest lever on both size and quality. Too low and you see blocky artefacts; too high and you are storing detail no one can see. Modern compressors handle this for you through a quality target rather than a manual bitrate, which is the easier and better approach.
+
+### Codec
+
+The codec is the compression method. **H.264** is the universal default — it plays on every device and is the safe choice. Newer codecs like H.265 and AV1 compress better but have patchier support. For a file you want to *just work everywhere*, H.264 is right.
+
+## "Without losing quality" — what that really means
+
+As with images, perfect lossless video is impractically large. "Without losing quality" really means compressing in the range where the loss is invisible. Modern encoders use a **Constant Rate Factor (CRF)** — a quality target where the encoder spends exactly as many bits as each scene needs:
+
+- **CRF around 23** — visually transparent; most people cannot tell it from the source.
+- **CRF around 28** — strong compression, a sensible default for sharing; any loss is hard to spot.
+- **CRF above 30** — visible softening; only for when small size matters more than fidelity.
+
+A good compressor exposes this as simple Low / Medium / High quality presets so you do not have to think in numbers.
+
+## Step by step
+
+1. **Decide where the video is going.** Email and chat apps want a small file; an archive wants higher quality. That decision sets your quality preset.
+2. **Drop the file into the [Video Compressor](/tools/video-compressor).** It runs in your browser — the video is never uploaded.
+3. **Pick a quality preset.** Medium is the right default and typically cuts the file 50–70%.
+4. **Compress and preview.** Play the result before downloading to confirm it looks fine.
+5. **Still too big?** Resize the resolution down with the [Video Resizer](/tools/video-resizer), then compress again.
+
+## Trim before you compress
+
+The cheapest way to shrink a video is to remove the parts you do not need. A clip is large in direct proportion to its length — cutting ten dead seconds off each end is a free saving that no compression setting can match. Trim first with the [Video Trimmer](/tools/video-trimmer), then compress what remains.
+
+## Practical size targets
+
+- **Email attachment** — most providers cap at 25 MB. Aim well under that.
+- **WhatsApp / chat apps** — keep clips small; many compress further on their own anyway.
+- **Web page embed** — smaller is always better for page speed; a compressed 1080p clip is fine.
+- **Social upload** — platforms re-encode your video regardless, so upload a reasonably compressed 1080p file and let them do the rest.
+
+## Why this matters for the web
+
+If a video lives on your own site, its size directly affects load time and the visitor's data usage. A heavy, uncompressed background video can single-handedly wreck a page's performance score. Compress any self-hosted video, and resize it to the dimensions it will actually display at — there is no reason to serve 4K to a 600-pixel-wide box.
+
+## The short version
+
+Video size is governed by resolution, bitrate and codec. Compress without visible loss by keeping H.264, dropping the resolution to 1080p (or 720p) if it does not need to be higher, and using a Medium quality preset. Trim dead footage first — it is the cheapest saving there is. The [Video Compressor](/tools/video-compressor) and [Video Resizer](/tools/video-resizer) handle all of this in your browser, with nothing uploaded.

@@ -1,0 +1,236 @@
+---
+title: "How to Calculate Percentages (10 Real-World Examples)"
+description: "Tip math, sales tax, percent change, percent off, exam scores, and more — with the formulas and a sanity-check shortcut for each."
+date: "2026-03-16"
+category: "Calculator Tools"
+tags: ["percentage", "math", "tip calculator", "personal finance"]
+featured: false
+author: "UtilityApps Team"
+image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=1200&h=600&q=80"
+---
+
+Percentages are the most-used math skill of adult life and the most-forgotten one from school. The formulas are simple. The mistakes come from picking the wrong one.
+
+This is a guide to ten situations where percent math actually shows up — with the formula, a worked example, and a 5-second sanity check for each.
+
+## The three core formulas
+
+Almost every percent problem is one of three:
+
+1. **Find the percentage of a number**: `value × percent / 100`
+   Example: 18% of $54 → 54 × 0.18 = $9.72
+2. **Find what percent one number is of another**: `(part / whole) × 100`
+   Example: 14 out of 80 → 14 / 80 × 100 = 17.5%
+3. **Find percent change**: `(new − old) / old × 100`
+   Example: from $200 to $250 → 50 / 200 × 100 = +25%
+
+Memorize these three and 95% of percent problems are solved.
+
+<Callout type="info">
+**Skip the math.** The [Percentage Calculator](/tools/percentage-calculator) covers all three, plus discount, tip, GST/VAT, and grade calculations with step-by-step explanations.
+</Callout>
+
+## 1. Tip at a restaurant
+
+US standard is **18–20%** for table service, **20–25%** for excellent service. Quick mental math:
+
+> Move the decimal one left (10%), then add half of that for 15% or double it for 20%.
+
+Example: $58 bill at 20%
+- 10% = $5.80
+- 20% = $11.60
+
+Many people round up to $12. Use the [Tip Calculator](/tools/tip-calculator) for splits or country-specific norms (the UK leaves 10–12%, Japan tips none).
+
+## 2. Sales tax / GST / VAT
+
+The number on the price tag is *before* tax in most of the US, *after* tax in the UK and EU. The math is the same — you just apply it differently.
+
+**Adding tax to a pre-tax price:**
+
+```
+total = price × (1 + tax_rate / 100)
+```
+
+Example: $89.99 + 8.25% sales tax → 89.99 × 1.0825 = $97.42
+
+**Backing tax out of an after-tax price:**
+
+```
+pre_tax = total / (1 + tax_rate / 100)
+```
+
+Example: £120 with 20% VAT included → 120 / 1.20 = £100 pre-VAT, £20 VAT.
+
+The common mistake is *subtracting 20% from £120* to get the pre-VAT price. That gives £96, which is wrong. The price has been *multiplied* by 1.20, so you need to *divide* by 1.20 to undo it.
+
+## 3. Discount / "% off"
+
+The straight version is easy:
+
+```
+final_price = price × (1 − discount / 100)
+```
+
+Example: $80 jacket at 30% off → 80 × 0.70 = $56.
+
+The harder version is **stacked discounts**. "Take 20% off, plus an additional 10% off the sale price" is *not* 30% off.
+
+```
+$100 × 0.80 = $80
+$80 × 0.90 = $72
+```
+
+Total discount: 28%, not 30%. Stacked discounts always come out lower than the sum because each percentage is applied to a smaller number.
+
+## 4. Percent change (the right way)
+
+The classic "did sales go up or down" calculation:
+
+```
+percent_change = (new − old) / old × 100
+```
+
+Example: revenue went from $48,000 to $54,000.
+- Change: +$6,000
+- Percent: 6,000 / 48,000 = +12.5%
+
+Watch out: percent changes do **not** add. If a stock loses 10% then gains 10%, you are not back to where you started — you are at 99%. The bigger the swing, the more pronounced the asymmetry.
+
+## 5. Percent point vs percent
+
+This is the trap that catches journalists.
+
+> A poll moves from 40% support to 44% support.
+
+That is a **4 percentage point** increase, but a **10 percent** increase (4 / 40 × 100). The two are not interchangeable. Newspapers that confuse them deserve the corrections they get.
+
+## 6. Exam scores and grading
+
+Computing your score:
+
+```
+percent_score = (correct / total) × 100
+```
+
+Example: 38 out of 50 → 76%
+
+For a weighted average across assignments, multiply each grade by its weight and sum:
+
+```
+final = (g1 × w1 + g2 × w2 + ... + gn × wn)
+```
+
+where weights sum to 1.
+
+Example: midterm (30%) at 82, final (50%) at 88, homework (20%) at 95:
+- 82 × 0.30 + 88 × 0.50 + 95 × 0.20 = 24.6 + 44.0 + 19.0 = 87.6
+
+For GPA, the [GPA Calculator](/tools/gpa-calculator) handles 4.0 / 4.0 weighted / 5.0 weighted / percentage scales.
+
+## 7. Tip-on-tax (and why it&apos;s a small ripoff)
+
+In some US restaurants the suggested tip percentages on the receipt are calculated on the *post-tax* total. At an 8% sales tax, that means a "20%" suggested tip is really 21.6% of the food.
+
+Computing the *pre-tax* tip yourself takes 5 seconds:
+
+```
+pre_tax_tip = food_price × tip_rate / 100
+```
+
+For a $100 food bill at 8% tax:
+- Restaurant&apos;s "20%" suggestion: $108 × 0.20 = $21.60
+- Pre-tax 20%: $100 × 0.20 = $20.00
+
+It&apos;s small money per visit but adds up.
+
+## 8. Compound interest
+
+Savings and credit cards compound. The straight formula is:
+
+```
+final = principal × (1 + rate / n)^(n × years)
+```
+
+where `n` is the number of compoundings per year (12 for monthly, 365 for daily).
+
+Quick approximation — the **Rule of 72**:
+
+> Years to double = 72 / annual percent rate.
+
+At 6%, money doubles every 12 years. At 10%, every 7.2 years. At 4% (savings account), every 18 years. The rule is accurate to within 5% for rates between 4% and 12%.
+
+## 9. Body fat / BMI changes
+
+Going from 28% body fat to 24% sounds like a "4% drop". Cleanly stated, that&apos;s a **4 percentage point** drop, or a **14% relative** drop in body fat (4 / 28 × 100). Both phrasings are common — pick one and stick with it.
+
+## 10. Salary raises
+
+You get a "5% raise". On a $80,000 salary that&apos;s $4,000, bringing you to $84,000. Easy.
+
+The **inflation-adjusted** raise is what matters. If inflation ran 4%, your *real* raise is closer to 1%. The shorthand:
+
+```
+real_raise ≈ nominal_raise − inflation
+```
+
+It&apos;s an approximation that works for small numbers. For high inflation, the exact formula is `(1 + nominal) / (1 + inflation) − 1`.
+
+## Sanity-check shortcuts
+
+A few percent values worth memorizing because you&apos;ll use them constantly:
+
+- **1% of X** = move the decimal two left
+- **10% of X** = move the decimal one left
+- **5% of X** = half of 10%
+- **15% of X** = 10% + 5%
+- **20% of X** = 10% × 2
+- **25% of X** = a quarter of X
+- **33% of X** ≈ a third of X
+- **50% of X** = half of X
+- **75% of X** = 50% + 25%
+
+Pair these and you can compute any common percentage in your head:
+
+- **18% of $54**: 10% = 5.40, 8% ≈ 4.32 → about $9.72. Exact answer: $9.72.
+
+<Callout type="tip">
+**Round at the end, not in the middle.** Compounding rounding errors blow up surprisingly fast — a 5-step calculation rounded each step can be 5–10% off the exact answer.
+</Callout>
+
+## When the calculator beats mental math
+
+Use the [Percentage Calculator](/tools/percentage-calculator) for:
+
+- **Multi-step calculations** (stacked discounts, weighted grades).
+- **Anything financial** where you need a paper trail.
+- **Reverse problems** like "what was the original price if the discounted price is $84 after 20% off?" (Answer: $84 / 0.80 = $105.)
+- **Sanity-checking deals** that "feel" generous.
+
+For everything else, mental math wins on speed once you internalize the three formulas at the top.
+
+## FAQ
+
+### Why does my calculator give a different answer than I expect?
+
+Usually one of three reasons: order of operations (use parentheses), entering the percent as the number 18 instead of 0.18, or applying a discount and a tax in the wrong order. The [Percentage Calculator](/tools/percentage-calculator) handles all of these correctly and shows the steps.
+
+### Can a percent go above 100%?
+
+Yes. A 200% increase means the value tripled (the original 100% plus 200% on top). A 150% return on investment means you got 2.5× back. Percent changes have no upper bound.
+
+### Can a percent be negative?
+
+Yes — a negative percent change means a decrease. A negative percent of a number is also valid (rare, but sometimes used in scientific contexts).
+
+### What does "basis points" mean?
+
+A basis point is **1/100 of a percent**. It is used in finance to avoid the percent-vs-percentage-point confusion. "Rates rose 25 basis points" means rates rose 0.25 percentage points.
+
+### Why do tax and tip orders matter?
+
+For most US restaurants, you tip on the pre-tax amount (because tip is a service charge, not on the food cost). The receipt&apos;s "suggested tip" line is sometimes computed post-tax. The difference is small but real — see section 7 above.
+
+---
+
+Three formulas, ten situations, and a handful of mental shortcuts cover almost every percent problem you will face. Save the [Percentage Calculator](/tools/percentage-calculator) for the multi-step ones, and you can stop reaching for your phone every time something is on sale.

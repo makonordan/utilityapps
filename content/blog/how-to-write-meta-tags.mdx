@@ -1,0 +1,85 @@
+---
+title: "How to Write Meta Tags That Actually Get Clicks"
+description: "A practical guide to title tags and meta descriptions — the right length, what to include, common mistakes, and how they affect search rankings and click-through."
+date: "2026-05-08"
+category: "SEO Tools"
+tags: ["meta tags", "seo", "title tag", "meta description"]
+featured: false
+author: "UtilityApps Team"
+---
+
+Meta tags are the small pieces of HTML that tell search engines and social platforms what a page is about. Two of them do most of the work: the **title tag** and the **meta description**. Get them right and you win clicks from the search results; get them wrong and even a well-ranked page is quietly ignored. This guide covers what to write and what to avoid.
+
+## The title tag
+
+The title tag is the clickable headline that appears in search results. In HTML it looks like this:
+
+```
+<title>How to Compress Images Without Losing Quality</title>
+```
+
+It is the single most important on-page SEO element. It is a confirmed ranking factor, and it is the first thing a searcher reads when deciding whether to click.
+
+**Length:** aim for **50–60 characters**. Google truncates longer titles with an ellipsis. The limit is technically measured in pixels, not characters, but 60 characters is a safe rule.
+
+**What to include:**
+
+- Your primary keyword, ideally near the front.
+- A reason to click — a benefit, a number, a year, a "how to."
+- Your brand name at the end, if space allows: `Primary Keyword — Benefit | Brand`.
+
+**What to avoid:**
+
+- Keyword stuffing. `Compress Image, Image Compressor, Compress Photos` reads like spam and search engines treat it that way.
+- Duplicate titles across pages. Every page needs a unique title.
+- Vague titles like `Home` or `Page 1`.
+
+## The meta description
+
+The meta description is the grey snippet of text beneath the title in search results:
+
+```
+<meta name="description" content="Learn how to compress images without losing quality...">
+```
+
+Here is the surprising part: the meta description is **not a ranking factor**. Google has said so directly. But it heavily influences **click-through rate** — and click-through rate matters. A page that ranks third but gets clicked more than the pages above it sends a strong quality signal.
+
+**Length:** aim for **150–160 characters**. Longer descriptions get truncated.
+
+**What to write:** treat it as ad copy. Summarise what the page delivers, include the keyword naturally (Google bolds matching terms in the snippet), and give the reader a concrete reason to choose your result over the others.
+
+**A caveat:** Google often *rewrites* the description it shows, pulling text from the page if it judges that more relevant to the query. Write a good description anyway — it is the version shown for your main keyword — but do not be alarmed when Google sometimes substitutes its own.
+
+## Open Graph tags: meta tags for social
+
+When your link is shared on social media or in chat apps, a different set of tags controls the preview card:
+
+```
+<meta property="og:title" content="...">
+<meta property="og:description" content="...">
+<meta property="og:image" content="...">
+```
+
+`og:image` is the big one — a link with a compelling preview image gets dramatically more engagement than a bare URL. If you only add one Open Graph tag, make it the image.
+
+## The robots and canonical tags
+
+Two more meta-level tags worth knowing:
+
+- **`<meta name="robots">`** controls whether a page should be indexed. `index, follow` is the default and what you want for content pages. `noindex` keeps a page out of search results — correct for thank-you pages and internal utilities, a disaster if applied to a page by mistake.
+- **The canonical tag** (`<link rel="canonical">`) tells search engines which URL is the "real" one when the same content is reachable from several addresses. It prevents duplicate-content dilution.
+
+## Common mistakes that quietly cost traffic
+
+- **Identical titles and descriptions across many pages.** Every page competes for different queries; give each its own.
+- **Missing meta descriptions.** Google then scrapes whatever text it finds — usually worse than what you would write.
+- **Titles that do not match the page.** A misleading title earns a click and an instant bounce, which hurts more than it helps.
+- **Ignoring Open Graph.** Shared links with no preview card get a fraction of the clicks.
+
+## Generate them cleanly
+
+Hand-writing every tag is error-prone. The [Meta Tag Generator](/tools/meta-tag-generator) builds a complete, correctly formatted set — title, description, Open Graph, and Twitter card tags — from a simple form, so you can paste a clean block into each page's `<head>`.
+
+## The short version
+
+Write a unique **title tag** of 50–60 characters with the keyword near the front and a reason to click. Write a unique **meta description** of 150–160 characters as ad copy — it does not rank the page but it wins the click. Add **Open Graph tags**, especially `og:image`, for social shares. Keep `index, follow` on content pages and set canonicals where URLs duplicate. The [Meta Tag Generator](/tools/meta-tag-generator) assembles the whole set for you.
