@@ -98,7 +98,7 @@ export function LetterheadGenerator() {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Mobile-first: preview appears above the form on small screens,
             becomes a sticky right-hand column at lg. */}
-        <aside className="order-first lg:order-last lg:sticky lg:top-24 lg:h-fit">
+        <aside className="order-first min-w-0 lg:order-last lg:sticky lg:top-24 lg:h-fit">
           <PreviewPanel
             data={data}
             open={previewOpen}
@@ -111,7 +111,7 @@ export function LetterheadGenerator() {
           </div>
         </aside>
 
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           {nameError && (
             <p className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-300">
               <AlertTriangle className="h-3 w-3" /> {nameError}

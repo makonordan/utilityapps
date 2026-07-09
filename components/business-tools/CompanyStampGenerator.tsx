@@ -18,6 +18,8 @@ import {
 import { renderStampSvg } from "@/lib/renderStampSvg";
 import { cn } from "@/lib/utils";
 
+import { StampExport } from "./StampExport";
+
 /**
  * /tools/company-stamp-generator client component.
  *
@@ -133,12 +135,13 @@ export function CompanyStampGenerator() {
       <div className="grid gap-6 lg:grid-cols-[55%_45%]">
         {/* Preview aside — first in DOM for mobile (preview on top),
             reordered after the controls on desktop via lg:order-last. */}
-        <aside className="order-first lg:order-last lg:sticky lg:top-24 lg:h-fit">
+        <aside className="order-first space-y-4 lg:order-last lg:sticky lg:top-24 lg:h-fit">
           <PreviewPanel
             svg={svg}
             background={previewBg}
             onBackgroundChange={setPreviewBg}
           />
+          <StampExport data={data} />
         </aside>
 
         <div className="space-y-6">
@@ -585,7 +588,7 @@ function TextField({
   );
 }
 
-function SegButton({
+export function SegButton({
   active,
   onClick,
   children,
