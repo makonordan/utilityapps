@@ -14,15 +14,19 @@ import {
 
 import {
   DEFAULT_FONT,
+  DEFAULT_LOGO_SCALE,
   DEFAULT_PAPER_SIZE,
   DEFAULT_TEMPLATE,
   DOC_SAFE_FONTS,
   DOC_SAFE_FONTS_BY_NAME,
+  LOGO_SCALE_MAX,
+  LOGO_SCALE_MIN,
   PAPER_SIZES,
   PAPER_SIZES_BY_ID,
   TEMPLATES,
   formatAddressLines,
   formatContactLine,
+  formatRegistrationParts,
   pagePadding,
   type LetterheadData,
   type PaperSizeDefinition,
@@ -57,6 +61,7 @@ function makeInitialData(): LetterheadData {
     companyName: "",
     tagline: "",
     logoUrl: "",
+    logoScale: DEFAULT_LOGO_SCALE,
     addressLine1: "",
     addressLine2: "",
     city: "",
@@ -67,6 +72,7 @@ function makeInitialData(): LetterheadData {
     email: "",
     website: "",
     registrationNumber: "",
+    taxId: "",
     footerText: "",
     showFooter: false,
     primaryColor: "#3B82F6",
@@ -159,6 +165,11 @@ export function LetterheadGenerator() {
                 Use a PNG logo with a transparent background for best results.
               </p>
             </div>
+            {data.logoUrl && (
+              <div className="mt-4">
+                <LogoSizeSlider value={data.logoScale} onChange={(v) => set("logoScale", v)} />
+              </div>
+            )}
           </Section>
 
           {/* 4 — Contact & registration */}
@@ -248,12 +259,20 @@ export function LetterheadGenerator() {
                   autoComplete="url"
                 />
               </Field>
-              <Field label="Registration / Tax number" hint="Optional">
+              <Field label="Company registration number" hint="Optional">
                 <input
                   value={data.registrationNumber}
                   onChange={(e) => set("registrationNumber", e.target.value)}
                   className={inputCls}
                   placeholder="RC 123456"
+                />
+              </Field>
+              <Field label="Tax ID / VAT number" hint="Optional">
+                <input
+                  value={data.taxId}
+                  onChange={(e) => set("taxId", e.target.value)}
+                  className={inputCls}
+                  placeholder="TIN 0123456789"
                 />
               </Field>
             </Grid>
@@ -494,26 +513,27 @@ function LogoOrPlaceholder({
   size: number;
   rounded?: boolean;
 }) {
+  const scaledSize = size * data.logoScale;
   if (data.logoUrl) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
         src={data.logoUrl}
         alt=""
-        style={{ height: size, maxWidth: size * 2.5 }}
+        style={{ height: scaledSize, maxWidth: scaledSize * 2.5 }}
         className="object-contain"
       />
     );
   }
   return (
     <div
-      style={{ height: size, width: size }}
+      style={{ height: scaledSize, width: scaledSize }}
       className={cn(
         "flex shrink-0 items-center justify-center border border-dashed border-surface-300 text-surface-300",
         rounded && "rounded-lg"
       )}
     >
-      <Building2 style={{ width: size * 0.5, height: size * 0.5 }} />
+      <Building2 style={{ width: scaledSize * 0.5, height: scaledSize * 0.5 }} />
     </div>
   );
 }
@@ -539,15 +559,17 @@ export function TemplateHeader({
   paddingY: number;
 }) {
   const { primaryColor, accentColor } = data;
+  const registration = formatRegistrationParts(data);
 
   switch (data.template) {
-    case "classic-centered":
+    case "classic-centered": {
+      const detailLines = [...formatAddressLines(data), ...registration];
       return (
         <div className="flex flex-col items-center text-center">
           <LogoOrPlaceholder data={data} size={56} />
           <CompanyName
             data={data}
-            style={{ marginTop: 10, fontSize: 20, fontWeight: 700, color: primaryColor }}
+            style={{ marginTop: 6, fontSize: 20, fontWeight: 700, color: primaryColor }}
           />
           {data.tagline && (
             <p style={{ marginTop: 4, fontSize: 11, color: "#6B7280" }}>{data.tagline}</p>
@@ -556,24 +578,31 @@ export function TemplateHeader({
             style={{ marginTop: 14, width: "100%", borderTop: `1.5px solid ${accentColor}` }}
           />
           <p style={{ marginTop: 8, fontSize: 10, color: "#6B7280" }}>{formatContactLine(data)}</p>
+          {detailLines.length > 0 && (
+            <p style={{ marginTop: 2, fontSize: 9, color: "#9CA3AF" }}>{detailLines.join("   ·   ")}</p>
+          )}
         </div>
       );
+    }
 
     case "left-aligned":
       return (
         <div>
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start justify-between gap-3">
             <LogoOrPlaceholder data={data} size={48} />
             <div className="text-right" style={{ fontSize: 10, color: "#6B7280", lineHeight: 1.6 }}>
               {formatAddressLines(data).map((line, i) => (
                 <p key={i}>{line}</p>
               ))}
               {(data.phone || data.email || data.website) && <p>{formatContactLine(data)}</p>}
+              {registration.map((line, i) => (
+                <p key={i}>{line}</p>
+              ))}
             </div>
           </div>
           <CompanyName
             data={data}
-            style={{ display: "block", marginTop: 10, fontSize: 18, fontWeight: 700 }}
+            style={{ display: "block", marginTop: 6, fontSize: 18, fontWeight: 700 }}
           />
           {data.tagline && (
             <p style={{ marginTop: 2, fontSize: 11, color: "#6B7280" }}>{data.tagline}</p>
@@ -588,7 +617,7 @@ export function TemplateHeader({
           {/* Negative margin cancels the page's own padding so the band
               bleeds edge-to-edge instead of reading as a rounded panel. */}
           <div
-            className="flex items-center gap-3"
+            className="flex items-center gap-2"
             style={{
               background: primaryColor,
               margin: `-${paddingY}px -${paddingX}px 0`,
@@ -613,22 +642,30 @@ export function TemplateHeader({
               <p key={i}>{line}</p>
             ))}
             {(data.phone || data.email || data.website) && <p>{formatContactLine(data)}</p>}
+            {registration.map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
           </div>
         </div>
       );
 
     case "minimal":
       return (
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <LogoOrPlaceholder data={data} size={32} />
-          <CompanyName data={data} style={{ fontSize: 16, fontWeight: 600 }} />
+          <div>
+            <CompanyName data={data} style={{ display: "block", fontSize: 16, fontWeight: 600 }} />
+            {data.tagline && (
+              <span style={{ fontSize: 9.5, color: "#6B7280" }}>{data.tagline}</span>
+            )}
+          </div>
         </div>
       );
 
     case "corporate-split":
       return (
         <div>
-          <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start justify-between gap-2">
             <LogoOrPlaceholder data={data} size={44} />
             <div className="flex-1 text-center">
               <CompanyName data={data} style={{ fontSize: 17, fontWeight: 700 }} />
@@ -641,6 +678,9 @@ export function TemplateHeader({
                 <p key={i}>{line}</p>
               ))}
               {(data.phone || data.email || data.website) && <p>{formatContactLine(data)}</p>}
+              {registration.map((line, i) => (
+                <p key={i}>{line}</p>
+              ))}
             </div>
           </div>
           <div style={{ marginTop: 12, borderTop: `1.5px solid ${accentColor}` }} />
@@ -650,7 +690,7 @@ export function TemplateHeader({
 
     case "elegant-footer":
       return (
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <LogoOrPlaceholder data={data} size={40} />
           <div>
             <CompanyName data={data} style={{ display: "block", fontSize: 18, fontWeight: 700 }} />
@@ -686,7 +726,9 @@ function TemplateFooter({
       >
         <div style={{ borderTop: "0.75px solid #D1D5DB", paddingTop: 6 }}>
           <p style={{ fontSize: 9, color: "#6B7280" }}>
-            {[formatAddressLines(data).join(", "), formatContactLine(data)].filter(Boolean).join("   ·   ")}
+            {[formatAddressLines(data).join(", "), formatContactLine(data), ...formatRegistrationParts(data)]
+              .filter(Boolean)
+              .join("   ·   ")}
           </p>
         </div>
       </div>
@@ -709,7 +751,9 @@ function TemplateFooter({
         {data.phone && <p>Tel: {data.phone}</p>}
         {data.email && <p>{data.email}</p>}
         {data.website && <p>{data.website}</p>}
-        {data.registrationNumber && <p>Reg. No: {data.registrationNumber}</p>}
+        {formatRegistrationParts(data).map((line, i) => (
+          <p key={i}>{line}</p>
+        ))}
       </div>
     </div>
   );
@@ -949,6 +993,41 @@ function LogoPicker({
         />
       </div>
       {error && <p className="mt-2 text-[11px] text-red-600 dark:text-red-400">{error}</p>}
+    </div>
+  );
+}
+
+// ── Logo size slider ─────────────────────────────────────────────────────
+
+function LogoSizeSlider({
+  value,
+  onChange,
+}: {
+  value: number;
+  onChange: (v: number) => void;
+}) {
+  const percent = Math.round(value * 100);
+  return (
+    <div>
+      <div className="mb-1.5 flex items-center justify-between">
+        <span className="text-xs font-medium uppercase tracking-wider text-surface-600 dark:text-surface-300">
+          Logo size
+        </span>
+        <span className="text-xs font-semibold text-surface-700 dark:text-surface-200">{percent}%</span>
+      </div>
+      <input
+        type="range"
+        min={LOGO_SCALE_MIN * 100}
+        max={LOGO_SCALE_MAX * 100}
+        step={5}
+        value={percent}
+        onChange={(e) => onChange(Number(e.target.value) / 100)}
+        className="w-full accent-primary-600"
+        aria-label="Logo size"
+      />
+      <p className="mt-1 text-[11px] text-surface-500 dark:text-surface-400">
+        Resizes the logo in the preview and in every downloaded format.
+      </p>
     </div>
   );
 }

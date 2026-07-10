@@ -383,6 +383,10 @@ async function buildWordBlob(data: LetterheadData, docx: DocxModule): Promise<Bl
     const alignment = alignmentFor(col.align);
     const shading = background ? { fill: hex(background) } : undefined;
     const lines: (InstanceType<typeof TextRun> | InstanceType<typeof ImageRun>)[][] = [];
+    // Index of the paragraph that holds ONLY the logo image (stack layout) —
+    // gets a tight spacing-after override so it doesn't inherit Word's
+    // default paragraph gap before the text that follows it.
+    let imageOwnLineIndex = -1;
 
     if (col.logo) {
       const img = await getLogoImage(col.logo.url, imageCache);
@@ -397,9 +401,10 @@ async function buildWordBlob(data: LetterheadData, docx: DocxModule): Promise<Bl
 
         if (col.layout === "inline" && col.textBlocks[0]) {
           const [first, ...rest] = col.textBlocks;
-          lines.push([imageRun, new TextRun({ text: "   " }), await textRunsFor(first)]);
+          lines.push([imageRun, new TextRun({ text: " " }), await textRunsFor(first)]);
           for (const block of rest) lines.push([await textRunsFor(block)]);
         } else {
+          imageOwnLineIndex = 0;
           lines.push([imageRun]);
           for (const block of col.textBlocks) lines.push([await textRunsFor(block)]);
         }
@@ -417,6 +422,7 @@ async function buildWordBlob(data: LetterheadData, docx: DocxModule): Promise<Bl
         new Paragraph({
           alignment,
           shading,
+          spacing: i === imageOwnLineIndex ? { after: 20 } : undefined,
           border: i === lines.length - 1 && borderBelow ? { bottom: borderBelow } : undefined,
           children,
         })
@@ -565,7 +571,7 @@ function columnContentHeightMm(col: HeaderFooterColumn): number {
   const textHeight = col.textBlocks.reduce((sum, b) => sum + textBlockHeightMm(b), 0);
   if (!col.logo) return textHeight;
   if (col.layout === "inline") return Math.max(col.logo.heightMm, textHeight);
-  return col.logo.heightMm + 2 + textHeight;
+  return col.logo.heightMm + 1.5 + textHeight;
 }
 
 function rowHeightMm(row: HeaderFooterRow): number {
@@ -608,11 +614,11 @@ async function drawColumnPdf(
             : opts.x;
       doc.addImage(img.dataUrl, "PNG", logoX, opts.y, w, h);
       if (col.layout === "inline") {
-        textX = logoX + w + 3;
-        textWidth = opts.width - (logoX + w + 3 - opts.x);
+        textX = logoX + w + 1.5;
+        textWidth = opts.width - (logoX + w + 1.5 - opts.x);
         textY = opts.y + h / 2 + 1.2;
       } else {
-        textY = opts.y + h + 3;
+        textY = opts.y + h + 1.5;
       }
     }
   }

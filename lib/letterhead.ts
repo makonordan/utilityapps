@@ -281,6 +281,16 @@ export const DOC_SAFE_FONTS_BY_NAME: Record<string, DocSafeFont> = DOC_SAFE_FONT
  *  because it's a true built-in on every Word install and every OS. */
 export const DEFAULT_FONT = DOC_SAFE_FONTS[0].name;
 
+// ── Logo scale ───────────────────────────────────────────────────────────
+
+/** `logoScale` is a multiplier applied to each template's base logo
+ *  height (see the `heightMm` literals in buildHeaderModel below) so a
+ *  single slider controls logo size consistently across the live
+ *  preview, PDF, Word, and PNG exports. 1 = the template's default size. */
+export const LOGO_SCALE_MIN = 0.5;
+export const LOGO_SCALE_MAX = 2;
+export const DEFAULT_LOGO_SCALE = 1;
+
 // ── Letterhead data ──────────────────────────────────────────────────────
 
 export interface LetterheadData {
@@ -288,6 +298,8 @@ export interface LetterheadData {
   tagline: string;
   /** Public URL to an uploaded/hosted logo. */
   logoUrl: string;
+  /** Multiplier on the template's default logo size — see LOGO_SCALE_MIN/MAX. */
+  logoScale: number;
   addressLine1: string;
   addressLine2: string;
   city: string;
@@ -297,8 +309,11 @@ export interface LetterheadData {
   phone: string;
   email: string;
   website: string;
-  /** Company registration / tax ID. Optional. */
+  /** Company registration number. Optional. */
   registrationNumber: string;
+  /** Tax ID / VAT number — kept separate from registrationNumber since
+   *  many businesses have both and need to show either or both. Optional. */
+  taxId: string;
   /** Optional footer line(s), e.g. a slogan or legal footer text. */
   footerText: string;
   showFooter: boolean;
@@ -331,6 +346,17 @@ export function formatAddressLines(data: LetterheadData): string[] {
   return [data.addressLine1, data.addressLine2, [cityRow, data.country].filter(Boolean).join(", ")].filter(
     Boolean
   );
+}
+
+/** Registration number and Tax ID, each as its own labeled string (0, 1,
+ *  or 2 entries) — kept separate from formatAddressLines/formatContactLine
+ *  since every template needs to surface these independently, whether
+ *  filled in isolation or together. */
+export function formatRegistrationParts(data: LetterheadData): string[] {
+  const parts: string[] = [];
+  if (data.registrationNumber.trim()) parts.push(`Reg. No: ${data.registrationNumber.trim()}`);
+  if (data.taxId.trim()) parts.push(`Tax ID: ${data.taxId.trim()}`);
+  return parts;
 }
 
 // ── Normalized header/footer model ──────────────────────────────────────
@@ -414,15 +440,30 @@ const MUTED_COLOR = "#6B7280";
 const FOOTER_MUTED_COLOR = "#4B5563";
 const RULE_MUTED_COLOR = "#D1D5DB";
 
-/** Build the normalized header layout for a given template + data. */
+/** Scale a template's base logo height by the user's chosen logoScale. */
+function logoOf(data: LetterheadData, baseHeightMm: number): HeaderFooterLogo | null {
+  return data.logoUrl ? { url: data.logoUrl, heightMm: baseHeightMm * data.logoScale } : null;
+}
+
+/** Build the normalized header layout for a given template + data.
+ *
+ * Every field on LetterheadData is guaranteed to appear SOMEWHERE in the
+ * header or footer for every template when filled in — nothing a user
+ * types is silently dropped just because a given template's default
+ * layout didn't originally have a slot for it. Address and registration/
+ * tax details ride along after the contact line wherever a template
+ * doesn't already have a dedicated footer for them (see buildFooterModel
+ * for the templates that do: minimal, elegant-footer). */
 export function buildHeaderModel(data: LetterheadData): HeaderFooterModel {
   const name = data.companyName.trim() || "Your Company Name";
   const addr = formatAddressLines(data);
   const contact = formatContactLine(data);
+  const registration = formatRegistrationParts(data);
   const { primaryColor, accentColor } = data;
 
   switch (data.template) {
-    case "classic-centered":
+    case "classic-centered": {
+      const detailLines = [...addr, ...(contact ? [contact] : []), ...registration];
       return {
         rows: [
           {
@@ -430,7 +471,7 @@ export function buildHeaderModel(data: LetterheadData): HeaderFooterModel {
               {
                 align: "center",
                 layout: "stack",
-                logo: data.logoUrl ? { url: data.logoUrl, heightMm: 14 } : null,
+                logo: logoOf(data, 14),
                 textBlocks: [
                   tb(name, 16, primaryColor, "center", true),
                   ...(data.tagline ? [tb(data.tagline, 9, MUTED_COLOR, "center")] : []),
@@ -440,11 +481,21 @@ export function buildHeaderModel(data: LetterheadData): HeaderFooterModel {
             ruleBelow: { color: accentColor, thickness: 1 },
             spaceAfterPt: 6,
           },
-          ...(contact
-            ? [{ columns: [{ align: "center" as const, textBlocks: [tb(contact, 8, MUTED_COLOR, "center")] }] }]
+          ...(detailLines.length
+            ? [
+                {
+                  columns: [
+                    {
+                      align: "center" as const,
+                      textBlocks: detailLines.map((line) => tb(line, 8, MUTED_COLOR, "center")),
+                    },
+                  ],
+                },
+              ]
             : []),
         ],
       };
+    }
 
     case "left-aligned":
       return {
@@ -454,7 +505,7 @@ export function buildHeaderModel(data: LetterheadData): HeaderFooterModel {
               {
                 align: "left",
                 width: 1,
-                logo: data.logoUrl ? { url: data.logoUrl, heightMm: 12 } : null,
+                logo: logoOf(data, 12),
                 textBlocks: [],
               },
               {
@@ -463,6 +514,7 @@ export function buildHeaderModel(data: LetterheadData): HeaderFooterModel {
                 textBlocks: [
                   ...addr.map((line) => tb(line, 8, MUTED_COLOR, "right")),
                   ...(contact ? [tb(contact, 8, MUTED_COLOR, "right")] : []),
+                  ...registration.map((line) => tb(line, 8, MUTED_COLOR, "right")),
                 ],
               },
             ],
@@ -492,7 +544,7 @@ export function buildHeaderModel(data: LetterheadData): HeaderFooterModel {
               {
                 align: "left",
                 layout: "inline",
-                logo: data.logoUrl ? { url: data.logoUrl, heightMm: 10 } : null,
+                logo: logoOf(data, 10),
                 textBlocks: [
                   tb(name, 15, "#FFFFFF", "left", true),
                   ...(data.tagline ? [tb(data.tagline, 9, "#FFFFFF", "left")] : []),
@@ -508,6 +560,7 @@ export function buildHeaderModel(data: LetterheadData): HeaderFooterModel {
                 textBlocks: [
                   ...addr.map((line) => tb(line, 8, MUTED_COLOR, "left")),
                   ...(contact ? [tb(contact, 8, MUTED_COLOR, "left")] : []),
+                  ...registration.map((line) => tb(line, 8, MUTED_COLOR, "left")),
                 ],
               },
             ],
@@ -523,8 +576,11 @@ export function buildHeaderModel(data: LetterheadData): HeaderFooterModel {
               {
                 align: "left",
                 layout: "inline",
-                logo: data.logoUrl ? { url: data.logoUrl, heightMm: 8 } : null,
-                textBlocks: [tb(name, 13, HEADING_COLOR, "left", true)],
+                logo: logoOf(data, 8),
+                textBlocks: [
+                  tb(name, 13, HEADING_COLOR, "left", true),
+                  ...(data.tagline ? [tb(data.tagline, 8, MUTED_COLOR, "left")] : []),
+                ],
               },
             ],
           },
@@ -539,7 +595,7 @@ export function buildHeaderModel(data: LetterheadData): HeaderFooterModel {
               {
                 align: "left",
                 width: 1,
-                logo: data.logoUrl ? { url: data.logoUrl, heightMm: 11 } : null,
+                logo: logoOf(data, 11),
                 textBlocks: [],
               },
               {
@@ -556,6 +612,7 @@ export function buildHeaderModel(data: LetterheadData): HeaderFooterModel {
                 textBlocks: [
                   ...addr.map((line) => tb(line, 8, MUTED_COLOR, "right")),
                   ...(contact ? [tb(contact, 8, MUTED_COLOR, "right")] : []),
+                  ...registration.map((line) => tb(line, 8, MUTED_COLOR, "right")),
                 ],
               },
             ],
@@ -573,7 +630,7 @@ export function buildHeaderModel(data: LetterheadData): HeaderFooterModel {
               {
                 align: "left",
                 layout: "inline",
-                logo: data.logoUrl ? { url: data.logoUrl, heightMm: 10 } : null,
+                logo: logoOf(data, 10),
                 textBlocks: [
                   tb(name, 15, HEADING_COLOR, "left", true),
                   ...(data.tagline ? [tb(data.tagline, 9, MUTED_COLOR, "left")] : []),
@@ -590,7 +647,13 @@ export function buildHeaderModel(data: LetterheadData): HeaderFooterModel {
 }
 
 function minimalFooterRows(data: LetterheadData): HeaderFooterRow[] {
-  const line = [formatAddressLines(data).join(", "), formatContactLine(data)].filter(Boolean).join("   ·   ");
+  const line = [
+    formatAddressLines(data).join(", "),
+    formatContactLine(data),
+    ...formatRegistrationParts(data),
+  ]
+    .filter(Boolean)
+    .join("   ·   ");
   if (!line) return [];
   return [
     { columns: [], ruleBelow: { color: RULE_MUTED_COLOR, thickness: 0.75 }, spaceAfterPt: 4 },
@@ -603,8 +666,8 @@ function elegantFooterRows(data: LetterheadData): HeaderFooterRow[] {
   if (data.phone) rightCol.push(tb(`Tel: ${data.phone}`, 7.5, FOOTER_MUTED_COLOR, "left"));
   if (data.email) rightCol.push(tb(data.email, 7.5, FOOTER_MUTED_COLOR, "left"));
   if (data.website) rightCol.push(tb(data.website, 7.5, FOOTER_MUTED_COLOR, "left"));
-  if (data.registrationNumber) {
-    rightCol.push(tb(`Reg. No: ${data.registrationNumber}`, 7.5, FOOTER_MUTED_COLOR, "left"));
+  for (const line of formatRegistrationParts(data)) {
+    rightCol.push(tb(line, 7.5, FOOTER_MUTED_COLOR, "left"));
   }
   const leftCol = formatAddressLines(data).map((line) => tb(line, 7.5, FOOTER_MUTED_COLOR, "left"));
   if (leftCol.length === 0 && rightCol.length === 0) return [];
