@@ -13,9 +13,32 @@ import {
 
 import { GoogleSignInButton } from "@/components/business-card/GoogleSignInButton";
 import { TrackToolVisit } from "@/components/tools/TrackToolVisit";
+import { getCategoryByName } from "@/lib/categories";
+import { TOOLS_BY_ID } from "@/lib/tools";
 import { SITE_CONFIG } from "@/lib/utils";
 
 const TOOL_ID = "business-card";
+const tool = TOOLS_BY_ID[TOOL_ID];
+
+// ── How it works — single source of truth for both the visible steps and
+//    the HowTo JSON-LD, so structured data can't drift from the page. ──
+const HOW_IT_WORKS_STEPS: { icon: typeof UserPlus; title: string; body: string }[] = [
+  {
+    icon: UserPlus,
+    title: "Create your cards",
+    body: "Add as many business cards as you need, each with its own identity, contact details, and branding.",
+  },
+  {
+    icon: QrCode,
+    title: "Share one QR code",
+    body: "Your master QR shows all your cards when scanned. Or share individual card QR codes for specific contexts.",
+  },
+  {
+    icon: Smartphone,
+    title: "Contacts save directly",
+    body: "When someone scans, your info saves to their phone contacts automatically. No app to install. No signup required.",
+  },
+];
 
 const TITLE = "Free Digital Business Card with QR Code — Multiple Cards, One Link";
 const DESCRIPTION =
@@ -46,8 +69,68 @@ export const metadata: Metadata = {
 };
 
 export default function BusinessCardLandingPage() {
+  const category = tool ? getCategoryByName(tool.category) : undefined;
+
+  const breadcrumb = [
+    { name: "Home", url: SITE_CONFIG.url },
+    { name: "Tools", url: `${SITE_CONFIG.url}/tools` },
+    {
+      name: tool?.category ?? "Business Tools",
+      url: category
+        ? `${SITE_CONFIG.url}/tools/categories/${category.id}`
+        : `${SITE_CONFIG.url}/tools`,
+    },
+    {
+      name: tool?.name ?? "Digital Business Card",
+      url: `${SITE_CONFIG.url}/tools/${TOOL_ID}`,
+    },
+  ];
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumb.map((b, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: b.name,
+      item: b.url,
+    })),
+  };
+
+  const softwareJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: tool?.name ?? "Digital Business Card",
+    description: tool?.longDescription ?? DESCRIPTION,
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Any (Web)",
+    url: `${SITE_CONFIG.url}/tools/${TOOL_ID}`,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_CONFIG.name,
+      url: SITE_CONFIG.url,
+    },
+  };
+
+  const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: `How to use ${tool?.name ?? "Digital Business Card"}`,
+    description: tool?.longDescription ?? DESCRIPTION,
+    step: HOW_IT_WORKS_STEPS.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.title,
+      text: s.body,
+    })),
+  };
+
   return (
     <>
+      <ScriptJsonLd data={breadcrumbJsonLd} />
+      <ScriptJsonLd data={softwareJsonLd} />
+      <ScriptJsonLd data={howToJsonLd} />
       <TrackToolVisit toolId={TOOL_ID} />
 
       {/* Hero */}
@@ -101,23 +184,7 @@ export default function BusinessCardLandingPage() {
             How it works
           </h2>
           <ol className="mt-10 grid gap-6 md:grid-cols-3">
-            {[
-              {
-                icon: UserPlus,
-                title: "Create your cards",
-                body: "Add as many business cards as you need, each with its own identity, contact details, and branding.",
-              },
-              {
-                icon: QrCode,
-                title: "Share one QR code",
-                body: "Your master QR shows all your cards when scanned. Or share individual card QR codes for specific contexts.",
-              },
-              {
-                icon: Smartphone,
-                title: "Contacts save directly",
-                body: "When someone scans, your info saves to their phone contacts automatically. No app to install. No signup required.",
-              },
-            ].map((s, i) => (
+            {HOW_IT_WORKS_STEPS.map((s, i) => (
               <li
                 key={i}
                 className="rounded-3xl border border-surface-200 bg-white p-6 dark:border-surface-800 dark:bg-surface-900"
@@ -245,6 +312,17 @@ export default function BusinessCardLandingPage() {
         </div>
       </section>
     </>
+  );
+}
+
+function ScriptJsonLd({ data }: { data: object }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(data).replace(/</g, "\\u003c"),
+      }}
+    />
   );
 }
 

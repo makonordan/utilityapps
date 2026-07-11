@@ -4,9 +4,12 @@ import { ChevronRight, Share2, ShieldCheck, Zap } from "lucide-react";
 
 import { ShareTool } from "@/components/share-tool/ShareTool";
 import { TrackToolVisit } from "@/components/tools/TrackToolVisit";
+import { getCategoryByName } from "@/lib/categories";
+import { TOOLS_BY_ID } from "@/lib/tools";
 import { SITE_CONFIG } from "@/lib/utils";
 
 const TOOL_ID = "share";
+const tool = TOOLS_BY_ID[TOOL_ID];
 
 const TITLE = "Free File, Text & Link Sharing — No Signup | UtilityApps";
 const DESCRIPTION =
@@ -41,8 +44,54 @@ export const metadata: Metadata = {
 };
 
 export default function SharePage() {
+  const category = tool ? getCategoryByName(tool.category) : undefined;
+
+  const breadcrumb = [
+    { name: "Home", url: SITE_CONFIG.url },
+    { name: "Tools", url: `${SITE_CONFIG.url}/tools` },
+    {
+      name: tool?.category ?? "Productivity Tools",
+      url: category
+        ? `${SITE_CONFIG.url}/tools/categories/${category.id}`
+        : `${SITE_CONFIG.url}/tools`,
+    },
+    {
+      name: tool?.name ?? "Quick Share",
+      url: `${SITE_CONFIG.url}/tools/${TOOL_ID}`,
+    },
+  ];
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumb.map((b, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: b.name,
+      item: b.url,
+    })),
+  };
+
+  const softwareJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: tool?.name ?? "Quick Share",
+    description: tool?.longDescription ?? DESCRIPTION,
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Any (Web)",
+    url: `${SITE_CONFIG.url}/tools/${TOOL_ID}`,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_CONFIG.name,
+      url: SITE_CONFIG.url,
+    },
+  };
+
   return (
     <>
+      <ScriptJsonLd data={breadcrumbJsonLd} />
+      <ScriptJsonLd data={softwareJsonLd} />
       <TrackToolVisit toolId={TOOL_ID} />
       <div className="mx-auto w-full max-w-3xl px-4 py-10 sm:py-14">
         <nav
@@ -146,5 +195,16 @@ export default function SharePage() {
         </section>
       </div>
     </>
+  );
+}
+
+function ScriptJsonLd({ data }: { data: object }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(data).replace(/</g, "\\u003c"),
+      }}
+    />
   );
 }
