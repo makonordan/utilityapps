@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
   const product = getProductById(id);
   if (!product) return { title: "Product not found" };
 
-  const title = `${product.name} — ${SITE_CONFIG.name} Store`;
+  const title = product.name;
   const description = product.longDescription;
 
   return {

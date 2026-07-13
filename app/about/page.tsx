@@ -17,13 +17,19 @@ import { CATEGORIES } from "@/lib/categories";
 import { TOOLS } from "@/lib/tools";
 import { SITE_CONFIG, formatNumber } from "@/lib/utils";
 
-const TITLE = `About ${SITE_CONFIG.name} — Free Tools for Everyone`;
+const TITLE = "About Us — Free Tools for Everyone";
 const DESCRIPTION =
   "Why we built UtilityApps, what we believe about productivity software, and how we keep hundreds of tools free for the world.";
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: [
+    "about utilityapps",
+    "who we are",
+    "why we built utilityapps",
+    "independent software team",
+  ],
   alternates: { canonical: "/about" },
   openGraph: {
     type: "website",
@@ -129,7 +135,7 @@ export default function AboutPage() {
 function Breadcrumb() {
   return (
     <nav aria-label="Breadcrumb" className="text-sm text-surface-500 dark:text-surface-400">
-      <ol className="flex items-center gap-1.5">
+      <ol className="flex flex-wrap items-center gap-1.5">
         <li>
           <Link href="/" className="hover:text-surface-700 dark:hover:text-surface-200">
             Home

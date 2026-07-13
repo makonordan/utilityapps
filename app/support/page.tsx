@@ -22,13 +22,14 @@ import {
 import type { SupporterPublicRow, SupporterTier } from "@/lib/supabase";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TITLE = "Support UtilityApps — Keep 100+ Free Tools Alive";
+const TITLE = "Support Us — Keep 100+ Free Tools Alive";
 const DESCRIPTION =
   "Help an independent developer keep UtilityApps free, private, and growing. Three supporter tiers from $5/month, plus one-time donations and business tool sponsorship. Built by Daniel in Lagos, Nigeria.";
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: ["support utilityapps", "donate", "sponsor free tools", "keep tools free"],
   alternates: { canonical: "/support" },
   openGraph: {
     type: "website",

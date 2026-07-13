@@ -38,10 +38,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
   title: {
     default: `${SITE_CONFIG.name} — ${SITE_CONFIG.description}`,
-    template: `%s | ${SITE_CONFIG.name} — Free AI Tools`,
+    template: `%s | ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
-  keywords: [...SITE_CONFIG.keywords],
   authors: [{ name: SITE_CONFIG.author, url: SITE_CONFIG.url }],
   creator: SITE_CONFIG.author,
   publisher: SITE_CONFIG.author,

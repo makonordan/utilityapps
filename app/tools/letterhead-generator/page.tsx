@@ -40,8 +40,7 @@ import { SITE_CONFIG } from "@/lib/utils";
 const TOOL_ID = "letterhead-generator";
 const tool = TOOLS_BY_ID[TOOL_ID];
 
-const TITLE =
-  "Free Letterhead Generator — Create Company Letterhead (Word, PDF, Image) | UtilityApps";
+const TITLE = "Free Letterhead Generator — Word, PDF, PNG";
 const DESCRIPTION =
   "Create a free professional company letterhead in seconds. Add your logo and details, choose A4 or US Letter, and download as an editable Word document, PDF, or image. No signup.";
 
@@ -247,7 +246,7 @@ export default function LetterheadGeneratorPage() {
         {/* Breadcrumb */}
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+          className="flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
         >
           <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
             Home

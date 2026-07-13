@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { A, H2, LegalPage, P, UL } from "@/components/legal/LegalPage";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TITLE = `Disclaimer — ${SITE_CONFIG.name}`;
+const TITLE = "Disclaimer";
 const DESCRIPTION =
   "UtilityApps tools provide estimates and educational content, not professional financial, medical, legal, or tax advice.";
 const LAST_UPDATED = "2026-05-01";
@@ -11,6 +11,7 @@ const LAST_UPDATED = "2026-05-01";
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: ["disclaimer", "not financial advice", "not medical advice", "educational use only"],
   alternates: { canonical: "/disclaimer" },
 };
 

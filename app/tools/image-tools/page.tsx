@@ -27,8 +27,7 @@ const CATEGORY_COLOR = "#7C3AED";
 // Metadata
 // ──────────────────────────────────────────────────────────────────────────
 
-const TITLE =
-  "Free Image Tools Online — Compress, Resize, Convert, Edit & More | UtilityApps";
+const TITLE = "Free Image Tools — Compress, Resize & More";
 const DESCRIPTION =
   "13 free online image tools. Compress JPG, PNG, GIF and SVG. Resize, crop, convert, add watermarks, remove backgrounds, and more. No signup. 100% free.";
 
@@ -205,7 +204,7 @@ export default function ImageToolsHubPage() {
       {/* Breadcrumb */}
       <nav
         aria-label="Breadcrumb"
-        className="mb-6 flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+        className="mb-6 flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
       >
         <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
           Home

@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const fetched = await getPollByPublicId(publicId);
   if (!fetched) {
     return {
-      title: `Poll not found | ${SITE_CONFIG.name}`,
+      title: "Poll Not Found",
       robots: { index: false, follow: false },
     };
   }
@@ -54,9 +54,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
   return {
     // Per spec: the browser tab / share preview title IS the poll
-    // question. No trailing " | UtilityApps" — the OG image and
-    // description both surface the brand.
-    title: displayQuestion,
+    // question. `absolute` bypasses the root layout's title template —
+    // a plain string here would still get " | UtilityApps" appended.
+    title: { absolute: displayQuestion },
     description,
     alternates: { canonical },
     openGraph: {

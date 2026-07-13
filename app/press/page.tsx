@@ -12,12 +12,13 @@ import { CATEGORIES } from "@/lib/categories";
 import { TOOLS } from "@/lib/tools";
 import { SITE_CONFIG, formatNumber } from "@/lib/utils";
 
-const TITLE = `Press Kit — ${SITE_CONFIG.name}`;
+const TITLE = "Press Kit";
 const DESCRIPTION = `Press kit, brand assets, founder bio, and pitch lengths for ${SITE_CONFIG.name}. For journalists, reviewers, and newsletter curators.`;
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: ["press kit", "media kit", "brand assets", "founder bio"],
   alternates: { canonical: "/press" },
   openGraph: {
     type: "website",
@@ -91,7 +92,7 @@ export default function PressPage() {
     <div className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
       <nav
         aria-label="Breadcrumb"
-        className="mb-6 flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+        className="mb-6 flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
       >
         <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
           Home

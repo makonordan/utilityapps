@@ -3,13 +3,14 @@ import type { Metadata } from "next";
 import { A, H2, LegalPage, P, UL } from "@/components/legal/LegalPage";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TITLE = `Terms of Service — ${SITE_CONFIG.name}`;
+const TITLE = "Terms of Service";
 const DESCRIPTION = "The terms that govern your use of UtilityApps.";
 const LAST_UPDATED = "2026-05-01";
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: ["terms of service", "terms of use", "usage policy"],
   alternates: { canonical: "/terms" },
 };
 

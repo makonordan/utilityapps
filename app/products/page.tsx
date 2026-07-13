@@ -6,13 +6,19 @@ import { ProductFilters } from "@/components/products/ProductFilters";
 import { PRODUCTS, PRODUCT_CATEGORIES } from "@/lib/products";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TITLE = `Digital Products — ${SITE_CONFIG.name} Store`;
+const TITLE = "Digital Products — Pay Once, Own Forever";
 const DESCRIPTION =
   "Practical, no-fluff digital products to help you work faster and smarter. Instant download, fair prices, made by UtilityApps.";
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: [
+    "digital products",
+    "pay once own forever",
+    "productivity templates",
+    "instant download products",
+  ],
   alternates: { canonical: "/products" },
   openGraph: {
     type: "website",

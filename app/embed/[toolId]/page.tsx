@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
     return { title: "Embed not found" };
   }
 
-  const title = `${tool.name} — Embed | ${SITE_CONFIG.name}`;
+  const title = `${tool.name} — Embed`;
   return {
     title,
     description: `${tool.name} embeddable widget for ${SITE_CONFIG.name}.`,

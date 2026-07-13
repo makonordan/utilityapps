@@ -35,8 +35,7 @@ import { SITE_CONFIG } from "@/lib/utils";
 const TOOL_ID = "instant-poll";
 const tool = TOOLS_BY_ID[TOOL_ID];
 
-const TITLE =
-  "Instant Poll Maker — Create a Poll & Share a Link in Seconds | UtilityApps";
+const TITLE = "Instant Poll Maker — Share a Link in Seconds";
 const DESCRIPTION =
   "Create a free instant poll and share the link in seconds. No login, no signup. Perfect for WhatsApp groups, Twitter, and quick decisions. Live results update in real time.";
 
@@ -270,7 +269,7 @@ export default function InstantPollPage() {
       <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+          className="flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
         >
           <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
             Home

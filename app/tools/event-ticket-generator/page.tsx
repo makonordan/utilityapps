@@ -47,8 +47,7 @@ import { SITE_CONFIG } from "@/lib/utils";
 const TOOL_ID = "event-ticket-generator";
 const tool = TOOLS_BY_ID[TOOL_ID];
 
-const TITLE =
-  "Free Event Ticket Generator — Create & Print Tickets with QR Codes | UtilityApps";
+const TITLE = "Free Event Ticket Generator — QR Tickets";
 const DESCRIPTION =
   "Create free event tickets and passes with check-in QR codes. Design, personalize, and download printable tickets in seconds. No fees, no signup — perfect for events, fundraisers, and parties.";
 
@@ -262,7 +261,7 @@ export default function EventTicketGeneratorPage() {
         {/* Breadcrumb */}
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+          className="flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
         >
           <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
             Home

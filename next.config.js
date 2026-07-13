@@ -112,6 +112,58 @@ const nextConfig = {
         destination: "/tools/convert-from-jpg",
         permanent: true,
       },
+      // Word Counter, Character Counter, Case Converter, and Text Diff
+      // Checker were merged into one richer toolkit at /tools/word-counter.
+      {
+        source: "/tools/character-counter",
+        destination: "/tools/word-counter",
+        permanent: true,
+      },
+      {
+        source: "/tools/case-converter",
+        destination: "/tools/word-counter",
+        permanent: true,
+      },
+      {
+        source: "/tools/text-diff-checker",
+        destination: "/tools/word-counter?tab=compare",
+        permanent: true,
+      },
+      // PDF Converter (Productivity Tools) duplicated the Image-to-PDF half
+      // of the JPG/PDF tool and has been removed in favour of it.
+      {
+        source: "/tools/pdf-converter",
+        destination: "/tools/jpg-pdf",
+        permanent: true,
+      },
+      // Nap Calculator, Caffeine Cutoff Calculator, Brown Noise Generator,
+      // and Ambient Sound Mixer were merged into the Sleep Cycle Calculator
+      // toolkit, which also moved from Sleep Tools into Health Tools.
+      {
+        source: "/tools/nap-calculator",
+        destination: "/tools/sleep-cycle-calculator?tab=nap",
+        permanent: true,
+      },
+      {
+        source: "/tools/caffeine-cutoff-calculator",
+        destination: "/tools/sleep-cycle-calculator?tab=caffeine",
+        permanent: true,
+      },
+      {
+        source: "/tools/brown-noise-generator",
+        destination: "/tools/sleep-cycle-calculator?tab=sounds",
+        permanent: true,
+      },
+      {
+        source: "/tools/ambient-sound-mixer",
+        destination: "/tools/sleep-cycle-calculator?tab=sounds",
+        permanent: true,
+      },
+      {
+        source: "/tools/categories/sleep-tools",
+        destination: "/tools/categories/health-tools",
+        permanent: true,
+      },
     ];
   },
   async rewrites() {

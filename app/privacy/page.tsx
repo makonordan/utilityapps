@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { A, H2, H3, LegalPage, P, UL } from "@/components/legal/LegalPage";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TITLE = `Privacy Policy — ${SITE_CONFIG.name}`;
+const TITLE = "Privacy Policy";
 const DESCRIPTION =
   "How UtilityApps collects, uses, and protects your data. GDPR and CCPA compliant.";
 const LAST_UPDATED = "2026-05-01";
@@ -11,6 +11,7 @@ const LAST_UPDATED = "2026-05-01";
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: ["privacy policy", "data protection", "GDPR compliance", "CCPA compliance"],
   alternates: { canonical: "/privacy" },
   robots: { index: true, follow: true },
 };

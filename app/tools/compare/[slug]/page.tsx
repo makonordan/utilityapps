@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
   const b = TOOLS_BY_ID[parsed.bId];
   if (!a || !b) return { title: "Comparison not found" };
 
-  const title = `${a.name} vs ${b.name} — Which One Should You Use? | ${SITE_CONFIG.name}`;
+  const title = `${a.name} vs ${b.name}`;
   const description = `Side-by-side comparison of ${a.name} and ${b.name}: features, use cases, and which one fits your situation. Both are free on ${SITE_CONFIG.name}.`;
 
   return {

@@ -27,6 +27,7 @@ import { CATEGORIES, getCategoryByName } from "@/lib/categories";
 import { getIcon } from "@/lib/icons";
 import { getRelatedPosts } from "@/lib/posts";
 import { TOOLS, TOOLS_BY_ID, type Tool } from "@/lib/tools";
+import { getToolSeoOverride } from "@/lib/toolSeoContent";
 import { SITE_CONFIG, cn, formatDate } from "@/lib/utils";
 
 interface RouteParams {
@@ -68,8 +69,9 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
     return { title: "Tool not found" };
   }
 
-  const title = `${tool.name} — Free Online ${tool.name} | ${SITE_CONFIG.name}`;
-  const description = tool.longDescription;
+  const override = getToolSeoOverride(tool.id);
+  const title = override?.title ?? `Free ${tool.name} Online`;
+  const description = override?.description ?? tool.longDescription;
   const ogImage = `${SITE_CONFIG.url}/og/tools/${tool.id}`;
 
   return {
@@ -103,6 +105,9 @@ export default async function ToolPage({ params }: RouteParams) {
   const Icon = getIcon(tool.icon);
   const category = getCategoryByName(tool.category);
   const accent = category?.color ?? "#0066FF";
+  const override = getToolSeoOverride(tool.id);
+  const displayTitle = override?.title ?? tool.name;
+  const displayDescription = override?.description ?? tool.longDescription;
 
   const related = TOOLS.filter(
     (t) => t.category === tool.category && t.id !== tool.id
@@ -164,7 +169,7 @@ export default async function ToolPage({ params }: RouteParams) {
     })),
   };
 
-  const faqs = buildToolFAQs(tool);
+  const faqs = override?.faqItems ?? buildToolFAQs(tool);
 
   return (
     <>
@@ -195,10 +200,10 @@ export default async function ToolPage({ params }: RouteParams) {
                 {tool.category}
               </Link>
               <h1 className="mt-1 text-3xl font-bold tracking-tight text-surface-900 sm:text-4xl dark:text-white">
-                {tool.name}
+                {displayTitle}
               </h1>
               <p className="mt-3 max-w-2xl text-base text-surface-600 dark:text-surface-300">
-                {tool.longDescription}
+                {displayDescription}
               </p>
             </div>
           </div>
@@ -233,6 +238,12 @@ export default async function ToolPage({ params }: RouteParams) {
         <FeatureGrid tool={tool} />
 
         <HowToSection toolName={tool.name} steps={howToSteps} />
+
+        {override?.seoContent && (
+          <section className="prose prose-surface mt-14 max-w-none dark:prose-invert">
+            {override.seoContent}
+          </section>
+        )}
 
         {articles.length > 0 && (
           <section className="mt-14 space-y-6">

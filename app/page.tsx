@@ -15,13 +15,20 @@ import { YouTubeHub } from "@/components/home/YouTubeHub";
 import { getFeaturedPosts } from "@/lib/posts";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const HOME_TITLE = `${SITE_CONFIG.name} — Hundreds of Free AI Utility Tools for Everyday Work`;
+const HOME_TITLE = "Hundreds of Free AI Tools for Everyday Work";
 const HOME_DESCRIPTION =
   "No signup. No downloads. 100% free online tools for creators, freelancers, developers, students, marketers and businesses.";
 
 export const metadata: Metadata = {
   title: HOME_TITLE,
   description: HOME_DESCRIPTION,
+  keywords: [
+    "free online tools",
+    "AI utility tools",
+    "no signup tools",
+    "browser-based tools",
+    "tools for creators and freelancers",
+  ],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",

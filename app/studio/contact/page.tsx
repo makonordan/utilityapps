@@ -6,7 +6,7 @@ import { InquiryForm } from "@/components/studio/InquiryForm";
 import { CalendlyLink } from "@/components/studio/CalendlyButton";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TITLE = `Tell us about your project — ${SITE_CONFIG.name} Studio`;
+const TITLE = "Tell Us About Your Project — Studio";
 const DESCRIPTION =
   "Share your project details with UtilityApps Studio. We'll respond within 24 hours to schedule a free 30-min discovery call.";
 

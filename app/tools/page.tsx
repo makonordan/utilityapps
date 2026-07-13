@@ -7,12 +7,13 @@ import { CATEGORIES } from "@/lib/categories";
 import { TOOLS } from "@/lib/tools";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TITLE = `All Free Online Tools — ${SITE_CONFIG.name}`;
+const TITLE = `Browse ${TOOLS.length}+ Free Online Tools`;
 const DESCRIPTION = `Browse all ${TOOLS.length} free utility tools on ${SITE_CONFIG.name}. Filter by category, search by keyword, and start using any tool instantly — no signup required.`;
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: ["browse all tools", "tool directory", "tool categories", "free tool index"],
   alternates: { canonical: "/tools" },
   openGraph: {
     type: "website",
@@ -52,7 +53,7 @@ export default function ToolsDirectoryPage() {
       <section className="border-b border-surface-200 bg-gradient-to-b from-surface-50 to-white pb-10 pt-12 dark:border-surface-800 dark:from-surface-950 dark:to-surface-950">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <nav aria-label="Breadcrumb" className="text-sm text-surface-500 dark:text-surface-400">
-            <ol className="flex items-center gap-1.5">
+            <ol className="flex flex-wrap items-center gap-1.5">
               <li>
                 <Link href="/" className="hover:text-surface-700 dark:hover:text-surface-200">
                   Home

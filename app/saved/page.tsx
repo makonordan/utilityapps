@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { SavedToolsView } from "@/components/tools/SavedToolsView";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TITLE = `Your Saved Tools — ${SITE_CONFIG.name}`;
+const TITLE = "Your Saved Tools";
 const DESCRIPTION =
   "Quickly return to the tools you've bookmarked. Saved anonymously on this device — no account, no signup.";
 

@@ -15,13 +15,14 @@ import { SITE_CONFIG, cn, formatDate } from "@/lib/utils";
 
 const PAGE_SIZE = 12;
 
-const TITLE = `Free Tools Blog — Productivity, AI & More | ${SITE_CONFIG.name}`;
+const TITLE = "Free Tools Blog — Guides & Tutorials";
 const DESCRIPTION =
   "Deep dives, money-saving guides, and practical tutorials for the tools you actually use. Free, no signup.";
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: ["tools blog", "productivity guides", "how-to tutorials", "tool tips and tricks"],
   alternates: { canonical: "/blog" },
   openGraph: {
     type: "website",

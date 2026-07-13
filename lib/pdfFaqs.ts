@@ -162,11 +162,11 @@ export const PDF_FAQS: Record<PdfToolId, FAQItem[]> = {
   "jpg-pdf": [
     {
       q: "Which way does this tool convert?",
-      a: "Both. Switch tabs: JPG → PDF combines images into a multi-page PDF; PDF → JPG renders each page of a PDF to a high-quality JPEG.",
+      a: "Both. Switch tabs: Image to PDF combines PNG, JPG, or JPEG images into a multi-page PDF; PDF → JPG renders each page of a PDF to a high-quality JPEG.",
     },
     {
-      q: "Can I add multiple JPGs to one PDF?",
-      a: "Yes. Drop or select all the images, drag to reorder, pick page size (A4 / Letter / Auto-fit), and one PDF is built with each image on its own page.",
+      q: "Can I mix PNG and JPG images in one PDF?",
+      a: "Yes. Drop or select any combination of PNG, JPG, and JPEG images, drag to reorder, pick page size (A4 / Letter / Auto-fit), and one PDF is built with each image on its own page.",
     },
     {
       q: "What resolution do PDF → JPG exports use?",
@@ -348,8 +348,8 @@ export const PDF_HOWTOS: Record<PdfToolId, HowToStep[]> = {
     { name: "Save", text: "Download the numbered PDF." },
   ],
   "jpg-pdf": [
-    { name: "Pick a direction", text: "Switch between JPG → PDF and PDF → JPG tabs." },
-    { name: "Add your files", text: "Drop images or a PDF into the upload area." },
+    { name: "Pick a direction", text: "Switch between Image to PDF and PDF → JPG tabs." },
+    { name: "Add your files", text: "Drop PNG, JPG, or JPEG images, or a PDF, into the upload area." },
     { name: "Convert and download", text: "Tweak any options and click convert — your file downloads when ready." },
   ],
   "sign-pdf": [
@@ -402,7 +402,7 @@ export const PDF_FEATURE_LISTS: Record<PdfToolId, string> = {
   "compress-pdf": "High/Medium/Low quality presets, image-based recompression, before/after size comparison, no upload",
   "watermark-pdf": "Text watermark with font size, colour, opacity, rotation and 9-position anchors, every-page application, no upload",
   "page-numbers-pdf": "Three number formats, six position options, custom start number, font size and colour controls, no upload",
-  "jpg-pdf": "Two directions in one tool: multi-image to PDF with page-size options, and PDF to high-quality JPEGs, no upload",
+  "jpg-pdf": "Two directions in one tool: PNG/JPG/JPEG images to PDF with page-size options, and PDF to high-quality JPEGs, no upload",
   "sign-pdf": "Drawable signature pad (mouse / finger / stylus), per-page placement, in-browser PDF embedding, no upload",
   "edit-pdf": "Add text and shape overlays to any page, font and colour controls, in-browser, no upload",
   "word-to-pdf": "Word (.docx / .doc) → PDF via ConvertAPI, font and layout preserved, 10 MB file limit, files deleted after conversion",

@@ -70,7 +70,7 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
   const competitor = getCompetitor(parsed.competitorSlug);
   if (!tool || !competitor) return { title: "Comparison not found" };
 
-  const title = `${tool.name} vs ${competitor.name} — Free ${competitor.name} Alternative | ${SITE_CONFIG.name}`;
+  const title = `${tool.name} vs ${competitor.name}`;
   const description = `Compare ${tool.name} (free, no signup) with ${competitor.name}: pricing, signup, file caps, watermarks. Side-by-side, fact-checked ${competitor.factsVerifiedOn}.`;
 
   return {

@@ -11,7 +11,7 @@ import { SITE_CONFIG } from "@/lib/utils";
 const TOOL_ID = "share";
 const tool = TOOLS_BY_ID[TOOL_ID];
 
-const TITLE = "Free File, Text & Link Sharing — No Signup | UtilityApps";
+const TITLE = "Free File, Text & Link Sharing — No Signup";
 const DESCRIPTION =
   "Share files up to 25 MB, text snippets, or shortened links instantly. Optional password, expiration, view limit and QR code. No signup, no tracking.";
 
@@ -96,7 +96,7 @@ export default function SharePage() {
       <div className="mx-auto w-full max-w-3xl px-4 py-10 sm:py-14">
         <nav
           aria-label="Breadcrumb"
-          className="mb-6 flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+          className="mb-6 flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
         >
           <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
             Home

@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
   const cat = getCategoryBySlug(category);
   if (!cat) return { title: "Category not found" };
 
-  const title = `${cat.name} — Free Online ${cat.name} | ${SITE_CONFIG.name}`;
+  const title = `${cat.name} — ${cat.toolCount}+ Free Tools`;
   const description = `Browse all ${cat.toolCount}+ free ${cat.name.toLowerCase()} on ${SITE_CONFIG.name}. ${cat.description}`;
 
   return {

@@ -42,8 +42,7 @@ import { SITE_CONFIG } from "@/lib/utils";
 const TOOL_ID = "company-stamp-generator";
 const tool = TOOLS_BY_ID[TOOL_ID];
 
-const TITLE =
-  "Free Company Stamp Generator — APPROVED, PAID & Custom Seals (Transparent PNG) | UtilityApps";
+const TITLE = "Free Company Stamp Generator — PNG Seals";
 const DESCRIPTION =
   "Create free business stamps and company seals online. Make APPROVED, PAID, RECEIVED, DRAFT and custom round or rectangular stamps. Download as a transparent PNG for your documents. No signup.";
 
@@ -249,7 +248,7 @@ export default function CompanyStampGeneratorPage() {
         {/* Breadcrumb */}
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+          className="flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
         >
           <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
             Home

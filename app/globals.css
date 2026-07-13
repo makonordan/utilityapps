@@ -58,3 +58,63 @@ button:not(:disabled),
 summary {
   cursor: pointer;
 }
+
+/* Native <input type="range"> thumbs default to ~12-16px, too small to grab
+ * reliably on touch screens. Give every slider in the app (calculators,
+ * image quality, video trim, etc.) a 44px tap target via a taller hit box
+ * and a larger thumb, applied once here instead of per-component. */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 44px;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+input[type="range"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: rgb(0 82 204 / 0.2);
+}
+.dark input[type="range"]::-webkit-slider-runnable-track {
+  background: rgb(0 82 204 / 0.35);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 24px;
+  width: 24px;
+  border-radius: 9999px;
+  background: #0052cc;
+  border: 3px solid white;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+  margin-top: -9px;
+}
+.dark input[type="range"]::-webkit-slider-thumb {
+  border-color: #0f172a;
+}
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: rgb(0 82 204 / 0.2);
+}
+.dark input[type="range"]::-moz-range-track {
+  background: rgb(0 82 204 / 0.35);
+}
+input[type="range"]::-moz-range-thumb {
+  height: 24px;
+  width: 24px;
+  border-radius: 9999px;
+  background: #0052cc;
+  border: 3px solid white;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+}
+.dark input[type="range"]::-moz-range-thumb {
+  border-color: #0f172a;
+}

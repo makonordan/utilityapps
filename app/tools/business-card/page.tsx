@@ -13,6 +13,7 @@ import {
 
 import { GoogleSignInButton } from "@/components/business-card/GoogleSignInButton";
 import { TrackToolVisit } from "@/components/tools/TrackToolVisit";
+import { ToolFAQ, type FAQItem } from "@/components/tools/ToolFAQ";
 import { getCategoryByName } from "@/lib/categories";
 import { TOOLS_BY_ID } from "@/lib/tools";
 import { SITE_CONFIG } from "@/lib/utils";
@@ -37,6 +38,37 @@ const HOW_IT_WORKS_STEPS: { icon: typeof UserPlus; title: string; body: string }
     icon: Smartphone,
     title: "Contacts save directly",
     body: "When someone scans, your info saves to their phone contacts automatically. No app to install. No signup required.",
+  },
+];
+
+const FAQS: FAQItem[] = [
+  {
+    q: "How does a digital business card save to someone's phone?",
+    a: "Your card's QR code encodes a vCard — the standard contact-file format every phone already understands. Scanning it with the native camera app (iOS, Android) or Google Lens triggers an \"Add to Contacts\" prompt directly, with no app to install and no account needed on the scanner's side.",
+  },
+  {
+    q: "Can I really have multiple business cards under one QR code?",
+    a: "Yes — create a card for each business, role, or identity you have, then share one master QR code that lets the scanner pick which card to save. You can also share an individual card's own QR code when only one identity is relevant.",
+  },
+  {
+    q: "Do I need to install an app to create or scan a card?",
+    a: "No app is required on either side. You create your card in the browser, and anyone scanning your QR code uses their phone's existing camera or QR scanner — no dedicated app download for them.",
+  },
+  {
+    q: "Is the free plan actually usable, or just a trial?",
+    a: "The free plan is a real, permanently free tier: one card, basic themes, an individual QR code, and monthly scan analytics — no time limit or forced upgrade to keep using it.",
+  },
+  {
+    q: "What happens if I update my contact details later?",
+    a: "Editing your card updates the same link and QR code instantly — anyone who scans it afterward gets your latest details. You don't need to reprint or reshare a new QR code when your phone number or title changes.",
+  },
+  {
+    q: "What analytics do I get on card scans?",
+    a: "Aggregate, privacy-respecting analytics — how many times a card was scanned and saved, and country-level location. No personally identifiable information about who scanned your card is tracked or shown.",
+  },
+  {
+    q: "Does scanning require the visitor to sign up or create an account?",
+    a: "No — scanning and saving a card to contacts works with zero signup on the scanner's side. An account is only needed if you're creating your own card.",
   },
 ];
 
@@ -285,6 +317,13 @@ export default function BusinessCardLandingPage() {
               cta="Coming soon"
             />
           </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="bg-white py-20 dark:bg-surface-950">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <ToolFAQ items={FAQS} />
         </div>
       </section>
 

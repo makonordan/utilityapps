@@ -96,18 +96,9 @@ const CATEGORY_DEFINITIONS: Omit<Category, "toolCount">[] = [
     id: "health-tools",
     name: "Health Tools",
     description:
-      "Track BMI, calories, macros, and hydration with science-backed formulas and unit support.",
+      "Track BMI and calories, plus sleep cycle, nap, caffeine cutoff, and brown-noise/ambient sound tools — all science-backed, browser-based, no signup.",
     icon: "HeartPulse",
     color: "#EF4444",
-    featured: true,
-  },
-  {
-    id: "sleep-tools",
-    name: "Sleep Tools",
-    description:
-      "Sleep cycle and nap calculators, brown-noise generator, ambient sound mixer, and caffeine cutoff timing — all browser-based, no signup.",
-    icon: "Moon",
-    color: "#4F46E5",
     featured: true,
   },
   {

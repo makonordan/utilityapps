@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { A, H2, LegalPage, P, UL } from "@/components/legal/LegalPage";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TITLE = `Affiliate Disclosure — ${SITE_CONFIG.name}`;
+const TITLE = "Affiliate Disclosure";
 const DESCRIPTION =
   "How affiliate links on UtilityApps work, how we mark them, and our commitment to editorial independence.";
 const LAST_UPDATED = "2026-05-23";
@@ -11,6 +11,7 @@ const LAST_UPDATED = "2026-05-23";
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: ["affiliate disclosure", "affiliate links policy", "editorial independence"],
   alternates: { canonical: "/affiliate-disclosure" },
 };
 

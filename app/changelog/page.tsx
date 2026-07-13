@@ -17,12 +17,13 @@ import {
 import { TOOLS_BY_ID } from "@/lib/tools";
 import { SITE_CONFIG, cn } from "@/lib/utils";
 
-const TITLE = `Changelog — What's new on ${SITE_CONFIG.name}`;
+const TITLE = "Changelog — What's New";
 const DESCRIPTION = `Track every tool launch, feature add, and SEO ship on ${SITE_CONFIG.name}. Updated with each release.`;
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: ["changelog", "product updates", "release notes", "new tool launches"],
   alternates: { canonical: "/changelog" },
   openGraph: {
     type: "website",
@@ -84,7 +85,7 @@ export default function ChangelogPage() {
     <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
       <nav
         aria-label="Breadcrumb"
-        className="mb-6 flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+        className="mb-6 flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
       >
         <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
           Home

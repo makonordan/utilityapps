@@ -14,11 +14,9 @@ import dynamic from "next/dynamic";
  * server-rendered for SEO; the components themselves are "use client".
  */
 export const IN_HOUSE_TOOLS: Record<string, ComponentType> = {
-  // Text Tools
-  "word-counter": dynamic(() => import("./WordCounter").then((m) => m.WordCounter)),
-  "character-counter": dynamic(() => import("./CharacterCounter").then((m) => m.CharacterCounter)),
-  "case-converter": dynamic(() => import("./CaseConverter").then((m) => m.CaseConverter)),
-  "text-diff-checker": dynamic(() => import("./TextDiffChecker").then((m) => m.TextDiffChecker)),
+  // Text Tools — word/character counting, case conversion, and diff
+  // checking all live in one merged toolkit at the word-counter slug.
+  "word-counter": dynamic(() => import("./TextToolkit").then((m) => m.TextToolkit)),
 
   // Calculator Tools
   "percentage-calculator": dynamic(() => import("./PercentageCalculator").then((m) => m.PercentageCalculator)),
@@ -49,7 +47,6 @@ export const IN_HOUSE_TOOLS: Record<string, ComponentType> = {
 
   // Productivity Tools
   "qr-code-generator": dynamic(() => import("./QrCodeGenerator").then((m) => m.QrCodeGenerator)),
-  "pdf-converter": dynamic(() => import("./PdfConverter").then((m) => m.PdfConverter)),
 };
 
 export function hasInHouseTool(slug: string): boolean {

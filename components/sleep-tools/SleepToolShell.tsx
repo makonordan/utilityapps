@@ -40,7 +40,7 @@ const TRUST_BADGES = [
 ] as const;
 
 function getRelatedSleepTools(currentId: string) {
-  return TOOLS.filter((t) => t.category === "Sleep Tools" && t.id !== currentId);
+  return TOOLS.filter((t) => t.category === "Health Tools" && t.id !== currentId);
 }
 
 export async function SleepToolShell({
@@ -63,7 +63,7 @@ export async function SleepToolShell({
     <div className={cn("mx-auto w-full max-w-5xl px-4 py-10 sm:py-14", className)}>
       <nav
         aria-label="Breadcrumb"
-        className="mb-6 flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+        className="mb-6 flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
       >
         <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
           Home
@@ -74,10 +74,10 @@ export async function SleepToolShell({
         </Link>
         <ChevronRight className="h-3 w-3" />
         <Link
-          href="/tools/categories/sleep-tools"
+          href="/tools/categories/health-tools"
           className="hover:text-primary-600 dark:hover:text-primary-400"
         >
-          Sleep Tools
+          Health Tools
         </Link>
         <ChevronRight className="h-3 w-3" />
         <span className="font-medium text-surface-700 dark:text-surface-200">{title}</span>
@@ -149,7 +149,7 @@ export async function SleepToolShell({
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
-                More sleep tools
+                More health tools
               </p>
               <h2 className="mt-1 text-2xl font-bold tracking-tight text-surface-900 sm:text-3xl dark:text-white">
                 Related tools
@@ -202,8 +202,8 @@ function SeoSchemas({
       {
         "@type": "ListItem",
         position: 3,
-        name: "Sleep Tools",
-        item: `${base}/tools/categories/sleep-tools`,
+        name: "Health Tools",
+        item: `${base}/tools/categories/health-tools`,
       },
       {
         "@type": "ListItem",
@@ -222,7 +222,7 @@ function SeoSchemas({
     description: longDescription,
     url: `${base}/tools/${toolId}`,
     applicationCategory: "HealthApplication",
-    applicationSubCategory: "Sleep Tool",
+    applicationSubCategory: "Health Tool",
     operatingSystem: "Web Browser",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     featureList,

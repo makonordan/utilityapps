@@ -649,8 +649,8 @@ function ResultTable({
   onRemove: (id: string) => void;
 }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-surface-200 dark:border-surface-800">
-      <table className="w-full text-left text-sm">
+    <div className="overflow-x-auto rounded-2xl border border-surface-200 dark:border-surface-800">
+      <table className="w-full min-w-[520px] text-left text-sm">
         <thead className="bg-surface-50 text-[11px] uppercase tracking-wider text-surface-500 dark:bg-surface-800/60 dark:text-surface-400">
           <tr>
             <th className="px-4 py-3 font-semibold">File</th>

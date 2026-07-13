@@ -8,7 +8,7 @@ import { SITE_CONFIG } from "@/lib/utils";
 
 const TOOL_ID = "translator";
 
-const TITLE = "Private Translator — On-Device, No Upload | UtilityApps";
+const TITLE = "Private Translator — On-Device, No Upload";
 const DESCRIPTION =
   "Translate text privately, on your device. Your words never leave your browser — unlike Google Translate. Auto-detect, ~25 languages, no signup.";
 

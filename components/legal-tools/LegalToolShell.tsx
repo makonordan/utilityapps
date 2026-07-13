@@ -62,7 +62,7 @@ export async function LegalToolShell({
     <div className={cn("mx-auto w-full max-w-5xl px-4 py-10 sm:py-14", className)}>
       <nav
         aria-label="Breadcrumb"
-        className="mb-6 flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+        className="mb-6 flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
       >
         <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
           Home

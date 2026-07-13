@@ -30,7 +30,7 @@ export function JpgPdfTool() {
                 : "text-surface-600 dark:text-surface-300"
             )}
           >
-            {t === "jpg-to-pdf" ? "JPG → PDF" : "PDF → JPG"}
+            {t === "jpg-to-pdf" ? "Image to PDF" : "PDF → JPG"}
           </button>
         ))}
       </div>
@@ -61,9 +61,9 @@ function JpgToPdfPanel() {
   const [error, setError] = useState<string | null>(null);
 
   const add = (files: File[]) => {
-    const accepted = files.filter((f) => /^image\//.test(f.type));
+    const accepted = files.filter((f) => /^image\/(jpeg|png)$/.test(f.type));
     if (accepted.length === 0) {
-      setError("Only image files are accepted.");
+      setError("Only PNG, JPG, and JPEG images are accepted.");
       return;
     }
     setError(null);
@@ -129,7 +129,7 @@ function JpgToPdfPanel() {
       downloadBlob(out, "images.pdf");
     } catch (err) {
       console.error(err);
-      setError("Couldn't convert those images. Only JPG and PNG are supported.");
+      setError("Couldn't convert those images. Only PNG, JPG, and JPEG are supported.");
     } finally {
       setBusy(false);
     }
@@ -142,7 +142,7 @@ function JpgToPdfPanel() {
         accept="image/jpeg,image/png"
         onFiles={add}
         label="Drop images here or click to choose"
-        sublabel="JPG and PNG, one or many"
+        sublabel="PNG, JPG, or JPEG, one or many"
       />
 
       {images.length > 0 && (
@@ -183,7 +183,7 @@ function JpgToPdfPanel() {
               onChange={(e) => setPageSize(e.target.value as PageSize)}
               className="mt-1.5 block w-full rounded-xl border border-surface-200 bg-white px-3 py-2.5 text-sm dark:border-surface-700 dark:bg-surface-900"
             >
-              <option value="auto">Auto-fit (each image's size)</option>
+              <option value="auto">Auto-fit (each image&apos;s size)</option>
               <option value="a4">A4 (210 × 297 mm)</option>
               <option value="letter">US Letter (8.5 × 11 in)</option>
             </select>

@@ -52,13 +52,11 @@ The canonical XML sitemap is at https://utilityapps.site/sitemap.xml.
 
 - [BMI Calculator](https://utilityapps.site/tools/bmi-calculator): Body Mass Index in metric and imperial with WHO healthy-range guidance.
 - [Calorie Calculator](https://utilityapps.site/tools/calorie-calculator): TDEE and daily calorie targets for weight loss, maintenance, and gain.
+- [Sleep Cycle Calculator](https://utilityapps.site/tools/sleep-cycle-calculator): Sleep cycle and nap calculators, caffeine cutoff timing, and a brown-noise/ambient sound mixer in one toolkit.
 
 ## Text tools
 
-- [Word Counter](https://utilityapps.site/tools/word-counter): Count words, characters, sentences, paragraphs, reading time, keyword density.
-- [Character Counter](https://utilityapps.site/tools/character-counter): Real-time character counts with platform presets (X, LinkedIn, SMS, meta).
-- [Case Converter](https://utilityapps.site/tools/case-converter): UPPERCASE, lowercase, Title Case, camelCase, snake_case, kebab-case.
-- [Text Diff Checker](https://utilityapps.site/tools/text-diff-checker): Compare two text blocks line- and word-by-word.
+- [Word Counter](https://utilityapps.site/tools/word-counter): Word, character, sentence, and reading-time counts; case conversion (11 styles); and a text diff checker — one toolkit.
 
 ## Image tools
 
@@ -79,7 +77,6 @@ The canonical XML sitemap is at https://utilityapps.site/sitemap.xml.
 
 ## Productivity tools
 
-- [PDF Converter](https://utilityapps.site/tools/pdf-converter): Convert PDFs to Word, Excel, JPG, PNG. Merge, split, compress, OCR.
 - [QR Code Generator](https://utilityapps.site/tools/qr-code-generator): Branded QR codes for URLs, WiFi, vCards with logos and high-res export.
 
 ## Featured articles

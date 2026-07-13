@@ -26,13 +26,19 @@ import {
 } from "@/lib/studio";
 import { SITE_CONFIG, cn } from "@/lib/utils";
 
-const TITLE = "UtilityApps Studio — Custom Development for Businesses";
+const TITLE = "Studio — Custom Development for Businesses";
 const DESCRIPTION =
   "We build digital products, web apps, internal dashboards, and AI-powered tools for businesses. AI-augmented development. Delivered in weeks. By the team behind UtilityApps.";
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: [
+    "custom software development",
+    "web app development studio",
+    "internal tools development",
+    "AI-augmented development",
+  ],
   alternates: { canonical: "/studio" },
   openGraph: {
     type: "website",

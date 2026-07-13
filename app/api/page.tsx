@@ -16,7 +16,7 @@ import { WaitlistForm } from "@/components/api-waitlist/WaitlistForm";
 import { TOOLS } from "@/lib/tools";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TITLE = "UtilityApps API — Coming Soon | Join the Waitlist";
+const TITLE = "Free Tools API — Coming Soon, Join Waitlist";
 const DESCRIPTION =
   "Every UtilityApps tool, available as a programmable API. PDF, image, audio, " +
   "legal docs, link shortening, file sharing — call it from your backend. Join " +
@@ -25,6 +25,12 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: [
+    "tools API",
+    "PDF processing API",
+    "image processing API",
+    "developer API waitlist",
+  ],
   alternates: { canonical: "/api" },
   openGraph: {
     type: "website",

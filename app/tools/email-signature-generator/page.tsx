@@ -36,8 +36,7 @@ import { SITE_CONFIG } from "@/lib/utils";
 const TOOL_ID = "email-signature-generator";
 const tool = TOOLS_BY_ID[TOOL_ID];
 
-const TITLE =
-  "Free Email Signature Generator — Gmail, Outlook & More | UtilityApps";
+const TITLE = "Free Email Signature Generator — Gmail & More";
 const DESCRIPTION =
   "Create a professional HTML email signature free. Works in Gmail, Outlook, Apple Mail and Yahoo. Add your photo, logo, and social links. Copy-paste ready — no signup.";
 
@@ -203,7 +202,7 @@ export default function EmailSignatureGeneratorPage() {
         {/* Breadcrumb */}
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+          className="flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
         >
           <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
             Home

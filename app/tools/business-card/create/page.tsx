@@ -21,7 +21,7 @@ import { SITE_CONFIG } from "@/lib/utils";
  */
 
 export const metadata = {
-  title: `Create your business card | ${SITE_CONFIG.name}`,
+  title: "Create Your Business Card",
   robots: { index: false, follow: true },
 };
 

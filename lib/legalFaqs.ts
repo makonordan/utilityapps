@@ -48,6 +48,10 @@ export const LEGAL_FAQS: Record<LegalToolId, FAQItem[]> = {
       q: "Will this work for my Shopify / WordPress / SaaS site?",
       a: "Yes — the output is a generic privacy policy that you can paste into a /privacy page on any platform. Most platforms (Shopify, WordPress, Squarespace, Webflow, custom React/Next.js apps) just need plain text or HTML for legal pages.",
     },
+    {
+      q: "How often should I update my privacy policy?",
+      a: "Whenever what you actually do with data changes — a new analytics tool, a new payment processor, expanding to a new region with different rules. Also worth a yearly review even without changes, since privacy laws themselves get updated periodically.",
+    },
     STANDARD_PRIVACY,
     STANDARD_DISCLAIMER,
   ],
@@ -64,6 +68,10 @@ export const LEGAL_FAQS: Record<LegalToolId, FAQItem[]> = {
     {
       q: "Should the Terms of Service and Privacy Policy be one document?",
       a: "No, separate documents. Privacy Policy = what data you collect and what you do with it (legally required disclosure). Terms of Service = the contract for using your service. They serve different legal purposes and should be linked separately in your footer.",
+    },
+    {
+      q: "Can I limit my liability entirely with a Terms of Service?",
+      a: "No — courts in most jurisdictions won't enforce a total liability waiver, especially against consumers, and some limitations (gross negligence, willful misconduct, certain consumer-protection rights) can't be waived at all. A well-drafted limitation clause narrows exposure; it doesn't eliminate it.",
     },
     STANDARD_PRIVACY,
     STANDARD_DISCLAIMER,
@@ -82,6 +90,10 @@ export const LEGAL_FAQS: Record<LegalToolId, FAQItem[]> = {
       q: "Do I need consent for analytics cookies?",
       a: "In the EU/UK, yes — analytics cookies that identify users are non-essential and require opt-in consent. In the US, opt-out is generally sufficient (CCPA). The policy explains the categories; consent is collected by your banner.",
     },
+    {
+      q: "What information do I need to generate the policy?",
+      a: "Your site URL, company name, and contact email at minimum. For accurate output, also note which cookie categories you actually use — strictly necessary, analytics, advertising, and social — since the generated policy only lists categories you confirm.",
+    },
     STANDARD_PRIVACY,
     STANDARD_DISCLAIMER,
   ],
@@ -98,6 +110,10 @@ export const LEGAL_FAQS: Record<LegalToolId, FAQItem[]> = {
     {
       q: "What information do I need?",
       a: "Names and addresses of both parties (or just one disclosing party for unilateral), the purpose of sharing (e.g. 'evaluating a potential investment'), the term (years), the governing-law jurisdiction, and any specific categories of information you want explicitly covered.",
+    },
+    {
+      q: "Is a signed NDA enforceable if it's generated from a template?",
+      a: "Generally yes — enforceability depends on the terms being clear and reasonable (specific purpose, defined confidential information, a sensible term), not on who drafted it. A template is a valid starting point as long as both parties actually sign and the terms fit your real situation.",
     },
     STANDARD_PRIVACY,
     STANDARD_DISCLAIMER,
@@ -116,6 +132,10 @@ export const LEGAL_FAQS: Record<LegalToolId, FAQItem[]> = {
       q: "Do I really need a written contract for small jobs?",
       a: "Yes — especially small jobs. Disputes are common when both sides assumed something different. A short written contract that captures scope, price, and deadline takes minutes to send and protects both sides far more than informal email threads do.",
     },
+    {
+      q: "What's a 'kill fee' and should I include one?",
+      a: "A kill fee is a payment owed if the client cancels the project partway through — it compensates you for time already spent and work turned down elsewhere. Worth including on any project with meaningful upfront time investment; less critical for very short, low-commitment jobs.",
+    },
     STANDARD_PRIVACY,
     STANDARD_DISCLAIMER,
   ],
@@ -132,6 +152,10 @@ export const LEGAL_FAQS: Record<LegalToolId, FAQItem[]> = {
     {
       q: "What happens after I send it?",
       a: "The service provider typically removes the content within a few days. The uploader may file a counter-notice; if they do, the service can restore the content unless you file a lawsuit within 10–14 business days. Sending a bad-faith notice (false claim of ownership) can expose you to liability under §512(f).",
+    },
+    {
+      q: "Who do I send the notice to?",
+      a: "The platform or host's designated DMCA agent — most major platforms publish a dedicated copyright/DMCA contact or web form. For smaller sites, check the footer for a copyright policy or send it to the hosting provider identified via a WHOIS lookup if the site itself has no listed contact.",
     },
     STANDARD_PRIVACY,
     STANDARD_DISCLAIMER,
@@ -150,6 +174,10 @@ export const LEGAL_FAQS: Record<LegalToolId, FAQItem[]> = {
       q: "Where do I send it?",
       a: "The organisation's privacy contact email is the simplest — most companies publish a privacy@company.com or list a DPO (Data Protection Officer) in their privacy policy. The letter can be sent by email or post; email is fine. Keep a dated copy of what you sent.",
     },
+    {
+      q: "What if the company doesn't respond within a month?",
+      a: "You can escalate to your national data protection authority (e.g. the ICO in the UK, or your country's equivalent) and file a complaint — most regulators have a straightforward online complaint process for exactly this situation.",
+    },
     STANDARD_PRIVACY,
     STANDARD_DISCLAIMER,
   ],
@@ -166,6 +194,10 @@ export const LEGAL_FAQS: Record<LegalToolId, FAQItem[]> = {
     {
       q: "What should I include?",
       a: "Your identity and standing (why you have the right to demand this stops), a specific description of the conduct, the date(s) it occurred, the legal basis (trademark, copyright, defamation, harassment, etc.), the specific actions required to comply, a deadline to comply, and the consequences if they don't (legal action, complaint to a regulator, etc.).",
+    },
+    {
+      q: "Does sending a cease and desist letter start a lawsuit?",
+      a: "No — it's a pre-litigation demand, not a court filing. It costs nothing to send and creates no legal proceeding by itself. If the recipient ignores it, your options are to escalate (a lawyer's letter), pursue mediation, or file an actual lawsuit — the letter itself doesn't commit you to any of those.",
     },
     STANDARD_PRIVACY,
     STANDARD_DISCLAIMER,

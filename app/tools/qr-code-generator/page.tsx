@@ -42,7 +42,7 @@ import { SITE_CONFIG } from "@/lib/utils";
 const TOOL_ID = "qr-code-generator";
 const tool = TOOLS_BY_ID[TOOL_ID];
 
-const TITLE = "Free QR Code Generator — URL, WiFi, vCard & More | UtilityApps";
+const TITLE = "Free QR Code Generator — URL, WiFi & More";
 const DESCRIPTION =
   "Create free custom QR codes instantly. Generate QR codes for websites, WiFi, contact cards, WhatsApp, menus and more. Add your logo and colors. Download PNG or SVG. No signup, no expiry.";
 
@@ -266,7 +266,7 @@ export default function QrCodeGeneratorPage() {
         {/* Breadcrumb */}
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+          className="flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
         >
           <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
             Home

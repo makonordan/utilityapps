@@ -40,7 +40,7 @@ import { SITE_CONFIG } from "@/lib/utils";
 const TOOL_ID = "business-hours-sign";
 const tool = TOOLS_BY_ID[TOOL_ID];
 
-const TITLE = "Free Business Hours Sign Generator — Printable Store Hours & Open/Closed Sign | UtilityApps";
+const TITLE = "Free Business Hours Sign Generator";
 const DESCRIPTION =
   "Create a free printable business hours sign. Set your opening times, style it, and download an Open/Closed hours sign as image or PDF. No signup, nothing uploaded — it all runs in your browser.";
 
@@ -241,7 +241,7 @@ export default function BusinessHoursSignPage() {
         {/* Breadcrumb */}
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+          className="flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
         >
           <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
             Home

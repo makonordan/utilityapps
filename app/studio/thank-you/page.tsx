@@ -5,7 +5,7 @@ import { ArrowRight, CalendarCheck, FileText, Grid2X2 } from "lucide-react";
 import { CalendlyLink } from "@/components/studio/CalendlyButton";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TITLE = `Thanks — we'll be in touch | ${SITE_CONFIG.name} Studio`;
+const TITLE = "Thanks — We'll Be in Touch";
 
 export const metadata: Metadata = {
   title: TITLE,

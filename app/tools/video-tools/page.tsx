@@ -11,8 +11,7 @@ import { SITE_CONFIG } from "@/lib/utils";
 
 const CATEGORY_COLOR = "#EC4899";
 
-const TITLE =
-  "Free Video Tools Online — Compress, Trim, Convert & More | UtilityApps";
+const TITLE = "Free Video Tools — Compress, Trim & More";
 const DESCRIPTION =
   "8 free in-browser video tools. Compress, trim, convert to WebM or GIF, extract audio, pull frames, mute, and resize MP4, MOV, WebM and more. No upload, no signup.";
 
@@ -140,7 +139,7 @@ export default function VideoToolsHubPage() {
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:py-14">
       <nav
         aria-label="Breadcrumb"
-        className="mb-6 flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+        className="mb-6 flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
       >
         <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
           Home

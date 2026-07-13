@@ -30,7 +30,6 @@ const TRENDING_CATEGORY_ORDER = [
   "Language Tools",
   "Design Tools",
   "Student Tools",
-  "Sleep Tools",
   "Travel Tools",
   "Text Tools",
 ];

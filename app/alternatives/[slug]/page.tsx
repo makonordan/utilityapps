@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
   const competitor = getCompetitor(slug);
   if (!competitor) return { title: "Alternative not found" };
 
-  const title = `Free ${competitor.name} Alternatives — No Signup, No Limits | ${SITE_CONFIG.name}`;
+  const title = `Free ${competitor.name} Alternatives`;
   const description = `Looking for a ${competitor.name} alternative? UtilityApps covers the same jobs free, with no signup, no daily caps, and no Pro upsell. ${competitor.blurb}`;
 
   return {

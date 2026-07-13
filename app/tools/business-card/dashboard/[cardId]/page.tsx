@@ -10,7 +10,7 @@ import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { SITE_CONFIG } from "@/lib/utils";
 
 export const metadata = {
-  title: `Edit card | ${SITE_CONFIG.name}`,
+  title: "Edit Card",
   robots: { index: false, follow: true },
 };
 

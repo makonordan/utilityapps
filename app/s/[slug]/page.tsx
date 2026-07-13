@@ -14,7 +14,7 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   return {
-    title: `Shared via ${SITE_CONFIG.name}`,
+    title: "Shared Content",
     description: "Open a one-off share — text or short link.",
     alternates: { canonical: `/s/${slug}` },
     robots: { index: false, follow: false }, // shares aren't search content

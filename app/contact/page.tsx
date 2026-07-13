@@ -6,13 +6,14 @@ import { InstagramIcon, LinkedinIcon, TwitterIcon, YoutubeIcon } from "@/compone
 import { ContactForm } from "@/components/contact/ContactForm";
 import { SITE_CONFIG } from "@/lib/utils";
 
-const TITLE = `Contact ${SITE_CONFIG.name}`;
+const TITLE = "Contact Us";
 const DESCRIPTION =
   "Get in touch with the UtilityApps team. Tool requests, bug reports, partnerships, and press — we read everything.";
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: ["contact utilityapps", "tool request", "bug report", "partnership inquiries"],
   alternates: { canonical: "/contact" },
   openGraph: {
     type: "website",
@@ -162,7 +163,7 @@ export default function ContactPage() {
 function Breadcrumb() {
   return (
     <nav aria-label="Breadcrumb" className="text-sm text-surface-500 dark:text-surface-400">
-      <ol className="flex items-center gap-1.5">
+      <ol className="flex flex-wrap items-center gap-1.5">
         <li>
           <Link href="/" className="hover:text-surface-700 dark:hover:text-surface-200">
             Home

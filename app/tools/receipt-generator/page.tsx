@@ -39,7 +39,7 @@ import { SITE_CONFIG } from "@/lib/utils";
 const TOOL_ID = "receipt-generator";
 const tool = TOOLS_BY_ID[TOOL_ID];
 
-const TITLE = "Free Receipt Generator — Create & Download Receipts (PDF & Image) | UtilityApps";
+const TITLE = "Free Receipt Generator — PDF & Image";
 const DESCRIPTION =
   "Create professional receipts for free. Add your business details, items, tax and totals, then download as a PDF or image. No signup, nothing uploaded — it all runs in your browser.";
 
@@ -245,7 +245,7 @@ export default function ReceiptGeneratorPage() {
         {/* Breadcrumb */}
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
+          className="flex flex-wrap items-center gap-1 text-xs text-surface-500 dark:text-surface-400"
         >
           <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">
             Home

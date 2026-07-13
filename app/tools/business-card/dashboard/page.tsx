@@ -13,7 +13,7 @@ import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { SITE_CONFIG } from "@/lib/utils";
 
 export const metadata = {
-  title: `My business cards | ${SITE_CONFIG.name}`,
+  title: "My Business Cards",
   robots: { index: false, follow: true },
 };
 
