@@ -9,14 +9,14 @@ import { PdfDropzone } from "@/components/pdf-tools/PdfDropzone";
 import { downloadBlob, formatBytes, openPdfDocument, renderPageToCanvas } from "@/lib/pdfClient";
 import { cn } from "@/lib/utils";
 
-type Tab = "jpg-to-pdf" | "pdf-to-jpg";
+type Tab = "jpg-to-pdf" | "pdf-to-image";
 
 export function JpgPdfTool() {
   const [tab, setTab] = useState<Tab>("jpg-to-pdf");
   return (
     <div className="space-y-5">
       <div role="tablist" className="flex gap-2 rounded-xl bg-surface-100 p-1.5 dark:bg-surface-800">
-        {(["jpg-to-pdf", "pdf-to-jpg"] as Tab[]).map((t) => (
+        {(["jpg-to-pdf", "pdf-to-image"] as Tab[]).map((t) => (
           <button
             key={t}
             type="button"
@@ -30,11 +30,11 @@ export function JpgPdfTool() {
                 : "text-surface-600 dark:text-surface-300"
             )}
           >
-            {t === "jpg-to-pdf" ? "Image to PDF" : "PDF → JPG"}
+            {t === "jpg-to-pdf" ? "Image to PDF" : "PDF to Image"}
           </button>
         ))}
       </div>
-      {tab === "jpg-to-pdf" ? <JpgToPdfPanel /> : <PdfToJpgPanel />}
+      {tab === "jpg-to-pdf" ? <JpgToPdfPanel /> : <PdfToImagePanel />}
     </div>
   );
 }
@@ -210,10 +210,18 @@ function JpgToPdfPanel() {
   );
 }
 
-// =========================================================== PDF → JPG
+// =========================================================== PDF → Image
 
-function PdfToJpgPanel() {
+type ImageFormat = "jpg" | "png";
+
+const IMAGE_FORMAT_MIME: Record<ImageFormat, string> = {
+  jpg: "image/jpeg",
+  png: "image/png",
+};
+
+function PdfToImagePanel() {
   const [file, setFile] = useState<File | null>(null);
+  const [format, setFormat] = useState<ImageFormat>("jpg");
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -227,23 +235,26 @@ function PdfToJpgPanel() {
       const doc = await openPdfDocument(file);
       const total = doc.numPages;
       const base = file.name.replace(/\.pdf$/i, "");
+      const mime = IMAGE_FORMAT_MIME[format];
+      // toDataURL ignores the quality argument for image/png; harmless to pass it.
+      const toDataUrl = (canvas: HTMLCanvasElement) => canvas.toDataURL(mime, 0.92);
 
       if (total === 1) {
         const canvas = await renderPageToCanvas(doc, 1, { scale: 2 });
-        const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+        const dataUrl = toDataUrl(canvas);
         const blob = await (await fetch(dataUrl)).blob();
-        downloadBlob(blob, `${base}.jpg`, "image/jpeg");
+        downloadBlob(blob, `${base}.${format}`, mime);
       } else {
         const zip = new JSZip();
         for (let i = 1; i <= total; i += 1) {
           const canvas = await renderPageToCanvas(doc, i, { scale: 2 });
-          const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+          const dataUrl = toDataUrl(canvas);
           const blob = await (await fetch(dataUrl)).blob();
-          zip.file(`${base}-page-${i}.jpg`, blob);
+          zip.file(`${base}-page-${i}.${format}`, blob);
           setProgress(i / total);
         }
         const zipBlob = await zip.generateAsync({ type: "blob" });
-        downloadBlob(zipBlob, `${base}-jpgs.zip`, "application/zip");
+        downloadBlob(zipBlob, `${base}-${format}s.zip`, "application/zip");
       }
     } catch (err) {
       console.error(err);
@@ -271,8 +282,20 @@ function PdfToJpgPanel() {
 
       {file && (
         <>
+          <label className="block max-w-xs">
+            <span className="block text-sm font-semibold text-surface-700 dark:text-surface-200">Output format</span>
+            <select
+              value={format}
+              onChange={(e) => setFormat(e.target.value as ImageFormat)}
+              className="mt-1.5 block w-full rounded-xl border border-surface-200 bg-white px-3 py-2.5 text-sm dark:border-surface-700 dark:bg-surface-900"
+            >
+              <option value="jpg">JPG — smaller file, best for photos and scans</option>
+              <option value="png">PNG — lossless, best for text and diagrams</option>
+            </select>
+          </label>
+
           <p className="rounded-xl bg-surface-50 px-3.5 py-2.5 text-sm text-surface-600 dark:bg-surface-800/60 dark:text-surface-300">
-            Each page becomes a high-quality JPEG (2× render). Multiple pages bundle into a ZIP.
+            Each page becomes a high-quality {format.toUpperCase()} (2× render). Multiple pages bundle into a ZIP.
           </p>
 
           {busy && (
@@ -297,7 +320,7 @@ function PdfToJpgPanel() {
               busy ? "cursor-not-allowed opacity-60" : "hover:bg-red-700"
             )}
           >
-            {busy ? <><Loader2 className="h-4 w-4 animate-spin" />Converting…</> : <><FileImage className="h-4 w-4" />Convert to JPG</>}
+            {busy ? <><Loader2 className="h-4 w-4 animate-spin" />Converting…</> : <><FileImage className="h-4 w-4" />Convert to {format.toUpperCase()}</>}
           </button>
         </>
       )}

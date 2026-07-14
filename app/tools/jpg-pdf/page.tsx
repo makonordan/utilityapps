@@ -8,9 +8,9 @@ import { SITE_CONFIG } from "@/lib/utils";
 
 const TOOL_ID = "jpg-pdf";
 
-const TITLE = "Free Image to PDF Converter — PNG, JPG & JPEG to PDF (+ PDF to JPG)";
+const TITLE = "Free Image to PDF Converter — PNG, JPG & JPEG to PDF (+ PDF to Image)";
 const DESCRIPTION =
-  "Convert PNG, JPG, or JPEG images into one PDF, or render every PDF page as a high-quality JPEG — no upload, no signup.";
+  "Convert PNG, JPG, or JPEG images into one PDF, or render every PDF page as a high-quality JPG or PNG image — no upload, no signup.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -21,6 +21,8 @@ export const metadata: Metadata = {
     "png to pdf",
     "jpeg to pdf",
     "pdf to jpg",
+    "pdf to png",
+    "pdf to image",
     "convert pdf to jpg",
     "image to pdf online free",
   ],
@@ -31,7 +33,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: `${SITE_CONFIG.url}/tools/${TOOL_ID}`,
     siteName: SITE_CONFIG.name,
-    images: [{ url: pdfToolOgUrl(TITLE, DESCRIPTION), width: 1200, height: 630, alt: "Image to PDF and PDF to JPG" }],
+    images: [{ url: pdfToolOgUrl(TITLE, DESCRIPTION), width: 1200, height: 630, alt: "Image to PDF and PDF to Image" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -48,8 +50,8 @@ export default function JpgPdfPage() {
       <TrackToolVisit toolId={TOOL_ID} />
       <PdfToolShell
         toolId={TOOL_ID}
-        title="Image to PDF & PDF to JPG"
-        description="Two converters in one. Combine PNG, JPG, or JPEG images into a PDF (with reorder and page-size options), or burst a PDF into high-resolution JPEGs."
+        title="Image to PDF & PDF to Image"
+        description="Two converters in one. Combine PNG, JPG, or JPEG images into a PDF (with reorder and page-size options), or burst a PDF into high-resolution JPG or PNG images."
         faqItems={getPdfFaqs(TOOL_ID)}
         seoContent={<SeoContent />}
       >
@@ -70,18 +72,20 @@ function SeoContent() {
         <strong>Auto-fit</strong> page size to make each PDF page match its image, or pick{" "}
         <strong>A4 / Letter</strong> for a uniform document that prints cleanly.
       </p>
-      <h2>PDF → JPG: when this matters</h2>
+      <h2>PDF to Image: when this matters, and which format to pick</h2>
       <p>
         Sometimes you need an image of a PDF page — to paste into a slide deck, embed in a
         Notion page, share on social media, or open with a basic image viewer. The exporter
-        renders each page at 2× device resolution (great for retina screens) and saves as JPEG at
-        ~92% quality, a sweet spot for text-heavy pages.
+        renders each page at 2× device resolution (great for retina screens) and lets you choose
+        the output format: <strong>JPG</strong> for a smaller file, best for photos and scanned
+        pages, or <strong>PNG</strong> for a lossless image, best for text-heavy pages, diagrams,
+        and screenshots where compression artefacts would blur small text.
       </p>
       <h2>Privacy</h2>
       <p>
         Both directions run in your browser. Image to PDF uses pdf-lib to embed PNG or JPEG images
-        directly into a new PDF. PDF → JPG uses pdfjs (Mozilla&rsquo;s PDF renderer) to draw each page to
-        a canvas, then exports the canvas as a JPEG. Nothing is uploaded.
+        directly into a new PDF. PDF to Image uses pdfjs (Mozilla&rsquo;s PDF renderer) to draw each
+        page to a canvas, then exports the canvas as a JPG or PNG. Nothing is uploaded.
       </p>
     </article>
   );

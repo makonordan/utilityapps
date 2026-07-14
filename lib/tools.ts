@@ -2263,11 +2263,11 @@ export const TOOLS: Tool[] = [
   },
   {
     id: "jpg-pdf",
-    name: "Image to PDF & PDF to JPG",
+    name: "Image to PDF & PDF to Image",
     description:
-      "Convert PNG, JPG, or JPEG images into a PDF, or render every page of a PDF as a high-quality JPEG.",
+      "Convert PNG, JPG, or JPEG images into a PDF, or render every page of a PDF as a high-quality JPG or PNG image.",
     longDescription:
-      "Two converters in one tool. Image to PDF: drop multiple PNG, JPG, or JPEG images, reorder, pick A4 / Letter / Auto-fit, get one multi-page PDF. PDF to JPG: render every page to a 2×-resolution JPEG, single file or ZIP for multi-page PDFs. Both directions run in your browser.",
+      "Two converters in one tool. Image to PDF: drop multiple PNG, JPG, or JPEG images, reorder, pick A4 / Letter / Auto-fit, get one multi-page PDF. PDF to Image: render every page to a 2×-resolution JPG or PNG, single file or ZIP for multi-page PDFs. Both directions run in your browser.",
     category: "PDF Tools",
     icon: "FileImage",
     href: "/tools/jpg-pdf",
@@ -2279,6 +2279,7 @@ export const TOOLS: Tool[] = [
       "png to pdf",
       "jpeg to pdf",
       "pdf to jpg",
+      "pdf to png",
       "pdf to image",
       "convert pdf to jpg",
     ],
