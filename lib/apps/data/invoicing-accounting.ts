@@ -36,11 +36,16 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track time", "track expenses", "accept online payments", "client management"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Lite", priceMonthly: 19, priceAnnual: 17.1, currency: "USD", keyLimits: ["Up to 5 billable clients"] },
+      { name: "Plus", priceMonthly: 38, priceAnnual: 29.7, currency: "USD", keyLimits: ["Up to 50 billable clients"] },
+      { name: "Premium", priceMonthly: 65, priceAnnual: 54, currency: "USD", keyLimits: ["Unlimited billable clients"] },
+      { name: "Select", priceMonthly: null, priceAnnual: null, currency: "USD", keyLimits: ["Custom quote — unlimited everything plus dedicated account manager"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier — 30-day free trial, no card required. Team members cost $11/user/mo extra on every plan.",
+    startingPrice: 19,
+    currency: "USD",
 
     keyFeatures: [
       "Recurring invoices",
@@ -82,9 +87,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.freshbooks.com/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator", "freelance-contract-generator"],
   },
@@ -106,11 +111,17 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "manage bills", "run payroll", "file taxes", "financial reporting"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Solopreneur", priceMonthly: 20, priceAnnual: null, currency: "USD", keyLimits: ["1 user"] },
+      { name: "Simple Start", priceMonthly: 35, priceAnnual: null, currency: "USD", keyLimits: ["1 user"] },
+      { name: "Essentials", priceMonthly: 70, priceAnnual: null, currency: "USD", keyLimits: ["3 users"] },
+      { name: "Plus", priceMonthly: 110, priceAnnual: null, currency: "USD", keyLimits: ["5 users, inventory tracking"] },
+      { name: "Advanced", priceMonthly: 250, priceAnnual: null, currency: "USD", keyLimits: ["25 users, advanced reporting"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier — introductory discounted pricing for the first 6 months, then standard rate. Payroll and Live Bookkeeping are separate paid add-ons.",
+    startingPrice: 20,
+    currency: "USD",
 
     keyFeatures: [
       "Invoicing and payments",
@@ -152,9 +163,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://quickbooks.intuit.com/pricing/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator", "purchase-order-generator", "tax-calculator"],
   },
@@ -176,11 +187,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "manage bills", "track expenses", "multi-currency billing", "financial reporting", "file taxes"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Early", priceMonthly: 25, priceAnnual: null, currency: "USD", keyLimits: ["Unlimited users; invoice/bill entry caps apply"] },
+      { name: "Growing", priceMonthly: 55, priceAnnual: null, currency: "USD", keyLimits: ["Unlimited invoicing and bill entry"] },
+      { name: "Established", priceMonthly: 90, priceAnnual: null, currency: "USD", keyLimits: ["Multi-currency, project tracking, expenses"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier — 30-day free trial. Plan names and prices differ by country (UK: Ignite/Grow/Comprehensive/Ultimate at different price points) — confirm the right regional page for your market.",
+    startingPrice: 25,
+    currency: "USD",
 
     keyFeatures: [
       "Unlimited users on every plan",
@@ -222,9 +237,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.xero.com/us/pricing-plans/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator", "purchase-order-generator", "tax-calculator"],
   },
@@ -245,11 +260,14 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "accept online payments", "basic bookkeeping"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Starter", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["Manual bookkeeping and invoicing"] },
+      { name: "Pro", priceMonthly: 19, priceAnnual: 190, currency: "USD", keyLimits: ["Automatic bank feeds, OCR receipt scanning, unlimited collaborators"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Starter is free forever for manual bookkeeping and invoicing — not a trial. Pro ($19/mo or $190/yr) adds automatic bank feeds and receipt scanning. Payroll is a separate paid add-on.",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "Free unlimited invoicing and accounting",
@@ -290,9 +308,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.waveapps.com/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
@@ -314,11 +332,18 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "manage bills", "multi-currency billing", "file taxes", "financial reporting"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Free", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["1 user, up to 1,000 invoices/yr, under $50k annual revenue"] },
+      { name: "Standard", priceMonthly: 20, priceAnnual: null, currency: "USD", keyLimits: ["3 users"] },
+      { name: "Professional", priceMonthly: 50, priceAnnual: null, currency: "USD", keyLimits: ["5 users, multi-currency, projects, purchase orders"] },
+      { name: "Premium", priceMonthly: 70, priceAnnual: null, currency: "USD", keyLimits: ["10 users"] },
+      { name: "Elite", priceMonthly: 150, priceAnnual: null, currency: "USD", keyLimits: ["Advanced inventory, warehouse management"] },
+      { name: "Ultimate", priceMonthly: 275, priceAnnual: null, currency: "USD", keyLimits: ["Advanced analytics, up to 3M records"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Free plan covers 1 user and up to 1,000 invoices/year for businesses under $50,000 annual revenue. Extra users cost $3/user/mo ($2.50 annually) on paid plans.",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "Multi-currency invoicing",
@@ -360,9 +385,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.zoho.com/us/books/pricing/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator", "purchase-order-generator", "currency-converter"],
   },
@@ -383,11 +408,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "accept online payments", "track expenses", "client management", "send proposals"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Free (hosted)", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["5 clients, unlimited invoices"] },
+      { name: "Pro (1 user)", priceMonthly: 14, priceAnnual: 140, currency: "USD", keyLimits: ["Scales per user, up to $300/mo for 100 users"] },
+      { name: "Enterprise (1-2 users)", priceMonthly: 18, priceAnnual: null, currency: "USD", keyLimits: ["Scales per user tier, up to $300/mo for 51-100 users"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Self-hosted edition is always free and unlimited. The hosted Free plan is capped at 5 clients with unlimited invoices. Paid hosted plans scale by user count.",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "Self-hosted (free, open-source) or hosted options",
@@ -428,9 +457,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://invoiceninja.com/pricing-plans/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator", "freelance-contract-generator"],
   },
@@ -452,11 +481,16 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "send contracts", "client management", "accept online payments", "track time", "send proposals"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Basic", priceMonthly: 15, priceAnnual: 9, currency: "USD", keyLimits: ["Per user; time tracking, tasks, unlimited projects/clients"] },
+      { name: "Essentials", priceMonthly: 25, priceAnnual: 19, currency: "USD", keyLimits: ["Adds invoices, payments, proposals, contracts, client portal"] },
+      { name: "Premium", priceMonthly: 39, priceAnnual: 29, currency: "USD", keyLimits: ["Adds project insights, Gantt view, deals pipeline"] },
+      { name: "Elite", priceMonthly: 59, priceAnnual: 49, currency: "USD", keyLimits: ["Minimum 3 users; custom permissions, Xero integration"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier — 7-day full-access free trial. Priced per user; annual billing cuts the per-user rate by roughly 25-40%.",
+    startingPrice: 15,
+    currency: "USD",
 
     keyFeatures: [
       "Contracts and e-signatures",
@@ -494,9 +528,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.hellobonsai.com/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "freelance-contract-generator", "receipt-generator"],
   },
@@ -517,11 +551,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["track time", "send invoices", "project budgeting", "team reporting"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Free", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["1 seat, 2 projects"] },
+      { name: "Teams", priceMonthly: 9, priceAnnual: 108, currency: "USD", keyLimits: ["Per seat, billed annually; usage-based fees may apply above seat rate"] },
+      { name: "Enterprise", priceMonthly: 14, priceAnnual: 168, currency: "USD", keyLimits: ["Per seat, billed annually"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Free plan is capped at 1 active seat and 2 active projects. Paid tiers are priced per seat with a 20% discount for annual billing; the Forecast resource-scheduling add-on costs an extra $5/person/month.",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "Time tracking with desktop/mobile timers",
@@ -559,9 +597,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.getharvest.com/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
@@ -583,11 +621,16 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["manage bills", "send invoices", "approve payments", "manage vendors", "accounts payable automation"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Essentials", priceMonthly: 45, priceAnnual: null, currency: "USD", keyLimits: ["Per user"] },
+      { name: "Team", priceMonthly: 55, priceAnnual: null, currency: "USD", keyLimits: ["Per user"] },
+      { name: "Corporate", priceMonthly: 89, priceAnnual: null, currency: "USD", keyLimits: ["Per user; distinguishes full vs. approver-only users"] },
+      { name: "Enterprise", priceMonthly: null, priceAnnual: null, currency: "USD", keyLimits: ["Custom quote for multi-entity/complex organizations"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier for core AP/AR automation (BILL Spend & Expense, a separate product, is free). Beyond the per-user subscription, ACH runs ~$0.49-0.59/payment, checks ~$1.99, card payments ~2.9%.",
+    startingPrice: 45,
+    currency: "USD",
 
     keyFeatures: [
       "Accounts payable and receivable automation",
@@ -625,9 +668,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.bill.com/product/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "purchase-order-generator", "receipt-generator"],
   },
@@ -649,11 +692,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "manage bills", "file taxes", "financial reporting"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Start", priceMonthly: 19, priceAnnual: null, currency: "USD", keyLimits: ["Core invoicing and expense tracking"] },
+      { name: "Standard", priceMonthly: 43, priceAnnual: null, currency: "USD", keyLimits: ["Adds bill management, cash flow forecasting"] },
+      { name: "Plus", priceMonthly: 62, priceAnnual: null, currency: "USD", keyLimits: ["Adds inventory, multi-currency"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No permanent free tier — introductory offer of 1-2 months free for new customers, then standard monthly rate. Plan names/prices differ by country (UK uses Start/Standard/Plus in GBP) — confirm the right regional page for your market.",
+    startingPrice: 19,
+    currency: "USD",
 
     keyFeatures: [
       "Double-entry accounting",
@@ -691,9 +738,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.sage.com/en-us/sage-business-cloud/accounting/pricing/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "purchase-order-generator", "receipt-generator", "tax-calculator"],
   },
@@ -701,7 +748,7 @@ export const INVOICING_APPS: AppListing[] = [
     id: "freeagent",
     name: "FreeAgent",
     // DRAFT - review before publish
-    tagline: "One simple plan for UK sole traders and small companies handling Self Assessment and MTD.",
+    tagline: "UK accounting priced by business type, handling Self Assessment and Making Tax Digital.",
     logoUrl: "VERIFY",
     website: "https://www.freeagent.com",
 
@@ -715,11 +762,16 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "file taxes", "time tracking", "project tracking"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Landlords", priceMonthly: 10, priceAnnual: 100, currency: "GBP", keyLimits: ["Excl. VAT"] },
+      { name: "Sole Trader", priceMonthly: 19, priceAnnual: 190, currency: "GBP", keyLimits: ["Excl. VAT"] },
+      { name: "Partnerships/LLP", priceMonthly: 27, priceAnnual: 270, currency: "GBP", keyLimits: ["Excl. VAT"] },
+      { name: "Limited Company", priceMonthly: 33, priceAnnual: 330, currency: "GBP", keyLimits: ["Excl. VAT"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier at list price, but often free for customers who bank with NatWest, RBS, Ulster Bank, or Mettle — confirm current bank partnerships. 30-day free trial otherwise, with a common 50%-off introductory rate for the first 6 or 12 months.",
+    startingPrice: 10,
+    currency: "GBP",
 
     keyFeatures: [
       "Self Assessment and Making Tax Digital tools (UK)",
@@ -754,9 +806,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.freeagent.com/pricing/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator", "tax-calculator"],
   },
@@ -777,11 +829,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "basic bookkeeping", "financial reporting"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "TrulySmall Invoices", priceMonthly: 8.99, priceAnnual: null, currency: "USD", keyLimits: ["Invoicing only, no bookkeeping"] },
+      { name: "TrulySmall Accounting", priceMonthly: 20, priceAnnual: 216, currency: "USD", keyLimits: ["Simple bookkeeping, income/expense tracking, sales tax"] },
+      { name: "Kashoo", priceMonthly: 30, priceAnnual: 324, currency: "USD", keyLimits: ["Multi-currency, unlimited users, broader accounting features"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier — 14-day free trial. Kashoo's product line now spans three flat-rate plans (TrulySmall Invoices/Accounting plus full Kashoo) rather than a single plan.",
+    startingPrice: 8.99,
+    currency: "USD",
 
     keyFeatures: [
       "Simple double-entry bookkeeping",
@@ -818,9 +874,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://kashoo.com/pricing/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
@@ -841,11 +897,16 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "accept online payments", "basic expense tracking"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Free", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["5 invoices/month, 3 saved clients, no team members"] },
+      { name: "Basic", priceMonthly: 9.99, priceAnnual: null, currency: "USD", keyLimits: ["100 invoices/month, 25 clients, up to 2 team members"] },
+      { name: "Professional", priceMonthly: 19.99, priceAnnual: null, currency: "USD", keyLimits: ["250 invoices/month, 100 clients, up to 10 team members"] },
+      { name: "Enterprise", priceMonthly: 29.99, priceAnnual: null, currency: "USD", keyLimits: ["Unlimited invoices/clients, up to 25 team members"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Free plan caps out at 5 invoices/month and 3 saved clients, no credit card required — beyond that you need a paid tier.",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "Multiple business unit support",
@@ -882,9 +943,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://invoicely.com/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
@@ -905,11 +966,16 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track time", "accept online payments", "estimates"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Free", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["Up to 5 clients"] },
+      { name: "Basic", priceMonthly: 19, priceAnnual: 192, currency: "USD", keyLimits: ["Up to 50 clients, financial reports"] },
+      { name: "Pro", priceMonthly: 29, priceAnnual: 300, currency: "USD", keyLimits: ["Up to 250 clients, 5 team members, own-domain email"] },
+      { name: "Plus", priceMonthly: 42, priceAnnual: null, currency: "USD", keyLimits: ["Up to 1,000 clients, 10 team members"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Free plan is capped at 5 clients but includes unlimited invoices, estimates, time tracking, expense tracking, and recurring billing.",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "Recurring invoices and subscriptions",
@@ -947,9 +1013,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.hiveage.com/pricing/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
@@ -1037,11 +1103,13 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "accept online payments", "estimates", "recurring billing"],
     pricingModel: "free",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Free", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["Up to 2 users, 3 projects, 500 invoices/year"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Entirely free — no paid tier exists. Capped at 2 users, 3 projects, and 500 invoices per year, with \"Powered by Zoho Invoice\" branding on invoices.",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "Completely free invoicing (no paid tier)",
@@ -1079,9 +1147,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.zoho.com/us/invoice/pricing/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
@@ -1103,11 +1171,13 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "accept online payments", "one-off client billing"],
     pricingModel: "free",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Pay-as-you-go", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["No monthly/setup fee; per-transaction processing fee applies when paid"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Free to send — no subscription. Fees apply only when an invoice is paid: ~2.99% + $0.49 for card payments, ~1.99% + $0.49 for PayPal Checkout/Venmo (US rates), plus 1.5% for international transactions.",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "No monthly fee — pay only per transaction",
@@ -1144,9 +1214,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.paypal.com/us/business/paypal-business-fees",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator", "currency-converter"],
   },
@@ -1168,11 +1238,14 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "accept online payments", "recurring billing", "developer-integrated billing"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Invoicing Starter", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["0.4% fee per paid invoice"] },
+      { name: "Invoicing Plus", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["0.5% fee per paid invoice, capped at $2"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No monthly fee on either tier — you only pay the 0.4-0.5% invoicing fee (capped at $2/invoice on Plus) when an invoice is paid, on top of standard Stripe Payments processing fees (~2.9% + $0.30 for cards).",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "Pay-as-you-go pricing (no monthly fee)",
@@ -1213,9 +1286,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://stripe.com/invoicing/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator", "currency-converter"],
   },
@@ -1243,11 +1316,14 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "accept online payments", "recurring billing", "estimates"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Free", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["Unlimited invoices, estimates, contracts; standard processing rates"] },
+      { name: "Plus", priceMonthly: 20, priceAnnual: null, currency: "USD", keyLimits: ["Milestone payments, custom templates, discounted processing rates"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Free plan sends unlimited invoices/estimates/contracts with no monthly fee — standard card processing rates apply per transaction. Plus ($20/mo) discounts those processing rates.",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "Free unlimited invoices on the Free plan",
@@ -1285,9 +1361,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://squareup.com/us/en/invoices/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
@@ -1308,11 +1384,16 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["manage bills", "send invoices", "accounts payable automation", "manage vendors"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Go", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["5 free ACH transfers/month, then $0.50 each"] },
+      { name: "Core", priceMonthly: 25, priceAnnual: 20, currency: "USD", keyLimits: ["20 free ACH transfers/month"] },
+      { name: "Boost", priceMonthly: 55, priceAnnual: 44, currency: "USD", keyLimits: ["50 free ACH transfers/month"] },
+      { name: "Unlimited", priceMonthly: 80, priceAnnual: 64, currency: "USD", keyLimits: ["Unlimited free ACH transfers, unlimited users"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Go plan is free with 5 ACH transfers/month included (then $0.50 each). Card payments cost ~2.9%, instant transfers 1% (capped at $75).",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "Free ACH bank transfers for bill pay",
@@ -1350,9 +1431,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://meliopayments.com/pricing/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "purchase-order-generator"],
   },
@@ -1571,11 +1652,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "file taxes", "financial reporting", "manage bills"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
-    hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    pricing: [
+      { name: "Small", priceMonthly: 16, priceAnnual: null, currency: "GBP", keyLimits: ["Bank automation, invoicing, stock tracking, integrations"] },
+      { name: "Medium", priceMonthly: 34, priceAnnual: null, currency: "GBP", keyLimits: ["Adds MTD VAT, purchase orders, CIS reporting"] },
+      { name: "Large", priceMonthly: 44, priceAnnual: null, currency: "GBP", keyLimits: ["Adds project accounting, multi-currency, expense claims"] },
+    ],
+    hasFreeTier: true,
+    freeTierReality: "Free plans exist for sole traders and landlords doing MTD income-tax filing only (no invoicing/bank feeds). Full accounting (Small/Medium/Large above) has no free tier — 30-day trial, with 50% off the first 3 months.",
+    startingPrice: 0,
+    currency: "GBP",
 
     keyFeatures: [
       "Making Tax Digital VAT submission",
@@ -1610,9 +1695,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.clearbooks.co.uk/pricing/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator", "tax-calculator"],
   },
@@ -1633,11 +1718,14 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "file taxes", "basic bookkeeping"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Pandle (Free)", priceMonthly: 0, priceAnnual: 0, currency: "GBP", keyLimits: ["Bank feeds, receipt uploads, projects, unlimited team members"] },
+      { name: "Pandle Pro", priceMonthly: 5, priceAnnual: null, currency: "GBP", keyLimits: ["Excl. VAT — adds MTD VAT/Income Tax submission, stock control, payment processing"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Free plan genuinely never expires and includes bank feeds and unlimited team members. Pro (£5+VAT/mo) unlocks MTD submissions and stock control; a 14-day Pro trial is available on the free plan.",
+    startingPrice: 0,
+    currency: "GBP",
 
     keyFeatures: [
       "Free core bookkeeping, forever",
@@ -1672,9 +1760,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.pandle.com/pricing/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
@@ -1695,11 +1783,14 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "file taxes", "basic bookkeeping"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "XS", priceMonthly: 0, priceAnnual: 0, currency: "GBP", keyLimits: ["Up to 200 ledger entries/year"] },
+      { name: "S", priceMonthly: null, priceAnnual: 60, currency: "GBP", keyLimits: ["201-500 ledger entries/year, excl. VAT"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "XS tier is genuinely free for up to 200 ledger entries/year with full features (professional invoicing, banking automation, MTD VAT returns). Accounts over 40,000 entries/year need an enterprise plan; automated bank feeds cost an extra £15+VAT/year.",
+    startingPrice: 0,
+    currency: "GBP",
 
     keyFeatures: [
       "Free plan for low ledger-entry volumes",
@@ -1734,9 +1825,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.quickfile.co.uk/home/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
@@ -1757,11 +1848,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "file taxes", "payroll", "accountant support"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Crunch Free", priceMonthly: 0, priceAnnual: 0, currency: "GBP", keyLimits: ["Free bookkeeping software, no accountant included"] },
+      { name: "Crunch Pro", priceMonthly: 10, priceAnnual: null, currency: "GBP", keyLimits: ["Excl. VAT — full software, MTD ITSA, VAT returns"] },
+      { name: "Crunch Premium", priceMonthly: 21.6, priceAnnual: null, currency: "GBP", keyLimits: ["Excl. VAT — adds a named accountant; accountancy-service tiers for limited companies run higher, starting around £185+VAT/mo — confirm current figure"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Crunch Free covers basic bookkeeping software only. Paid tiers add MTD/VAT filing (Pro) and a named accountant (Premium and up) — full accountancy-service pricing varies by business type and requires a custom quote.",
+    startingPrice: 0,
+    currency: "GBP",
 
     keyFeatures: [
       "Free bookkeeping tier",
@@ -1796,9 +1891,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.crunch.co.uk/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "tax-calculator", "salary-calculator"],
   },
@@ -1819,11 +1914,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "file taxes", "business banking"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Up to £750/mo deposits", priceMonthly: 3, priceAnnual: null, currency: "GBP", keyLimits: ["Business account, invoicing, bookkeeping, tax estimates"] },
+      { name: "£750-£7,500/mo deposits", priceMonthly: 9, priceAnnual: null, currency: "GBP", keyLimits: ["Same features, higher deposit tier"] },
+      { name: "Unlimited deposits", priceMonthly: 18, priceAnnual: null, currency: "GBP", keyLimits: ["Same features, no deposit cap"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No permanent free tier — first 3 months free for new customers, then the monthly fee applies based on deposit volume. Additional per-transaction fees apply (ATM withdrawals, foreign transactions, Post Office/PayPoint deposits).",
+    startingPrice: 3,
+    currency: "GBP",
 
     keyFeatures: [
       "Business current account with built-in bookkeeping",
@@ -1861,9 +1960,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://countingup.com/small-businesses/pricing/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
@@ -1883,13 +1982,18 @@ export const INVOICING_APPS: AppListing[] = [
     regionNotes:
       "UK sole traders only; also sold to accountants as a client-management tool at a separate per-client price — VERIFY which pricing page applies to an individual sole-trader user vs. an accountant.",
     useCases: ["track expenses", "file taxes", "basic bookkeeping", "self assessment"],
-    pricingModel: "freemium",
+    pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
-    hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    pricing: [
+      { name: "MTD Bridging", priceMonthly: 16.99, priceAnnual: 49.99, currency: "GBP", keyLimits: ["Keep your own spreadsheets, submit MTD quarterly updates"] },
+      { name: "Bookkeeping", priceMonthly: 16.99, priceAnnual: 99.99, currency: "GBP", keyLimits: ["Automatic bookkeeping, tax estimates, invoicing"] },
+      { name: "MTD Filing", priceMonthly: 21.99, priceAnnual: 129.99, currency: "GBP", keyLimits: ["Adds quarterly MTD updates and year-end declarations"] },
+      { name: "Full", priceMonthly: null, priceAnnual: 159.99, currency: "GBP", keyLimits: ["Adds full Self Assessment submission to HMRC"] },
+    ],
+    hasFreeTier: false,
+    freeTierReality: "No permanent free tier — 14-day free trial, no card details required. This is the consumer/sole-trader pricing; Coconut also sells a separate per-client plan to accountants (~£5.50/client/mo) that isn't reflected here.",
+    startingPrice: 16.99,
+    currency: "GBP",
 
     keyFeatures: [
       "Income and expense tracking built for sole traders",
@@ -1924,9 +2028,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.getcoconut.com/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "tax-calculator"],
   },
@@ -2010,11 +2114,14 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "manage bills", "inventory management", "file taxes", "financial reporting"],
     pricingModel: "one-time",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Silver (perpetual)", priceMonthly: null, priceAnnual: 22500, currency: "INR", keyLimits: ["Single-user, excl. 18% GST; one-time cost, ~₹750/mo rental option"] },
+      { name: "Gold (perpetual)", priceMonthly: null, priceAnnual: 67500, currency: "INR", keyLimits: ["Multi-user, excl. 18% GST; one-time cost, ~₹2,250/mo rental option"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier — 7-day trial. Perpetual license is the primary model; optional TSS support/updates subscription costs ₹4,500/yr (Silver) or ₹13,500/yr (Gold), excl. GST.",
+    startingPrice: 22500,
+    currency: "INR",
 
     keyFeatures: [
       "GST-compliant accounting and billing",
@@ -2049,9 +2156,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://tallysolutions.com/tally-monthly-subscription/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "purchase-order-generator"],
   },
@@ -2072,11 +2179,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "inventory management", "mobile invoicing", "file taxes"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Free", priceMonthly: 0, priceAnnual: 0, currency: "INR", keyLimits: ["Basic billing, limited invoices/month"] },
+      { name: "Silver", priceMonthly: 33.25, priceAnnual: 399, currency: "INR", keyLimits: ["GST billing, inventory, basic reports"] },
+      { name: "Platinum", priceMonthly: 250, priceAnnual: null, currency: "INR", keyLimits: ["Advanced inventory, multi-user, business analytics — a Gold mid-tier also exists, exact price unconfirmed"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Free plan covers basic GST billing with capped monthly invoices. Yearly billing gets up to 20% off vs. monthly.",
+    startingPrice: 0,
+    currency: "INR",
 
     keyFeatures: [
       "GST billing and e-invoicing",
@@ -2111,9 +2222,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://mybillbook.in/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
@@ -2134,11 +2245,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "manage bills", "financial reporting", "client management", "file taxes"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Free", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["15 documents total, free forever"] },
+      { name: "Premium (Accounting)", priceMonthly: null, priceAnnual: 135, currency: "USD", keyLimits: ["Unlimited invoices, GST reports, multi-currency"] },
+      { name: "Premium (Sales CRM)", priceMonthly: null, priceAnnual: 135, currency: "USD", keyLimits: ["Lead tracking, sales pipeline"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Free plan allows 15 total documents (invoices/quotes/etc.), free forever with no card required. Full premium features are available on a free trial before you commit to the $135/yr plan; 35% savings vs. monthly billing.",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "GST-compliant invoicing",
@@ -2173,9 +2288,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.refrens.com/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "purchase-order-generator"],
   },
@@ -2196,11 +2311,14 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "manage bills", "inventory management", "file taxes", "financial reporting"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Startup (Free)", priceMonthly: 0, priceAnnual: 0, currency: "INR", keyLimits: ["1 user, up to 25 invoices, 100 customers, 25 products/services"] },
+      { name: "Paid", priceMonthly: 749, priceAnnual: 7499, currency: "INR", keyLimits: ["Removes free-plan caps; annual billing gets 2 months free"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Free Startup plan is capped at 1 user, 25 invoices, 100 customers, and 25 products/services — genuinely usable for a very small business, not a time-limited trial.",
+    startingPrice: 0,
+    currency: "INR",
 
     keyFeatures: [
       "GST-compliant invoicing and accounting",
@@ -2235,9 +2353,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://profitbooks.net/pricing/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
@@ -2258,11 +2376,17 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "run payroll", "file taxes", "financial reporting", "manage bills"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Solo", priceMonthly: null, priceAnnual: 63, currency: "AUD", keyLimits: ["Sole trader invoicing/expenses, intro price — regular price higher"] },
+      { name: "Business Lite", priceMonthly: null, priceAnnual: 315, currency: "AUD", keyLimits: ["Intro price, regular price higher"] },
+      { name: "Business Pro", priceMonthly: 70, priceAnnual: null, currency: "AUD", keyLimits: ["Payroll priced separately at ~$3/employee/mo"] },
+      { name: "AccountRight Plus", priceMonthly: 165, priceAnnual: null, currency: "AUD", keyLimits: ["Unlimited payroll included, job costing, inventory"] },
+      { name: "AccountRight Premier", priceMonthly: 195, priceAnnual: null, currency: "AUD", keyLimits: ["Multi-currency, advanced inventory"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier — free trial only. Plan names/prices have shifted repeatedly in the past two years (Essentials/AccountRight were restructured into Business Lite/Pro plus Solo); confirm the current lineup before trusting these figures long-term.",
+    startingPrice: 63,
+    currency: "AUD",
 
     keyFeatures: [
       "GST/BAS and Single Touch Payroll (Australia)",
@@ -2297,9 +2421,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.myob.com/au/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "salary-calculator", "tax-calculator"],
   },
@@ -2320,11 +2444,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "run payroll", "file taxes", "manage bills"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Accounting Starter", priceMonthly: null, priceAnnual: null, currency: "AUD", keyLimits: ["Introductory rate as low as $1/mo for 6 months; RRP not published"] },
+      { name: "Accounting Plus", priceMonthly: 24, priceAnnual: null, currency: "AUD", keyLimits: ["Unlimited invoices, bank reconciliation, GST tracking"] },
+      { name: "Accounting Premium", priceMonthly: null, priceAnnual: null, currency: "AUD", keyLimits: ["Confirm current price — not published in a self-serve comparison table"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier — 30-day free trial, plus a recurring $1/month-for-6-months promo on Starter for new customers. Unlimited users on every tier; Premium's exact RRP needs manual confirmation.",
+    startingPrice: 24,
+    currency: "AUD",
 
     keyFeatures: [
       "Modular pricing — add invoicing, payroll, GST/BAS as separate modules",
@@ -2359,9 +2487,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.reckon.com/au/accounting-software/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "salary-calculator"],
   },
@@ -2444,11 +2572,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "manage bills", "inventory management", "file taxes", "financial reporting"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Start", priceMonthly: 1375, priceAnnual: null, currency: "ZAR", keyLimits: ["Up to 2 users, 2 companies"] },
+      { name: "Core", priceMonthly: null, priceAnnual: null, currency: "ZAR", keyLimits: ["Up to 4 users, 4 companies — exact price not published, select options on-site"] },
+      { name: "Plus", priceMonthly: null, priceAnnual: null, currency: "ZAR", keyLimits: ["Up to 5 users, 5 companies — exact price not published, select options on-site"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "No free tier identified — VERIFY trial availability.",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier — sold via monthly or annual billing starting from R1,375/mo for the Start tier. Additional modules (payroll, etc.) cost R460-R725/mo extra.",
+    startingPrice: 1375,
+    currency: "ZAR",
 
     keyFeatures: [
       "Multi-user, multi-company licensing",
@@ -2483,9 +2615,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://shop.sage.co.za/product/sage-50-cloud-pastel-partner/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "purchase-order-generator"],
   },
@@ -2569,11 +2701,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "send contracts", "client management", "send proposals", "accept online payments"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Starter", priceMonthly: 36, priceAnnual: 29, currency: "USD", keyLimits: ["Annual rate shown per month; core CRM, invoicing, contracts"] },
+      { name: "Essentials", priceMonthly: 59, priceAnnual: 49, currency: "USD", keyLimits: ["Annual rate shown per month; adds automation, scheduling"] },
+      { name: "Premium", priceMonthly: 129, priceAnnual: 109, currency: "USD", keyLimits: ["Annual rate shown per month; adds advanced automation, multiple team members"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier — 30-day free trial, no credit card required. Prices shown are monthly rates; paying annually cuts the effective monthly cost by roughly 17-20%.",
+    startingPrice: 29,
+    currency: "USD",
 
     keyFeatures: [
       "Client CRM with pipeline/workflow automation",
@@ -2596,7 +2732,7 @@ export const INVOICING_APPS: AppListing[] = [
       "Popular in creative/event industries with an active community",
     ],
     cons: [
-      "Pricing has risen significantly in recent years — VERIFY current tiers before comparing",
+      "Pricing has risen significantly in recent years",
       "Not an accounting system — no ledgers or bank reconciliation",
       "Best value assumes you actually use the CRM/workflow features, not just invoicing",
     ],
@@ -2608,9 +2744,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.honeybook.com/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "freelance-contract-generator", "email-signature-generator"],
   },
@@ -2631,11 +2767,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "send contracts", "client management", "send proposals", "workflow automation"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Free (lifetime trial)", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["Up to 3 clients, full feature access"] },
+      { name: "Starter", priceMonthly: 20, priceAnnual: 200, currency: "USD", keyLimits: ["Annual price shown; includes 15% discount vs. monthly"] },
+      { name: "Premier", priceMonthly: 40, priceAnnual: 400, currency: "USD", keyLimits: ["Annual price shown; adds automated workflows, Zapier, scheduling"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Free plan is a genuine lifetime trial (not time-limited) capped at 3 clients with full feature access. Extra brands cost $10/mo each; additional users start at $25/mo for 4-10 users.",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "Highly customizable workflow automation",
@@ -2670,9 +2810,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.dubsado.com/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "freelance-contract-generator"],
   },
@@ -2693,11 +2833,13 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "send contracts", "client management", "send proposals", "scheduling"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "17hats", priceMonthly: 60, priceAnnual: 600, currency: "USD", keyLimits: ["Same features on monthly, yearly, or bi-yearly billing"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "No free tier — 7-day free trial only, single all-inclusive paid plan.",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier — 7-day free trial only, single all-inclusive paid plan. Frequent promotional pricing (e.g. 50% off the first year) is common — confirm current promo before quoting list price.",
+    startingPrice: 60,
+    currency: "USD",
 
     keyFeatures: [
       "Single all-inclusive plan — same features regardless of billing cycle",
@@ -2732,9 +2874,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://17hats.com/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "freelance-contract-generator"],
   },
@@ -2755,11 +2897,16 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "file taxes", "financial reporting"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Free", priceMonthly: 0, priceAnnual: 0, currency: "EUR", keyLimits: ["Limited invoices/month, no bookkeeping"] },
+      { name: "Invoices", priceMonthly: 11.9, priceAnnual: 106.8, currency: "EUR", keyLimits: ["Monthly rate; 24-month contract drops to €8.90/mo, 12-month to €9.90/mo"] },
+      { name: "Accounting", priceMonthly: 12.9, priceAnnual: null, currency: "EUR", keyLimits: ["Adds bookkeeping, VAT reporting, bank reconciliation"] },
+      { name: "Accounting Pro", priceMonthly: null, priceAnnual: null, currency: "EUR", keyLimits: ["Adds payroll/advanced reporting — exact price not confirmed"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Free plan is capped at a small number of invoices/month with no bookkeeping features. Prices shown are for the German (.de) market and the flexible 1-month contract; 12/24-month contracts lower the price but require 14 days' notice to cancel at term end.",
+    startingPrice: 0,
+    currency: "EUR",
 
     keyFeatures: [
       "Invoicing and recurring billing",
@@ -2794,9 +2941,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://sevdesk.de/preise/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
@@ -2817,11 +2964,16 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "file taxes", "payroll", "financial reporting"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "S", priceMonthly: 3.45, priceAnnual: null, currency: "EUR", keyLimits: ["Promotional price (50% off regular €6.90/mo, permanent for new customers); basic invoicing"] },
+      { name: "M", priceMonthly: null, priceAnnual: null, currency: "EUR", keyLimits: ["Adds more features than S — exact promo price not confirmed"] },
+      { name: "L", priceMonthly: 9.95, priceAnnual: null, currency: "EUR", keyLimits: ["Promotional price (regular €19.90/mo); adds VAT reporting, more automation"] },
+      { name: "XL", priceMonthly: 14.95, priceAnnual: null, currency: "EUR", keyLimits: ["All S/M/L features plus advanced/special functions"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier. Prices shown are the current promotional rates (new-customer discounts on S and L are described as \"permanent\"); optional payroll module costs an extra €9.40-€104.90/mo depending on employee count.",
+    startingPrice: 3.45,
+    currency: "EUR",
 
     keyFeatures: [
       "Tiered packages (S/M/L/XL) by feature depth",
@@ -2856,9 +3008,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.lexware.de/preise/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator", "salary-calculator"],
   },
@@ -2879,11 +3031,16 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "file taxes", "financial reporting"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Free", priceMonthly: 0, priceAnnual: 0, currency: "EUR", keyLimits: ["Excl. VAT"] },
+      { name: "Starter", priceMonthly: 15, priceAnnual: 162, currency: "EUR", keyLimits: ["Excl. VAT; up to 20 bank transactions/month, ~10% off paying annually"] },
+      { name: "Growth", priceMonthly: 28, priceAnnual: 302, currency: "EUR", keyLimits: ["Excl. VAT; up to 50 bank transactions/month"] },
+      { name: "Professional", priceMonthly: 39, priceAnnual: 421, currency: "EUR", keyLimits: ["Excl. VAT; unlimited bank transactions"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Free plan exists at €0 (exact feature limits VERIFY-worth double-checking on-site) — paid tiers are differentiated purely by monthly bank-transaction volume (20/50/unlimited). No long-term contract on any tier.",
+    startingPrice: 0,
+    currency: "EUR",
 
     keyFeatures: [
       "Pricing tiered by monthly bank-transaction volume",
@@ -2918,9 +3075,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.moneybird.nl/prijzen/",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
@@ -2930,22 +3087,26 @@ export const INVOICING_APPS: AppListing[] = [
     // DRAFT - review before publish
     tagline: "Dutch-rooted cloud ERP-lite covering accounting, CRM, and project management for growing businesses.",
     logoUrl: "VERIFY",
-    website: "https://www.exact.com/us/software/exact-online",
+    website: "https://www.exact.com/nl/producten/accountancy",
 
     category: "invoicing-accounting",
     subCategory: "full-accounting",
     industries: ["retail", "construction", "consulting"],
     businessSizes: ["small", "medium"],
     regions: ["europe", "global"],
-    regionNotes: "Strong presence in the Netherlands and broader EU; pricing and currency shown vary significantly by country — VERIFY the correct regional pricing page and currency before quoting a figure.",
+    regionNotes: "Strong presence in the Netherlands and broader EU; figures below are Dutch (EUR) rates as of April 2026 — non-Dutch markets may see different pricing/currency, confirm the regional page for your target country.",
     useCases: ["financial reporting", "manage bills", "project management", "file taxes", "erp"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Boekhouden Plus", priceMonthly: 97.5, priceAnnual: null, currency: "EUR", keyLimits: ["Excl. VAT; for businesses processing more than 5 sales invoices/month"] },
+      { name: "Boekhouden Professional", priceMonthly: 146, priceAnnual: null, currency: "EUR", keyLimits: ["Excl. VAT; for more than 100 sales invoices/month"] },
+      { name: "Premium", priceMonthly: 299, priceAnnual: null, currency: "EUR", keyLimits: ["Excl. VAT; adds CRM/project management modules, from €299/mo"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No free tier — free trial available. Extra users cost €14-€33/mo and an extra administration (company) costs €14-€20/mo depending on package. These are Dutch-market rates (April 2026); other countries/currencies differ.",
+    startingPrice: 97.5,
+    currency: "EUR",
 
     keyFeatures: [
       "Full accounting with CRM and project management modules",
@@ -2980,9 +3141,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
-    pricingSourceUrl: "https://www.exact.com/us/software/exact-online/prices",
-    lastReviewed: "",
+    pricingVerifiedDate: "2026-07-15",
+    pricingSourceUrl: "https://www.exact.com/nl/producten/accountancy/jaarrekening/features-en-prijzen",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "purchase-order-generator", "tax-calculator"],
   },
@@ -3003,11 +3164,16 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "manage bills", "inventory management", "financial reporting", "run payroll"],
     pricingModel: "subscription",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Plus", priceMonthly: 7.5, priceAnnual: null, currency: "EUR", keyLimits: ["Excl. VAT; basic invoicing"] },
+      { name: "Basic", priceMonthly: 14.5, priceAnnual: null, currency: "EUR", keyLimits: ["Excl. VAT; adds accounting features"] },
+      { name: "Standard", priceMonthly: 29.5, priceAnnual: null, currency: "EUR", keyLimits: ["Excl. VAT; adds inventory, more automation"] },
+      { name: "Premium", priceMonthly: 99.5, priceAnnual: null, currency: "EUR", keyLimits: ["Excl. VAT; flat rate, priority support"] },
+    ],
     hasFreeTier: false,
-    freeTierReality: "No permanent free tier identified — 14-day free trial, no card required.",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "No permanent free tier — 14-day free trial, no card required. Add-ons cost extra: HR from €1.50/employee/mo, Inventory from €25/mo, POS from €25/store/mo, SII from €30/mo, extra Platform users €10/mo each.",
+    startingPrice: 7.5,
+    currency: "EUR",
 
     keyFeatures: [
       "Accounting, invoicing, and inventory in tiered plans",
@@ -3042,9 +3208,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www.holded.com/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "purchase-order-generator"],
   },
@@ -3127,11 +3293,14 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["basic bookkeeping", "send invoices", "financial reporting", "multi-business accounting"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Desktop Edition", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["Free, no locked features, unlimited businesses on one computer"] },
+      { name: "Cloud Edition", priceMonthly: 59, priceAnnual: null, currency: "USD", keyLimits: ["Flat rate — not per user or per business"] },
+    ],
     hasFreeTier: true,
-    freeTierReality: "VERIFY",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+    freeTierReality: "Desktop Edition is entirely free with no locked features or business-count limit. Cloud Edition is a flat $59/mo regardless of user or business count; a self-hosted Server Edition is also available.",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "Free Desktop Edition with no locked features",
@@ -3166,9 +3335,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: "VERIFY",
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://www2.manager.io/cloud/pricing",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "purchase-order-generator"],
   },
@@ -3189,12 +3358,15 @@ export const INVOICING_APPS: AppListing[] = [
     useCases: ["send invoices", "track expenses", "basic bookkeeping", "financial reporting"],
     pricingModel: "freemium",
 
-    pricing: [{ name: "VERIFY", priceMonthly: "VERIFY", priceAnnual: "VERIFY", currency: "VERIFY", keyLimits: ["VERIFY"] }],
+    pricing: [
+      { name: "Self-Hosted (Standard)", priceMonthly: 0, priceAnnual: 0, currency: "USD", keyLimits: ["Free; production use capped at 2 users, 1 company, 1,000 invoices"] },
+      { name: "Cloud", priceMonthly: 12, priceAnnual: 96, currency: "USD", keyLimits: ["Annual rate ~$8/mo; managed hosting, no self-hosting caps"] },
+    ],
     hasFreeTier: true,
     freeTierReality:
-      "Self-hosted Standard edition is free, but production use is limited to 2 users, 1 company, and 1,000 invoices — VERIFY current limits before relying on this.",
-    startingPrice: "VERIFY",
-    currency: "VERIFY",
+      "Self-hosted Standard edition is free and source-available, but production use is capped at 2 users, 1 company, and 1,000 invoices. Licensed under the Business Source License (converts to GPLv3 four years after each version's release).",
+    startingPrice: 0,
+    currency: "USD",
 
     keyFeatures: [
       "Self-hosted (source-available) or managed cloud hosting",
@@ -3229,9 +3401,9 @@ export const INVOICING_APPS: AppListing[] = [
     affiliateUrl: null,
     hasAffiliateProgram: true,
 
-    pricingVerifiedDate: "",
+    pricingVerifiedDate: "2026-07-15",
     pricingSourceUrl: "https://akaunting.com/open-source-accounting-software",
-    lastReviewed: "",
+    lastReviewed: "2026-07-15",
 
     relatedUtilityAppsTools: ["invoice-generator", "receipt-generator"],
   },
