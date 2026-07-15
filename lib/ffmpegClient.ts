@@ -97,11 +97,26 @@ export async function runFFmpeg(file: File, opts: RunOptions): Promise<RunResult
   };
   if (opts.onProgress) ff.on("progress", handler);
 
+  // Capture FFmpeg's own log lines so a failure can surface the real reason
+  // (e.g. "no audio stream", "Cannot allocate memory") instead of just an
+  // exit code.
+  const logLines: string[] = [];
+  const logHandler = ({ message }: { message: string }) => {
+    logLines.push(message);
+    if (logLines.length > 40) logLines.shift();
+  };
+  ff.on("log", logHandler);
+
   try {
     await ff.writeFile(opts.inputName, await fetchFile(file));
     const exitCode = await ff.exec(opts.args);
     if (exitCode !== 0) {
-      throw new Error(`FFmpeg exited with code ${exitCode}`);
+      const detail = logLines.slice(-6).join(" ").trim();
+      throw new Error(
+        detail
+          ? `FFmpeg exited with code ${exitCode}: ${detail}`
+          : `FFmpeg exited with code ${exitCode}`
+      );
     }
     const data = await ff.readFile(opts.outputName);
     const bytes = data instanceof Uint8Array ? data : new TextEncoder().encode(String(data));
@@ -109,6 +124,7 @@ export async function runFFmpeg(file: File, opts: RunOptions): Promise<RunResult
     return { blob, durationMs: performance.now() - started };
   } finally {
     if (opts.onProgress) ff.off("progress", handler);
+    ff.off("log", logHandler);
     // Best-effort cleanup; ignore "file not found" errors.
     try { await ff.deleteFile(opts.inputName); } catch { /* ignore */ }
     try { await ff.deleteFile(opts.outputName); } catch { /* ignore */ }
