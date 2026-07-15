@@ -213,6 +213,325 @@ before publishing.
   - [ ] Affiliate program confirmation
   - [ ] pricingVerifiedDate set
 
+## Batch 2 — 32 additional listings
+
+Same rules as above. A few of these need special attention beyond the usual
+pricing check — flagged inline.
+
+- [ ] **Square Invoices** — https://squareup.com/us/en/invoices/pricing
+  - [ ] Pricing tiers, prices, currency (Free / Plus / Premium + per-transaction rates)
+  - [ ] Free tier reality
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Melio** — https://meliopayments.com/pricing/
+  - [ ] Pricing tiers, prices, currency (Go/Core/Boost/Unlimited)
+  - [ ] Free tier reality — confirm free ACH scope
+  - [ ] Starting price
+  - [ ] Integrations list (QuickBooks/Xero sync)
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Digits** — https://digits.com
+  - [ ] **No public pricing page found in research** — confirm whether one
+        exists now, or whether pricing is genuinely sales-assisted only
+  - [ ] Pricing tiers, prices, currency
+  - [ ] Free tier reality (likely none — confirm)
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Oracle NetSuite** — https://www.netsuite.com/portal/products/erp/order-management/pricing.shtml
+  - [ ] **No public pricing exists — custom quote only.** Decide how (or
+        whether) to represent a starting price on the public listing page;
+        do not publish a specific number without direct confirmation from
+        Oracle sales
+  - [ ] Free tier reality (confirm: sales-led demo, not self-serve trial)
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Sage Intacct** — https://www.sage.com/en-us/sage-business-cloud/intacct/pricing/
+  - [ ] **No public pricing exists — custom quote only.** Same handling
+        question as NetSuite above
+  - [ ] Free tier reality
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Clear Books** — https://www.clearbooks.co.uk/pricing/
+  - [ ] Pricing tiers, prices, currency (Small/Medium/Large, £6-£32.80 range with intro discounts — confirm current discount status)
+  - [ ] Free tier reality
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Pandle** — https://www.pandle.com/pricing/
+  - [ ] Pricing tiers, prices, currency (free forever core + Pandle Pro ~£5-6.64/mo)
+  - [ ] Free tier reality — exact scope of the free plan
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **QuickFile** — https://www.quickfile.co.uk/home/pricing
+  - [ ] Pricing tiers, prices, currency (free by ledger-entry volume, £60/yr Large/Extra Large)
+  - [ ] Free tier reality — exact ledger-entry cap
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Crunch** — https://www.crunch.co.uk/pricing
+  - [ ] Pricing tiers, prices, currency (Free / Pro ~£10+VAT / Premium ~£21.60+VAT — confirm current figures)
+  - [ ] Free tier reality
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Countingup** — https://countingup.com/small-businesses/pricing/
+  - [ ] Pricing tiers, prices, currency (tiered by monthly deposit volume: ~£3/£9/£18)
+  - [ ] Free tier reality (none — confirm intro free-period length)
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Coconut** — https://www.getcoconut.com/pricing
+  - [ ] **Confirm which pricing applies** — research surfaced accountant/practice
+        pricing (£5.50/client/mo), not a clear consumer sole-trader plan; find
+        the correct end-user pricing page
+  - [ ] Pricing tiers, prices, currency
+  - [ ] Free tier reality
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Vyapar** — https://vyaparapp.in/pricing
+  - [ ] **Confirm region** — Vyapar also runs a separate Pakistan product
+        (vyaparpk.com) with its own pricing; make sure this listing matches
+        the India-market page
+  - [ ] Pricing tiers, prices, currency
+  - [ ] Free tier reality
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **TallyPrime** — https://tallysolutions.com/tally-monthly-subscription/
+  - [ ] Pricing tiers, prices, currency (Silver/Gold; perpetual license ~₹18,000/₹54,000 vs. monthly subscription — pick one model and document both if relevant)
+  - [ ] Free tier reality (none — confirm trial availability)
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **myBillBook** — https://mybillbook.in/pricing
+  - [ ] Pricing tiers, prices, currency (basic from ~Rs.399/yr)
+  - [ ] Free tier reality
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Refrens** — https://www.refrens.com/pricing
+  - [ ] Pricing tiers, prices, currency (free 15 docs + ~$135/yr premium)
+  - [ ] Free tier reality — exact document/feature cap
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **ProfitBooks** — https://profitbooks.net/pricing/
+  - [ ] Pricing tiers, prices, currency (free single-user plan + ~Rs.749/mo or Rs.7,499/yr)
+  - [ ] Free tier reality — exact invoice/customer/product caps
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **MYOB** — https://www.myob.com/au/pricing
+  - [ ] **Confirm current plan names** — MYOB's Australian plan lineup/pricing
+        has changed multiple times recently (Solo/Business Lite/Pro/AccountRight
+        Plus/Premier); verify against the live page, not this note
+  - [ ] Pricing tiers, prices, currency
+  - [ ] Free tier reality (none — confirm trial length)
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Reckon One** — https://www.reckon.com/au/accounting-software/
+  - [ ] **Find the exact modular-pricing page** — search results were
+        inconsistent (~$10-$46/mo across sources); confirm current structure
+  - [ ] Pricing tiers, prices, currency
+  - [ ] Free tier reality
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Saasu** — https://www.saasu.com/pricing/
+  - [ ] Pricing tiers, prices, currency (per-file, from ~$15/mo)
+  - [ ] Free tier reality (30-day free trial, no permanent free plan — confirm)
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Sage Pastel Partner** — https://shop.sage.co.za/product/sage-50-cloud-pastel-partner/
+  - [ ] **Confirm current edition/pricing lineup** — sold through Sage's SA
+        shop and partner resellers, with per-annum pricing and separate
+        monthly "Flex" options; figures were unclear in initial research
+  - [ ] Pricing tiers, prices, currency
+  - [ ] Free tier reality
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Govchain Books** — https://www.govchain.co.za/books
+  - [ ] **No specific pricing figures found in research** — the /pricing URL
+        on this domain is for company registration, not Books; find the
+        correct Books-specific pricing page/section
+  - [ ] Pricing tiers, prices, currency
+  - [ ] Free tier reality
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **HoneyBook** — https://www.honeybook.com/pricing
+  - [ ] Pricing tiers, prices, currency (Starter/Essentials/Premium — note recent price increases)
+  - [ ] Free tier reality (none — confirm trial length, currently 30 days per research)
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Dubsado** — https://www.dubsado.com/pricing
+  - [ ] Pricing tiers, prices, currency (Starter $20/mo, Premier $40/mo — confirm current figures and add-on user/brand fees)
+  - [ ] Free tier reality (lifetime free trial at low client volume — confirm exact cap)
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **17hats** — https://17hats.com/pricing
+  - [ ] Pricing tiers, prices, currency (single plan, currently ~$60/mo list price with promo pricing — confirm)
+  - [ ] Free tier reality (none — 7-day trial only)
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **sevDesk** — https://sevdesk.de/preise/
+  - [ ] **Confirm target market** — figures found were for the German (.de)
+        site; check whether Austria/Switzerland pricing differs
+  - [ ] Pricing tiers, prices, currency (Free/Invoices/Accounting/Accounting Pro, 1/12/24-month contract options)
+  - [ ] Free tier reality
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Lexware Office** — https://www.lexware.de/preise/
+  - [ ] Pricing tiers, prices, currency (S/M/L/XL packages, €3.45-€19.90/mo range — note promo vs. regular pricing)
+  - [ ] Free tier reality (none — confirm trial availability)
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Moneybird** — https://www.moneybird.nl/prijzen/
+  - [ ] Pricing tiers, prices, currency (Free/Starter €15/Growth €28/Professional €39, tiered by bank-transaction volume)
+  - [ ] Free tier reality — exact transaction-count cap
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Exact Online** — https://www.exact.com/us/software/exact-online/prices
+  - [ ] **Confirm correct regional pricing page and currency** — the page
+        found showed USD figures ($158-$422/mo) for a Dutch-rooted product;
+        find the pricing page for your actual target market
+  - [ ] Pricing tiers, prices, currency
+  - [ ] Free tier reality
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Holded** — https://www.holded.com/pricing
+  - [ ] Pricing tiers, prices, currency (Plus €7.5 / Basic €14.5 / Standard €29.5 / Premium €99.5, plus HR/Inventory/POS/SII add-ons)
+  - [ ] Free tier reality (none — 14-day trial, no card required)
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [x] **GnuCash** — https://gnucash.org/
+  - [x] Pricing tiers, prices, currency — genuinely $0, no paid tier exists (open-source, GPL-licensed)
+  - [x] Free tier reality — 100% free forever, no locked features
+  - [x] Starting price — $0
+  - [ ] Integrations list (still VERIFY — not pricing-gating, but fill in before full publish polish)
+  - [ ] Logo asset
+  - [x] Affiliate program confirmation — no vendor, no affiliate program (false)
+  - [x] pricingVerifiedDate set — 2026-07-15 (this listing publishes automatically; confirm the editorial fields still read correctly before considering it fully polished)
+
+- [ ] **Manager.io** — https://www2.manager.io/cloud/pricing
+  - [ ] Pricing tiers, prices, currency (free Desktop Edition + Cloud Edition ~$59/mo flat + self-hosted Server Edition)
+  - [ ] Free tier reality — confirm Desktop Edition has no feature limits
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
+- [ ] **Akaunting** — https://akaunting.com/open-source-accounting-software
+  - [ ] Pricing tiers, prices, currency (self-hosted free with 2 user/1 company/1,000 invoice cap, or Cloud from ~$8-12/mo)
+  - [ ] Free tier reality — confirm current self-hosted production-use limits and license terms (Business Source License)
+  - [ ] Starting price
+  - [ ] Integrations list
+  - [ ] Logo asset
+  - [ ] Affiliate program confirmation
+  - [ ] pricingVerifiedDate set
+
 ## After verifying
 
 Once a listing's `pricingVerifiedDate` is set and no field still holds
