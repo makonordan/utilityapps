@@ -386,6 +386,10 @@ export function AppsDirectory() {
       pricingModels: [],
       freeOnly: false,
     }));
+  const clearIndustries = () => setFilters((f) => ({ ...f, industries: [] }));
+  const clearRegions = () => setFilters((f) => ({ ...f, regions: [] }));
+  const clearSizes = () => setFilters((f) => ({ ...f, sizes: [] }));
+  const clearPricing = () => setFilters((f) => ({ ...f, pricingModels: [] }));
 
   const activeChips = [
     ...filters.industries.map((id) => ({
@@ -449,6 +453,9 @@ export function AppsDirectory() {
               Industry
             </p>
             <div className="flex flex-wrap gap-2">
+              <ChipToggle active={filters.industries.length === 0} onClick={clearIndustries}>
+                All
+              </ChipToggle>
               {INDUSTRIES.map((id) => (
                 <ChipToggle key={id} active={filters.industries.includes(id)} onClick={() => toggleIndustry(id)}>
                   {industryLabel(id)}
@@ -462,6 +469,9 @@ export function AppsDirectory() {
               Region
             </p>
             <div className="flex flex-wrap gap-2">
+              <ChipToggle active={filters.regions.length === 0} onClick={clearRegions}>
+                All
+              </ChipToggle>
               {REGIONS.map((r) => (
                 <ChipToggle key={r.id} active={filters.regions.includes(r.id)} onClick={() => toggleRegion(r.id)}>
                   {r.name}
@@ -476,6 +486,9 @@ export function AppsDirectory() {
                 Business size
               </p>
               <div className="flex flex-wrap gap-2">
+                <ChipToggle active={filters.sizes.length === 0} onClick={clearSizes}>
+                  All
+                </ChipToggle>
                 {BUSINESS_SIZES.map((s) => (
                   <ChipToggle key={s.id} active={filters.sizes.includes(s.id)} onClick={() => toggleSize(s.id)}>
                     {s.name}
@@ -489,6 +502,9 @@ export function AppsDirectory() {
                 Pricing
               </p>
               <div className="flex flex-wrap gap-2">
+                <ChipToggle active={filters.pricingModels.length === 0} onClick={clearPricing}>
+                  All
+                </ChipToggle>
                 {PRICING_MODELS.map((p) => (
                   <ChipToggle
                     key={p.id}
