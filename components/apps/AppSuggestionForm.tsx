@@ -7,6 +7,13 @@ import { submitAppSuggestion } from "@/lib/apps/analytics";
 
 type State = "idle" | "loading" | "success" | "error";
 
+/** Accepts "greena.com.ng" as readily as "https://greena.com.ng" — most
+ *  visitors won't type a scheme, and requiring one just bounces a valid
+ *  suggestion. Prepends https:// when one isn't already present. */
+function normalizeUrl(value: string): string {
+  return /^https?:\/\//i.test(value) ? value : `https://${value}`;
+}
+
 /** "Suggest software to add" box — anonymous, email optional. Never a gate;
  *  purely a way for visitors to tell us what's missing from the directory. */
 export function AppSuggestionForm({ className }: { className?: string }) {
@@ -24,7 +31,7 @@ export function AppSuggestionForm({ className }: { className?: string }) {
     setError(null);
     const res = await submitAppSuggestion({
       suggestedName: name.trim(),
-      suggestedUrl: url.trim() || undefined,
+      suggestedUrl: url.trim() ? normalizeUrl(url.trim()) : undefined,
       reason: reason.trim() || undefined,
       email: email.trim() || undefined,
     });
@@ -69,10 +76,11 @@ export function AppSuggestionForm({ className }: { className?: string }) {
             className="rounded-xl border border-surface-200 bg-white px-3 py-2.5 text-sm text-surface-900 placeholder:text-surface-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-surface-800 dark:bg-surface-950 dark:text-white dark:placeholder:text-surface-500"
           />
           <input
-            type="url"
+            type="text"
+            inputMode="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            placeholder="Website (optional)"
+            placeholder="Website (optional) — e.g. greena.com.ng"
             className="rounded-xl border border-surface-200 bg-white px-3 py-2.5 text-sm text-surface-900 placeholder:text-surface-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-surface-800 dark:bg-surface-950 dark:text-white dark:placeholder:text-surface-500"
           />
           <textarea
