@@ -17,6 +17,9 @@ import {
   Search,
   Share2,
   Smartphone,
+  Store,
+  ThumbsDown,
+  ThumbsUp,
   Trash2,
   Wrench,
 } from "lucide-react";
@@ -37,6 +40,7 @@ import type {
   SubscriberGrowthPoint,
   ZeroResultSearch,
 } from "@/lib/admin";
+import type { AppsAnalyticsSummary } from "@/lib/apps/analyticsAdmin";
 import { TOOLS_BY_ID } from "@/lib/tools";
 import { cn, formatDate, formatNumber } from "@/lib/utils";
 
@@ -48,7 +52,8 @@ type Tab =
   | "newsletter"
   | "contact"
   | "search"
-  | "revenue";
+  | "revenue"
+  | "apps";
 
 const TABS: { id: Tab; label: string; Icon: typeof BarChart3 }[] = [
   { id: "overview", label: "Overview", Icon: BarChart3 },
@@ -59,6 +64,7 @@ const TABS: { id: Tab; label: string; Icon: typeof BarChart3 }[] = [
   { id: "contact", label: "Contact", Icon: Inbox },
   { id: "search", label: "Search", Icon: Search },
   { id: "revenue", label: "Revenue", Icon: CircleDollarSign },
+  { id: "apps", label: "Apps", Icon: Store },
 ];
 
 // Heuristic — not real revenue. Used only for the "estimated" card so the
@@ -109,6 +115,7 @@ export function Dashboard({ stats }: { stats: AdminStats }) {
               newsletterCount={stats.newsletterCount}
             />
           )}
+          {tab === "apps" && <AppsTab apps={stats.apps} />}
         </main>
       </div>
     </div>
@@ -1337,6 +1344,174 @@ function SearchTab({
           rows={zero.map((s) => [s.query, formatNumber(s.count), formatDate(s.lastSeen)])}
           emptyText="No zero-result searches in the last 30 days. Nice."
         />
+      </Section>
+    </div>
+  );
+}
+
+// ----- Apps directory --------------------------------------------------------
+
+function AppsTab({ apps }: { apps: AppsAnalyticsSummary }) {
+  if (!apps.readable) {
+    return (
+      <p className="rounded-2xl border border-warning-200 bg-warning-50 p-4 text-sm text-warning-800 dark:border-warning-500/30 dark:bg-warning-500/10 dark:text-warning-200">
+        Apps directory analytics can&apos;t be read yet — these tables have no anon SELECT
+        policy by design, so add the <code>SUPABASE_SERVICE_ROLE_KEY</code> environment
+        variable (Supabase → Settings → API → service_role key) and redeploy.
+      </p>
+    );
+  }
+
+  return (
+    <div>
+      <ul className="grid gap-4 sm:grid-cols-3">
+        <li>
+          <StatCard
+            label="Zero-result searches"
+            value={formatNumber(apps.zeroResultSearches.length)}
+            hint="Last 30 days — demand we're not serving"
+          />
+        </li>
+        <li>
+          <StatCard
+            label="Most-clicked listing"
+            value={apps.mostClicked[0]?.appName ?? "—"}
+            hint={
+              apps.mostClicked[0]
+                ? `${formatNumber(apps.mostClicked[0].count)} clicks, 30d`
+                : "No affiliate clicks yet"
+            }
+          />
+        </li>
+        <li>
+          <StatCard
+            label="Suggestions inbox"
+            value={formatNumber(apps.suggestions.length)}
+            hint="Most recent, all time"
+          />
+        </li>
+      </ul>
+
+      <Section
+        title="Top searches"
+        description="Last 30 days — what people are looking for in this directory"
+      >
+        <DataTable
+          columns={["Query", "Searches"]}
+          rows={apps.topSearches.map((s) => [s.query, formatNumber(s.count)])}
+          emptyText="No searches recorded yet."
+        />
+      </Section>
+
+      <Section
+        title="Zero-result searches"
+        description="Our highest-value signal — software/categories to add next"
+      >
+        <DataTable
+          columns={["Query", "Searches", "Last seen"]}
+          rows={apps.zeroResultSearches.map((s) => [
+            s.query,
+            formatNumber(s.count),
+            formatDate(s.lastSeen),
+          ])}
+          emptyText="No zero-result searches in the last 30 days. Nice."
+        />
+      </Section>
+
+      <Section title="Most-viewed listings" description="Last 30 days">
+        <DataTable
+          columns={["App", "Views"]}
+          rows={apps.mostViewed.map((s) => [s.appName, formatNumber(s.count)])}
+          emptyText="No listing views recorded yet."
+        />
+      </Section>
+
+      <Section
+        title="Most-clicked affiliate links"
+        description="Last 30 days — real purchase intent, not just page views"
+      >
+        <DataTable
+          columns={["App", "Clicks"]}
+          rows={apps.mostClicked.map((s) => [s.appName, formatNumber(s.count)])}
+          emptyText="No affiliate clicks recorded yet."
+        />
+      </Section>
+
+      <Section
+        title="Was this review helpful?"
+        description="Yes/no ratio per listing, last 30 days — which reviews are landing"
+      >
+        <DataTable
+          columns={["App", "Yes", "No", "Ratio"]}
+          rows={apps.helpful.map((s) => [
+            s.appName,
+            <span key="yes" className="inline-flex items-center gap-1 text-success-700 dark:text-success-400">
+              <ThumbsUp className="h-3.5 w-3.5" /> {formatNumber(s.yes)}
+            </span>,
+            <span key="no" className="inline-flex items-center gap-1 text-warning-700 dark:text-warning-400">
+              <ThumbsDown className="h-3.5 w-3.5" /> {formatNumber(s.no)}
+            </span>,
+            s.ratio !== null ? `${(s.ratio * 100).toFixed(0)}%` : "—",
+          ])}
+          emptyText="No helpful votes recorded yet."
+        />
+      </Section>
+
+      <Section title="Most-used filters" description="Last 30 days — what people filter by">
+        <DataTable
+          columns={["Filter", "Uses"]}
+          rows={apps.topFilters.map((s) => [s.filter, formatNumber(s.count)])}
+          emptyText="No filter usage recorded yet."
+        />
+      </Section>
+
+      <Section title="Suggestions inbox" description="Most recent 50, all time">
+        {apps.suggestions.length === 0 ? (
+          <p className="rounded-2xl border border-dashed border-surface-200 p-6 text-center text-sm text-surface-500 dark:border-surface-800 dark:text-surface-400">
+            No suggestions yet.
+          </p>
+        ) : (
+          <ul className="space-y-3">
+            {apps.suggestions.map((s) => (
+              <li
+                key={s.id}
+                className="rounded-2xl border border-surface-200 bg-white p-4 dark:border-surface-800 dark:bg-surface-900"
+              >
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <p className="text-sm font-semibold text-surface-900 dark:text-white">
+                    {s.suggestedName}
+                  </p>
+                  <p className="text-xs text-surface-500 dark:text-surface-400">
+                    {formatDate(s.createdAt)}
+                  </p>
+                </div>
+                {s.suggestedUrl && (
+                  <a
+                    href={s.suggestedUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-0.5 inline-block break-all text-xs text-primary-600 hover:underline dark:text-primary-400"
+                  >
+                    {s.suggestedUrl}
+                  </a>
+                )}
+                {s.reason && (
+                  <p className="mt-2 whitespace-pre-wrap text-sm text-surface-700 dark:text-surface-200">
+                    {s.reason}
+                  </p>
+                )}
+                {s.email && (
+                  <p className="mt-2 text-xs text-surface-500 dark:text-surface-400">
+                    Reply to:{" "}
+                    <a href={`mailto:${s.email}`} className="text-primary-600 hover:underline dark:text-primary-400">
+                      {s.email}
+                    </a>
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
       </Section>
     </div>
   );

@@ -1,9 +1,10 @@
 import "server-only";
 
+import { ALL_APPS } from "./apps";
+import { getVerifiedComparisonSlugs } from "./apps/comparisons";
 import { CATEGORIES } from "./categories";
 import { getPostMetas } from "./blog";
 import { TOOL_VS_COMPETITOR, getCompetitorsWithTools } from "./competitorComparisons";
-import { PRODUCTS } from "./products";
 import { TOOLS } from "./tools";
 import { SITE_CONFIG } from "./utils";
 
@@ -27,7 +28,7 @@ const STATIC_PAGES: { path: string; priority: number; changeFrequency: ChangeFre
   { path: "/", priority: 1.0, changeFrequency: "daily" },
   { path: "/tools", priority: 0.9, changeFrequency: "weekly" },
   { path: "/blog", priority: 0.8, changeFrequency: "weekly" },
-  { path: "/products", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/apps", priority: 0.9, changeFrequency: "weekly" },
   { path: "/youtube", priority: 0.7, changeFrequency: "weekly" },
   { path: "/about", priority: 0.5, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.5, changeFrequency: "monthly" },
@@ -113,12 +114,27 @@ export async function getSitemapEntries(): Promise<SitemapEntry[]> {
     });
   }
 
-  for (const product of PRODUCTS) {
+  // Apps directory listing pages. ALL_APPS is already filtered to verified
+  // pricing only in production (see isPricingVerified() in lib/apps/index.ts)
+  // — a listing still marked "VERIFY" never gets a sitemap entry.
+  for (const app of ALL_APPS) {
     entries.push({
-      url: `${SITE_CONFIG.url}/products/${product.id}`,
+      url: `${SITE_CONFIG.url}/apps/${app.id}`,
       lastModified: now,
       changeFrequency: "monthly",
-      priority: 0.7,
+      priority: 0.8,
+    });
+  }
+
+  // Apps comparison pages — same verified-both-sides filter as the route's
+  // own generateStaticParams, so the sitemap never links a comparison where
+  // either app is still awaiting pricing verification.
+  for (const comparison of getVerifiedComparisonSlugs()) {
+    entries.push({
+      url: `${SITE_CONFIG.url}/apps/compare/${comparison}`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
     });
   }
 

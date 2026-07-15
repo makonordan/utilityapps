@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { OutgrowingToolBanner } from "@/components/tools/OutgrowingToolBanner";
 import { TrackToolVisit } from "@/components/tools/TrackToolVisit";
 import { InvoiceGenerator } from "@/components/productivity-tools/InvoiceGenerator";
 import { ProductivityToolShell } from "@/components/productivity-tools/ProductivityToolShell";
@@ -55,6 +56,7 @@ export default function InvoiceGeneratorPage() {
       >
         <InvoiceGenerator />
       </ProductivityToolShell>
+      <OutgrowingToolBanner />
     </>
   );
 }

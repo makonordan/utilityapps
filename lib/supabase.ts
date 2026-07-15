@@ -76,6 +76,44 @@ export interface ContactMessageRow {
   created_at: string;
 }
 
+// --- Apps directory analytics (anonymous, no IP, no accounts) -------------
+
+export interface AppSearchRow {
+  id: number;
+  query: string;
+  results_count: number;
+  category: string | null;
+  clicked_app_id: string | null;
+  created_at: string;
+}
+
+export type AppEventType =
+  | "listing_view"
+  | "affiliate_click"
+  | "compare_view"
+  | "helpful_yes"
+  | "helpful_no"
+  | "filter_used";
+
+export interface AppEventRow {
+  id: number;
+  app_id: string;
+  event_type: AppEventType;
+  metadata: Record<string, unknown>;
+  device_type: string | null;
+  country: string | null;
+  created_at: string;
+}
+
+export interface AppSuggestionRow {
+  id: number;
+  suggested_name: string;
+  suggested_url: string | null;
+  reason: string | null;
+  email: string | null;
+  created_at: string;
+}
+
 export type SupporterTier = "supporter" | "power" | "patron" | "one_time";
 export type SupporterProvider = "bmac" | "stripe" | "paystack" | "manual";
 export type SupporterStatus = "active" | "cancelled" | "pending";
@@ -204,6 +242,30 @@ export interface Database {
         Row: ContactMessageRow;
         Insert: Omit<ContactMessageRow, "id" | "created_at"> & { created_at?: string };
         Update: Partial<Omit<ContactMessageRow, "id">>;
+        Relationships: [];
+      };
+      app_searches: {
+        Row: AppSearchRow;
+        Insert: Omit<AppSearchRow, "id" | "created_at" | "results_count"> & {
+          created_at?: string;
+          results_count?: number;
+        };
+        Update: Partial<Omit<AppSearchRow, "id">>;
+        Relationships: [];
+      };
+      app_events: {
+        Row: AppEventRow;
+        Insert: Omit<AppEventRow, "id" | "created_at" | "metadata"> & {
+          created_at?: string;
+          metadata?: Record<string, unknown>;
+        };
+        Update: Partial<Omit<AppEventRow, "id">>;
+        Relationships: [];
+      };
+      app_suggestions: {
+        Row: AppSuggestionRow;
+        Insert: Omit<AppSuggestionRow, "id" | "created_at"> & { created_at?: string };
+        Update: Partial<Omit<AppSuggestionRow, "id">>;
         Relationships: [];
       };
       supporters: {

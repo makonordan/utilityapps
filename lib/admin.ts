@@ -1,5 +1,6 @@
 import "server-only";
 
+import { getAppsAnalytics, type AppsAnalyticsSummary } from "./apps/analyticsAdmin";
 import { PRODUCTS_BY_ID, type Product } from "./products";
 import { TOOLS_BY_ID, type Tool } from "./tools";
 
@@ -214,6 +215,10 @@ export interface AdminStats {
   extensionWaitlist: ApiWaitlistSummary;
   /** Geo + device breakdown of tool_usage (last 30 days). */
   geo: GeoStats;
+  /** Apps directory analytics — searches, listing views/clicks, helpful
+   *  votes, filter usage, suggestions inbox. Null-safe empty when the
+   *  service-role key isn't configured (see `readable`). */
+  apps: AppsAnalyticsSummary;
   source: "supabase" | "fallback";
   fallbackReason?: string;
 }
@@ -240,6 +245,16 @@ const EMPTY_STATS: Omit<AdminStats, "source" | "fallbackReason"> = {
   apiWaitlist: { total: 0, goal: 100, recent: [], readable: false },
   extensionWaitlist: { total: 0, goal: 100, recent: [], readable: false },
   geo: { topCountries: [], devices: [], totalEvents: 0 },
+  apps: {
+    topSearches: [],
+    zeroResultSearches: [],
+    mostViewed: [],
+    mostClicked: [],
+    helpful: [],
+    topFilters: [],
+    suggestions: [],
+    readable: false,
+  },
 };
 
 // Shape of a contact_messages row as read through the untyped service-role
@@ -756,6 +771,11 @@ export async function getAdminStats(): Promise<AdminStats> {
       console.error("[admin/stats] extension_waitlist", err);
     }
 
+    // Apps directory analytics — same service-role read pattern; the
+    // function itself already degrades to an empty/unreadable summary on
+    // any failure, so no extra try/catch is needed here.
+    const appsAnalytics = await getAppsAnalytics();
+
     // Contact messages — read with the service-role client. The
     // contact_messages table has no anon SELECT policy (it holds PII), so the
     // anon `supabase` client cannot read it. Falls back to empty when the
@@ -825,6 +845,7 @@ export async function getAdminStats(): Promise<AdminStats> {
       apiWaitlist,
       extensionWaitlist,
       geo,
+      apps: appsAnalytics,
       source: "supabase",
     };
   } catch (err) {

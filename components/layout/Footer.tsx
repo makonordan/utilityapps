@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { InstagramIcon, LinkedinIcon, TwitterIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
 import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
+import { APP_CATEGORIES } from "@/lib/apps";
 import { CATEGORIES } from "@/lib/categories";
 import { TOOLS_BY_ID } from "@/lib/tools";
 import { SITE_CONFIG } from "@/lib/utils";
@@ -22,7 +23,6 @@ const TOP_TOOLS = TOP_TOOL_IDS.map((id) => TOOLS_BY_ID[id]).filter(
 
 const RESOURCES = [
   { label: "Blog", href: "/blog" },
-  { label: "Products", href: "/products" },
   { label: "YouTube", href: "/youtube" },
   { label: "Newsletter", href: "/newsletter" },
   { label: "API (alpha)", href: "/api" },
@@ -93,7 +93,7 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
 export function Footer() {
   return (
     <footer className="mt-24 border-t border-surface-200 bg-white text-surface-700 dark:border-surface-800 dark:bg-[#0a0a0a] dark:text-surface-300">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-5">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-6">
         <div className="sm:col-span-2 lg:col-span-1">
           <FooterLogo />
           <p className="mt-3 text-sm text-surface-600 dark:text-surface-400">
@@ -126,6 +126,15 @@ export function Footer() {
         <FooterColumn title="Categories">
           {CATEGORIES.map((cat) => (
             <FooterLink key={cat.id} href={`/tools/categories/${cat.id}`}>
+              {cat.name}
+            </FooterLink>
+          ))}
+        </FooterColumn>
+
+        <FooterColumn title="Apps">
+          <FooterLink href="/apps">Browse all apps</FooterLink>
+          {APP_CATEGORIES.map((cat) => (
+            <FooterLink key={cat.id} href="/apps">
               {cat.name}
             </FooterLink>
           ))}

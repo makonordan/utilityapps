@@ -1,5 +1,6 @@
 import type { FAQItem } from "@/components/tools/ToolFAQ";
 
+import type { AppListing } from "./apps/types";
 import type { BlogPostMeta } from "./blog";
 import type { Product } from "./products";
 import type { Tool } from "./tools";
@@ -164,6 +165,69 @@ export function generateProductSchema(
       availability: "https://schema.org/InStock",
       url: product.affiliateUrl,
     },
+  };
+}
+
+/**
+ * Third-party app listings (the /apps directory). Deliberately omits
+ * aggregateRating/reviewRating — we don't collect star ratings, so we never
+ * emit fake rating schema. Offers are only included once pricing has been
+ * verified (never while a field still holds the "VERIFY" placeholder).
+ */
+export function generateAppSoftwareSchema(app: AppListing): object {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: app.name,
+    description: app.tagline,
+    applicationCategory: "BusinessApplication",
+    operatingSystem: app.platforms.join(", "),
+    url: `${SITE_CONFIG.url}/apps/${app.id}`,
+    ...(app.logoUrl.startsWith("http") ? { image: app.logoUrl } : {}),
+    ...(typeof app.startingPrice === "number" && app.currency !== "VERIFY"
+      ? {
+          offers: {
+            "@type": "Offer",
+            price: app.startingPrice.toFixed(2),
+            priceCurrency: app.currency,
+            url: app.website,
+          },
+        }
+      : {}),
+    publisher: PUBLISHER,
+  };
+}
+
+/** Our editorial verdict, attributed to UtilityApps — not a crowd-sourced
+ *  star rating. No reviewRating field; see generateAppSoftwareSchema. */
+export function generateAppReviewSchema(app: AppListing): object {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    itemReviewed: { "@type": "SoftwareApplication", name: app.name, url: app.website },
+    reviewBody: app.verdict,
+    author: { "@type": "Organization", name: SITE_CONFIG.name, url: SITE_CONFIG.url },
+    publisher: PUBLISHER,
+    ...(app.lastReviewed ? { datePublished: app.lastReviewed } : {}),
+    url: `${SITE_CONFIG.url}/apps/${app.id}`,
+  };
+}
+
+export function generateCollectionPageSchema(options: {
+  name: string;
+  description: string;
+  url: string;
+  itemCount?: number;
+}): object {
+  const url = options.url.startsWith("http") ? options.url : `${SITE_CONFIG.url}${options.url}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: options.name,
+    description: options.description,
+    url,
+    isPartOf: { "@type": "WebSite", name: SITE_CONFIG.name, url: SITE_CONFIG.url },
+    ...(options.itemCount !== undefined ? { mainEntity: { "@type": "ItemList", numberOfItems: options.itemCount } } : {}),
   };
 }
 

@@ -164,6 +164,20 @@ const nextConfig = {
         destination: "/tools/categories/health-tools",
         permanent: true,
       },
+      // The Products nav entry was replaced by the curated Apps directory.
+      // Existing checkout/order infrastructure for owned products stays live
+      // (see lib/products.ts) but the browsing routes now forward to /apps
+      // so SEO authority transfers instead of 404ing.
+      {
+        source: "/products",
+        destination: "/apps",
+        permanent: true,
+      },
+      {
+        source: "/products/:id",
+        destination: "/apps",
+        permanent: true,
+      },
     ];
   },
   async rewrites() {

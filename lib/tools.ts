@@ -58,7 +58,7 @@ export const TOOLS: Tool[] = [
     description:
       "Estimate monthly mortgage payments, PMI, taxes, and insurance with a free mortgage affordability calculator.",
     longDescription:
-      "Plan home purchases with a complete mortgage calculator that includes principal, interest, property tax, homeowners insurance, PMI, and HOA fees. Compare 15-year vs 30-year terms, see amortization schedules, and check affordability based on income and debt-to-income ratio.",
+      "Plan home purchases with a complete mortgage calculator that includes principal, interest, property tax, homeowners insurance, PMI, and HOA fees. See the full month-by-month (or year-by-year) amortization schedule, total interest paid over the life of the loan, and export it as a CSV.",
     category: "Finance Tools",
     icon: "Home",
     href: "/tools/mortgage-calculator",
@@ -74,7 +74,7 @@ export const TOOLS: Tool[] = [
       "home loan calculator",
       "PITI calculator",
       "mortgage affordability",
-      "refinance calculator",
+      "amortization schedule",
     ],
     trending: true,
     new: false,
@@ -408,15 +408,22 @@ export const TOOLS: Tool[] = [
     id: "salary-calculator",
     name: "Salary Calculator",
     description:
-      "Convert hourly, weekly, monthly, and annual salary across currencies with tax and overtime support.",
+      "Convert hourly, weekly, monthly, and annual salary, with UK income tax + NI and Singapore CPF take-home estimates.",
     longDescription:
-      "Compare offers and convert between hourly, weekly, biweekly, monthly, and annual pay across major currencies. Optional withholding, overtime, and benefits cost adjustments produce a true take-home estimate for the US, UK, Canada, and EU.",
+      "Convert between hourly, weekly, biweekly, monthly, and annual pay. Select United Kingdom to see an estimated take-home figure after income tax and National Insurance across the basic, higher, and additional rate bands, or Singapore to see take-home pay after employee CPF contributions.",
     category: "Finance Tools",
     icon: "Wallet",
     href: "/tools/salary-calculator",
     externalHref: null,
     embedUrl: null,
-    keywords: ["salary calculator", "hourly to annual", "take home calculator", "paycheck calculator"],
+    keywords: [
+      "salary calculator",
+      "hourly to annual",
+      "take home pay calculator uk",
+      "uk salary calculator national insurance",
+      "singapore salary calculator cpf",
+      "paycheck calculator",
+    ],
     trending: false,
     new: false,
     featured: false,

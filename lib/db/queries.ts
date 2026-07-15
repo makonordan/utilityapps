@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 import {
+  AppEventType,
   BookmarkRow,
   DbResult,
   fail,
@@ -296,6 +297,93 @@ export async function saveContactMessage(
       email: email.trim().toLowerCase(),
       subject: subject.trim(),
       message: message.trim(),
+    });
+    if (error) return fail(error);
+    return ok(true);
+  } catch (err) {
+    return fail(err);
+  }
+}
+
+// --- apps directory analytics -----------------------------------------------
+// Anonymous, privacy-respecting tracking for the /apps software directory.
+// Anon-INSERT only — no SELECT policy exists on any of these tables (see
+// schema.sql section 19), so reads always go through the service-role
+// client in lib/apps/analyticsAdmin.ts, never these functions.
+
+export interface AppSearchInput {
+  query: string;
+  resultsCount: number;
+  category?: string | null;
+  clickedAppId?: string | null;
+}
+
+export async function logAppSearch(
+  input: AppSearchInput,
+  client: SupabaseClient = supabase
+): Promise<DbResult<true>> {
+  try {
+    const cleaned = input.query.trim();
+    if (!cleaned) return ok(true);
+    const { error } = await client.from("app_searches").insert({
+      query: cleaned,
+      results_count: input.resultsCount,
+      category: input.category ?? null,
+      clicked_app_id: input.clickedAppId ?? null,
+    });
+    if (error) return fail(error);
+    return ok(true);
+  } catch (err) {
+    return fail(err);
+  }
+}
+
+export interface AppEventInput {
+  appId: string;
+  eventType: AppEventType;
+  metadata?: Record<string, unknown>;
+  deviceType?: string | null;
+  country?: string | null;
+}
+
+export async function logAppEvent(
+  input: AppEventInput,
+  client: SupabaseClient = supabase
+): Promise<DbResult<true>> {
+  try {
+    const { error } = await client.from("app_events").insert({
+      app_id: input.appId,
+      event_type: input.eventType,
+      metadata: input.metadata ?? {},
+      device_type: input.deviceType ?? null,
+      country: input.country ?? null,
+    });
+    if (error) return fail(error);
+    return ok(true);
+  } catch (err) {
+    return fail(err);
+  }
+}
+
+export interface AppSuggestionInput {
+  suggestedName: string;
+  suggestedUrl?: string | null;
+  reason?: string | null;
+  email?: string | null;
+}
+
+export async function logAppSuggestion(
+  input: AppSuggestionInput,
+  client: SupabaseClient = supabase
+): Promise<DbResult<true>> {
+  try {
+    const name = input.suggestedName.trim();
+    if (!name) return fail("suggestedName is required");
+    const { error } = await client.from("app_suggestions").insert({
+      suggested_name: name,
+      suggested_url: input.suggestedUrl?.trim() || null,
+      reason: input.reason?.trim() || null,
+      email: input.email?.trim().toLowerCase() || null,
     });
     if (error) return fail(error);
     return ok(true);

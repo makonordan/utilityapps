@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 
 import { AdSlot } from "@/components/ads/AdSlot";
 import { AllTools } from "@/components/home/AllTools";
+import { AppsPreview } from "@/components/home/AppsPreview";
 import { FAQ } from "@/components/home/FAQ";
 import { FeaturedPosts } from "@/components/home/FeaturedPosts";
 import { Hero } from "@/components/home/Hero";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { MagazineDownload } from "@/components/home/MagazineDownload";
 import { Newsletter } from "@/components/home/Newsletter";
-import { ProductsPreview } from "@/components/home/ProductsPreview";
 import { Stats } from "@/components/home/Stats";
 import { TrendingTools } from "@/components/home/TrendingTools";
 import { YouTubeHub } from "@/components/home/YouTubeHub";
@@ -76,7 +76,7 @@ export default async function HomePage() {
       <HowItWorks />
       <FeaturedPosts posts={posts} />
       <MagazineDownload />
-      <ProductsPreview />
+      <AppsPreview />
       <YouTubeHub />
       <Stats />
       <Newsletter />

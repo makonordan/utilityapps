@@ -36,9 +36,9 @@ The canonical XML sitemap is at https://utilityapps.site/sitemap.xml.
 ## Finance tools
 
 - [Loan Calculator](https://utilityapps.site/tools/loan-calculator): Monthly payments, interest, amortization for personal, auto, student, or business loans. US/UK/CA/EU.
-- [Mortgage Calculator](https://utilityapps.site/tools/mortgage-calculator): PITI mortgage payments with PMI, taxes, insurance, and 15-vs-30-year comparison.
+- [Mortgage Calculator](https://utilityapps.site/tools/mortgage-calculator): PITI mortgage payments with PMI, taxes, insurance, and a full amortization schedule (yearly/monthly, CSV export).
 - [Income Tax Calculator](https://utilityapps.site/tools/tax-calculator): Federal and state income tax estimates for US, UK, Canada, and major EU countries.
-- [Salary Calculator](https://utilityapps.site/tools/salary-calculator): Convert hourly, weekly, monthly, annual pay across currencies with overtime and tax.
+- [Salary Calculator](https://utilityapps.site/tools/salary-calculator): Convert hourly, weekly, monthly, annual pay, with UK income tax + NI and Singapore CPF take-home estimates.
 - [Currency Converter](https://utilityapps.site/tools/currency-converter): Convert 160+ currencies with live mid-market rates and historical charts.
 
 ## Calculator tools

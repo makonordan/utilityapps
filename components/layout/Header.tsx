@@ -29,10 +29,10 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
+  { label: "Apps", href: "/apps", badge: "New" },
   { label: "API", href: "/api", badge: "Alpha" },
   { label: "Studio", href: "/studio" },
   { label: "Blog", href: "/blog" },
-  { label: "Products", href: "/products" },
   { label: "YouTube", href: "/youtube" },
   { label: "About", href: "/about" },
 ];

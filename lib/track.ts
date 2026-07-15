@@ -46,7 +46,7 @@ function markTracked(toolId: string): void {
   writeRateMap(map);
 }
 
-function detectDevice(): string {
+export function detectDevice(): string {
   if (typeof navigator === "undefined") return "unknown";
   return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? "mobile" : "desktop";
 }

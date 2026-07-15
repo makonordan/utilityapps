@@ -10,9 +10,9 @@ import { SITE_CONFIG } from "@/lib/utils";
 const TOOL_ID = "remove-background";
 const CONFIG = IMAGE_TOOLS_CONFIG[TOOL_ID];
 
-const TITLE = "Remove Background Free — In-Browser AI Background Remover | Private & Unlimited";
+const TITLE = "Remove Background Free — AI Background Remover, No Upload";
 const DESCRIPTION =
-  "Remove the background from any photo in seconds. AI runs entirely in your browser — no upload, no API key, no usage cap. Replace with transparent, a solid colour, or a blurred original.";
+  "Remove the background from any photo in seconds. AI runs entirely in your browser — no upload, no signup, no usage cap. Transparent, solid colour, or blurred background.";
 
 export const metadata: Metadata = {
   title: TITLE,

@@ -16,6 +16,7 @@ import {
 
 import { AdSlot } from "@/components/ads/AdSlot";
 import { PurchaseOrderGenerator } from "@/components/business-tools/PurchaseOrderGenerator";
+import { OutgrowingToolBanner } from "@/components/tools/OutgrowingToolBanner";
 import { TrackToolVisit } from "@/components/tools/TrackToolVisit";
 import { getCategoryByName } from "@/lib/categories";
 import { getIcon } from "@/lib/icons";
@@ -538,6 +539,7 @@ export default function PurchaseOrderGeneratorPage() {
           </div>
         </section>
       </div>
+      <OutgrowingToolBanner maxWidth="max-w-6xl" />
     </>
   );
 }

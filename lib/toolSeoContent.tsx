@@ -87,9 +87,9 @@ export const TOOL_SEO_CONTENT: Record<string, ToolSeoOverride> = {
   },
 
   "mortgage-calculator": {
-    title: "Mortgage Calculator with Amortization Schedule — PITI & Affordability",
+    title: "Free Mortgage Calculator — PITI & Full Amortization Schedule",
     description:
-      "Estimate your full monthly mortgage payment — principal, interest, property tax, insurance and PMI — plus an amortization schedule and affordability check.",
+      "Free mortgage calculator — estimate your full monthly payment (principal, interest, property tax, insurance, PMI), plus the complete month-by-month amortization schedule with CSV export.",
     seoContent: (
       <article>
         <h2>What PITI actually includes</h2>
@@ -108,12 +108,14 @@ export const TOOL_SEO_CONTENT: Record<string, ToolSeoOverride> = {
           payment and frees up cash flow, at the cost of paying more interest overall. Run both
           terms through the calculator to see the exact dollar trade-off for your numbers.
         </p>
-        <h2>Affordability and debt-to-income</h2>
+        <h2>Reading the amortization schedule</h2>
         <p>
-          Lenders typically want your total monthly debt payments (mortgage plus other debts) to
-          stay under roughly 36–43% of gross monthly income, and housing costs alone under about
-          28%. The calculator&rsquo;s affordability check uses your income and existing debt to flag
-          whether a given home price fits comfortably within those common guidelines.
+          Every payment splits between interest (calculated on your current balance) and principal
+          (what actually reduces what you owe) — and that split shifts every month as the balance
+          shrinks. The schedule below the calculator shows this month by month, or rolled up
+          year by year, along with the running balance and total interest paid over the full term.
+          Toggle between views, or export the full monthly schedule as a CSV to check any specific
+          month or paste into your own spreadsheet.
         </p>
         <h2>Why use UtilityApps for this</h2>
         <p>
@@ -136,12 +138,8 @@ export const TOOL_SEO_CONTENT: Record<string, ToolSeoOverride> = {
         a: "Yes — if your down payment is less than 20% of the home price, an estimated PMI amount is added to your monthly payment, since that's what most conventional lenders require until you reach 20% equity.",
       },
       {
-        q: "How is affordability determined?",
-        a: "The calculator compares your estimated monthly payment against your gross income and existing monthly debts using standard debt-to-income (DTI) guidelines lenders commonly use, so you can see whether a price range looks affordable before you apply.",
-      },
-      {
         q: "Can I see or download a full amortization schedule?",
-        a: "Yes — a month-by-month breakdown of principal, interest, and remaining balance across the entire loan term, viewable on the page.",
+        a: "Yes — toggle \"Show schedule\" for a month-by-month or year-by-year breakdown of principal, interest, and remaining balance across the entire loan term, and export the full monthly schedule as a CSV to check any specific payment or paste into your own spreadsheet.",
       },
       {
         q: "Does it work for homes outside the US?",
@@ -222,60 +220,97 @@ export const TOOL_SEO_CONTENT: Record<string, ToolSeoOverride> = {
   },
 
   "salary-calculator": {
-    title: "Salary Calculator After Tax — Take-Home Pay Calculator",
+    title: "Free Salary Calculator — UK Tax & NI, Singapore CPF Take-Home Pay",
     description:
-      "Convert between hourly, weekly, monthly, and annual pay and estimate real take-home pay after tax, across the US, UK, Canada, and EU currencies.",
+      "Convert between hourly, weekly, monthly, and annual pay, then see a UK take-home estimate after income tax and National Insurance, or a Singapore take-home estimate after CPF contributions.",
     seoContent: (
       <article>
         <h2>Gross pay vs. take-home pay</h2>
         <p>
-          The headline salary in a job offer is gross pay — before income tax, payroll taxes
-          (Social Security/National Insurance), and any benefits deductions. Take-home pay (net
-          pay) is what actually lands in your bank account. This calculator converts a gross figure
-          in any pay period into hourly, weekly, biweekly, monthly, and annual equivalents, then
-          estimates the net amount after typical withholding for your country.
+          The headline salary in a job offer is gross pay — before income tax, payroll
+          contributions, and any benefits deductions. Take-home pay (net pay) is what actually
+          lands in your bank account. This calculator converts a gross figure in any pay period
+          into hourly, weekly, biweekly, monthly, and annual equivalents, then — for the UK and
+          Singapore — estimates the net amount after the country&rsquo;s standard payroll deductions.
+        </p>
+        <h2>UK take-home pay: tax bands and National Insurance</h2>
+        <p>
+          Select United Kingdom to see your pay broken down using the 2026/27 England &amp;
+          Northern Ireland bands (Scotland uses different rates). Everyone gets a tax-free{" "}
+          <strong>Personal Allowance</strong> of £12,570 a year, which tapers away by £1 for every
+          £2 earned above £100,000 and disappears entirely at £125,140. Income above the
+          allowance is taxed in three bands: <strong>20% (basic rate)</strong> on taxable income
+          up to £50,270, <strong>40% (higher rate)</strong> on the portion between £50,270 and
+          £125,140, and <strong>45% (additional rate)</strong> above £125,140.
+        </p>
+        <p>
+          On top of income tax, employees pay <strong>Class 1 National Insurance</strong>: 0% up
+          to £12,570, <strong>8%</strong> on earnings between £12,570 and £50,270, and{" "}
+          <strong>2%</strong> above £50,270. Both come straight off gross pay through PAYE, and
+          the calculator applies both automatically once you select United Kingdom.
+        </p>
+        <p>
+          A few common UK salary examples, income tax and NI combined: a{" "}
+          <strong>£30,000</strong> salary comes to roughly <strong>£25,120</strong> a year (about
+          £2,093/month) take-home; <strong>£50,000</strong> comes to roughly{" "}
+          <strong>£39,520</strong> a year (about £3,293/month); and <strong>£80,000</strong>{" "}
+          comes to roughly <strong>£59,470</strong> a year (about £4,956/month). Enter your own
+          figure for an exact estimate.
+        </p>
+        <h2>Singapore take-home pay: CPF contributions</h2>
+        <p>
+          Select Singapore to see take-home pay after the <strong>Central Provident Fund (CPF)</strong>{" "}
+          — Singapore&rsquo;s mandatory retirement, healthcare, and housing savings scheme. For
+          employees aged 55 and under, the standard 2026 rate is <strong>20% of wages</strong>{" "}
+          deducted from your pay, applied up to the <strong>S$7,400/month Ordinary Wage
+          ceiling</strong> (earnings above that aren&rsquo;t subject to further CPF). Your employer
+          separately contributes an additional 17% on top of your pay — that portion is not
+          deducted from you, but it&rsquo;s part of your real total compensation.
+        </p>
+        <p>
+          Unlike the UK or US, Singapore doesn&rsquo;t withhold personal income tax from each
+          paycheck — residents file and pay income tax annually, so it isn&rsquo;t part of this
+          per-paycheck take-home figure. CPF is the deduction that actually affects what lands in
+          your account each payday.
         </p>
         <h2>Comparing job offers on equal footing</h2>
         <p>
-          A $65,000 salary and a $32/hour rate aren&rsquo;t directly comparable until you know the hours
-          — 40 hours a week at $32/hour is about $66,560/year before overtime. Converting every
-          offer to the same annual, after-tax basis is the only fair way to compare a salaried role
-          against an hourly one, or offers across different countries and currencies.
-        </p>
-        <h2>Overtime and benefits adjustments</h2>
-        <p>
-          For hourly roles, overtime pay (commonly time-and-a-half past 40 hours in the US) changes
-          your effective annual pay significantly if it&rsquo;s a regular part of the job. The calculator
-          lets you factor in expected overtime and the estimated cost of benefits so the final
-          number reflects what you&rsquo;d actually take home, not just the sticker rate.
+          A $65,000 salary and a $32/hour rate aren&rsquo;t directly comparable until you know the
+          hours — the hourly view here assumes a standard 40-hour week across 52 weeks. Converting
+          every offer to the same annual basis, and to take-home pay where UK or Singapore support
+          applies, is the fairest way to compare a salaried role against an hourly one.
         </p>
         <h2>Why use UtilityApps for this</h2>
         <p>
-          Your salary figures are calculated locally in your browser — nothing is uploaded, stored,
-          or tied to an account. No signup required to convert or compare pay.
+          Your salary figures are calculated locally in your browser — nothing is uploaded,
+          stored, or tied to an account. No signup required to convert or estimate take-home pay.
         </p>
       </article>
     ),
     faqItems: [
       {
         q: "How do I convert an hourly rate to an annual salary?",
-        a: "Enter your hourly rate and typical hours per week; the calculator multiplies by 52 weeks (adjustable for unpaid time off) to show the annual equivalent, alongside weekly, biweekly, and monthly figures.",
+        a: "Enter your hourly rate and select \"Hour\" as the period — the calculator annualizes it assuming a standard 40-hour week across 52 weeks, then shows the equivalent weekly, biweekly, monthly, and annual figures.",
       },
       {
-        q: "Does it estimate take-home pay after tax?",
-        a: "Yes — it applies an estimated withholding for your selected country (and US state, where relevant) to show a net take-home figure alongside the gross amount, so you can see roughly what actually reaches your bank account.",
+        q: "Does it estimate UK take-home pay after tax and National Insurance?",
+        a: "Yes — select United Kingdom as the country to see your gross pay broken down by the 2026/27 basic, higher, and additional rate income tax bands plus Class 1 National Insurance, alongside an estimated net take-home figure.",
       },
       {
-        q: "Can it factor in overtime pay?",
-        a: "Yes. If your role regularly includes overtime, add expected overtime hours and the calculator applies the standard time-and-a-half (or your custom multiplier) to the annual estimate.",
+        q: "Does it estimate Singapore take-home pay after CPF?",
+        a: "Yes — select Singapore to see your pay after the standard 20% employee CPF contribution (applied up to the S$7,400/month Ordinary Wage ceiling). Singapore income tax is filed annually rather than withheld per paycheck, so it isn't part of this figure.",
       },
       {
-        q: "Can I compare pay across different currencies?",
-        a: "Yes — select the currency and country for each offer you're comparing; conversions use standard exchange-rate logic so you can line up international offers on a common basis.",
+        q: "What UK tax bands does the calculator use?",
+        a: "The 2026/27 England & Northern Ireland bands: 0% under the £12,570 Personal Allowance, 20% up to £50,270, 40% up to £125,140, and 45% above that, with the allowance tapering away between £100,000 and £125,140. Scotland uses different bands, which aren't modeled here.",
+      },
+      {
+        q: "What National Insurance rate does it use?",
+        a: "Class 1 employee National Insurance: 0% up to £12,570, 8% between £12,570 and £50,270, and 2% above £50,270 — applied automatically alongside income tax when you select United Kingdom.",
       },
       {
         q: "How accurate is the take-home estimate?",
-        a: "It's a solid planning estimate based on standard tax brackets and typical payroll deductions, but actual take-home pay varies with benefits elections, retirement contributions, and local tax nuances your employer's payroll system applies.",
+        a: "It's a solid planning estimate based on the current standard tax and contribution rates, but actual take-home pay varies with pension contributions, student loan repayments, benefits elections, and other payroll-specific deductions your employer applies.",
       },
       {
         q: "Is my salary information private?",
@@ -934,6 +969,273 @@ export const TOOL_SEO_CONTENT: Record<string, ToolSeoOverride> = {
       {
         q: "Is there a length limit recommended for slugs?",
         a: "There's no hard limit, but shorter slugs (roughly 3–5 words) tend to display better in search results and are easier for users to read and remember.",
+      },
+    ],
+  },
+
+  // ============================================================ Developer
+  "password-generator": {
+    title: "Free Password Generator — Strong, Random & Passphrase (Offline)",
+    description:
+      "Generate strong, random passwords with adjustable length, symbols, and a pronounceable or Diceware-style passphrase mode. 100% offline — nothing is transmitted or logged.",
+    seoContent: (
+      <article>
+        <h2>What makes a password actually strong</h2>
+        <p>
+          Strength comes from entropy — how many guesses an attacker would need, on average, to
+          land on your exact password. A long, random string drawn from a large character set
+          (lowercase, uppercase, digits, symbols) has far more entropy than a short word with a
+          number tacked on, even if the short one looks &ldquo;complicated&rdquo; to a human. As a rule of
+          thumb, 16+ random characters or a 5-word Diceware passphrase both comfortably exceed what
+          offline brute-force cracking can realistically reach.
+        </p>
+        <h2>Random characters vs. passphrases</h2>
+        <p>
+          A random-character password (e.g. <code>qX7$mK2!vL9pR4nQ</code>) packs the most entropy
+          per character but is hard to type or memorize — best for password managers. A Diceware
+          passphrase (e.g. <code>correct-horse-battery-staple-orbit</code>) is built from a large
+          word list and is easier to type and remember while still being cryptographically strong,
+          provided it&rsquo;s long enough (4-6 words minimum) and the words are chosen randomly, not
+          picked by hand.
+        </p>
+        <h2>Why character exclusions matter</h2>
+        <p>
+          Some systems reject certain symbols, and some fonts make characters like <code>l</code>,{" "}
+          <code>1</code>, <code>I</code>, and <code>0</code>/<code>O</code> hard to tell apart when
+          a password has to be typed from a screen or printout. Excluding ambiguous characters
+          trades a small amount of entropy for far fewer transcription errors — worth it for
+          passwords a person will actually type by hand.
+        </p>
+        <h2>Why generate passwords locally</h2>
+        <p>
+          This generator uses your browser&rsquo;s cryptographically secure random number generator
+          and never sends the length, character set, or generated password to a server. Nothing is
+          logged, cached, or transmitted — the only copy of the password that exists is the one on
+          your screen.
+        </p>
+      </article>
+    ),
+    faqItems: [
+      {
+        q: "How random are the generated passwords?",
+        a: "Passwords are generated using your browser's built-in cryptographically secure random number generator (Web Crypto API), not a predictable pseudo-random function — the same class of randomness used for encryption keys.",
+      },
+      {
+        q: "What's the difference between a random password and a passphrase?",
+        a: "A random password mixes letters, numbers, and symbols for maximum entropy per character but is hard to memorize. A passphrase (Diceware-style) strings together several random dictionary words — easier to type and remember at an equivalent security level, as long as it's long enough.",
+      },
+      {
+        q: "How long should my password be?",
+        a: "16 characters or more for random passwords, or 4-6 words for a passphrase, is a solid baseline against modern offline cracking. Longer is better; the generator supports both up to very long lengths.",
+      },
+      {
+        q: "Can I exclude ambiguous characters like 1, l, I, and 0, O?",
+        a: "Yes — there's a toggle to exclude visually similar characters, useful for passwords you'll need to type from a printout or read aloud.",
+      },
+      {
+        q: "Is any password sent to a server or logged?",
+        a: "No. Generation happens entirely in your browser using the Web Crypto API. Nothing — not the settings, not the generated password — is transmitted, logged, or stored anywhere.",
+      },
+      {
+        q: "Can I generate multiple passwords at once?",
+        a: "Yes — bulk generation is supported, useful for provisioning multiple accounts or API keys at once without repeating the same settings each time.",
+      },
+    ],
+  },
+
+  "json-formatter": {
+    title: "Free JSON Formatter & Validator — Beautify, Minify & JSONPath",
+    description:
+      "Format, validate, and minify JSON with syntax error highlighting, a collapsible tree view, and JSONPath queries. Convert between JSON, YAML, CSV, and XML — free, in your browser.",
+    seoContent: (
+      <article>
+        <h2>Beautify vs. minify — when to use each</h2>
+        <p>
+          Beautified (pretty-printed) JSON adds indentation and line breaks so a human can read
+          nested objects and arrays at a glance — useful when debugging an API response or editing
+          a config file by hand. Minified JSON strips all unnecessary whitespace to shrink the
+          payload for production — every byte matters when a response is fetched thousands of
+          times. Most workflows need both: beautify while developing, minify before shipping.
+        </p>
+        <h2>Finding the actual syntax error</h2>
+        <p>
+          A single missing comma or unmatched brace can make an entire JSON document invalid, and
+          generic error messages like &ldquo;Unexpected token&rdquo; rarely point at the real problem.
+          This formatter highlights the exact line and character where parsing failed, so you can
+          fix trailing commas, unquoted keys, and mismatched brackets without scanning the whole
+          document by eye.
+        </p>
+        <h2>Querying large JSON with JSONPath</h2>
+        <p>
+          Once a payload gets into the thousands of lines, scrolling to find a value is slow.
+          JSONPath expressions like <code>$.data.users[?(@.active==true)].email</code> let you
+          query directly into nested structures and arrays, similar to how XPath works for XML —
+          handy for pulling one field out of a large API response without writing a script.
+        </p>
+        <h2>Why use UtilityApps for this</h2>
+        <p>
+          Large files are handled entirely client-side with a collapsible tree view, so nothing is
+          uploaded to a server — useful when the JSON contains real data, tokens, or PII you
+          don&rsquo;t want leaving your machine.
+        </p>
+      </article>
+    ),
+    faqItems: [
+      {
+        q: "What's the difference between formatting (beautifying) and validating JSON?",
+        a: "Formatting adds indentation and line breaks to make JSON readable; validating checks whether the JSON is syntactically correct. This tool does both — invalid JSON is flagged with the exact line and character of the error before formatting.",
+      },
+      {
+        q: "Can it minify JSON as well as beautify it?",
+        a: "Yes — toggle to minified output to strip all whitespace for production use, or pretty-printed output for readability while debugging.",
+      },
+      {
+        q: "What is JSONPath and why would I use it?",
+        a: "JSONPath is a query syntax for extracting specific values from nested JSON, similar to XPath for XML. It's useful for pulling one field out of a large API response or config file without manually scrolling through it.",
+      },
+      {
+        q: "Can I convert JSON to YAML, CSV, or XML?",
+        a: "Yes — one-click conversion between JSON, YAML, CSV, and XML is supported, useful when moving data between tools that expect different formats.",
+      },
+      {
+        q: "Does it handle very large JSON files?",
+        a: "Yes — the tree view is collapsible and built to stay responsive on large payloads without needing to send the file to a server first.",
+      },
+      {
+        q: "Is my JSON data uploaded anywhere?",
+        a: "No. All parsing, formatting, validation, and conversion happen locally in your browser — nothing is sent to a server, which matters if your JSON contains tokens, credentials, or personal data.",
+      },
+    ],
+  },
+
+  "base64-encoder": {
+    title: "Free Base64 Encoder & Decoder — Text, Files & Images Online",
+    description:
+      "Encode and decode Base64 strings, files, and images instantly. Supports standard, URL-safe, and MIME variants, plus UTF-8 and binary data — free, all processing stays local.",
+    seoContent: (
+      <article>
+        <h2>What Base64 encoding actually does</h2>
+        <p>
+          Base64 converts arbitrary binary data into a string made up only of letters, digits, and
+          three punctuation characters (<code>+</code>, <code>/</code>, <code>=</code>) — a format
+          safe to embed inside text-based formats like JSON, XML, HTML, or email, none of which can
+          reliably carry raw binary bytes. It&rsquo;s not encryption: anyone can decode Base64 back to
+          the original data instantly, so it should never be relied on to keep something secret.
+        </p>
+        <h2>Standard vs. URL-safe Base64</h2>
+        <p>
+          Standard Base64 uses <code>+</code> and <code>/</code>, both of which have special
+          meaning inside a URL (space and path separator context) and need percent-encoding if
+          used raw in a query string. URL-safe Base64 swaps those two characters for{" "}
+          <code>-</code> and <code>_</code> instead, so the result can be dropped directly into a
+          URL or filename — common in JWTs and API tokens — without further encoding.
+        </p>
+        <h2>Encoding files and images, not just text</h2>
+        <p>
+          Base64 is also how images get embedded directly into HTML or CSS as data URIs (
+          <code>data:image/png;base64,...</code>), avoiding a separate HTTP request for small
+          icons, and how binary attachments travel inside text-only protocols like email (MIME).
+          This tool handles files and images the same way it handles plain text — drop one in and
+          get the encoded (or decoded) result.
+        </p>
+        <h2>Why encode/decode locally</h2>
+        <p>
+          Base64 strings frequently contain tokens, API keys, or personal data hiding in plain
+          sight. Decoding them in your browser instead of an unknown third-party site means that
+          data never leaves your device.
+        </p>
+      </article>
+    ),
+    faqItems: [
+      {
+        q: "Is Base64 encoding the same as encryption?",
+        a: "No. Base64 is a reversible encoding scheme, not encryption — anyone can decode it back to the original data instantly with no key required. It should never be used to keep data secret.",
+      },
+      {
+        q: "What's the difference between standard and URL-safe Base64?",
+        a: "Standard Base64 uses + and /, which have special meaning in URLs and need extra encoding to use safely there. URL-safe Base64 replaces those with - and _ so the output can be used directly in a URL, filename, or JWT without further encoding.",
+      },
+      {
+        q: "Can I Base64 encode a file or image, not just text?",
+        a: "Yes — drop in a file or image and it's encoded to (or decoded from) Base64 the same way as plain text, including generating a data: URI for embedding images directly in HTML or CSS.",
+      },
+      {
+        q: "Why would I need to decode a Base64 string?",
+        a: "Common cases include inspecting JWT payloads, reading MIME email attachments, debugging API responses that embed binary data, or checking what a data URI actually contains.",
+      },
+      {
+        q: "Does it handle UTF-8 text with special characters correctly?",
+        a: "Yes — both UTF-8 strings and raw binary blobs are supported, so encoding and decoding round-trips correctly even with non-ASCII characters.",
+      },
+      {
+        q: "Is my data uploaded to a server?",
+        a: "No. All encoding and decoding happens locally in your browser, which matters since Base64 strings often contain tokens, secrets, or personal data.",
+      },
+    ],
+  },
+
+  "url-encoder": {
+    title: "Free URL Encoder & Decoder — Percent-Encode Query Strings",
+    description:
+      "Percent-encode and decode URLs, query parameters, and components using RFC-3986. Inspect and edit query strings in a grid view — free, runs entirely in your browser.",
+    seoContent: (
+      <article>
+        <h2>What percent-encoding solves</h2>
+        <p>
+          URLs can only safely contain a limited set of ASCII characters — letters, digits, and a
+          handful of punctuation marks. Spaces, ampersands, non-Latin characters, and reserved
+          symbols like <code>?</code> and <code>#</code> have to be percent-encoded (e.g. a space
+          becomes <code>%20</code>) so they&rsquo;re carried correctly instead of breaking the URL&rsquo;s
+          structure or being interpreted as a delimiter.
+        </p>
+        <h2>Encoding a whole URL vs. just a component</h2>
+        <p>
+          Encoding an entire URL and encoding one component (say, a single query value) aren&rsquo;t
+          interchangeable — if you percent-encode a full URL including its own{" "}
+          <code>://</code>, <code>?</code>, and <code>&amp;</code> characters, you break it,
+          since those characters are structural, not data. The right approach is to encode only
+          the value going into a parameter, then assemble the URL around it — which is why this
+          tool separates whole-URL mode from component/query-string mode.
+        </p>
+        <h2>Debugging redirects and query strings</h2>
+        <p>
+          A broken redirect or API call is often caused by a query parameter that&rsquo;s double-
+          encoded, under-encoded, or has a stray unencoded <code>&amp;</code> splitting it into two
+          parameters. The grid view breaks a query string into individual key/value pairs so you
+          can spot exactly which parameter is malformed, edit it, and rebuild the corrected URL.
+        </p>
+        <h2>Why use UtilityApps for this</h2>
+        <p>
+          Encoding and decoding happens instantly in your browser as you type, with no character
+          limit and no server round-trip — useful when the URL contains tokens or internal paths
+          you&rsquo;d rather not send to a third-party site.
+        </p>
+      </article>
+    ),
+    faqItems: [
+      {
+        q: "What does percent-encoding a URL actually do?",
+        a: "It converts characters that aren't safe in a URL — spaces, &, #, non-Latin characters, and more — into a %XX format using their byte value, so the URL is transmitted correctly instead of being misread or broken by browsers and servers.",
+      },
+      {
+        q: "Should I encode the whole URL or just one parameter?",
+        a: "Just the parameter value in almost all cases. Encoding a full URL including its :// , ?, and & characters breaks those structural characters. This tool has separate modes for whole-URL and component/query-string encoding to avoid that mistake.",
+      },
+      {
+        q: "What's the difference between encodeURIComponent and encodeURI?",
+        a: "encodeURIComponent (used for single values like query parameters) encodes more characters, including &, ?, and =, while encodeURI (for whole URLs) leaves those structural characters alone. Using the wrong one is a common source of double-encoding or broken links.",
+      },
+      {
+        q: "Can I edit individual query parameters instead of the raw string?",
+        a: "Yes — the grid view splits a query string into key/value rows you can edit directly, then rebuilds the encoded URL from your changes.",
+      },
+      {
+        q: "Why does my URL look 'double-encoded' with %25 in it?",
+        a: "%25 is the encoded form of the % character itself — it shows up when an already-encoded string gets encoded a second time. Decode once to check whether that's what happened, then re-encode from the original raw value.",
+      },
+      {
+        q: "Is the URL I paste in sent anywhere?",
+        a: "No. Encoding and decoding run entirely client-side — useful since URLs often contain auth tokens, internal paths, or other values you wouldn't want sent to a third party.",
       },
     ],
   },

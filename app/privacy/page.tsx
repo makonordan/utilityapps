@@ -71,6 +71,27 @@ export default function PrivacyPage() {
           months are deleted automatically.
         </P>
 
+        <H3 id="apps-directory-analytics">Apps directory analytics</H3>
+        <P>
+          The /apps software directory (invoicing and accounting software, with more categories
+          planned) uses the same anonymous approach. We log which listing or comparison page you
+          viewed, which affiliate link you clicked, whether you found a review helpful, which
+          filters you used, and the searches you ran (including searches that returned nothing —
+          that tells us what to add next), each tagged with an approximate device class and a
+          country derived server-side from the request at the time (then discarded). None of this
+          requires an account, and none of it is linked to your name, email, or IP address — we
+          never store your IP address. A helpful-vote flag is kept in your browser&apos;s local
+          storage so we don&apos;t ask twice, not to identify you.
+        </P>
+        <P>
+          These events live in Supabase tables (<code>app_searches</code>, <code>app_events</code>,{" "}
+          <code>app_suggestions</code>) that anyone can write to but nobody can read directly —
+          aggregate reads (top searches, most-viewed listings, etc.) happen only through our admin
+          tooling. If you use the optional &ldquo;suggest software&rdquo; box, the software name,
+          URL, and reason you provide are stored the same way; the email field there is entirely
+          optional and only used if you want a reply.
+        </P>
+
         <H3 id="bookmarks">Bookmarks and recently used tools</H3>
         <P>
           When you bookmark a tool or use one, we store the tool ID and a timestamp on your device

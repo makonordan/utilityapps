@@ -17,6 +17,7 @@ import {
 
 import { AdSlot } from "@/components/ads/AdSlot";
 import { ReceiptGenerator } from "@/components/business-tools/ReceiptGenerator";
+import { OutgrowingToolBanner } from "@/components/tools/OutgrowingToolBanner";
 import { TrackToolVisit } from "@/components/tools/TrackToolVisit";
 import { getCategoryByName } from "@/lib/categories";
 import { getIcon } from "@/lib/icons";
@@ -531,6 +532,7 @@ export default function ReceiptGeneratorPage() {
           </div>
         </section>
       </div>
+      <OutgrowingToolBanner maxWidth="max-w-6xl" />
     </>
   );
 }

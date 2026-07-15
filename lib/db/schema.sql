@@ -935,3 +935,114 @@ do $$ begin
   create policy poll_votes_no_public_select on public.poll_votes
     for select using (false);
 exception when duplicate_object then null; end $$;
+
+-- 19. Apps directory analytics (app_searches, app_events, app_suggestions) --
+-- Anonymous, privacy-respecting tracking for the /apps software directory.
+-- No accounts, no personal data, no IP storage anywhere in this section.
+-- Every table here is anon-INSERT only; there is deliberately no public
+-- SELECT policy on any of them — aggregate reads (top searches, most
+-- viewed/clicked listings, helpful ratios, suggestions inbox) happen only
+-- through the service-role client in lib/apps/analyticsAdmin.ts, consumed
+-- by the admin dashboard's Apps tab.
+
+do $$ begin
+  create type public.app_event_type as enum (
+    'listing_view', 'affiliate_click', 'compare_view',
+    'helpful_yes', 'helpful_no', 'filter_used'
+  );
+exception when duplicate_object then null; end $$;
+
+-- What people search for (and find nothing for) tells us exactly which
+-- software and categories to add next — the highest-value table here.
+create table if not exists public.app_searches (
+  id              bigint generated always as identity primary key,
+  query           text not null,
+  results_count   integer not null default 0,
+  category        text,
+  clicked_app_id  text,
+  created_at      timestamptz not null default now()
+);
+
+create index if not exists app_searches_created_idx
+  on public.app_searches (created_at desc);
+-- Zero-result searches are demand we're not serving — the admin dashboard
+-- highlights them, so a partial index keeps that query cheap at scale.
+create index if not exists app_searches_zero_results_idx
+  on public.app_searches (created_at desc) where results_count = 0;
+
+alter table public.app_searches enable row level security;
+
+do $$ begin
+  create policy app_searches_public_insert on public.app_searches
+    for insert with check (true);
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create policy app_searches_no_public_select on public.app_searches
+    for select using (false);
+exception when duplicate_object then null; end $$;
+
+-- Per-listing interaction events: views, affiliate clicks, comparison-page
+-- views, helpful votes, filter usage. `app_id` doubles as either a real app
+-- id (listing_view / affiliate_click / helpful_yes / helpful_no), a
+-- comparison slug (compare_view, e.g. "freshbooks-vs-quickbooks-online"),
+-- or the literal sentinel 'directory' for events not tied to one listing
+-- (filter_used). `metadata` carries event-specific detail — e.g. which
+-- filter and value — so the shape can evolve without a migration.
+create table if not exists public.app_events (
+  id           bigint generated always as identity primary key,
+  app_id       text not null,
+  event_type   public.app_event_type not null,
+  metadata     jsonb not null default '{}'::jsonb,
+  device_type  text,
+  -- Country only, resolved server-side from x-vercel-ip-country /
+  -- cf-ipcountry. Never an IP address — never stored anywhere in this table.
+  country      text,
+  created_at   timestamptz not null default now()
+);
+
+create index if not exists app_events_app_idx
+  on public.app_events (app_id, created_at desc);
+create index if not exists app_events_type_idx
+  on public.app_events (event_type, created_at desc);
+create index if not exists app_events_created_idx
+  on public.app_events (created_at desc);
+
+alter table public.app_events enable row level security;
+
+do $$ begin
+  create policy app_events_public_insert on public.app_events
+    for insert with check (true);
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create policy app_events_no_public_select on public.app_events
+    for select using (false);
+exception when duplicate_object then null; end $$;
+
+-- Visitor-suggested software to add to the directory. Email is optional —
+-- collected only if the visitor wants a reply — so this table holds
+-- possible PII and gets the same insert-only treatment as contact_messages.
+create table if not exists public.app_suggestions (
+  id              bigint generated always as identity primary key,
+  suggested_name  text not null,
+  suggested_url   text,
+  reason          text,
+  email           text,
+  created_at      timestamptz not null default now()
+);
+
+create index if not exists app_suggestions_created_idx
+  on public.app_suggestions (created_at desc);
+
+alter table public.app_suggestions enable row level security;
+
+do $$ begin
+  create policy app_suggestions_public_insert on public.app_suggestions
+    for insert with check (true);
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create policy app_suggestions_no_public_select on public.app_suggestions
+    for select using (false);
+exception when duplicate_object then null; end $$;

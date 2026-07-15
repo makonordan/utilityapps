@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { Download } from "lucide-react";
 
 import { Field, INPUT_CLASS, ToolShell } from "./ToolShell";
 
@@ -18,6 +19,63 @@ function pmt(principal: number, annualRatePct: number, years: number): number {
   return (principal * r * f) / (f - 1);
 }
 
+interface ScheduleRow {
+  key: number;
+  label: string;
+  principal: number;
+  interest: number;
+  balance: number;
+}
+
+/** Month-by-month principal/interest/balance split for the P&I portion of the loan. */
+function buildMonthlySchedule(principal: number, annualRatePct: number, years: number): ScheduleRow[] {
+  const months = Math.round(years * 12);
+  if (months <= 0 || principal <= 0) return [];
+  const monthlyRate = annualRatePct / 100 / 12;
+  const payment = pmt(principal, annualRatePct, years);
+  const rows: ScheduleRow[] = [];
+  let balance = principal;
+  for (let period = 1; period <= months; period++) {
+    const interest = balance * monthlyRate;
+    let principalPaid = payment - interest;
+    if (period === months || principalPaid > balance) principalPaid = balance;
+    balance = Math.max(0, balance - principalPaid);
+    rows.push({ key: period, label: `Month ${period}`, principal: principalPaid, interest, balance });
+  }
+  return rows;
+}
+
+/** Rolls up a monthly schedule into one row per 12-month block. */
+function buildYearlySchedule(monthly: ScheduleRow[]): ScheduleRow[] {
+  const out: ScheduleRow[] = [];
+  for (let i = 0; i < monthly.length; i += 12) {
+    const chunk = monthly.slice(i, i + 12);
+    const year = out.length + 1;
+    out.push({
+      key: year,
+      label: `Year ${year}`,
+      principal: chunk.reduce((sum, r) => sum + r.principal, 0),
+      interest: chunk.reduce((sum, r) => sum + r.interest, 0),
+      balance: chunk[chunk.length - 1].balance,
+    });
+  }
+  return out;
+}
+
+function downloadScheduleCsv(rows: ScheduleRow[]) {
+  const header = "Period,Principal,Interest,Balance\n";
+  const body = rows
+    .map((r) => `${r.label},${r.principal.toFixed(2)},${r.interest.toFixed(2)},${r.balance.toFixed(2)}`)
+    .join("\n");
+  const blob = new Blob([header + body], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "amortization-schedule.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export function MortgageCalculator() {
   const [home, setHome] = useState("400000");
   const [down, setDown] = useState("80000");
@@ -26,11 +84,15 @@ export function MortgageCalculator() {
   const [tax, setTax] = useState("4800");
   const [insurance, setInsurance] = useState("1500");
   const [hoa, setHoa] = useState("0");
+  const [scheduleView, setScheduleView] = useState<"yearly" | "monthly">("yearly");
+  const [showSchedule, setShowSchedule] = useState(false);
 
   const homeNum = Number(home) || 0;
   const downNum = Number(down) || 0;
   const principal = Math.max(0, homeNum - downNum);
-  const piPayment = pmt(principal, Number(rate), Number(years));
+  const rateNum = Number(rate) || 0;
+  const yearsNum = Number(years) || 0;
+  const piPayment = pmt(principal, rateNum, yearsNum);
   const monthlyTax = (Number(tax) || 0) / 12;
   const monthlyIns = (Number(insurance) || 0) / 12;
   const monthlyHoa = Number(hoa) || 0;
@@ -40,6 +102,14 @@ export function MortgageCalculator() {
   const monthlyPmi = downPct < 20 ? (principal * 0.005) / 12 : 0;
 
   const totalPiti = piPayment + monthlyTax + monthlyIns + monthlyHoa + monthlyPmi;
+
+  const monthlySchedule = useMemo(
+    () => buildMonthlySchedule(principal, rateNum, yearsNum),
+    [principal, rateNum, yearsNum]
+  );
+  const yearlySchedule = useMemo(() => buildYearlySchedule(monthlySchedule), [monthlySchedule]);
+  const totalInterest = monthlySchedule.reduce((sum, r) => sum + r.interest, 0);
+  const activeSchedule = scheduleView === "yearly" ? yearlySchedule : monthlySchedule;
 
   return (
     <ToolShell
@@ -106,6 +176,82 @@ export function MortgageCalculator() {
             </div>
           ))}
       </div>
+
+      {monthlySchedule.length > 0 && (
+        <div className="mt-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-surface-600 dark:text-surface-300">
+                Amortization schedule
+              </p>
+              <p className="mt-0.5 text-[11px] text-surface-500 dark:text-surface-400">
+                Total interest over {yearsNum} years:{" "}
+                <span className="font-semibold text-surface-700 dark:text-surface-200">{fmtUSD(totalInterest)}</span>
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="inline-flex rounded-xl border border-surface-200 p-0.5 dark:border-surface-700">
+                {(["yearly", "monthly"] as const).map((view) => (
+                  <button
+                    key={view}
+                    type="button"
+                    onClick={() => setScheduleView(view)}
+                    className={
+                      scheduleView === view
+                        ? "rounded-[10px] bg-primary-500 px-3 py-1.5 text-xs font-semibold text-white"
+                        : "rounded-[10px] px-3 py-1.5 text-xs font-semibold text-surface-600 hover:text-surface-900 dark:text-surface-300 dark:hover:text-white"
+                    }
+                  >
+                    {view === "yearly" ? "Yearly" : "Monthly"}
+                  </button>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowSchedule((s) => !s)}
+                className="rounded-xl border border-surface-200 px-3 py-1.5 text-xs font-semibold text-surface-700 transition hover:border-surface-300 hover:bg-surface-50 dark:border-surface-700 dark:text-surface-200 dark:hover:bg-surface-800"
+              >
+                {showSchedule ? "Hide schedule" : "Show schedule"}
+              </button>
+              {showSchedule && (
+                <button
+                  type="button"
+                  onClick={() => downloadScheduleCsv(monthlySchedule)}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-surface-200 px-3 py-1.5 text-xs font-semibold text-surface-700 transition hover:border-surface-300 hover:bg-surface-50 dark:border-surface-700 dark:text-surface-200 dark:hover:bg-surface-800"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  Export CSV
+                </button>
+              )}
+            </div>
+          </div>
+
+          {showSchedule && (
+            <div className="mt-3 max-h-96 overflow-y-auto overflow-x-auto rounded-xl border border-surface-200 dark:border-surface-700">
+              <table className="w-full text-sm">
+                <thead className="sticky top-0 bg-surface-50 text-xs uppercase tracking-wider text-surface-500 dark:bg-surface-800 dark:text-surface-400">
+                  <tr>
+                    <th className="px-4 py-2 text-left font-semibold">{scheduleView === "yearly" ? "Year" : "Month"}</th>
+                    <th className="px-4 py-2 text-right font-semibold">Principal</th>
+                    <th className="px-4 py-2 text-right font-semibold">Interest</th>
+                    <th className="px-4 py-2 text-right font-semibold">Balance</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-surface-200 bg-white dark:divide-surface-700 dark:bg-surface-900">
+                  {activeSchedule.map((row) => (
+                    <tr key={row.key}>
+                      <td className="px-4 py-2 text-surface-700 dark:text-surface-200">{row.label}</td>
+                      <td className="px-4 py-2 text-right text-surface-700 dark:text-surface-200">{fmtUSD(row.principal)}</td>
+                      <td className="px-4 py-2 text-right text-surface-700 dark:text-surface-200">{fmtUSD(row.interest)}</td>
+                      <td className="px-4 py-2 text-right font-semibold text-surface-900 dark:text-white">{fmtUSD(row.balance)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
     </ToolShell>
   );
 }
