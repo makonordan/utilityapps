@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ArrowUpRight, Search, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUpRight, ChevronDown, Search, SlidersHorizontal, X } from "lucide-react";
 
 import { AppLogo } from "@/components/apps/AppLogo";
+import { ToolCard } from "@/components/tools/ToolCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import {
   ALL_APPS,
@@ -22,7 +23,23 @@ import {
 } from "@/lib/apps";
 import { logCompletedSearch, trackAffiliateClick, trackAppEvent } from "@/lib/apps/analytics";
 import { formatStartingPrice, industryLabel, PRICING_NAME, REGION_NAME, SIZE_NAME } from "@/lib/apps/format";
+import { TOOLS, TOOLS_BY_ID } from "@/lib/tools";
 import { cn } from "@/lib/utils";
+
+const APPS_PAGE = 9;
+const TOOLS_PAGE = 8;
+
+// Editorial mapping from an app category to the free UtilityApps tools that
+// pair well with it — used as the "Start free with our tools" fallback for
+// categories where individual listings don't carry a relatedUtilityAppsTools
+// match of their own. Keep every id real (verified against lib/tools.ts).
+const CATEGORY_FUNNEL_TOOLS: Record<string, string[]> = {
+  "invoicing-accounting": ["invoice-generator", "receipt-generator", "purchase-order-generator", "tax-calculator"],
+  "project-management": ["pomodoro-timer", "countdown-timer", "study-timer", "cron-expression-builder"],
+  "email-marketing": ["email-signature-generator", "qr-code-generator", "meta-tag-generator", "url-encoder"],
+  "hr-payroll": ["salary-calculator", "tax-calculator", "freelance-contract-generator", "nda-generator"],
+};
+const DEFAULT_FUNNEL_TOOL_IDS = ["invoice-generator", "qr-code-generator", "password-generator", "currency-converter"];
 
 type SortMode = "editors" | "popular" | "trending" | "price" | "recent";
 
@@ -347,6 +364,48 @@ export function AppsDirectory() {
   const shortcuts = curatedShortcuts(filters.category);
   const activeCategory = APP_CATEGORIES.find((c) => c.id === filters.category) ?? null;
 
+  // Pagination for the results grid and the tools funnel. Both reset to
+  // their first page whenever the active filter set changes — adjusted
+  // during render (React's documented pattern for "state that depends on a
+  // changing key") rather than in an effect, so it takes effect in the same
+  // render instead of triggering an extra one.
+  const filterKey = JSON.stringify({ ...filters, sort: undefined });
+  const [visibleCount, setVisibleCount] = useState(APPS_PAGE);
+  const [visibleToolCount, setVisibleToolCount] = useState(TOOLS_PAGE);
+  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+  if (filterKey !== prevFilterKey) {
+    setPrevFilterKey(filterKey);
+    setVisibleCount(APPS_PAGE);
+    setVisibleToolCount(TOOLS_PAGE);
+  }
+  const visibleApps = sorted.slice(0, visibleCount);
+  const allAppsShown = visibleApps.length >= sorted.length;
+
+  const hasActiveFilter =
+    filters.category !== null ||
+    filters.industries.length > 0 ||
+    filters.regions.length > 0 ||
+    filters.sizes.length > 0 ||
+    filters.pricingModels.length > 0 ||
+    filters.freeOnly ||
+    filters.q.trim().length > 0;
+
+  // "Start free with our tools" — a curated suggestion when a category (or
+  // other filter) is active, or the full free-tools catalog (paginated) when
+  // browsing with no filter at all.
+  let suggestedToolIds: string[];
+  if (filters.category) {
+    suggestedToolIds = CATEGORY_FUNNEL_TOOLS[filters.category] ?? DEFAULT_FUNNEL_TOOL_IDS;
+  } else if (hasActiveFilter) {
+    const related = [...new Set(sorted.flatMap((app) => app.relatedUtilityAppsTools))];
+    suggestedToolIds = related.length > 0 ? related.slice(0, 8) : DEFAULT_FUNNEL_TOOL_IDS;
+  } else {
+    suggestedToolIds = [];
+  }
+  const suggestedTools = suggestedToolIds.map((id) => TOOLS_BY_ID[id]).filter((t): t is (typeof TOOLS)[number] => Boolean(t));
+  const allToolsVisible = TOOLS.slice(0, visibleToolCount);
+  const allToolsShown = allToolsVisible.length >= TOOLS.length;
+
   // Log completed searches only — debounced so a settled query (not every
   // keystroke) gets one entry, with the result count it actually produced.
   // Zero-result searches are the highest-value signal here (demand we're
@@ -602,15 +661,88 @@ export function AppsDirectory() {
             }
           />
         ) : (
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {sorted.map((app) => (
-              <li key={app.id}>
-                <AppCard app={app} />
+          <>
+            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {visibleApps.map((app) => (
+                <li key={app.id}>
+                  <AppCard app={app} />
+                </li>
+              ))}
+            </ul>
+
+            {!allAppsShown && (
+              <div className="mt-10 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((c) => c + APPS_PAGE)}
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40"
+                >
+                  Load More Apps
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+              </div>
+            )}
+            {allAppsShown && sorted.length > APPS_PAGE && (
+              <p className="mt-10 text-center text-sm font-medium text-surface-500 dark:text-surface-400">
+                You&apos;ve seen every app in this view
+              </p>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Funnel to our own free tools — suggestions that match whatever's
+          currently filtered, or the full catalog (paginated) with no filter. */}
+      <section className="mt-12 rounded-2xl border border-primary-200 bg-primary-50/60 p-6 dark:border-primary-700/40 dark:bg-primary-500/10">
+        <h2 className="text-lg font-bold text-surface-900 dark:text-white">Start free with our tools</h2>
+        <p className="mt-1 text-sm text-surface-600 dark:text-surface-300">
+          {hasActiveFilter
+            ? `Not ready to pay for ${activeCategory ? activeCategory.name.toLowerCase() : "software"}? These free tools cover the basics first.`
+            : "Not ready to pay? Use our free tools first — come back when you outgrow them."}
+        </p>
+
+        {hasActiveFilter ? (
+          <ul className="mt-4 flex flex-wrap gap-3">
+            {suggestedTools.map((tool) => (
+              <li key={tool.id}>
+                <Link
+                  href={tool.href}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-surface-200 bg-white px-4 py-2 text-sm font-semibold text-surface-800 transition hover:border-primary-300 hover:text-primary-700 dark:border-surface-800 dark:bg-surface-900 dark:text-surface-100 dark:hover:border-primary-700 dark:hover:text-primary-300"
+                >
+                  {tool.name}
+                </Link>
               </li>
             ))}
           </ul>
+        ) : (
+          <>
+            <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {allToolsVisible.map((tool) => (
+                <li key={tool.id}>
+                  <ToolCard tool={tool} />
+                </li>
+              ))}
+            </ul>
+            {!allToolsShown && (
+              <div className="mt-6 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setVisibleToolCount((c) => c + TOOLS_PAGE)}
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40"
+                >
+                  Load More Tools
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+              </div>
+            )}
+            {allToolsShown && TOOLS.length > TOOLS_PAGE && (
+              <p className="mt-6 text-center text-sm font-medium text-surface-500 dark:text-surface-400">
+                You&apos;ve seen every tool
+              </p>
+            )}
+          </>
         )}
-      </div>
+      </section>
     </div>
   );
 }

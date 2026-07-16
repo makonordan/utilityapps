@@ -9,7 +9,6 @@ import { AppSuggestionForm } from "@/components/apps/AppSuggestionForm";
 import { AppsNewsletter } from "@/components/apps/AppsNewsletter";
 import { ToolFAQ, type FAQItem } from "@/components/tools/ToolFAQ";
 import { generateBreadcrumbSchema, generateCollectionPageSchema, jsonLdString } from "@/lib/schema";
-import { TOOLS_BY_ID } from "@/lib/tools";
 import { SITE_CONFIG } from "@/lib/utils";
 
 const TITLE = "Apps — Honestly Curated Software Recommendations";
@@ -62,11 +61,6 @@ const TRUST_ITEMS = [
   "We say when NOT to use something",
   "Affiliate-funded, never affiliate-ranked",
 ];
-
-const FUNNEL_TOOL_IDS = ["invoice-generator", "receipt-generator", "purchase-order-generator"] as const;
-const FUNNEL_TOOLS = FUNNEL_TOOL_IDS.map((id) => TOOLS_BY_ID[id]).filter(
-  (t): t is NonNullable<typeof t> => Boolean(t)
-);
 
 const FAQS: FAQItem[] = [
   {
@@ -212,29 +206,8 @@ export default function AppsDirectoryPage() {
         <AppsDirectory />
       </Suspense>
 
-      {/* Funnel to our own free tools */}
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
-        <div className="rounded-2xl border border-primary-200 bg-primary-50/60 p-6 dark:border-primary-700/40 dark:bg-primary-500/10">
-          <h2 className="text-lg font-bold text-surface-900 dark:text-white">
-            Start free with our tools
-          </h2>
-          <p className="mt-1 text-sm text-surface-600 dark:text-surface-300">
-            Not ready to pay? Use our free tools first — come back when you outgrow them.
-          </p>
-          <ul className="mt-4 flex flex-wrap gap-3">
-            {FUNNEL_TOOLS.map((tool) => (
-              <li key={tool.id}>
-                <Link
-                  href={tool.href}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-surface-200 bg-white px-4 py-2 text-sm font-semibold text-surface-800 transition hover:border-primary-300 hover:text-primary-700 dark:border-surface-800 dark:bg-surface-900 dark:text-surface-100 dark:hover:border-primary-700 dark:hover:text-primary-300"
-                >
-                  {tool.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      {/* "Start free with our tools" now lives inside AppsDirectory itself,
+          since it needs live access to the visitor's active filter state. */}
 
       <section className="mx-auto max-w-7xl px-4 sm:px-6">
         <AppsNewsletter />
