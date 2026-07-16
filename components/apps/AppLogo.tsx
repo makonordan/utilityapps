@@ -2,19 +2,27 @@ import Image from "next/image";
 
 import type { AppListing } from "@/lib/apps";
 
-/** Renders the vendor logo when we have a real, verified asset URL; falls
- *  back to a colored initial avatar otherwise (logoUrl starts as "VERIFY"
- *  until the owner uploads a real asset — see docs/apps-verification-checklist.md). */
+/** Renders the vendor logo when we have a real asset URL (currently sourced
+ *  from Google's favicon service, keyed off each app's own website domain —
+ *  see docs/apps-verification-checklist.md); falls back to a colored initial
+ *  avatar for the rare listing still carrying the "VERIFY" placeholder. A
+ *  bordered neutral tile behind the image keeps small/transparent favicons
+ *  from looking like they're floating loose on the card. */
 export function AppLogo({ app, size = 40 }: { app: AppListing; size?: number }) {
   if (app.logoUrl.startsWith("http")) {
     return (
-      <Image
-        src={app.logoUrl}
-        alt=""
-        width={size}
-        height={size}
-        className="shrink-0 rounded-xl object-contain"
-      />
+      <span
+        className="flex shrink-0 items-center justify-center rounded-xl border border-surface-200 bg-white p-1.5 dark:border-surface-800 dark:bg-surface-950"
+        style={{ width: size, height: size }}
+      >
+        <Image
+          src={app.logoUrl}
+          alt=""
+          width={size}
+          height={size}
+          className="h-full w-full object-contain"
+        />
+      </span>
     );
   }
   return (

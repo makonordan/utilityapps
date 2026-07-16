@@ -1,11 +1,19 @@
 import Fuse from "fuse.js";
 
+import { EMAIL_MARKETING_APPS } from "./data/email-marketing";
+import { HR_PAYROLL_APPS } from "./data/hr-payroll";
 import { INVOICING_APPS } from "./data/invoicing-accounting";
+import { PROJECT_MANAGEMENT_APPS } from "./data/project-management";
 import { VERIFY, type AppListing, type BusinessSize, type Region } from "./types";
 
 // Aggregates every category data file into one array. New categories drop in
 // here as `...NEW_CATEGORY_APPS` — nothing else in this module changes.
-const RAW_APPS: AppListing[] = [...INVOICING_APPS];
+const RAW_APPS: AppListing[] = [
+  ...INVOICING_APPS,
+  ...PROJECT_MANAGEMENT_APPS,
+  ...EMAIL_MARKETING_APPS,
+  ...HR_PAYROLL_APPS,
+];
 
 /** A listing is publishable once every pricing-related fact has been
  *  checked against the vendor's live pricing page — no field still holds

@@ -88,14 +88,32 @@ export interface AppCategory {
   description: string;
 }
 
-// Phase 1 ships a single category. Additional categories drop into this
-// array (and get their own lib/apps/data/<category>.ts file) in later phases.
+// Additional categories drop into this array (and get their own
+// lib/apps/data/<category>.ts file) as the directory grows.
 export const APP_CATEGORIES: AppCategory[] = [
   {
     id: "invoicing-accounting",
     name: "Invoicing & Accounting Software",
     description:
       "Send invoices, track expenses, and manage the books — from single-invoice freelancer tools to full double-entry accounting suites.",
+  },
+  {
+    id: "project-management",
+    name: "Project Management Software",
+    description:
+      "Plan work, assign tasks, and track progress — from simple kanban boards for small teams to full portfolio and resource management for larger orgs.",
+  },
+  {
+    id: "email-marketing",
+    name: "Email Marketing Software",
+    description:
+      "Build lists, send campaigns, and automate follow-ups — from simple newsletter tools to full marketing automation platforms.",
+  },
+  {
+    id: "hr-payroll",
+    name: "HR & Payroll Software",
+    description:
+      "Run payroll, manage benefits, and handle hiring and HR admin — from single-country payroll for small teams to global HR platforms.",
   },
 ];
 

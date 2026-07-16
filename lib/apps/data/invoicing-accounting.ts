@@ -23,7 +23,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "FreshBooks",
     // DRAFT - review before publish
     tagline: "Invoicing and light bookkeeping built for freelancers who bill by time or project.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.freshbooks.com&sz=128",
     website: "https://www.freshbooks.com",
 
     category: "invoicing-accounting",
@@ -98,7 +98,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "QuickBooks Online",
     // DRAFT - review before publish
     tagline: "The category default for US small businesses — full accounting, payroll, and a huge app ecosystem.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=quickbooks.intuit.com&sz=128",
     website: "https://quickbooks.intuit.com",
 
     category: "invoicing-accounting",
@@ -174,7 +174,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Xero",
     // DRAFT - review before publish
     tagline: "Full accounting with unlimited users on every plan — strong outside the US too.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.xero.com&sz=128",
     website: "https://www.xero.com",
 
     category: "invoicing-accounting",
@@ -248,7 +248,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Wave",
     // DRAFT - review before publish
     tagline: "Genuinely free invoicing and accounting for US/Canada freelancers and very small businesses.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.waveapps.com&sz=128",
     website: "https://www.waveapps.com",
 
     category: "invoicing-accounting",
@@ -319,7 +319,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Zoho Books",
     // DRAFT - review before publish
     tagline: "Full double-entry accounting at a lower price point, with deep multi-country tax support.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.zoho.com&sz=128",
     website: "https://www.zoho.com/books/",
 
     category: "invoicing-accounting",
@@ -396,7 +396,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Invoice Ninja",
     // DRAFT - review before publish
     tagline: "Open-source invoicing you can self-host for free, or run hosted for a small fee.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=invoiceninja.com&sz=128",
     website: "https://invoiceninja.com",
 
     category: "invoicing-accounting",
@@ -468,7 +468,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Bonsai",
     // DRAFT - review before publish
     tagline: "Contracts, proposals, and invoicing in one workflow for freelance consultants and creatives.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.hellobonsai.com&sz=128",
     website: "https://www.hellobonsai.com",
 
     category: "invoicing-accounting",
@@ -539,7 +539,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Harvest",
     // DRAFT - review before publish
     tagline: "Time tracking that turns straight into client invoices — built for agencies billing hourly.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.getharvest.com&sz=128",
     website: "https://www.getharvest.com",
 
     category: "invoicing-accounting",
@@ -608,7 +608,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Bill.com",
     // DRAFT - review before publish
     tagline: "Accounts payable and receivable automation with approval workflows, layered on your existing books.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.bill.com&sz=128",
     website: "https://www.bill.com",
 
     category: "invoicing-accounting",
@@ -679,7 +679,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Sage Business Cloud Accounting",
     // DRAFT - review before publish
     tagline: "Established, compliance-focused accounting with deep UK and South Africa support.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.sage.com&sz=128",
     website: "https://www.sage.com/en-us/sage-business-cloud/accounting/",
 
     category: "invoicing-accounting",
@@ -749,7 +749,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "FreeAgent",
     // DRAFT - review before publish
     tagline: "UK accounting priced by business type, handling Self Assessment and Making Tax Digital.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.freeagent.com&sz=128",
     website: "https://www.freeagent.com",
 
     category: "invoicing-accounting",
@@ -817,7 +817,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Kashoo",
     // DRAFT - review before publish
     tagline: "No-frills double-entry bookkeeping with one flat plan and unlimited users.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=kashoo.com&sz=128",
     website: "https://kashoo.com",
 
     category: "invoicing-accounting",
@@ -885,7 +885,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Invoicely",
     // DRAFT - review before publish
     tagline: "Simple free-to-start invoicing for occasional invoicers running multiple small businesses.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=invoicely.com&sz=128",
     website: "https://invoicely.com",
 
     category: "invoicing-accounting",
@@ -954,7 +954,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Hiveage",
     // DRAFT - review before publish
     tagline: "Budget invoicing with built-in time tracking — a smaller-name alternative to FreshBooks.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.hiveage.com&sz=128",
     website: "https://www.hiveage.com",
 
     category: "invoicing-accounting",
@@ -1024,7 +1024,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Moon Invoice",
     // DRAFT - review before publish
     tagline: "Mobile-first invoicing for tradespeople and small businesses billing from the field.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.mooninvoice.com&sz=128",
     website: "https://www.mooninvoice.com",
 
     category: "invoicing-accounting",
@@ -1090,7 +1090,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Zoho Invoice",
     // DRAFT - review before publish
     tagline: "Completely free invoicing, forever — not a trial, with an upgrade path into Zoho Books.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.zoho.com&sz=128",
     website: "https://www.zoho.com/invoice/",
 
     category: "invoicing-accounting",
@@ -1158,7 +1158,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "PayPal Invoicing",
     // DRAFT - review before publish
     tagline: "Send an invoice from an account your clients already trust — no subscription, pay per transaction.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.paypal.com&sz=128",
     website: "https://www.paypal.com/us/business/accept-payments/invoice",
 
     category: "invoicing-accounting",
@@ -1225,7 +1225,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Stripe Invoicing",
     // DRAFT - review before publish
     tagline: "API-first invoicing for businesses already running payments through Stripe.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=stripe.com&sz=128",
     website: "https://stripe.com/invoicing",
 
     category: "invoicing-accounting",
@@ -1303,7 +1303,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Square Invoices",
     // DRAFT - review before publish
     tagline: "Free invoicing bundled with the Square payments ecosystem — pay only when you get paid.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=squareup.com&sz=128",
     website: "https://squareup.com/us/en/invoices",
 
     category: "invoicing-accounting",
@@ -1372,7 +1372,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Melio",
     // DRAFT - review before publish
     tagline: "Pay and get paid via free ACH — a bill-pay layer that sits on top of your existing accounting software.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=meliopayments.com&sz=128",
     website: "https://meliopayments.com",
 
     category: "invoicing-accounting",
@@ -1442,7 +1442,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Digits",
     // DRAFT - review before publish
     tagline: "AI-driven real-time bookkeeping and financial insights for venture-backed startups.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=digits.com&sz=128",
     website: "https://digits.com",
 
     category: "invoicing-accounting",
@@ -1508,7 +1508,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Oracle NetSuite",
     // DRAFT - review before publish
     tagline: "Full-suite cloud ERP with financials, inventory, and CRM — enterprise scale, enterprise price, quote-only.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.netsuite.com&sz=128",
     website: "https://www.netsuite.com",
 
     category: "invoicing-accounting",
@@ -1574,7 +1574,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Sage Intacct",
     // DRAFT - review before publish
     tagline: "AICPA-endorsed cloud financial management for mid-market finance teams — quote-only, no public pricing.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.sage.com&sz=128",
     website: "https://www.sage.com/en-us/sage-business-cloud/intacct/",
 
     category: "invoicing-accounting",
@@ -1640,7 +1640,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Clear Books",
     // DRAFT - review before publish
     tagline: "UK small-business accounting with Making Tax Digital built in, at a lower price than Xero/QuickBooks.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.clearbooks.co.uk&sz=128",
     website: "https://www.clearbooks.co.uk",
 
     category: "invoicing-accounting",
@@ -1706,7 +1706,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Pandle",
     // DRAFT - review before publish
     tagline: "Free-forever UK bookkeeping software, with a low-cost Pro tier for extra features.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.pandle.com&sz=128",
     website: "https://www.pandle.com",
 
     category: "invoicing-accounting",
@@ -1771,7 +1771,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "QuickFile",
     // DRAFT - review before publish
     tagline: "Free UK accounting for low invoice volumes, with an affordable flat fee once you scale up.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.quickfile.co.uk&sz=128",
     website: "https://www.quickfile.co.uk",
 
     category: "invoicing-accounting",
@@ -1836,7 +1836,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Crunch",
     // DRAFT - review before publish
     tagline: "UK online accounting bundled with real accountant access — software and a human, in one subscription.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.crunch.co.uk&sz=128",
     website: "https://www.crunch.co.uk",
 
     category: "invoicing-accounting",
@@ -1902,7 +1902,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Countingup",
     // DRAFT - review before publish
     tagline: "A UK business bank account with bookkeeping and tax tools built directly into the banking app.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=countingup.com&sz=128",
     website: "https://countingup.com",
 
     category: "invoicing-accounting",
@@ -1971,7 +1971,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Coconut",
     // DRAFT - review before publish
     tagline: "Purpose-built bookkeeping and Making Tax Digital for UK sole traders.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.getcoconut.com&sz=128",
     website: "https://www.getcoconut.com",
 
     category: "invoicing-accounting",
@@ -2039,7 +2039,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Vyapar",
     // DRAFT - review before publish
     tagline: "GST-compliant billing, inventory, and accounting built for Indian small businesses and retailers.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=vyaparapp.in&sz=128",
     website: "https://vyaparapp.in",
 
     category: "invoicing-accounting",
@@ -2102,7 +2102,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "TallyPrime",
     // DRAFT - review before publish
     tagline: "The long-standing default accounting software for Indian SMBs — perpetual license or monthly subscription.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=tallysolutions.com&sz=128",
     website: "https://tallysolutions.com",
 
     category: "invoicing-accounting",
@@ -2167,7 +2167,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "myBillBook",
     // DRAFT - review before publish
     tagline: "Simple GST billing and inventory app for Indian shopkeepers and small manufacturers.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=mybillbook.in&sz=128",
     website: "https://mybillbook.in",
 
     category: "invoicing-accounting",
@@ -2233,7 +2233,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Refrens",
     // DRAFT - review before publish
     tagline: "Invoicing, accounting, and a lightweight sales CRM in one platform, built for Indian freelancers and agencies.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.refrens.com&sz=128",
     website: "https://www.refrens.com",
 
     category: "invoicing-accounting",
@@ -2299,7 +2299,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "ProfitBooks",
     // DRAFT - review before publish
     tagline: "Straightforward GST accounting for Indian small businesses, with a genuinely usable free plan.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=profitbooks.net&sz=128",
     website: "https://profitbooks.net",
 
     category: "invoicing-accounting",
@@ -2364,7 +2364,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "MYOB",
     // DRAFT - review before publish
     tagline: "The long-standing Australian/NZ default for small business accounting and payroll.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.myob.com&sz=128",
     website: "https://www.myob.com",
 
     category: "invoicing-accounting",
@@ -2432,7 +2432,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Reckon One",
     // DRAFT - review before publish
     tagline: "Modular Australian accounting — pay only for the modules (invoicing, payroll, GST) you actually need.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.reckon.com&sz=128",
     website: "https://www.reckon.com/au/accounting-software/",
 
     category: "invoicing-accounting",
@@ -2498,7 +2498,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Saasu",
     // DRAFT - review before publish
     tagline: "Australian-made online accounting with bank feeds, inventory, and cash flow forecasting.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.saasu.com&sz=128",
     website: "https://www.saasu.com",
 
     category: "invoicing-accounting",
@@ -2560,7 +2560,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Sage Pastel Partner",
     // DRAFT - review before publish
     tagline: "Established South African desktop/cloud-hybrid accounting for small and medium businesses.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=shop.sage.co.za&sz=128",
     website: "https://shop.sage.co.za",
 
     category: "invoicing-accounting",
@@ -2626,7 +2626,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Govchain Books",
     // DRAFT - review before publish
     tagline: "South African bookkeeping bundled with SARS tax filing — compliance-first, built for small businesses.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.govchain.co.za&sz=128",
     website: "https://www.govchain.co.za/books",
 
     category: "invoicing-accounting",
@@ -2689,7 +2689,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "HoneyBook",
     // DRAFT - review before publish
     tagline: "Client management, contracts, and invoicing in one flow, built for creative and service-based freelancers.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.honeybook.com&sz=128",
     website: "https://www.honeybook.com",
 
     category: "invoicing-accounting",
@@ -2755,7 +2755,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Dubsado",
     // DRAFT - review before publish
     tagline: "Highly customizable client-management and invoicing workflows for creative entrepreneurs.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.dubsado.com&sz=128",
     website: "https://www.dubsado.com",
 
     category: "invoicing-accounting",
@@ -2821,7 +2821,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "17hats",
     // DRAFT - review before publish
     tagline: "One flat-fee plan bundling CRM, contracts, invoicing, and scheduling for small service businesses.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=17hats.com&sz=128",
     website: "https://17hats.com",
 
     category: "invoicing-accounting",
@@ -2885,7 +2885,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "sevDesk",
     // DRAFT - review before publish
     tagline: "German-market cloud accounting with invoicing, bookkeeping, and DATEV export for the DACH region.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.sevdesk.com&sz=128",
     website: "https://www.sevdesk.com",
 
     category: "invoicing-accounting",
@@ -2952,7 +2952,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Lexware Office",
     // DRAFT - review before publish
     tagline: "Established German invoicing and accounting software (formerly lexoffice), with tiered feature packages.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.lexware.de&sz=128",
     website: "https://www.lexware.de",
 
     category: "invoicing-accounting",
@@ -3019,7 +3019,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Moneybird",
     // DRAFT - review before publish
     tagline: "Simple Dutch cloud accounting priced by monthly bank-transaction volume.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.moneybird.com&sz=128",
     website: "https://www.moneybird.com",
 
     category: "invoicing-accounting",
@@ -3086,7 +3086,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Exact Online",
     // DRAFT - review before publish
     tagline: "Dutch-rooted cloud ERP-lite covering accounting, CRM, and project management for growing businesses.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.exact.com&sz=128",
     website: "https://www.exact.com/nl/producten/accountancy",
 
     category: "invoicing-accounting",
@@ -3152,7 +3152,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Holded",
     // DRAFT - review before publish
     tagline: "Spanish all-in-one management software — accounting, invoicing, inventory, HR, and POS in modular tiers.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.holded.com&sz=128",
     website: "https://www.holded.com",
 
     category: "invoicing-accounting",
@@ -3219,7 +3219,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "GnuCash",
     // DRAFT - review before publish
     tagline: "100% free, open-source double-entry accounting for individuals and very small businesses.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=gnucash.org&sz=128",
     website: "https://gnucash.org",
 
     category: "invoicing-accounting",
@@ -3281,7 +3281,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Manager.io",
     // DRAFT - review before publish
     tagline: "Free desktop accounting, or a flat-fee cloud edition that doesn't charge per user or per business.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=www.manager.io&sz=128",
     website: "https://www.manager.io",
 
     category: "invoicing-accounting",
@@ -3346,7 +3346,7 @@ export const INVOICING_APPS: AppListing[] = [
     name: "Akaunting",
     // DRAFT - review before publish
     tagline: "Open-source accounting you can self-host for free, or run as a managed cloud service.",
-    logoUrl: "VERIFY",
+    logoUrl: "https://www.google.com/s2/favicons?domain=akaunting.com&sz=128",
     website: "https://akaunting.com",
 
     category: "invoicing-accounting",

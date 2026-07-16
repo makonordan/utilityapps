@@ -24,8 +24,6 @@ import { logCompletedSearch, trackAffiliateClick, trackAppEvent } from "@/lib/ap
 import { formatStartingPrice, industryLabel, PRICING_NAME, REGION_NAME, SIZE_NAME } from "@/lib/apps/format";
 import { cn } from "@/lib/utils";
 
-const DIRECTORY_CATEGORY = APP_CATEGORIES[0]?.id ?? null;
-
 type SortMode = "editors" | "popular" | "trending" | "price" | "recent";
 
 const SORT_OPTIONS: { id: SortMode; label: string }[] = [
@@ -38,6 +36,7 @@ const SORT_OPTIONS: { id: SortMode; label: string }[] = [
 
 interface FilterState {
   q: string;
+  category: string | null;
   industries: string[];
   regions: Region[];
   sizes: BusinessSize[];
@@ -54,8 +53,11 @@ function parseList<T extends string>(value: string | null): T[] {
 function stateFromParams(params: URLSearchParams): FilterState {
   const sortParam = params.get("sort");
   const sort = SORT_OPTIONS.some((s) => s.id === sortParam) ? (sortParam as SortMode) : "editors";
+  const categoryParam = params.get("category");
+  const category = APP_CATEGORIES.some((c) => c.id === categoryParam) ? categoryParam : null;
   return {
     q: params.get("q") ?? "",
+    category,
     industries: parseList(params.get("industry")),
     regions: parseList<Region>(params.get("region")),
     sizes: parseList<BusinessSize>(params.get("size")),
@@ -68,6 +70,7 @@ function stateFromParams(params: URLSearchParams): FilterState {
 function paramsFromState(state: FilterState): string {
   const params = new URLSearchParams();
   if (state.q.trim()) params.set("q", state.q.trim());
+  if (state.category) params.set("category", state.category);
   if (state.industries.length) params.set("industry", state.industries.join(","));
   if (state.regions.length) params.set("region", state.regions.join(","));
   if (state.sizes.length) params.set("size", state.sizes.join(","));
@@ -82,6 +85,7 @@ function toggleValue<T>(list: T[], value: T): T[] {
 }
 
 function matchesFilters(app: AppListing, filters: FilterState): boolean {
+  if (filters.category && app.category !== filters.category) return false;
   if (filters.industries.length && !filters.industries.some((i) => app.industries.includes(i))) {
     return false;
   }
@@ -124,25 +128,32 @@ function sortApps(apps: AppListing[], mode: SortMode): AppListing[] {
   }
 }
 
-// Curated shortcuts are computed once from the full published catalog and are
-// independent of the visitor's active filters — they're meant to always
-// offer a useful jumping-off point, even if filters currently return zero.
-const EDITORS_PICKS = sortApps(
-  ALL_APPS.filter((a) => a.editorsPick),
-  "popular"
-);
-const TRENDING_APPS = sortApps(
-  ALL_APPS.filter((a) => a.trending),
-  "popular"
-);
-const FREE_APPS = sortApps(
-  ALL_APPS.filter((a) => a.hasFreeTier),
-  "popular"
-).slice(0, 8);
-const GLOBAL_APPS = sortApps(
-  ALL_APPS.filter((a) => a.regions.some((r) => r !== "north-america")),
-  "popular"
-).slice(0, 8);
+// Curated shortcuts are independent of the visitor's active filter/search
+// state (they're meant to always offer a useful jumping-off point even if
+// filters currently return zero) but do respect the selected category, since
+// "trending" invoicing tools aren't a useful shortcut while browsing HR
+// software.
+function curatedShortcuts(category: string | null) {
+  const pool = category ? ALL_APPS.filter((a) => a.category === category) : ALL_APPS;
+  return {
+    editorsPicks: sortApps(
+      pool.filter((a) => a.editorsPick),
+      "popular"
+    ),
+    trending: sortApps(
+      pool.filter((a) => a.trending),
+      "popular"
+    ),
+    free: sortApps(
+      pool.filter((a) => a.hasFreeTier),
+      "popular"
+    ).slice(0, 8),
+    global: sortApps(
+      pool.filter((a) => a.regions.some((r) => r !== "north-america")),
+      "popular"
+    ).slice(0, 8),
+  };
+}
 
 function ChipToggle({
   active,
@@ -333,6 +344,8 @@ export function AppsDirectory() {
   const base = filters.q.trim() ? searchApps(filters.q) : ALL_APPS;
   const filtered = base.filter((app) => matchesFilters(app, filters));
   const sorted = sortApps(filtered, filters.sort);
+  const shortcuts = curatedShortcuts(filters.category);
+  const activeCategory = APP_CATEGORIES.find((c) => c.id === filters.category) ?? null;
 
   // Log completed searches only — debounced so a settled query (not every
   // keystroke) gets one entry, with the result count it actually produced.
@@ -342,11 +355,11 @@ export function AppsDirectory() {
     const query = filters.q.trim();
     if (!query) return;
     const timer = setTimeout(() => {
-      logCompletedSearch(query, sorted.length, DIRECTORY_CATEGORY);
+      logCompletedSearch(query, sorted.length, filters.category);
     }, 600);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters.q]);
+  }, [filters.q, filters.category]);
 
   // Filter usage is logged only when a filter is switched ON — that's the
   // "what are people looking for" signal; switching one off isn't a new
@@ -355,6 +368,10 @@ export function AppsDirectory() {
   const logFilterUsed = (filterType: string, value: string) =>
     trackAppEvent("directory", "filter_used", { filterType, value });
 
+  const setCategory = (id: string | null) => {
+    if (id && id !== filters.category) logFilterUsed("category", id);
+    setFilters((f) => ({ ...f, category: id }));
+  };
   const toggleIndustry = (id: string) => {
     if (!filters.industries.includes(id)) logFilterUsed("industry", id);
     setFilters((f) => ({ ...f, industries: toggleValue(f.industries, id) }));
@@ -417,24 +434,39 @@ export function AppsDirectory() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
+      {/* Category switcher — the primary entry point now that the directory
+          spans multiple software categories, not just invoicing. */}
+      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
+        <ChipToggle active={filters.category === null} onClick={() => setCategory(null)}>
+          All categories
+        </ChipToggle>
+        {APP_CATEGORIES.map((c) => (
+          <ChipToggle key={c.id} active={filters.category === c.id} onClick={() => setCategory(c.id)}>
+            {c.name.replace(" Software", "")}
+          </ChipToggle>
+        ))}
+      </div>
+
       {/* Quick-browse rows */}
-      <div className="space-y-8">
-        <QuickBrowseRow title="⭐ Editor's Picks" apps={EDITORS_PICKS} />
-        <QuickBrowseRow title="🔥 Trending now" apps={TRENDING_APPS} />
-        <QuickBrowseRow title="🆓 Best free options" apps={FREE_APPS} />
-        <QuickBrowseRow title="🌍 Strong outside the US" apps={GLOBAL_APPS} />
+      <div className="mt-8 space-y-8">
+        <QuickBrowseRow title="⭐ Editor's Picks" apps={shortcuts.editorsPicks} />
+        <QuickBrowseRow title="🔥 Trending now" apps={shortcuts.trending} />
+        <QuickBrowseRow title="🆓 Best free options" apps={shortcuts.free} />
+        <QuickBrowseRow title="🌍 Strong outside the US" apps={shortcuts.global} />
       </div>
 
       {/* Search */}
       <div className="mt-10">
         <label className="relative flex w-full items-center">
           <Search className="pointer-events-none absolute left-3.5 h-4 w-4 text-surface-400" />
-          <span className="sr-only">Search invoicing &amp; accounting software</span>
+          <span className="sr-only">
+            Search {activeCategory ? activeCategory.name.toLowerCase() : "software"}
+          </span>
           <input
             type="search"
             value={filters.q}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search invoicing & accounting software..."
+            placeholder={`Search ${activeCategory ? activeCategory.name.toLowerCase() : "all software"}...`}
             className="w-full rounded-xl border border-surface-200 bg-white py-3 pl-10 pr-3 text-sm text-surface-900 placeholder:text-surface-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-surface-800 dark:bg-surface-900 dark:text-white dark:placeholder:text-surface-500"
           />
         </label>

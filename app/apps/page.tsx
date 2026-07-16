@@ -14,7 +14,7 @@ import { SITE_CONFIG } from "@/lib/utils";
 
 const TITLE = "Apps — Honestly Curated Software Recommendations";
 const DESCRIPTION =
-  "Software recommendations you can actually trust. Curated by usefulness, not by who paid the most. Compare invoicing and accounting software by industry, region, price and business size. No signup.";
+  "Software recommendations you can actually trust. Curated by usefulness, not by who paid the most. Compare invoicing, project management, email marketing, HR and payroll software by industry, region, price and business size. No signup.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -22,8 +22,10 @@ export const metadata: Metadata = {
   keywords: [
     "best invoicing software",
     "best accounting software for small business",
-    "invoicing software comparison",
-    "accounting software comparison",
+    "best project management software",
+    "best email marketing software",
+    "best HR and payroll software",
+    "software comparison",
     "honest software reviews",
   ],
   alternates: { canonical: "/apps" },
@@ -49,7 +51,7 @@ const breadcrumbJsonLd = generateBreadcrumbSchema([
 ]);
 
 const collectionJsonLd = generateCollectionPageSchema({
-  name: "Invoicing & Accounting Software",
+  name: "Business Software Directory",
   description: DESCRIPTION,
   url: "/apps",
 });

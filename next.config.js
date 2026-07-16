@@ -43,6 +43,7 @@ const nextConfig = {
       { protocol: "https", hostname: "i.ytimg.com" },
       { protocol: "https", hostname: "picsum.photos" },
       { protocol: "https", hostname: "api.qrserver.com" },
+      { protocol: "https", hostname: "www.google.com" },
     ],
   },
   async headers() {
