@@ -5,7 +5,17 @@ export interface FAQItem {
   a: string;
 }
 
-export function ToolFAQ({ items, title = "Frequently asked" }: { items: FAQItem[]; title?: string }) {
+export function ToolFAQ({
+  items,
+  title = "Frequently asked",
+  heading = "Questions about this tool",
+  centered = false,
+}: {
+  items: FAQItem[];
+  title?: string;
+  heading?: string;
+  centered?: boolean;
+}) {
   if (items.length === 0) return null;
 
   const jsonLd = {
@@ -20,12 +30,12 @@ export function ToolFAQ({ items, title = "Frequently asked" }: { items: FAQItem[
 
   return (
     <section className="space-y-6">
-      <header>
+      <header className={centered ? "text-center" : undefined}>
         <p className="text-xs font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
           {title}
         </p>
         <h2 className="mt-2 text-2xl font-bold tracking-tight text-surface-900 sm:text-3xl dark:text-white">
-          Questions about this tool
+          {heading}
         </h2>
       </header>
 

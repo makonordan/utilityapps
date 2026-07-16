@@ -214,8 +214,8 @@ export default function AppsDirectoryPage() {
       </section>
 
       {/* SEO content */}
-      <section className="mx-auto max-w-3xl px-4 py-4 sm:px-6">
-        <div className="prose prose-surface max-w-none dark:prose-invert">
+      <section className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+        <div className="prose prose-surface prose-lg max-w-none dark:prose-invert">
           <h2>How to choose invoicing or accounting software</h2>
           <p>
             Most buyers pick invoicing or accounting software the wrong way: they search &ldquo;best
@@ -283,8 +283,8 @@ export default function AppsDirectoryPage() {
             or multi-entity accounting, a paid subscription is often premature. Our own free{" "}
             <Link href="/tools/invoice-generator">Invoice Generator</Link>,{" "}
             <Link href="/tools/receipt-generator">Receipt Generator</Link>, and{" "}
-            <Link href="/tools/purchase-order-generator">Purchase Order Generator</Link> cover the
-            basics with no signup and no monthly fee. Use those until the volume, tax complexity, or
+            <Link href="/tools/purchase-order-generator">Purchase Order Generator</Link>{" "}
+            cover the basics with no signup and no monthly fee. Use those until the volume, tax complexity, or
             team size of your business genuinely outgrows a free tool — then use the filters above to
             find the paid software that fits what you&apos;ve actually become, not what a generic
             ranking assumes you are.
@@ -292,7 +292,14 @@ export default function AppsDirectoryPage() {
         </div>
       </section>
 
-      <ToolFAQ items={FAQS} title="Apps FAQ" />
+      <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+        <ToolFAQ
+          items={FAQS}
+          title="Apps FAQ"
+          heading="Common questions about this directory"
+          centered
+        />
+      </section>
 
       <section className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
         <AppSuggestionForm />

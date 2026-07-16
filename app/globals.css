@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 /* Tell Tailwind v4 to read our JS config (colors, animations, fonts). */
 @config "../tailwind.config.ts";
