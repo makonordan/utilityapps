@@ -1,6 +1,15 @@
 import Fuse from "fuse.js";
 
+import { AI_TOOLS_APPS } from "./data/ai-tools";
+import { COMMUNICATION_TELECOMS_APPS } from "./data/communication-telecoms";
+import { CRM_APPS } from "./data/crm";
+import { CUSTOMER_SUPPORT_APPS } from "./data/customer-support";
+import { DATA_ANALYTICS_APPS } from "./data/data-analytics";
+import { DEV_TOOLS_APPS } from "./data/dev-tools";
+import { ECOMMERCE_APPS } from "./data/ecommerce";
+import { EDUCATION_APPS } from "./data/education";
 import { EMAIL_MARKETING_APPS } from "./data/email-marketing";
+import { FINANCE_BANKING_APPS } from "./data/finance-banking";
 import { HR_PAYROLL_APPS } from "./data/hr-payroll";
 import { INVOICING_APPS } from "./data/invoicing-accounting";
 import { PROJECT_MANAGEMENT_APPS } from "./data/project-management";
@@ -13,6 +22,15 @@ const RAW_APPS: AppListing[] = [
   ...PROJECT_MANAGEMENT_APPS,
   ...EMAIL_MARKETING_APPS,
   ...HR_PAYROLL_APPS,
+  ...DEV_TOOLS_APPS,
+  ...EDUCATION_APPS,
+  ...FINANCE_BANKING_APPS,
+  ...COMMUNICATION_TELECOMS_APPS,
+  ...ECOMMERCE_APPS,
+  ...DATA_ANALYTICS_APPS,
+  ...AI_TOOLS_APPS,
+  ...CRM_APPS,
+  ...CUSTOMER_SUPPORT_APPS,
 ];
 
 /** A listing is publishable once every pricing-related fact has been

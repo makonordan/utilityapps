@@ -115,6 +115,72 @@ export const APP_CATEGORIES: AppCategory[] = [
     description:
       "Run payroll, manage benefits, and handle hiring and HR admin — from single-country payroll for small teams to global HR platforms.",
   },
+  {
+    id: "finance-banking",
+    name: "Finance & Banking Software",
+    description:
+      "Business banking, expense cards, and payments — from free startup checking accounts to corporate card programs and cross-border payouts.",
+  },
+  {
+    id: "communication-telecoms",
+    name: "Communication & Telecoms Software",
+    description:
+      "Talk and meet — team chat, video conferencing, and business phone systems for teams that need to actually reach each other.",
+  },
+  {
+    id: "dev-tools",
+    name: "Developer Tools",
+    description:
+      "Ship and run software — hosting, CI/CD, monitoring, and no-code platforms for building and operating applications.",
+  },
+  {
+    id: "ecommerce",
+    name: "E-commerce Software",
+    description:
+      "Sell online — storefront platforms, point of sale, and inventory management for businesses that sell physical or digital products.",
+  },
+  {
+    id: "education",
+    name: "Education & Learning Software",
+    description:
+      "Teach and learn online — course platforms and learning management systems for schools, trainers, and course creators.",
+  },
+  {
+    id: "design",
+    name: "Design & Creative Software",
+    description:
+      "Design, edit, and prototype — graphic design, video editing, and UI tools for building visual assets and products.",
+  },
+  {
+    id: "data-analytics",
+    name: "Data & Analytics Software",
+    description:
+      "Turn data into decisions — business intelligence, dashboards, and analytics platforms for tracking what matters.",
+  },
+  {
+    id: "ai-tools",
+    name: "AI Tools",
+    description:
+      "AI-powered writing, image, video, and coding assistants — tools that generate or transform content using AI.",
+  },
+  {
+    id: "legal",
+    name: "Legal & Compliance Software",
+    description:
+      "Handle contracts and compliance — e-signature, contract management, and compliance automation for teams that need a paper trail.",
+  },
+  {
+    id: "crm",
+    name: "CRM Software",
+    description:
+      "Track leads, deals, and customer relationships — from simple contact management to full sales pipeline automation.",
+  },
+  {
+    id: "customer-support",
+    name: "Customer Support Software",
+    description:
+      "Help customers when they're stuck — helpdesk, live chat, and ticketing systems for support teams.",
+  },
 ];
 
 export const REGIONS: { id: Region; name: string }[] = [

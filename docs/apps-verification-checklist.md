@@ -13,9 +13,9 @@ automated fetch).
 values (not the `"VERIFY"` sentinel) and `pricingVerifiedDate` is set. In
 development, unverified listings still render but log a console warning.
 
-## Status (as of 2026-07-16)
+## Status (as of 2026-07-17)
 
-**78 of 111 listings are verified and publish to production**, across four
+**203 of 291 listings are verified and publish to production**, across 12
 categories:
 
 | Category | Total | Published | Unverified |
@@ -24,6 +24,22 @@ categories:
 | Project Management (`project-management.ts`) | 20 | 8 | 12 |
 | Email Marketing (`email-marketing.ts`) | 20 | 17 | 3 |
 | HR & Payroll (`hr-payroll.ts`) | 21 | 10 | 11 |
+| Developer Tools (`dev-tools.ts`) | 20 | 18 | 2 |
+| Education & Learning (`education.ts`) | 20 | 11 | 9 |
+| Finance & Banking (`finance-banking.ts`) | 20 | 16 | 4 |
+| Communication & Telecoms (`communication-telecoms.ts`) | 20 | 9 | 11 |
+| E-commerce (`ecommerce.ts`) | 20 | 16 | 4 |
+| Data & Analytics (`data-analytics.ts`) | 20 | 10 | 10 |
+| AI Tools (`ai-tools.ts`) | 20 | 18 | 2 |
+| CRM (`crm.ts`) | 20 | 15 | 5 |
+| Customer Support (`customer-support.ts`) | 20 | 12 | 8 |
+
+**Not yet built**: Design & Creative (`design`) and Legal & Compliance
+(`legal`) are registered in `APP_CATEGORIES` (`lib/apps/types.ts`) but have no
+data file yet — the research pass for both was interrupted by a session usage
+limit before either file was written. They currently show an empty state on
+the directory page rather than an error; running the same research process
+used for the other 13 categories will populate them.
 
 ## Still unverified
 
@@ -37,77 +53,135 @@ categories:
   sales-assisted onboarding for funded startups.
 - **Vyapar** — official pricing page (vyaparapp.in/pricing) is JS-rendered
   and inaccessible to automated fetch; third-party reseller listings quote
-  inconsistent numbers (₹699/yr in one place, ₹3,420/yr in another).
-- **Saasu** — pricing page returned marketing copy ("from $15/mo per file")
-  without a clear, current tier breakdown.
+  inconsistent numbers.
+- **Saasu** — pricing page returned marketing copy without a clear, current
+  tier breakdown.
 - **Govchain Books** — the `/pricing` URL on govchain.co.za is for company
   registration, not the Books product; actual Books pricing was never
   located.
 - **Moon Invoice** — official pricing page is JS-rendered; aggregator sites
-  report conflicting tier prices ($7.99/$9.99/$14.99/$19.99 vs.
-  $9.99/$19.99/$39.99 in different sources).
+  report conflicting tier prices.
 
 ### Project Management
-
-Several of these are pages that only publish the annual-billed rate — the
-true month-to-month price wasn't confirmed, and it's not assumed equal:
 
 - **monday**, **clickup**, **teamwork**, **linear** — Free/entry tier
   confirmed; higher tiers only show the "billed yearly" figure, no separate
   monthly-only rate disclosed.
-- **wrike** — Free confirmed; Business+ is explicitly annual-only
-  (`priceAnnual` uses `null` correctly there), but Team's monthly rate wasn't
+- **wrike** — Free confirmed; Business+ is explicitly annual-only, but Team's
+  monthly rate wasn't found.
+- **basecamp** — Pro's monthly price confirmed, but no annual-discount figure
   found.
-- **basecamp** — Pro's monthly price ($15) confirmed, but no annual-discount
-  figure found.
-- **paymo** — monthly prices confirmed (with an "increases after 3 months"
-  promo caveat), but no annual-billing number found.
-- **shortcut** — page claims "up to 25% off annual" but the quoted annual
-  totals equal monthly × 12 exactly — internally inconsistent.
-- **nifty** — page returned two conflicting pricing tables (flat-rate vs.
-  per-member) for the same plan names.
-- **smartsheet** — scraped numbers were garbled (e.g. a price mixed with a
-  list of regional currencies).
-- **zoho-projects** — pricing page is JS-rendered; repeated fetches returned
-  plan names/features but zero dollar figures.
-- **jira** — atlassian.com/software/jira/pricing repeatedly returned
-  truncated/inaccessible.
+- **paymo** — monthly prices confirmed, but no annual-billing number found.
+- **shortcut** — page claims an annual discount but the quoted totals equal
+  monthly × 12 exactly — internally inconsistent.
+- **nifty** — page returned two conflicting pricing tables for the same plan
+  names.
+- **smartsheet** — scraped numbers were garbled.
+- **zoho-projects** — Free plan confirmed (5 users, 3 projects, 5GB, 50
+  workflow executions/mo), but paid tiers render prices via JavaScript that
+  couldn't be captured.
+- **jira** — pricing page repeatedly returned truncated/inaccessible.
 
 ### Email Marketing
 
-- **ActiveCampaign** — official pricing page uses a JS contact-count slider
-  that returns masked figures to automated fetch; third-party aggregators
-  disagreed on whether cited numbers were monthly or annual-billed.
-- **Sendlane** — acquired by Privy (January 2026); pricing appears to be in
-  transition (sources cite ~$600/mo vs. ~$625/mo), no reliable self-serve
-  entry point.
-- **Flodesk** — overhauled its pricing model (2025-12-02, flat-rate unlimited
-  → subscriber-tiered); sources disagree on whether a genuine free plan still
-  exists for new customers.
+- **ActiveCampaign** — JS contact-count slider masks figures to automated
+  fetch; third-party aggregators disagreed on monthly vs. annual billing.
+- **Sendlane** — acquired by Privy (Jan 2026); pricing in transition, no
+  reliable self-serve entry point.
+- **Flodesk** — overhauled its pricing model (Dec 2025); sources disagree on
+  whether a genuine free plan still exists.
 
 ### HR & Payroll
 
 - **Rippling** — modular per-module pricing; vendor page blocked automated
-  fetch, third-party figures explicitly hedge as non-final.
-- **ADP Run** — no official pricing published; only unreliable third-party
-  estimates exist.
-- **Paychex** — only the entry tier has an unofficial cited rate; the rest is
+  fetch.
+- **ADP Run**, **Paychex**, **Paycor** — no reliable self-serve pricing
+  published.
+- **Workday** — enterprise, fully custom/sales-led.
+- **Namely** — one plan has a cited price, the rest are custom-quote only.
+- **HiBob**, **Greenhouse**, **Lever** — pages are demo-request/quote-only
+  funnels, no prices shown.
+- **Personio** — third-party estimates range too widely to publish as fact.
+- **Breathe HR** — two conflicting sets of banded UK prices found.
+
+### Developer Tools
+
+- **Render** — render.com/pricing is JS-rendered; repeated fetches returned
+  only nav/footer content, no tier numbers.
+- **Bubble** — bubble.io/pricing is JS-rendered; third-party aggregator
+  figures exist but weren't treated as vendor-verified.
+
+### Education & Learning
+
+- **Canvas (Instructure)**, **SAP Litmos** — pricing pages name tiers but
+  disclose no dollar figures (institutional sales-led).
+- **Docebo**, **Absorb LMS**, **Cornerstone OnDemand** — confirmed quote-only
+  via direct fetch.
+- **iSpring Learn** — pay-per-active-user model described, no dollar figures
+  published.
+- **Udemy Business** — pricing page returned HTTP 403 on repeated attempts.
+- **Coursera for Business** — Team plan is JS-rendered, Enterprise is
   quote-only.
-- **Paycor** — confirmed via direct fetch: no pricing published anywhere.
-- **Workday** — enterprise, fully custom/sales-led (expected to stay
-  unverified — same category as NetSuite/Sage Intacct).
-- **Namely** — one plan has a cited price, the other three are custom-quote
-  only.
-- **HiBob** — confirmed via direct fetch: page is a demo-request form, no
-  pricing shown.
-- **Personio** — third-party estimates range $3–$15/employee/mo, too wide a
-  spread to publish as fact.
-- **Breathe HR** — two conflicting sets of banded UK prices found,
-  unreconcilable.
-- **Greenhouse** — confirmed via direct fetch: "pricing is customized," no
-  public tiers.
-- **Lever** — confirmed via direct fetch: pricing "available upon request"
-  only.
+- **LinkedIn Learning** — pricing sits behind LinkedIn's login wall.
+
+### Finance & Banking
+
+- **Bluevine**, **Revolut Business**, **American Express Business
+  Blueprint** — pricing/fee structure not confirmed to the standard this
+  directory requires; needs a direct live-page check.
+
+### Communication & Telecoms
+
+- **Zoom**, **Cisco Webex**, **GoTo Meeting**, **Whereby**, **RingCentral**,
+  **Grasshopper**, **Nextiva**, **Dialpad**, **Vonage Business
+  Communications**, **8x8**, **Aircall** — not confirmed to the standard this
+  directory requires (JS-rendered pricing calculators or region-gated pages
+  were the common blocker); needs a direct live-page check per listing.
+
+### E-commerce
+
+- **Squarespace Commerce**, **Adobe Commerce**, **Clover**, **ShipBob** — not
+  confirmed to the standard this directory requires; needs a direct
+  live-page check.
+
+### Data & Analytics
+
+- **Tableau**, **Looker**, **Domo**, **Sisense**, **Qlik Sense**, **Zoho
+  Analytics**, **Google Analytics 360**, **Twilio Segment**, **Hotjar**,
+  **Mode Analytics** — enterprise BI/analytics platforms are frequently
+  quote-only or JS-rendered; needs a direct live-page check per listing.
+
+### AI Tools
+
+- **ChatGPT**, **Midjourney** — not confirmed to the standard this directory
+  requires (AI product pricing changes unusually often); needs a direct
+  live-page check. Treat AI-category pricing as higher priority to re-verify
+  on a recurring basis given how fast it moves.
+
+### CRM
+
+- **Zoho CRM**, **Agile CRM**, **Bigin** — not confirmed to the standard
+  this directory requires; needs a direct live-page check.
+- **Capsule CRM** — Free plan confirmed ($0/mo, 2 users, 250 contacts, 5
+  custom fields, 1 pipeline). Paid Starter/Growth/Advanced tiers exist with
+  an annual-vs-monthly toggle and an "up to 15% off annual" claim, but exact
+  per-user dollar prices weren't extractable from the static page.
+
+### Customer Support
+
+- **Kayako** — shifted to an outcome-based pricing model with no published
+  flat rate.
+- **HappyFox** — no standing free tier for the core Help Desk product
+  (limited-time promos aside).
+- **Gladly**, **Kustomer** — pure demo-request/quote-only funnels, no dollar
+  figures published anywhere.
+- **Jira Service Management** — same truncated-fetch issue documented for
+  Jira Software elsewhere in this directory.
+- **Intercom** — no free tier (14-day trial only); per-seat pricing sits
+  behind a JS pricing calculator. The one confirmed figure is the Fin AI
+  Agent add-on at $0.99 per resolved conversation.
+- **Gorgias** — pricing confirmed to scale with monthly ticket volume, but
+  the exact tier breakpoints weren't captured.
 
 To unblock any of these: open the vendor's live pricing page directly in a
 browser (not via automated fetch, which fails on JS-rendered pages), record
@@ -121,10 +195,10 @@ These fields aren't part of the `isPricingVerified()` gate, so verified
 listings are already live without them — but are still worth filling in over
 time:
 
-- **`integrations`** — every listing across all four categories still has
+- **`integrations`** — every listing across all 13 categories still has
   `["VERIFY"]`. Replace with the real, current integration list from each
   vendor's app marketplace page.
-- **`logoUrl`** — resolved for all 111 listings via Google's public favicon
+- **`logoUrl`** — resolved for all 291 listings via Google's public favicon
   endpoint (`https://www.google.com/s2/favicons?domain=<domain>&sz=128`),
   keyed off each app's own `website` domain. This was chosen after
   confirming Clearbit's logo API — the more commonly recommended option — no
@@ -153,17 +227,17 @@ time:
   Partnerships/Limited Company), not a single flat plan.
 - **Kashoo** — now sold as three flat-rate plans under the TrulySmall/Kashoo
   branding, not a single plan.
-- **Crunch** — Premium tier price (£21.60+VAT) is the accountant-inclusive
-  starting point; full accountancy-service tiers run considerably higher
-  (~£185+VAT/mo) and need a fresh quote.
+- **Crunch** — Premium tier price is the accountant-inclusive starting
+  point; full accountancy-service tiers run considerably higher and need a
+  fresh quote.
 - **Reckon One** — Premium tier's exact price wasn't published in a
   self-serve comparison table; only Starter/Plus were confirmed directly.
-- **Sage Pastel Partner** — only the Start tier's price (R1,375) was shown
-  without login; Core/Plus require selecting options on-site.
+- **Sage Pastel Partner** — only the Start tier's price was shown without
+  login; Core/Plus require selecting options on-site.
 - **sevDesk / Lexware Office** — figures are for the German (.de) market;
   Austria/Switzerland pricing may differ.
-- **Exact Online** — figures are Dutch (EUR) rates as of April 2026; other
-  countries see different pricing/currency.
+- **Exact Online** — figures are Dutch (EUR) rates; other countries see
+  different pricing/currency.
 - **MYOB** — plan names/prices have shifted multiple times in the past two
   years; re-confirm against the live page periodically.
 
@@ -173,10 +247,37 @@ time:
   blocked automated fetch (403); figures were cross-referenced across
   multiple independent, consistent third-party sources instead of a single
   direct fetch.
-- **Sage HR** — US rate confirmed; Canada pricing differs and the
-  sage.com/ca pricing path 404'd during research.
-- **QuickBooks Payroll** — plan is being renamed (Core → Workforce Payroll)
-  effective 2026-07-01; the listing reflects the new name.
+- **Sage HR** — US rate confirmed; Canada pricing differs.
+- **QuickBooks Payroll** — plan renamed (Core → Workforce Payroll) effective
+  2026-07-01; the listing reflects the new name.
+
+### Developer Tools
+
+- **DigitalOcean**, **Fly.io** — usage-based infrastructure pricing, not a
+  flat SaaS tier ladder; `pricing[]` reflects the real, confirmed
+  entry-point numbers (e.g. Droplet $4/mo) with the usage-based caveat
+  spelled out in `freeTierReality` rather than a fabricated tier structure.
+- **Airtable** — top-level tier prices confirmed, but exact per-base
+  record/storage/automation caps weren't disclosed on the vendor page.
+- **Okta** — the core Workforce Identity SSO/MFA suite is the primary
+  listing; Auth0 (Okta's separate Customer Identity product) has very
+  different, much higher starting pricing, noted in `freeTierReality`.
+
+### E-commerce
+
+- **Podia** appears twice, deliberately, under two different ids —
+  `podia` (Education & Learning, course-creation angle) and
+  `podia-ecommerce` (E-commerce, digital-product-selling angle). Same
+  vendor, same pricing, two different buyer intents; this is intentional,
+  not a data error.
+
+### CRM
+
+- Avoid re-adding **monday.com**'s CRM product or **ActiveCampaign**'s CRM
+  features under a plain `monday`/`activecampaign` id — those ids are
+  already taken by the Project Management and Email Marketing listings for
+  the same vendors. Use a distinct id (e.g. `monday-crm`) if either is ever
+  added here.
 
 ## After verifying
 
@@ -198,4 +299,8 @@ change is needed beyond editing the data file.
    never appear as a filter option.
 5. Set `logoUrl` to `https://www.google.com/s2/favicons?domain=<domain>&sz=128`
    for every listing, verified or not (doesn't gate publishing).
-6. Update the status table and "Still unverified" section above.
+6. Check for `id` collisions against every other category file before
+   committing — a vendor that legitimately belongs in two categories (see
+   the Podia note above) needs two distinct ids, since `ALL_APPS_BY_ID` in
+   `lib/apps/index.ts` keys on `id` alone across the whole directory.
+7. Update the status table and "Still unverified" section above.
