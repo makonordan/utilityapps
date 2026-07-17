@@ -8,6 +8,7 @@ import Fuse, { type FuseResult } from "fuse.js";
 import {
   ArrowRight,
   BookOpen,
+  LayoutGrid,
   Mic,
   MicOff,
   Search,
@@ -16,6 +17,7 @@ import {
   X,
 } from "lucide-react";
 
+import { searchApps, type AppListing } from "@/lib/apps";
 import {
   EMPTY_SUGGESTION,
   clearRecentSearches,
@@ -49,6 +51,7 @@ interface TrendingItem {
 
 type FlatItem =
   | { kind: "tool"; href: string; key: string; label: string }
+  | { kind: "app"; href: string; key: string; label: string }
   | { kind: "article"; href: string; key: string; label: string }
   | { kind: "product"; href: string; key: string; label: string };
 
@@ -75,6 +78,11 @@ export function SearchModal() {
     if (!query.trim()) return [] as FuseResult<Tool>[];
     return fuse.search(query.trim()).slice(0, 8);
   }, [fuse, query]);
+
+  const appResults: AppListing[] = useMemo(() => {
+    if (!query.trim()) return [];
+    return searchApps(query.trim()).slice(0, 5);
+  }, [query]);
 
   // ⌘K + custom event triggers
   useEffect(() => {
@@ -219,6 +227,9 @@ export function SearchModal() {
     for (const t of toolResults) {
       out.push({ kind: "tool", key: `tool-${t.id}`, href: t.href, label: t.name });
     }
+    for (const app of appResults) {
+      out.push({ kind: "app", key: `app-${app.id}`, href: `/apps/${app.id}`, label: app.name });
+    }
     for (const a of articleResults) {
       out.push({ kind: "article", key: `article-${a.slug}`, href: a.url, label: a.title });
     }
@@ -226,7 +237,7 @@ export function SearchModal() {
       out.push({ kind: "product", key: `product-${p.id}`, href: p.href, label: p.name });
     }
     return out;
-  }, [bestMatchTool, toolResults, articleResults, productResults]);
+  }, [bestMatchTool, toolResults, appResults, articleResults, productResults]);
 
   useEffect(() => {
     // Reset cursor when the result list changes shape.
@@ -348,7 +359,7 @@ export function SearchModal() {
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search tools, articles, and products..."
+                placeholder="Search tools, apps, articles, and products..."
                 aria-label="Search"
                 className="flex-1 bg-transparent text-base text-surface-900 placeholder:text-surface-400 focus:outline-none dark:text-white"
               />
@@ -443,6 +454,32 @@ export function SearchModal() {
                             onClick={() =>
                               submit({ kind: "tool", key, href: tool.href, label: tool.name })
                             }
+                          />
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </Section>
+              )}
+
+              {appResults.length > 0 && (
+                <Section title="Apps">
+                  <ul className="space-y-1">
+                    {appResults.map((app) => {
+                      const key = `app-${app.id}`;
+                      const idx = indexByKey.get(key) ?? -1;
+                      const href = `/apps/${app.id}`;
+                      return (
+                        <li key={key}>
+                          <ResultRow
+                            href={href}
+                            title={app.name}
+                            subtitle={app.tagline}
+                            tag="Software"
+                            icon={<LayoutGrid className="h-4 w-4" />}
+                            selected={idx === selectedIndex}
+                            onMouseEnter={() => setSelectedIndex(idx)}
+                            onClick={() => submit({ kind: "app", key, href, label: app.name })}
                           />
                         </li>
                       );

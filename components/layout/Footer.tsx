@@ -132,9 +132,9 @@ export function Footer() {
         </FooterColumn>
 
         <FooterColumn title="Apps">
-          <FooterLink href="/apps">Browse all apps</FooterLink>
+          <FooterLink href="/apps#apps-results">Browse all apps</FooterLink>
           {APP_CATEGORIES.map((cat) => (
-            <FooterLink key={cat.id} href="/apps">
+            <FooterLink key={cat.id} href={`/apps?category=${cat.id}#apps-results`}>
               {cat.name}
             </FooterLink>
           ))}

@@ -15,7 +15,7 @@ development, unverified listings still render but log a console warning.
 
 ## Status (as of 2026-07-17)
 
-**203 of 291 listings are verified and publish to production**, across 12
+**220 of 331 listings are verified and publish to production**, across all 15
 categories:
 
 | Category | Total | Published | Unverified |
@@ -33,13 +33,8 @@ categories:
 | AI Tools (`ai-tools.ts`) | 20 | 18 | 2 |
 | CRM (`crm.ts`) | 20 | 15 | 5 |
 | Customer Support (`customer-support.ts`) | 20 | 12 | 8 |
-
-**Not yet built**: Design & Creative (`design`) and Legal & Compliance
-(`legal`) are registered in `APP_CATEGORIES` (`lib/apps/types.ts`) but have no
-data file yet — the research pass for both was interrupted by a session usage
-limit before either file was written. They currently show an empty state on
-the directory page rather than an error; running the same research process
-used for the other 13 categories will populate them.
+| Legal & Compliance (`legal.ts`) | 20 | 5 | 15 |
+| Design & Creative (`design.ts`) | 20 | 12 | 8 |
 
 ## Still unverified
 
@@ -183,6 +178,40 @@ used for the other 13 categories will populate them.
 - **Gorgias** — pricing confirmed to scale with monthly ticket volume, but
   the exact tier breakpoints weren't captured.
 
+### Legal & Compliance
+
+- **Vanta**, **Drata**, **Secureframe**, **OneTrust**, **Ironclad**, **Juro**
+  — vendor's own pricing page confirmed directly: fully custom/quote-gated,
+  no dollar figures published anywhere.
+- **Icertis** — no public pricing exists at all; enterprise sales-led, same
+  situation as NetSuite/Sage Intacct elsewhere in this directory.
+- **Sprinto** — no public pricing; third-party estimates range too widely
+  (high four figures to tens of thousands annually) to publish as fact.
+- **ContractSafe** — volume-band interactive selector; no flat dollar
+  figures shown without picking a band.
+- **Zoho Sign** — free plan confirmed ($0, 1 user, 5 envelopes/mo); paid
+  tiers render via JavaScript and weren't extractable.
+- **Dropbox Sign**, **Adobe Acrobat Sign**, **signNow**, **Clio**,
+  **LawDepot** — genuine access failures (404s, DNS timeouts, bot-blocking,
+  or JS-rendered pages with no extractable content across multiple attempts).
+
+### Design & Creative
+
+- **Canva**, **Adobe Creative Cloud**, **Adobe Premiere Pro** — vendor pages
+  consistently returned HTTP 403 or timed out across 6+ retries with varied
+  URLs.
+- **Gamma (design)**, **Piktochart**, **CapCut**, **Filmora** — same
+  403/timeout pattern; third-party aggregator figures exist but disagreed
+  with each other on exact numbers (especially CapCut/Filmora), so they
+  weren't used to fill in "verified" numbers.
+- **Affinity** — flagged for a human look: research strongly suggests
+  Affinity's pricing model changed materially after Canva's acquisition
+  (was one-time-purchase, now appears free with paid AI features gated
+  behind a Canva Pro subscription), but this couldn't be confirmed via
+  direct fetch (403/redirect/DNS failure on every attempt). Listed as
+  `pricingModel: "freemium"` rather than the old "one-time" pending
+  confirmation — don't assume the old model still applies.
+
 To unblock any of these: open the vendor's live pricing page directly in a
 browser (not via automated fetch, which fails on JS-rendered pages), record
 the real tiers, and fill in `pricing`, `hasFreeTier`, `freeTierReality`,
@@ -195,10 +224,10 @@ These fields aren't part of the `isPricingVerified()` gate, so verified
 listings are already live without them — but are still worth filling in over
 time:
 
-- **`integrations`** — every listing across all 13 categories still has
+- **`integrations`** — every listing across all 15 categories still has
   `["VERIFY"]`. Replace with the real, current integration list from each
   vendor's app marketplace page.
-- **`logoUrl`** — resolved for all 291 listings via Google's public favicon
+- **`logoUrl`** — resolved for all 331 listings via Google's public favicon
   endpoint (`https://www.google.com/s2/favicons?domain=<domain>&sz=128`),
   keyed off each app's own `website` domain. This was chosen after
   confirming Clearbit's logo API — the more commonly recommended option — no
@@ -278,6 +307,16 @@ time:
   already taken by the Project Management and Email Marketing listings for
   the same vendors. Use a distinct id (e.g. `monday-crm`) if either is ever
   added here.
+
+### Design & Creative
+
+- **Descript** and **Gamma** each appear twice, deliberately — `descript`
+  and `gamma` under AI Tools (their AI-powered angle: AI video/podcast
+  editing, AI presentation generation), `descript-design` and
+  `gamma-design` under Design & Creative (their editing/presentation-tool
+  angle). Same vendors, same pricing, two different buyer intents; follow
+  this `-design`/`-ecommerce`-style suffix pattern for any future vendor
+  that legitimately spans two categories.
 
 ## After verifying
 

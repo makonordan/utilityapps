@@ -358,6 +358,18 @@ export function AppsDirectory() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, pathname]);
 
+  // This component only renders its real content after client hydration (a
+  // Suspense fallback ships in the initial HTML), so the browser's native
+  // "scroll to #hash on load" can fire before #apps-results exists in the
+  // DOM and silently do nothing. Once mounted, do it ourselves.
+  useEffect(() => {
+    if (window.location.hash !== "#apps-results") return;
+    const t = setTimeout(() => {
+      document.getElementById("apps-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+    return () => clearTimeout(t);
+  }, []);
+
   const base = filters.q.trim() ? searchApps(filters.q) : ALL_APPS;
   const filtered = base.filter((app) => matchesFilters(app, filters));
   const sorted = sortApps(filtered, filters.sort);
@@ -531,8 +543,13 @@ export function AppsDirectory() {
         </label>
       </div>
 
-      {/* Filter panel */}
-      <div className="mt-6 rounded-2xl border border-surface-200 bg-white p-5 dark:border-surface-800 dark:bg-surface-900">
+      {/* Filter panel — also the scroll target for `#apps-results` links
+          (footer category links, "Browse all apps") so visitors land right
+          at the filters/results instead of the top of a long page. */}
+      <div
+        id="apps-results"
+        className="mt-6 scroll-mt-24 rounded-2xl border border-surface-200 bg-white p-5 dark:border-surface-800 dark:bg-surface-900"
+      >
         <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-surface-900 dark:text-white">
           <SlidersHorizontal className="h-4 w-4" />
           Filters

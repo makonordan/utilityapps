@@ -8,12 +8,13 @@ import { AppsDirectory } from "@/components/apps/AppsDirectory";
 import { AppSuggestionForm } from "@/components/apps/AppSuggestionForm";
 import { AppsNewsletter } from "@/components/apps/AppsNewsletter";
 import { ToolFAQ, type FAQItem } from "@/components/tools/ToolFAQ";
+import { APP_CATEGORIES } from "@/lib/apps";
 import { generateBreadcrumbSchema, generateCollectionPageSchema, jsonLdString } from "@/lib/schema";
 import { SITE_CONFIG } from "@/lib/utils";
 
 const TITLE = "Apps — Honestly Curated Software Recommendations";
 const DESCRIPTION =
-  "Software recommendations you can actually trust. Curated by usefulness, not by who paid the most. Compare invoicing, project management, email marketing, HR and payroll software by industry, region, price and business size. No signup.";
+  "Software recommendations you can actually trust. Curated by usefulness, not by who paid the most. Compare invoicing, CRM, project management, HR, dev tools, AI tools, and a dozen more software categories by industry, region, price and business size. No signup.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -24,6 +25,10 @@ export const metadata: Metadata = {
     "best project management software",
     "best email marketing software",
     "best HR and payroll software",
+    "best CRM software",
+    "best customer support software",
+    "best developer tools",
+    "best AI tools",
     "software comparison",
     "honest software reviews",
   ],
@@ -100,8 +105,12 @@ const FAQS: FAQItem[] = [
     a: "Yes — email us or use the suggestion box below with the tool's name and why you use it. We read every suggestion, though we can't guarantee every tool makes the cut.",
   },
   {
-    q: "Which invoicing/accounting software is best for freelancers vs. a small business?",
-    a: "It depends on volume and complexity, not just size. A solo freelancer sending a handful of invoices a month is usually better off starting free (Zoho Invoice, Wave) and only paying once they outgrow it. A small business with employees, inventory, or multi-currency needs typically wants a full accounting suite like QuickBooks Online, Xero, or Zoho Books instead. Use the Business size and Free tier filters above to narrow it down for your situation.",
+    q: "Which software is best for freelancers vs. a small business?",
+    a: "It depends on volume and complexity, not just size — and the answer looks different in every category. A solo freelancer sending a handful of invoices a month is usually better off starting free (Zoho Invoice, Wave) and only paying once they outgrow it; a small business with employees, inventory, or multi-currency needs typically wants a full suite like QuickBooks Online or Xero instead. The same pattern holds elsewhere — a solo founder needs a lighter CRM or project tool than a 30-person team does. Use the Business size and Free tier filters above to narrow it down for your situation, in whichever category you're browsing.",
+  },
+  {
+    q: "How many software categories does this directory cover?",
+    a: `${APP_CATEGORIES.length} so far — ${APP_CATEGORIES.map((c) => c.name.replace(" Software", "")).join(", ")} — with more added over time. Use the category chips above the results grid to switch between them, or browse "All categories" to see everything at once.`,
   },
 ];
 
@@ -216,52 +225,58 @@ export default function AppsDirectoryPage() {
       {/* SEO content */}
       <section className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
         <div className="prose prose-surface prose-lg max-w-none dark:prose-invert">
-          <h2>How to choose invoicing or accounting software</h2>
+          <h2>How to choose business software, in any category</h2>
           <p>
-            Most buyers pick invoicing or accounting software the wrong way: they search &ldquo;best
+            Most buyers pick software the wrong way: they search &ldquo;best CRM&rdquo; or &ldquo;best
             accounting software,&rdquo; open the first three &ldquo;best of&rdquo; lists, and pick
             whichever name appears highest on all of them. That approach optimizes for what the
             software industry pays to promote, not for what actually fits your business. The right
-            starting question isn&apos;t &ldquo;what&apos;s the best invoicing software&rdquo; — it&apos;s
-            &ldquo;what does <em>my</em> business actually need to send invoices, get paid, and keep
-            clean books, without paying for capability I&apos;ll never use?&rdquo;
+            starting question isn&apos;t &ldquo;what&apos;s the best tool&rdquo; — it&apos;s &ldquo;what
+            does <em>my</em> business actually need, without paying for capability I&apos;ll never
+            use?&rdquo; That question has a different answer for invoicing than it does for CRM, dev
+            tools, or HR — which is why this directory is split into{" "}
+            {APP_CATEGORIES.length} categories instead of one giant undifferentiated list.
           </p>
           <p>
             Start with volume and complexity, not brand recognition. A solo freelancer sending five
-            invoices a month has almost nothing in common with a 12-person agency running payroll
-            and multi-currency billing, even though software review sites often lump both into the
-            same &ldquo;best accounting software&rdquo; list. Filter by your actual business size and
-            industry first, then compare the handful of tools left — that&apos;s a much shorter, more
-            honest list than any generic ranking.
+            invoices a month, running no ads, and never touching a CI/CD pipeline has almost nothing
+            in common with a 50-person company doing all three at scale — even though generic
+            &ldquo;best of&rdquo; lists often rank software as if every buyer were the same size. Pick
+            a category above, filter by your actual business size and industry, then compare the
+            handful of tools left — that&apos;s a much shorter, more honest list than any one-size-
+            fits-all ranking.
           </p>
 
           <h2>What actually matters (and what doesn&apos;t)</h2>
           <p>
             <strong>Free tier reality.</strong> Marketing pages love the word &ldquo;free,&rdquo; but the
-            reality varies wildly — some free tiers are genuinely usable indefinitely (Wave, Zoho
-            Invoice), while others are a thinly disguised trial that stops working the moment you
-            hit five clients or 30 days. Read what the free tier actually allows, not just that one
-            exists.
+            reality varies wildly across every category here — some free tiers are genuinely usable
+            indefinitely (Wave for invoicing, Zoho Invoice, Tidio for support), while others are a
+            thinly disguised trial that stops working the moment you hit a handful of contacts, seats,
+            or 30 days. Read what the free tier actually allows, not just that one exists — every
+            listing&apos;s <em>free tier reality</em> line says so plainly.
           </p>
           <p>
-            <strong>Regional tax and VAT support.</strong> A tool built around US sales tax and 1099
-            filing can be a poor fit for a UK sole trader who needs Making Tax Digital compliance, or
-            a business charging VAT across the EU. Conversely, tools built for UK/EU tax rules
-            sometimes have thin US support. This is one of the most commonly overlooked factors in
-            generic &ldquo;best of&rdquo; lists, which are almost always written from a single
-            country&apos;s perspective.
+            <strong>Regional and compliance fit.</strong> A tool built around US sales tax and 1099
+            filing can be a poor fit for a UK sole trader who needs Making Tax Digital compliance. A
+            banking or payroll product that&apos;s excellent in the US is sometimes simply
+            unavailable outside it. An AI tool trained mostly on English content may underperform for
+            non-English support teams. This is one of the most commonly overlooked factors in generic
+            &ldquo;best of&rdquo; lists, which are almost always written from a single country&apos;s
+            perspective — we flag region limits explicitly instead of burying them.
           </p>
           <p>
-            <strong>Integrations.</strong> The software that matters most isn&apos;t the invoicing tool
-            in isolation — it&apos;s the invoicing tool plus your bank, your payment processor, your
-            e-commerce platform, and whatever your accountant already uses. A cheaper tool that
-            doesn&apos;t talk to any of those can cost you more time than a pricier one that does.
+            <strong>Integrations.</strong> The software that matters most is rarely one tool in
+            isolation — it&apos;s that tool plus your bank, your payment processor, your CRM, and
+            whatever your team already uses daily. A cheaper tool that doesn&apos;t talk to any of
+            those can cost you more time than a pricier one that does.
           </p>
           <p>
             <strong>Scaling costs.</strong> The sticker price on a pricing page is the starting price,
-            not the price you&apos;ll pay in year two. Per-user fees, client caps, and add-on modules
-            (payroll, receipt scanning, extra currencies) can quietly double your monthly bill as you
-            grow. Model the cost at the size you expect to be in 12 months, not just today.
+            not the price you&apos;ll pay in year two. Per-seat fees, contact/usage caps, and add-on
+            modules (payroll, extra automations, premium support) can quietly double your monthly
+            bill as you grow. Model the cost at the size you expect to be in 12 months, not just
+            today.
           </p>
 
           <h2>Why most &ldquo;best of&rdquo; lists are pay-to-play — and how this one differs</h2>
@@ -279,15 +294,16 @@ export default function AppsDirectoryPage() {
 
           <h2>When free tools are enough</h2>
           <p>
-            If you&apos;re sending a handful of invoices a month and don&apos;t need payroll, inventory,
-            or multi-entity accounting, a paid subscription is often premature. Our own free{" "}
-            <Link href="/tools/invoice-generator">Invoice Generator</Link>,{" "}
-            <Link href="/tools/receipt-generator">Receipt Generator</Link>, and{" "}
-            <Link href="/tools/purchase-order-generator">Purchase Order Generator</Link>{" "}
-            cover the basics with no signup and no monthly fee. Use those until the volume, tax complexity, or
-            team size of your business genuinely outgrows a free tool — then use the filters above to
-            find the paid software that fits what you&apos;ve actually become, not what a generic
-            ranking assumes you are.
+            Before paying for software in any category, check whether one of our own free tools
+            already covers what you need — no signup, no monthly fee. Sending a few invoices a month
+            doesn&apos;t require full accounting software; our{" "}
+            <Link href="/tools/invoice-generator">Invoice Generator</Link> and{" "}
+            <Link href="/tools/receipt-generator">Receipt Generator</Link> may be enough on their
+            own. The &ldquo;Start free with our tools&rdquo; section above the results grid
+            automatically surfaces the free tools that pair with whatever category or filter you
+            currently have selected — use those until the volume, complexity, or team size of your
+            business genuinely outgrows them, then come back here to find the paid software that
+            fits what you&apos;ve actually become, not what a generic ranking assumes you are.
           </p>
         </div>
       </section>
