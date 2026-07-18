@@ -12,7 +12,6 @@ import { HideOnEmbed } from "@/components/layout/HideOnEmbed";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { SearchModal } from "@/components/search/SearchModal";
 import { RecentlyUsed } from "@/components/tools/RecentlyUsed";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import {
   generateOrganizationSchema,
   generateWebSiteSchema,
@@ -141,9 +140,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </ThemeProvider>
         <Analytics />
         <GoogleAnalytics />
-        <HideOnEmbed>
-          <WhatsAppButton />
-        </HideOnEmbed>
       </body>
     </html>
   );
