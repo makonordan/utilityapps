@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { AdSlot } from "@/components/ads/AdSlot";
 import { AllTools } from "@/components/home/AllTools";
 import { AppsPreview } from "@/components/home/AppsPreview";
+import { AppsPromoModal } from "@/components/home/AppsPromoModal";
 import { FAQ } from "@/components/home/FAQ";
 import { FeaturedPosts } from "@/components/home/FeaturedPosts";
 import { Hero } from "@/components/home/Hero";
@@ -12,6 +13,7 @@ import { Newsletter } from "@/components/home/Newsletter";
 import { Stats } from "@/components/home/Stats";
 import { TrendingTools } from "@/components/home/TrendingTools";
 import { YouTubeHub } from "@/components/home/YouTubeHub";
+import { ALL_APPS, APP_CATEGORIES } from "@/lib/apps";
 import { getFeaturedPosts } from "@/lib/posts";
 import { SITE_CONFIG } from "@/lib/utils";
 
@@ -64,6 +66,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <AppsPromoModal appCount={ALL_APPS.length} categoryCount={APP_CATEGORIES.length} />
       <Hero />
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <AdSlot position="top" />
