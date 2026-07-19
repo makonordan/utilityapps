@@ -228,6 +228,21 @@ function ToolsMegaMenu() {
 function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const grouped = useMemo(() => groupToolsByCategory(), []);
+  // Rendered permanently once mounted the first time; open/close is a pure
+  // CSS transition on transform/opacity, not a framer-motion AnimatePresence
+  // mount/unmount. AnimatePresence tracks exit animations as external state
+  // shared across the whole overlay + panel tree, and under rapid open/close
+  // taps on WebKit that tracking can desync from the `open` boolean — the
+  // backdrop freezes at opacity:0 and the panel at its fully-offscreen
+  // transform, but the backdrop element itself (and its pointer-events)
+  // never actually unmounts, so it's left silently blocking every tap on
+  // the page underneath until a full reload. A CSS transition has no such
+  // external state to desync: whatever class list is applied right now is
+  // exactly what plays, no matter how fast it's toggled.
+  const [everOpened, setEverOpened] = useState(false);
+  if (open && !everOpened) {
+    setEverOpened(true);
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -238,140 +253,138 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
     };
   }, [open]);
 
+  if (!everOpened) return null;
+
   return (
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[55] bg-surface-950/40 backdrop-blur-sm md:hidden"
-          onClick={onClose}
-        >
-          <motion.aside
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "tween", ease: "easeOut", duration: 0.25 }}
-            className="absolute inset-y-0 right-0 flex w-full max-w-sm flex-col bg-white shadow-card-hover dark:bg-surface-900"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between border-b border-surface-200 px-4 py-3 dark:border-surface-800">
-              <Logo />
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label="Close menu"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-xl text-surface-600 hover:bg-surface-100 dark:text-surface-300 dark:hover:bg-surface-800"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <nav className="flex-1 overflow-y-auto px-4 py-4">
-              <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
-                Tools
-              </p>
-              <ul className="space-y-1">
-                {CATEGORIES.map((cat) => {
-                  const isOpen = expanded === cat.id;
-                  const tools = grouped.get(cat.name) ?? [];
-                  return (
-                    <li key={cat.id}>
-                      <button
-                        type="button"
-                        onClick={() => setExpanded(isOpen ? null : cat.id)}
-                        aria-expanded={isOpen}
-                        className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm font-medium text-surface-800 hover:bg-surface-100 dark:text-surface-100 dark:hover:bg-surface-800"
-                      >
-                        <span className="flex items-center gap-2">
-                          <span>{cat.name}</span>
-                          <span className="rounded-full bg-surface-100 px-1.5 py-0.5 text-[10px] font-medium text-surface-600 dark:bg-surface-800 dark:text-surface-300">
-                            {cat.toolCount}
-                          </span>
-                        </span>
-                        <ChevronDown
-                          className={cn("h-4 w-4 transition-transform", isOpen && "rotate-180")}
-                        />
-                      </button>
-                      <AnimatePresence initial={false}>
-                        {isOpen && (
-                          <motion.ul
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="overflow-hidden pl-4"
-                          >
-                            {tools.map((tool) => (
-                              <li key={tool.id}>
-                                <Link
-                                  href={tool.href}
-                                  onClick={onClose}
-                                  className="block rounded-lg px-3 py-2 text-sm text-surface-700 hover:bg-surface-50 hover:text-primary-600 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-primary-400"
-                                >
-                                  {tool.name}
-                                </Link>
-                              </li>
-                            ))}
-                            <li>
-                              <Link
-                                href={
-                                  cat.name === "Image Tools"
-                                    ? "/tools/image-tools"
-                                    : `/tools/categories/${cat.id}`
-                                }
-                                onClick={onClose}
-                                className="block rounded-lg px-3 py-2 text-xs font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400"
-                              >
-                                See all in {cat.name} →
-                              </Link>
-                            </li>
-                          </motion.ul>
-                        )}
-                      </AnimatePresence>
-                    </li>
-                  );
-                })}
-              </ul>
-
-              <p className="mt-6 px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
-                More
-              </p>
-              <ul className="space-y-1">
-                {NAV_LINKS.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      onClick={onClose}
-                      className="flex items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-surface-800 hover:bg-surface-100 dark:text-surface-100 dark:hover:bg-surface-800"
-                    >
-                      <span>{link.label}</span>
-                      {link.badge && (
-                        <span className="rounded-full bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">
-                          {link.badge}
-                        </span>
-                      )}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            <div className="border-t border-surface-200 px-4 py-4 dark:border-surface-800">
-              <a
-                href="/support"
-                onClick={onClose}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary-500 to-accent-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:from-primary-600 hover:to-accent-600"
-              >
-                <Heart className="h-4 w-4" />
-                Support
-              </a>
-            </div>
-          </motion.aside>
-        </motion.div>
+    <div
+      aria-hidden={!open}
+      className={cn(
+        "fixed inset-0 z-[55] bg-surface-950/40 backdrop-blur-sm transition-opacity duration-300 ease-out md:hidden",
+        open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
       )}
-    </AnimatePresence>
+      onClick={onClose}
+    >
+      <aside
+        className={cn(
+          "absolute inset-y-0 right-0 flex w-full max-w-sm flex-col bg-white shadow-card-hover transition-transform duration-[250ms] ease-out dark:bg-surface-900",
+          open ? "translate-x-0" : "translate-x-full"
+        )}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between border-b border-surface-200 px-4 py-3 dark:border-surface-800">
+          <Logo />
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close menu"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl text-surface-600 hover:bg-surface-100 dark:text-surface-300 dark:hover:bg-surface-800"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <nav className="flex-1 overflow-y-auto px-4 py-4">
+          <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
+            Tools
+          </p>
+          <ul className="space-y-1">
+            {CATEGORIES.map((cat) => {
+              const isOpen = expanded === cat.id;
+              const tools = grouped.get(cat.name) ?? [];
+              return (
+                <li key={cat.id}>
+                  <button
+                    type="button"
+                    onClick={() => setExpanded(isOpen ? null : cat.id)}
+                    aria-expanded={isOpen}
+                    className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm font-medium text-surface-800 hover:bg-surface-100 dark:text-surface-100 dark:hover:bg-surface-800"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span>{cat.name}</span>
+                      <span className="rounded-full bg-surface-100 px-1.5 py-0.5 text-[10px] font-medium text-surface-600 dark:bg-surface-800 dark:text-surface-300">
+                        {cat.toolCount}
+                      </span>
+                    </span>
+                    <ChevronDown
+                      className={cn("h-4 w-4 transition-transform", isOpen && "rotate-180")}
+                    />
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.ul
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden pl-4"
+                      >
+                        {tools.map((tool) => (
+                          <li key={tool.id}>
+                            <Link
+                              href={tool.href}
+                              onClick={onClose}
+                              className="block rounded-lg px-3 py-2 text-sm text-surface-700 hover:bg-surface-50 hover:text-primary-600 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:text-primary-400"
+                            >
+                              {tool.name}
+                            </Link>
+                          </li>
+                        ))}
+                        <li>
+                          <Link
+                            href={
+                              cat.name === "Image Tools"
+                                ? "/tools/image-tools"
+                                : `/tools/categories/${cat.id}`
+                            }
+                            onClick={onClose}
+                            className="block rounded-lg px-3 py-2 text-xs font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400"
+                          >
+                            See all in {cat.name} →
+                          </Link>
+                        </li>
+                      </motion.ul>
+                    )}
+                  </AnimatePresence>
+                </li>
+              );
+            })}
+          </ul>
+
+          <p className="mt-6 px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
+            More
+          </p>
+          <ul className="space-y-1">
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  onClick={onClose}
+                  className="flex items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-surface-800 hover:bg-surface-100 dark:text-surface-100 dark:hover:bg-surface-800"
+                >
+                  <span>{link.label}</span>
+                  {link.badge && (
+                    <span className="rounded-full bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">
+                      {link.badge}
+                    </span>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="border-t border-surface-200 px-4 py-4 dark:border-surface-800">
+          <a
+            href="/support"
+            onClick={onClose}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary-500 to-accent-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:from-primary-600 hover:to-accent-600"
+          >
+            <Heart className="h-4 w-4" />
+            Support
+          </a>
+        </div>
+      </aside>
+    </div>
   );
 }
 
