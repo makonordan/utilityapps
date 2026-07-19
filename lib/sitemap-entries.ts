@@ -41,8 +41,18 @@ const STATIC_PAGES: { path: string; priority: number; changeFrequency: ChangeFre
   { path: "/studio", priority: 0.8, changeFrequency: "monthly" },
 ];
 
+// Captured once per server instance (effectively per-deploy), not per
+// request. The route regenerates hourly (see app/sitemap.ts revalidate),
+// and stamping `new Date()` inside the function meant every one of these
+// ~600 URLs reported a fresh lastmod every hour regardless of whether the
+// underlying page changed — Google learns to distrust a lastmod signal
+// that "changes" on a schedule unrelated to real edits. This constant is
+// the closest stand-in for a real edit date until Tool/AppListing track
+// one themselves.
+const BUILD_TIME = new Date();
+
 export async function getSitemapEntries(): Promise<SitemapEntry[]> {
-  const now = new Date();
+  const now = BUILD_TIME;
   const entries: SitemapEntry[] = [];
 
   for (const page of STATIC_PAGES) {

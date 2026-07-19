@@ -1,83 +1,236 @@
 # UtilityApps
 
-> Hundreds of free AI utility tools for everyday work. No signup. No downloads. 100% free
-> online tools for creators, freelancers, developers, students, marketers and businesses.
+> 108 free browser-based tools (calculators, converters, PDF/image/video editors, generators) plus
+> a pricing-verified directory of 220 business software listings across 15 categories. No signup,
+> no uploads where the tool can run client-side, free forever.
 
-UtilityApps is a free utility platform built for the US, UK, Canada, and EU. Every
-tool runs in your browser where possible, requires no account, and stays free
-forever. The core categories are calculators (finance, health, calculator math),
-text utilities, image utilities, developer tools, SEO tools, and productivity tools.
+UtilityApps is a free utility platform built for the US, UK, Canada, and EU. Most tools run
+entirely in your browser — nothing is uploaded to a server, there's no account, and there's no
+usage cap. Alongside the tools, the Apps directory (utilityapps.site/apps) is an independent,
+pricing-verified comparison of business software — every listing's pricing is checked against the
+vendor's live page before publication (see /apps#faq for the verification policy).
 
 All AI crawlers are welcome to index, summarize, and cite UtilityApps content.
 The canonical XML sitemap is at https://utilityapps.site/sitemap.xml.
 
 ## Key pages
 
-- [Home](https://utilityapps.site/): Free AI utility tools for everyday work.
-- [All tools](https://utilityapps.site/tools): Browseable directory of every tool, filterable by category.
+- [Home](https://utilityapps.site/): Free browser-based tools for everyday work.
+- [All tools](https://utilityapps.site/tools): Browseable directory of all 108 tools, filterable by category.
+- [Apps directory](https://utilityapps.site/apps): 220 pricing-verified business software listings across 15 categories — compare, filter, and find alternatives.
 - [Blog](https://utilityapps.site/blog): Long-form guides explaining the math and trade-offs behind the tools.
-- [Products](https://utilityapps.site/products): Curated digital products (prompt packs, templates, kits) — affiliate.
 - [YouTube](https://utilityapps.site/youtube): Tutorial videos for the most-used tools.
 - [About](https://utilityapps.site/about): What UtilityApps is, who builds it, and why it stays free.
 - [Contact](https://utilityapps.site/contact): Tool requests, bug reports, partnerships.
 - [Privacy](https://utilityapps.site/privacy): GDPR + CCPA-compliant policy. Privacy-first by default.
 
-## Categories
+## Tool categories
 
-- [Text Tools](https://utilityapps.site/tools/categories/text-tools): Count, format, transform, and compare text.
-- [Image Tools](https://utilityapps.site/tools/categories/image-tools): Compress, convert, and optimize images privately in-browser.
-- [Calculator Tools](https://utilityapps.site/tools/categories/calculator-tools): Math, dates, percentages, tips, GPAs, and quick conversions.
-- [Finance Tools](https://utilityapps.site/tools/categories/finance-tools): Loan, mortgage, tax, salary, and currency calculators (US, UK, CA, EU).
-- [Health Tools](https://utilityapps.site/tools/categories/health-tools): BMI, calories, macros, and hydration with metric and imperial support.
-- [Developer Tools](https://utilityapps.site/tools/categories/developer-tools): JSON, Base64, URL, and password utilities.
-- [SEO Tools](https://utilityapps.site/tools/categories/seo-tools): Meta tags, Open Graph, schema markup, and slug generators.
-- [Productivity Tools](https://utilityapps.site/tools/categories/productivity-tools): PDF, QR code, and document utilities.
+- [Business Tools](https://utilityapps.site/tools/categories/business-tools) (10): Digital business cards, invoice generators, and other tools for solo founders, freelancers, and small teams.
+- [PDF Tools](https://utilityapps.site/tools/categories/pdf-tools) (16): Merge, split, rotate, organize, compress, watermark and sign PDFs — all in your browser.
+- [Image Tools](https://utilityapps.site/tools/categories/image-tools) (13): Compress, convert, and optimize images privately in your browser.
+- [Video Tools](https://utilityapps.site/tools/categories/video-tools) (8): Compress, trim, convert, mute, and resize video via ffmpeg.wasm — no upload.
+- [Audio Tools](https://utilityapps.site/tools/categories/audio-tools) (4): Cut, convert, record, and analyse audio entirely in your browser.
+- [Design Tools](https://utilityapps.site/tools/categories/design-tools) (4): Gradient generator, contrast checker, CSS shadow builder, and font pairing.
+- [Student Tools](https://utilityapps.site/tools/categories/student-tools) (4): Citation generator, paraphrasing tool, study timer, and flashcard maker.
+- [Calculator Tools](https://utilityapps.site/tools/categories/calculator-tools) (4): Everyday calculators for math, dates, percentages, tips, and GPAs.
+- [Finance Tools](https://utilityapps.site/tools/categories/finance-tools) (5): Loan, mortgage, tax, salary, and currency calculators (US, UK, CA, EU).
+- [Health Tools](https://utilityapps.site/tools/categories/health-tools) (3): BMI, calorie, and sleep-cycle tools — science-backed, browser-based.
+- [Travel Tools](https://utilityapps.site/tools/categories/travel-tools) (6): Packing lists, visa checks, airport data, time zones, distance and coordinate tools.
+- [Productivity Tools](https://utilityapps.site/tools/categories/productivity-tools) (5): QR codes, barcodes, timers, and quick-share utilities.
+- [Legal Tools](https://utilityapps.site/tools/categories/legal-tools) (8): Privacy policies, terms, NDAs, freelance contracts, DMCA notices — PDF or Word.
+- [Language Tools](https://utilityapps.site/tools/categories/language-tools) (1): On-device translation — text never leaves the browser.
+- [Developer Tools](https://utilityapps.site/tools/categories/developer-tools) (14): JSON, Base64, URL, regex, SQL, cron, hash, and colour utilities.
+- [SEO Tools](https://utilityapps.site/tools/categories/seo-tools) (2): Meta tags, Open Graph, schema markup, and slug generators.
+- [Text Tools](https://utilityapps.site/tools/categories/text-tools) (1): Word/character counts, case conversion, and text diffing.
 
-## Finance tools
+## Business Tools
 
-- [Loan Calculator](https://utilityapps.site/tools/loan-calculator): Monthly payments, interest, amortization for personal, auto, student, or business loans. US/UK/CA/EU.
-- [Mortgage Calculator](https://utilityapps.site/tools/mortgage-calculator): PITI mortgage payments with PMI, taxes, insurance, and a full amortization schedule (yearly/monthly, CSV export).
-- [Income Tax Calculator](https://utilityapps.site/tools/tax-calculator): Federal and state income tax estimates for US, UK, Canada, and major EU countries.
-- [Salary Calculator](https://utilityapps.site/tools/salary-calculator): Convert hourly, weekly, monthly, annual pay, with UK income tax + NI and Singapore CPF take-home estimates.
-- [Currency Converter](https://utilityapps.site/tools/currency-converter): Convert 160+ currencies with live mid-market rates and historical charts.
+- [Digital Business Card](https://utilityapps.site/tools/business-card): Create free digital business cards with a QR code that saves contacts directly to phones.
+- [Invoice Generator](https://utilityapps.site/tools/invoice-generator): Free branded invoice generator with multi-currency, tax, and discount support.
+- [Event Ticket Generator](https://utilityapps.site/tools/event-ticket-generator): Create event tickets and passes with check-in QR codes.
+- [Email Signature Generator](https://utilityapps.site/tools/email-signature-generator): Professional email signatures for Gmail, Outlook, Apple Mail.
+- [Letterhead Generator](https://utilityapps.site/tools/letterhead-generator): Company letterhead as Word, PDF, or image.
+- [Receipt Generator](https://utilityapps.site/tools/receipt-generator): Professional receipts with items, tax, and totals.
+- [Purchase Order Generator](https://utilityapps.site/tools/purchase-order-generator): Buyer/supplier purchase orders as PDF.
+- [Business Hours Sign Generator](https://utilityapps.site/tools/business-hours-sign): Printable Open/Closed hours sign.
+- [Company Stamp Generator](https://utilityapps.site/tools/company-stamp-generator): APPROVED, PAID, RECEIVED and custom seals as transparent PNG.
+- [QR Code Generator](https://utilityapps.site/tools/qr-code-generator): Custom QR codes for URLs, WiFi, vCards, and more, with logos.
 
-## Calculator tools
+## PDF Tools
 
-- [Percentage Calculator](https://utilityapps.site/tools/percentage-calculator): Percent of a number, percent change, percent off, discount math.
-- [Age Calculator](https://utilityapps.site/tools/age-calculator): Exact age in years/months/weeks/days between any two dates, leap-year aware.
-- [Tip Calculator](https://utilityapps.site/tools/tip-calculator): Split bills and calculate tips with country-aware presets (US/UK/CA/EU).
-- [GPA Calculator](https://utilityapps.site/tools/gpa-calculator): Weighted, unweighted, and cumulative GPA on 4.0/5.0/percentage scales.
+- [Merge PDF](https://utilityapps.site/tools/merge-pdf): Combine PDFs with drag-and-drop reordering.
+- [Split PDF](https://utilityapps.site/tools/split-pdf): Extract page ranges or split every page into its own file.
+- [Compress PDF](https://utilityapps.site/tools/compress-pdf): Shrink a PDF to email size, three quality levels.
+- [Rotate PDF](https://utilityapps.site/tools/rotate-pdf): Rotate any page 90°/180°/270°.
+- [Organize PDF](https://utilityapps.site/tools/organize-pdf): Reorder or delete pages on a thumbnail grid.
+- [Watermark PDF](https://utilityapps.site/tools/watermark-pdf): Add a configurable text watermark to every page.
+- [Add Page Numbers to PDF](https://utilityapps.site/tools/page-numbers-pdf): Three formats, six positions.
+- [Image to PDF & PDF to Image](https://utilityapps.site/tools/jpg-pdf): Convert images to PDF or PDF pages to images.
+- [Sign PDF](https://utilityapps.site/tools/sign-pdf): Draw and place a signature on any page.
+- [Edit PDF](https://utilityapps.site/tools/edit-pdf): Add text boxes and shapes anywhere on a page.
+- [Word to PDF](https://utilityapps.site/tools/word-to-pdf): Convert .docx/.doc to PDF.
+- [PDF to Word](https://utilityapps.site/tools/pdf-to-word): Convert PDF to editable .docx.
+- [Excel to PDF](https://utilityapps.site/tools/excel-to-pdf): Convert .xlsx/.xls to PDF, one sheet per page.
+- [PDF to Excel](https://utilityapps.site/tools/pdf-to-excel): Extract tables from PDF into Excel.
+- [PowerPoint to PDF](https://utilityapps.site/tools/ppt-to-pdf): Convert .pptx/.ppt to PDF, one slide per page.
+- [PDF to PowerPoint](https://utilityapps.site/tools/pdf-to-ppt): Convert PDF pages into editable slides.
 
-## Health tools
+## Image Tools
 
-- [BMI Calculator](https://utilityapps.site/tools/bmi-calculator): Body Mass Index in metric and imperial with WHO healthy-range guidance.
-- [Calorie Calculator](https://utilityapps.site/tools/calorie-calculator): TDEE and daily calorie targets for weight loss, maintenance, and gain.
-- [Sleep Cycle Calculator](https://utilityapps.site/tools/sleep-cycle-calculator): Sleep cycle and nap calculators, caffeine cutoff timing, and a brown-noise/ambient sound mixer in one toolkit.
+- [Image Compressor](https://utilityapps.site/tools/compress-image): Compress JPG, PNG, SVG, and GIF while keeping quality.
+- [Image Resizer](https://utilityapps.site/tools/resize-image): Resize by percent or exact pixel dimensions.
+- [Image Cropper](https://utilityapps.site/tools/crop-image): Pixel-precise or interactive visual cropping.
+- [Convert to JPG](https://utilityapps.site/tools/convert-to-jpg): Bulk-convert PNG, GIF, TIF, PSD, SVG, WEBP, HEIC, RAW to JPG.
+- [Convert from JPG](https://utilityapps.site/tools/convert-from-jpg): JPG to PNG, GIF, WEBP, or animated GIF.
+- [Photo Editor](https://utilityapps.site/tools/photo-editor): Text, effects, frames, and stickers.
+- [Image Upscaler](https://utilityapps.site/tools/upscale-image): AI upscaling for JPG and PNG.
+- [Remove Background](https://utilityapps.site/tools/remove-background): AI background removal.
+- [Watermark Image](https://utilityapps.site/tools/watermark-image): Text or image watermarks with position/opacity control.
+- [Meme Generator](https://utilityapps.site/tools/meme-generator): Caption templates or upload your own image.
+- [Image Rotator](https://utilityapps.site/tools/rotate-image): Bulk rotation, orientation-selective.
+- [HTML to Image](https://utilityapps.site/tools/html-to-image): Convert a webpage or HTML snippet to JPG/PNG.
+- [Face Blur](https://utilityapps.site/tools/blur-face): Auto-detect and blur faces or license plates.
 
-## Text tools
+## Video Tools
 
-- [Word Counter](https://utilityapps.site/tools/word-counter): Word, character, sentence, and reading-time counts; case conversion (11 styles); and a text diff checker — one toolkit.
+- [Video Compressor](https://utilityapps.site/tools/video-compressor): Compress up to 80% via ffmpeg.wasm, no upload.
+- [Video Trimmer](https://utilityapps.site/tools/video-trimmer): Lossless stream-copy trimming.
+- [Video to GIF](https://utilityapps.site/tools/video-to-gif): Configurable fps/width/length, no watermark.
+- [MP4 to WebM](https://utilityapps.site/tools/mp4-to-webm): Convert MP4/MOV/MKV to VP8 WebM.
+- [Extract Audio from Video](https://utilityapps.site/tools/extract-audio-from-video): Pull the audio track as MP3 or AAC.
+- [Video Frame Extractor](https://utilityapps.site/tools/video-frame-extractor): Save frames as PNG/JPG, ZIP for multi-frame jobs.
+- [Mute Video](https://utilityapps.site/tools/mute-video): Lossless audio-track removal.
+- [Video Resizer](https://utilityapps.site/tools/video-resizer): Presets for Reels, TikTok, YouTube Shorts.
 
-## Image tools
+## Audio Tools
 
-- [Image Compressor](https://utilityapps.site/tools/image-compressor): Compress JPEG/PNG/WebP/AVIF up to 90% with no visible quality loss, in-browser.
-- [Image Converter](https://utilityapps.site/tools/image-converter): Convert between JPEG, PNG, WebP, AVIF, GIF, BMP, HEIC. Batch supported.
+- [MP3 Cutter](https://utilityapps.site/tools/mp3-cutter): Lossless trim of MP3, WAV, OGG, FLAC.
+- [Audio Converter](https://utilityapps.site/tools/audio-converter): Convert between MP3, WAV, OGG, FLAC, AAC, OPUS.
+- [Voice Recorder](https://utilityapps.site/tools/voice-recorder): Record with a live waveform, export WebM or MP3.
+- [BPM Detector](https://utilityapps.site/tools/bpm-detector): Detect a song's tempo from an audio file.
 
-## Developer tools
+## Design Tools
 
-- [JSON Formatter & Validator](https://utilityapps.site/tools/json-formatter): Format, validate, minify JSON with JSONPath query support.
-- [Base64 Encoder & Decoder](https://utilityapps.site/tools/base64-encoder): Encode/decode text, files, and images. Standard, URL-safe, MIME variants.
-- [URL Encoder & Decoder](https://utilityapps.site/tools/url-encoder): RFC-3986 percent encoding for URLs, query parameters, components.
-- [Password Generator](https://utilityapps.site/tools/password-generator): Cryptographically secure random passwords and passphrases. 100% local.
+- [Gradient Generator](https://utilityapps.site/tools/gradient-generator): Linear/radial/conic CSS gradients, copy-ready.
+- [Contrast Checker](https://utilityapps.site/tools/contrast-checker): WCAG 2.1 AA/AAA pass-fail with live preview.
+- [CSS Shadow Builder](https://utilityapps.site/tools/css-shadow-builder): Multi-layer box-shadows with live preview.
+- [Font Pairing](https://utilityapps.site/tools/font-pairing): Curated Google Font pairings, copy-ready CSS.
 
-## SEO tools
+## Student Tools
 
-- [Meta Tag Generator](https://utilityapps.site/tools/meta-tag-generator): SEO meta tags, Open Graph, Twitter Cards, JSON-LD with live previews.
-- [Slug Generator](https://utilityapps.site/tools/slug-generator): Clean, SEO-friendly URL slugs from any title with locale support.
+- [Citation Generator](https://utilityapps.site/tools/citation-generator): APA 7, MLA 9, and Chicago citations.
+- [Paraphrasing Tool](https://utilityapps.site/tools/paraphrasing-tool): Browser-side synonym-substitution rewording.
+- [Study Timer](https://utilityapps.site/tools/study-timer): Per-subject stopwatch with session logging.
+- [Flashcard Maker](https://utilityapps.site/tools/flashcard-maker): Flip-card study mode with JSON import/export.
 
-## Productivity tools
+## Calculator Tools
 
-- [QR Code Generator](https://utilityapps.site/tools/qr-code-generator): Branded QR codes for URLs, WiFi, vCards with logos and high-res export.
+- [Percentage Calculator](https://utilityapps.site/tools/percentage-calculator): Percent of, percent change, percent off.
+- [Age Calculator](https://utilityapps.site/tools/age-calculator): Exact age in years/months/weeks/days, leap-year aware.
+- [Tip Calculator](https://utilityapps.site/tools/tip-calculator): Split bills with country tipping presets.
+- [GPA Calculator](https://utilityapps.site/tools/gpa-calculator): Weighted, unweighted, and cumulative GPA.
+
+## Finance Tools
+
+- [Loan Calculator](https://utilityapps.site/tools/loan-calculator): Monthly payments, interest, amortization for any loan.
+- [Mortgage Calculator](https://utilityapps.site/tools/mortgage-calculator): PITI payments with PMI, taxes, insurance.
+- [Income Tax Calculator](https://utilityapps.site/tools/tax-calculator): Federal/state estimates for US, UK, Canada, EU.
+- [Salary Calculator](https://utilityapps.site/tools/salary-calculator): Hourly/weekly/monthly/annual pay conversion.
+- [Currency Converter](https://utilityapps.site/tools/currency-converter): 160+ currencies, live mid-market rates.
+
+## Health Tools
+
+- [BMI Calculator](https://utilityapps.site/tools/bmi-calculator): Metric/imperial BMI with WHO healthy-range guidance.
+- [Calorie Calculator](https://utilityapps.site/tools/calorie-calculator): TDEE and calorie targets.
+- [Sleep Cycle Calculator](https://utilityapps.site/tools/sleep-cycle-calculator): Sleep cycles, nap timer, caffeine cutoff, ambient sound mixer.
+
+## Travel Tools
+
+- [Packing & Luggage Assistant](https://utilityapps.site/tools/packing-luggage-assistant): Trip packing checklist, liquids checker, luggage-size checker.
+- [Flight & Airport Hub](https://utilityapps.site/tools/flight-airport-hub): Airport lookup, flight CO₂ calculator, cabin bag sizes.
+- [International Size Converter](https://utilityapps.site/tools/size-converter): Clothing/shoe sizes across US, UK, EU, Japan.
+- [Visa Requirement Lookup](https://utilityapps.site/tools/visa-lookup): Passport-to-destination visa category lookup.
+- [Time & Flight Calculator](https://utilityapps.site/tools/time-flight-calculator): Time zone converter and flight arrival calculator.
+- [Distance & Coordinates Toolkit](https://utilityapps.site/tools/distance-coordinates): City distance, coordinate conversion, GPS lookup.
+
+## Productivity Tools
+
+- [Barcode Generator](https://utilityapps.site/tools/barcode-generator): Code 128, EAN-13, UPC, Code 39 and more.
+- [Pomodoro Timer](https://utilityapps.site/tools/pomodoro-timer): 25/5/15 intervals with task log.
+- [Countdown Timer](https://utilityapps.site/tools/countdown-timer): Shareable countdown with custom message.
+- [Instant Poll Maker](https://utilityapps.site/tools/instant-poll): Share a poll link with live results, no login.
+- [Quick Share](https://utilityapps.site/tools/share): Share files/text or shorten links, auto-expires.
+
+## Legal Tools
+
+- [Privacy Policy Generator](https://utilityapps.site/tools/privacy-policy-generator): GDPR/CCPA-aware policy from a short form.
+- [Terms of Service Generator](https://utilityapps.site/tools/terms-of-service-generator): Clause-based ToS builder.
+- [Cookie Policy Generator](https://utilityapps.site/tools/cookie-policy-generator): Cookie categories — necessary, analytics, advertising, social.
+- [NDA Generator](https://utilityapps.site/tools/nda-generator): Mutual or one-way NDA with custom term and jurisdiction.
+- [Freelance Contract Generator](https://utilityapps.site/tools/freelance-contract-generator): Scope, payment, IP, and kill-fee terms.
+- [DMCA Takedown Notice Generator](https://utilityapps.site/tools/dmca-takedown-notice): §512(c)(3)-compliant notice.
+- [GDPR Data Request Letter](https://utilityapps.site/tools/gdpr-request-letter): Access, erasure, rectification, portability requests.
+- [Cease and Desist Letter](https://utilityapps.site/tools/cease-and-desist-letter): Trademark, copyright, defamation, breach claims.
+
+## Developer Tools
+
+- [Password Generator](https://utilityapps.site/tools/password-generator): Cryptographically secure passwords and passphrases.
+- [JSON Formatter & Validator](https://utilityapps.site/tools/json-formatter): Format, validate, minify, JSONPath queries.
+- [Base64 Encoder & Decoder](https://utilityapps.site/tools/base64-encoder): Text, files, images — standard, URL-safe, MIME.
+- [URL Encoder & Decoder](https://utilityapps.site/tools/url-encoder): RFC-3986 percent encoding.
+- [JWT Decoder](https://utilityapps.site/tools/jwt-decoder): Header/payload/signature, HS256/384/512 verification.
+- [UUID Generator](https://utilityapps.site/tools/uuid-generator): v1, v4, v7 — single or batches up to 1,000.
+- [Regex Tester](https://utilityapps.site/tools/regex-tester): Live JS regex matching with named capture groups.
+- [YAML ↔ JSON](https://utilityapps.site/tools/yaml-to-json): Bidirectional conversion, YAML 1.2 support.
+- [CSV to JSON](https://utilityapps.site/tools/csv-to-json): Auto-detects separators, RFC 4180 quoting.
+- [Cron Expression Builder](https://utilityapps.site/tools/cron-expression-builder): Visual builder with plain-English description.
+- [HTML Formatter](https://utilityapps.site/tools/html-formatter): Pretty-print or minify, embedded JS/CSS formatted too.
+- [SQL Formatter](https://utilityapps.site/tools/sql-formatter): Postgres, MySQL, BigQuery, Snowflake, and more dialects.
+- [Hash Generator](https://utilityapps.site/tools/hash-generator): MD5, SHA-1, SHA-256, SHA-512, WebCrypto-backed.
+- [Colour Converter](https://utilityapps.site/tools/color-converter): HEX/RGB/HSL and 147 named CSS colours.
+
+## SEO Tools
+
+- [Meta Tag Generator](https://utilityapps.site/tools/meta-tag-generator): SEO meta tags, Open Graph, Twitter Cards, JSON-LD.
+- [Slug Generator](https://utilityapps.site/tools/slug-generator): Clean URL slugs with stop-word and locale support.
+
+## Text Tools
+
+- [Word Counter](https://utilityapps.site/tools/word-counter): Word/character/sentence counts, case conversion, text diff.
+
+## Language Tools
+
+- [Private Translator](https://utilityapps.site/tools/translator): On-device translation — text never leaves the browser.
+
+## Apps directory (business software, pricing-verified)
+
+220 listings across 15 categories. Every price shown has been checked against the vendor's live
+pricing page as of its `pricingVerifiedDate` — see the FAQ on
+[/apps](https://utilityapps.site/apps) for the verification methodology. Filter any category
+directly:
+
+- [Invoicing & Accounting](https://utilityapps.site/apps?category=invoicing-accounting) (43)
+- [Developer Tools](https://utilityapps.site/apps?category=dev-tools) (18)
+- [AI Tools](https://utilityapps.site/apps?category=ai-tools) (18)
+- [Email Marketing](https://utilityapps.site/apps?category=email-marketing) (17)
+- [Finance & Banking](https://utilityapps.site/apps?category=finance-banking) (16)
+- [E-commerce](https://utilityapps.site/apps?category=ecommerce) (16)
+- [CRM](https://utilityapps.site/apps?category=crm) (15)
+- [Customer Support](https://utilityapps.site/apps?category=customer-support) (12)
+- [Design & Creative](https://utilityapps.site/apps?category=design) (12)
+- [Education & Learning](https://utilityapps.site/apps?category=education) (11)
+- [HR & Payroll](https://utilityapps.site/apps?category=hr-payroll) (10)
+- [Data & Analytics](https://utilityapps.site/apps?category=data-analytics) (10)
+- [Communication & Telecoms](https://utilityapps.site/apps?category=communication-telecoms) (9)
+- [Project Management](https://utilityapps.site/apps?category=project-management) (8)
+- [Legal & Compliance](https://utilityapps.site/apps?category=legal) (5)
+
+UtilityApps also publishes direct alternative pages for well-known tools, each with head-to-head
+`/vs/` comparisons against specific UtilityApps tools — for example
+[/alternatives/ilovepdf](https://utilityapps.site/alternatives/ilovepdf),
+[/alternatives/smallpdf](https://utilityapps.site/alternatives/smallpdf), and
+[/alternatives/canva](https://utilityapps.site/alternatives/canva).
 
 ## Featured articles
 
@@ -92,4 +245,5 @@ The canonical XML sitemap is at https://utilityapps.site/sitemap.xml.
 UtilityApps welcomes all major search and AI crawlers. Robots policy at
 https://utilityapps.site/robots.txt explicitly allows GPTBot, ClaudeBot,
 Claude-Web, PerplexityBot, anthropic-ai, Googlebot, Bingbot, DuckDuckBot.
-We disallow only /api/ and /admin/ across all bots.
+We disallow /api/, /admin/, and /embeds/ (legacy static tool bundles, noindex) —
+every tool page and Apps directory listing above is fully crawlable.

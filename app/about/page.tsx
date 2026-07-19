@@ -14,8 +14,11 @@ import {
 } from "lucide-react";
 
 import { CATEGORIES } from "@/lib/categories";
+import { generateAuthorSchema, getAuthorProfile } from "@/lib/schema";
 import { TOOLS } from "@/lib/tools";
 import { SITE_CONFIG, formatNumber } from "@/lib/utils";
+
+const AUTHOR_LINKEDIN = getAuthorProfile("Daniel M.")?.sameAs[0] ?? null;
 
 const TITLE = "About Us — Free Tools for Everyone";
 const DESCRIPTION =
@@ -58,6 +61,7 @@ const aboutJsonLd = {
     name: SITE_CONFIG.name,
     url: SITE_CONFIG.url,
   },
+  mainEntity: generateAuthorSchema("Daniel M."),
 };
 
 const VALUES = [
@@ -313,6 +317,43 @@ function Team() {
         </Link>
         . We ship the most-requested tools first.
       </p>
+
+      <div
+        id="author"
+        className="mt-10 scroll-mt-24 rounded-2xl border border-surface-200 bg-white p-6 text-left dark:border-surface-800 dark:bg-surface-900"
+      >
+        <div className="flex items-center gap-4">
+          <span
+            aria-hidden="true"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-accent-500 text-base font-semibold text-white"
+          >
+            DM
+          </span>
+          <div>
+            <p className="text-sm font-semibold text-surface-900 dark:text-white">Daniel M.</p>
+            <p className="text-xs text-surface-500 dark:text-surface-400">Founder &amp; builder, UtilityApps</p>
+          </div>
+        </div>
+        <p className="mt-4 text-sm leading-relaxed text-surface-600 dark:text-surface-300">
+          UtilityApps is built and written by Daniel — a business and data analyst with 7+ years
+          delivering software, data, and AI products across banking, fintech, and telecoms,
+          including risk-reporting infrastructure for Access Bank Group, GTBank, and Nigeria&apos;s
+          central bank. He holds CBAP, CSPO, PRINCE2 Foundation, and Certified Data Scientist
+          certifications, and applies the same rigor to the finance and health calculators here
+          that he&apos;d bring to an enterprise reporting system.
+        </p>
+        {AUTHOR_LINKEDIN && (
+          <a
+            href={AUTHOR_LINKEDIN}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 hover:underline dark:text-primary-400"
+          >
+            View LinkedIn profile
+            <ArrowRight className="h-3.5 w-3.5" />
+          </a>
+        )}
+      </div>
     </section>
   );
 }

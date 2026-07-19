@@ -66,6 +66,18 @@ const nextConfig = {
         source: "/embed/:path*",
         headers: embedHeaders,
       },
+      // Legacy static tool bundles under /public/embeds/ (loan/mortgage/bmi/
+      // percentage/age calculators). These are iframed into their in-house
+      // tool pages for the widget itself, but each bundle is a full
+      // standalone site export (its own about/contact/privacy/blog pages,
+      // sitemap.xml, and a canonical pointing at the old external domain).
+      // Crawlable and indexable by default, which wastes crawl budget on
+      // ~90 off-brand URLs. noindex here (not a robots.txt disallow) so
+      // Google can still crawl and read this header, then drop them.
+      {
+        source: "/embeds/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
       // Hashed build assets — already content-hashed, so cache forever.
       {
         source: "/_next/static/:path*",

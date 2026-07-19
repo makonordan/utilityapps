@@ -20,6 +20,35 @@ const PUBLISHER = {
   logo: { "@type": "ImageObject", url: `${SITE_CONFIG.url}/icon.png` },
 };
 
+/** Maps a BlogPostMeta.author string to their public profile, so article
+ *  schema can credit a real Person (E-E-A-T) instead of a faceless
+ *  Organization. Add an entry here for each named byline in use. */
+const AUTHOR_PROFILES: Record<string, { url: string; sameAs: string[]; jobTitle: string }> = {
+  "Daniel M.": {
+    url: `${SITE_CONFIG.url}/about#author`,
+    sameAs: ["https://www.linkedin.com/in/makonordaniel/"],
+    jobTitle: "Founder, UtilityApps",
+  },
+};
+
+/** The author's own profile links (e.g. LinkedIn), for UI use outside JSON-LD
+ *  — the byline link on blog posts and the About page bio card. */
+export function getAuthorProfile(author: string): { url: string; sameAs: string[] } | null {
+  return AUTHOR_PROFILES[author] ?? null;
+}
+
+export function generateAuthorSchema(author: string): object {
+  const profile = AUTHOR_PROFILES[author];
+  if (!profile) return { "@type": "Organization" as const, name: author, url: SITE_CONFIG.url };
+  return {
+    "@type": "Person" as const,
+    name: author,
+    url: profile.url,
+    sameAs: profile.sameAs,
+    jobTitle: profile.jobTitle,
+  };
+}
+
 export interface BreadcrumbCrumb {
   name: string;
   url: string;
@@ -119,7 +148,7 @@ export function generateArticleSchema(post: BlogPostMeta, options: { wordCount?:
     image: post.image ?? `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`,
     datePublished: post.date,
     dateModified: post.date,
-    author: { "@type": "Organization", name: post.author, url: SITE_CONFIG.url },
+    author: generateAuthorSchema(post.author),
     publisher: PUBLISHER,
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     articleSection: post.category,

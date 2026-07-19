@@ -15,6 +15,7 @@ import {
   type Heading,
 } from "@/lib/blog";
 import { getCategoryTheme } from "@/lib/blogThemes";
+import { generateAuthorSchema, getAuthorProfile } from "@/lib/schema";
 import { SITE_CONFIG, cn, formatDate } from "@/lib/utils";
 
 interface RouteParams {
@@ -90,7 +91,7 @@ export default async function BlogPostPage({ params }: RouteParams) {
     image: post.image ?? `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`,
     datePublished: post.date,
     dateModified: post.date,
-    author: { "@type": "Organization", name: post.author, url: SITE_CONFIG.url },
+    author: generateAuthorSchema(post.author),
     publisher: {
       "@type": "Organization",
       name: SITE_CONFIG.name,
@@ -306,6 +307,7 @@ function ShareSection({ title, url }: { title: string; url: string }) {
 }
 
 function AuthorCard({ author }: { author: string }) {
+  const profile = getAuthorProfile(author);
   return (
     <section className="mt-8 flex items-start gap-4 rounded-2xl border border-surface-200 bg-white p-5 dark:border-surface-800 dark:bg-surface-900">
       <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500 text-white">
@@ -315,10 +317,27 @@ function AuthorCard({ author }: { author: string }) {
         <p className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
           Written by
         </p>
-        <h3 className="text-sm font-semibold text-surface-900 dark:text-white">{author}</h3>
+        <h3 className="text-sm font-semibold text-surface-900 dark:text-white">
+          <Link href="/about#author" className="hover:underline">
+            {author}
+          </Link>
+        </h3>
         <p className="mt-1 text-sm text-surface-600 dark:text-surface-300">
-          We build free utility tools and write about the math, science, and trade-offs behind them.
-          Got feedback or a tool request?{" "}
+          Builds and writes UtilityApps&apos; calculators and guides, drawing on 7+ years shipping
+          software and data products in banking and fintech.{" "}
+          {profile?.sameAs[0] && (
+            <>
+              <a
+                href={profile.sameAs[0]}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-primary-600 hover:underline dark:text-primary-400"
+              >
+                LinkedIn
+              </a>
+              {" · "}
+            </>
+          )}
           <Link href="/contact" className="font-medium text-primary-600 hover:underline dark:text-primary-400">
             Get in touch
           </Link>

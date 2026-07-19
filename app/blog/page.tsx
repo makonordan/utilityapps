@@ -11,6 +11,7 @@ import {
   type BlogPostMeta,
 } from "@/lib/blog";
 import { getCategoryTheme } from "@/lib/blogThemes";
+import { generateAuthorSchema } from "@/lib/schema";
 import { SITE_CONFIG, cn, formatDate } from "@/lib/utils";
 
 const PAGE_SIZE = 12;
@@ -91,7 +92,7 @@ export default async function BlogIndexPage({ searchParams }: SearchParams) {
       description: post.description,
       datePublished: post.date,
       url: `${SITE_CONFIG.url}${post.url}`,
-      author: { "@type": "Organization", name: post.author },
+      author: generateAuthorSchema(post.author),
       articleSection: post.category,
     })),
   };
